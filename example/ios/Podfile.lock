@@ -1,0 +1,78 @@
+PODS:
+  - Flutter (1.0.0)
+  - mongo-embedded-c-driver (1.13.0-4.0.4)
+  - mongo_embedded (4.0.4)
+  - mongoatlasflutter (0.0.1):
+    - Flutter
+    - StitchSDK (~> 6.1.0)
+  - mongoc_embedded (4.0.4):
+    - mongo-embedded-c-driver (~> 1.13.0-4.0.4)
+    - mongo_embedded (~> 4.0.4)
+  - MongoMobile (0.1.0):
+    - mongo_embedded (~> 4.0.4)
+    - mongoc_embedded (~> 4.0.4)
+    - MongoSwift (~> 0.1.0)
+  - MongoSwift (0.1.0):
+    - mongo-embedded-c-driver (~> 1.13.0-4.0.0)
+  - StitchCore (6.1.0):
+    - StitchCoreSDK (= 6.1.0)
+  - StitchCoreLocalMongoDBService (6.1.0):
+    - MongoMobile (= 0.1.0)
+    - StitchCoreSDK (= 6.1.0)
+  - StitchCoreRemoteMongoDBService (6.1.0):
+    - StitchCoreLocalMongoDBService (= 6.1.0)
+    - StitchCoreSDK (= 6.1.0)
+  - StitchCoreSDK (6.1.0):
+    - MongoSwift (= 0.1.0)
+  - StitchRemoteMongoDBService (6.1.0):
+    - StitchCore (= 6.1.0)
+    - StitchCoreRemoteMongoDBService (= 6.1.0)
+  - StitchSDK (6.1.0):
+    - StitchSDK/StitchSDK (= 6.1.0)
+  - StitchSDK/StitchRemoteMongoDBService (6.1.0):
+    - StitchRemoteMongoDBService (= 6.1.0)
+  - StitchSDK/StitchSDK (6.1.0):
+    - StitchSDK/StitchRemoteMongoDBService
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - mongoatlasflutter (from `.symlinks/plugins/mongoatlasflutter/ios`)
+
+SPEC REPOS:
+  trunk:
+    - mongo-embedded-c-driver
+    - mongo_embedded
+    - mongoc_embedded
+    - MongoMobile
+    - MongoSwift
+    - StitchCore
+    - StitchCoreLocalMongoDBService
+    - StitchCoreRemoteMongoDBService
+    - StitchCoreSDK
+    - StitchRemoteMongoDBService
+    - StitchSDK
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  mongoatlasflutter:
+    :path: ".symlinks/plugins/mongoatlasflutter/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  mongo-embedded-c-driver: b46360baa15fc142baae80628822f26663220bde
+  mongo_embedded: e413134eb6b60544e7278add03007f8fe384a00c
+  mongoatlasflutter: ce1cee538b8930f795289c8a6f253c78f8e8bbf8
+  mongoc_embedded: 41aadbb756b07070d6f0471192a84750cb42c580
+  MongoMobile: 988e8d2fd322761d6358570dde8a2b3d44801823
+  MongoSwift: e20f86eae1beb06bbba49c2d73bb570961cc4c85
+  StitchCore: 997a2163b4ebf661dd3e92a4be08391acf078659
+  StitchCoreLocalMongoDBService: 2dfa73e67f906dca07b52612bdae197eb42e1e07
+  StitchCoreRemoteMongoDBService: 2987e9de1d8c6e55234feaa76ddd0712a935e6cf
+  StitchCoreSDK: 2c789433bd72429b4a39d8d481008037bc8bb4d4
+  StitchRemoteMongoDBService: 7a3fb5e8e6d74e98e303f52b0af0cf246d07b9bf
+  StitchSDK: f534f7db2d3b0f29d30a8fe0b010bf92ec65e385
+
+PODFILE CHECKSUM: 73d69d282a87aa0aafabdecb47f632fc347a9aac
+
+COCOAPODS: 1.8.4
