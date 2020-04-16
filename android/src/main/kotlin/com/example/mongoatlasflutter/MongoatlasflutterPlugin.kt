@@ -1,7 +1,6 @@
 package com.example.mongoatlasflutter
 
 import androidx.annotation.NonNull;
-import com.google.android.gms.tasks.Task
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -11,7 +10,6 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 import com.mongodb.stitch.android.core.Stitch
 import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
 import com.mongodb.stitch.core.auth.providers.anonymous.AnonymousCredential
-import com.mongodb.stitch.core.services.mongodb.remote.RemoteInsertOneResult
 
 
 /** MongoatlasflutterPlugin */
@@ -52,20 +50,18 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
         when (call.method) {
             "getPlatformVersion" -> getPlatformVersion(result)
             "connectMongo" -> connectMongo(call, result)
-            "insertDocument" -> {
-                val task = insertDocumentIntoCollection(call)
+            "insertDocument" -> insertDocument(call, result)
 
-                if (task == null)
-                    result.error("Error", "Failed to insert a document", "")
-
-                task!!.addOnCompleteListener {
-                    if(it.isSuccessful)
-                        result.success(true)
-                    else
-                        result.error("Error", "Failed to insert a document - Permission DENIED", "")
-
-                }
-            }
+//            "insertDocuments" -> this.insertDocuments(call, result)
+//            
+            "deleteDocument" -> this.deleteDocument(call, result)
+//            "deleteDocuments" -> this.deleteDocuments(call, result)
+//            
+            "findDocuments" -> this.findDocuments(call, result)
+            "findDocument" -> this.findDocument(call, result)
+            
+            "countDocuments" ->  this.countDocuments(call, result)
+            
             else -> result.notImplemented()
         }
 
@@ -78,21 +74,6 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun connectMongo(@NonNull call: MethodCall, @NonNull result: Result) {
-//    val mongoClient = MongoClients.create(
-//            "mongodb+srv://kfiross:7c034cfd@cluster0-ugz4h.mongodb.net/test?retryWrites=true&w=majority")
-
-//    launch(Dispatchers.Default) { // will get dispatched to DefaultDispatcher
-//      println("Default               : I'm working in thread ${Thread.currentThread().name}")
-//    }
-//
-//    val thread = object : Thread() {
-//      override fun run() {
-//        val uri = MongoClientURI("mongodb+srv://kfiross:7c034cfd@cluster0-ugz4h.mongodb.net/test?retryWrites=true&w=majority")
-//        val mongoClient = MongoClient(uri)
-//
-//        val database = mongoClient.getDatabase("test")
-
-
         val clientAppId = call.argument<String>("app_id")
 
         if (clientAppId == null) {
@@ -130,29 +111,179 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 
     }
 
-
-    private fun insertDocumentIntoCollection(@NonNull call: MethodCall)
-            : Task<RemoteInsertOneResult>? {
+    /**
+     *
+     */
+    private fun insertDocument(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val data = call.argument<HashMap<String, Any>>("data")
 
 
-        return client.insertDocument(
+        val task = client.insertDocument(
                 databaseName,
                 collectionName,
                 data
         )
-//        val myFirstDocument = Document()
-//        myFirstDocument["time"] = Date().time
-//        myFirstDocument["user_id"] = client.auth.user!!.id
-//
-//        myCollection.insertOne(myFirstDocument)
-//                .addOnSuccessListener {
-//                    Log.d("STITCH", "One document inserted")
-//                }
+
+        if (task == null)
+            result.error("Error", "Failed to insert a document", "")
+
+        task!!.addOnCompleteListener {
+            if(it.isSuccessful)
+                result.success(true)
+            else
+                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+
+        }
     }
 
+    // TODO: CHECK ALL THIS OPERATIONS !!!!
+    private fun insertDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
+        val databaseName = call.argument<String>("database_name")
+        val collectionName = call.argument<String>("collection_name")
+        val data = call.argument<HashMap<String, Any>>("data")
+
+
+//        val task = client.insertDocuments(
+//                databaseName,
+//                collectionName,
+//                data
+//        )
+//
+//        if (task == null)
+//            result.error("Error", "Failed to insert a document", "")
+//
+//        task!!.addOnCompleteListener {
+//            if(it.isSuccessful)
+//                result.success(true)
+//            else
+//                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+//
+//        }
+    }
+   
+    private fun deleteDocument(@NonNull call: MethodCall, @NonNull result: Result) {
+        val databaseName = call.argument<String>("database_name")
+        val collectionName = call.argument<String>("collection_name")
+     //   val filter = call.argument<HashMap<String, Any>>("filter")
+
+
+        val task = client.deleteDocument(
+                databaseName,
+                collectionName
+                //add: filter
+        )
+
+        if (task == null)
+            result.error("Error", "Failed to insert a document", "")
+
+        task!!.addOnCompleteListener {
+            if(it.isSuccessful)
+                result.success(true)
+            else
+                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+
+        }
+    }
+    private fun deleteDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
+        val databaseName = call.argument<String>("database_name")
+        val collectionName = call.argument<String>("collection_name")
+        //   val filter = call.argument<HashMap<String, Any>>("filter")
+
+        val task = client.deleteDocuments(
+                databaseName,
+                collectionName
+                // add: filter
+        )
+
+        if (task == null)
+            result.error("Error", "Failed to insert a document", "")
+
+        task!!.addOnCompleteListener {
+            if(it.isSuccessful)
+                result.success(true)
+            else
+                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+
+        }
+    }
+   
+    private fun findDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
+        val databaseName = call.argument<String>("database_name")
+        val collectionName = call.argument<String>("collection_name")
+//        val filter = call.argument<HashMap<String, Any>>("filter")
+
+ 
+
+        val task = client.findDocuments(
+                databaseName,
+                collectionName
+                //add: filter
+        )
+
+        if (task == null)
+            result.error("Error", "Failed to insert a document", "")
+
+
+        val queryResults = ArrayList<String>()
+        task!!.forEach {
+            queryResults.add(it.toJson())
+        }.continueWith {
+            if(it.isSuccessful)
+                result.success(queryResults)
+            else
+                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+
+        }
+    }
+    private fun findDocument(@NonNull call: MethodCall, @NonNull result: Result) {
+        val databaseName = call.argument<String>("database_name")
+        val collectionName = call.argument<String>("collection_name")
+//        val filter = call.argument<HashMap<String, Any>>("filter")
+
+
+        val task = client.findDocument(
+                databaseName,
+                collectionName
+                //add: filter
+        )
+
+        if (task == null)
+            result.error("Error", "Failed to insert a document", "")
+
+        task!!.addOnCompleteListener {
+            if(it.isSuccessful)
+                result.success(it.result.toJson())
+            else
+                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+
+        }
+    }
+   
+    private fun countDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
+        val databaseName = call.argument<String>("database_name")
+        val collectionName = call.argument<String>("collection_name")
+//        val filter = call.argument<HashMap<String, Any>>("filter")
+
+
+        val task = client.countDocuments(
+             databaseName,
+             collectionName
+             //add: filter
+        )
+
+        if (task == null)
+            result.error("Error", "Failed to insert a document", "")
+
+        task!!.addOnCompleteListener {
+            if(it.isSuccessful)
+                result.success(it.result)
+            else
+                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+
+        }
+    }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)

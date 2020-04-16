@@ -14,52 +14,108 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
 
+  MongoAtlasClient client = MongoAtlasClient();
+
   @override
   void initState() {
     super.initState();
-    initPlatformState();
 
-    func();
-  }
+    // initiliize MongoStitch App
+    client.initializeApp("mystitchapp-fjpmn").then((_) {
+      // after app initlized, show some data
+      // insertData();
+      // fetchData();
+      deleteData();
 
-  Future<void> func() async
-  {
-    var result;
-    try{
-      result = await Mongoatlasflutter.connectToMongo();
-    }
-    on PlatformException{
-      debugPrint("PlatformException thrown..");
-    }
-
-    try{
-      await Mongoatlasflutter.insertDocument();
-    }
-    on PlatformException{
-      debugPrint("Error!!!");
-    }
-
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await Mongoatlasflutter.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
     });
   }
+
+  Future<void> insertData() async {
+    var collection = client.getDatabase("test").getCollection("my_collection");
+
+    try {
+      var document = MongoDocument.fromMap({
+        "time": DateTime.now().millisecondsSinceEpoch,
+        "user_id": "abcdefg",
+        "price": 31.78432
+      });
+
+      await collection.insertOne(document);
+
+      var size = await collection.count();
+      print(size);
+    } on PlatformException {
+      debugPrint("Error!!!");
+    }
+  }
+
+  Future<void> fetchData() async {
+    var collection = client.getDatabase("test").getCollection("my_collection");
+
+    try {
+//      var document = MongoDocument.fromMap({
+//        "time": DateTime.now().millisecondsSinceEpoch,
+//        "user_id": "abcdefg",
+//        "price": 31.78432
+//      });
+
+
+//      var docs = await collection.find();
+//      print(docs.length);
+
+        var doc = await collection.findOne();
+        int ssaa = 232;
+
+//      var size = await collection.count();
+//      print(size);
+    } on PlatformException {
+      debugPrint("Error!!!");
+    }
+  }
+
+  Future<void> deleteData() async {
+    var collection = client.getDatabase("test").getCollection("my_collection");
+
+    try {
+//      var document = MongoDocument.fromMap({
+//        "time": DateTime.now().millisecondsSinceEpoch,
+//        "user_id": "abcdefg",
+//        "price": 31.78432
+//      });
+
+
+//      var docs = await collection.find();
+//      print(docs.length);
+
+      var isDeleted = await collection.deleteOne(BsonDocument());
+      int ssaa = 232;
+
+//      var size = await collection.count();
+//      print(size);
+    } on PlatformException {
+      debugPrint("Error!!!");
+    }
+  }
+
+//  // Platform messages are asynchronous, so we initialize in an async method.
+//  Future<void> initPlatformState() async {
+//    String platformVersion;
+//    // Platform messages may fail, so we use a try/catch PlatformException.
+//    try {
+//      platformVersion = await Mongoatlasflutter.platformVersion;
+//    } on PlatformException {
+//      platformVersion = 'Failed to get platform version.';
+//    }
+//
+//    // If the widget was removed from the tree while the asynchronous platform
+//    // message was in flight, we want to discard the reply rather than calling
+//    // setState to update our non-existent appearance.
+//    if (!mounted) return;
+//
+//    setState(() {
+//      _platformVersion = platformVersion;
+//    });
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +125,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Text('Running on: \n'),
         ),
       ),
     );
