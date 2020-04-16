@@ -31,7 +31,9 @@ class Mongoatlasflutter {
     final databaseName = "test";
     final data = {
       "time": DateTime.now().millisecondsSinceEpoch,
-      "user_id": "abcdefg"
+      "user_id": "abcdefg",
+      "price": 2.78432
+
     };
 
     final result = await _channel.invokeMethod('insertDocument', {
