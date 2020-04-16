@@ -121,23 +121,14 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
                                 details: nil))
             return
         }
-        
-        // my fu** up solution
+ 
         var document = Document()
         for (key) in data!.keys{
             let value = data![key]
 
-            if let bsonValue = value as? String {
-                document[key] = bsonValue
+            if (value != nil){
+                document[key] = BsonExtractor.getValue(of: value!)
             }
-
-            if let bsonValue = value as? Int {
-                document[key] = bsonValue
-            }
-
-//            if let bsonValue = value as? BSONValue {
-//                document[key] = bsonValue
-//            }
         }
 
       
@@ -150,5 +141,36 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
                 print("Failed to insert item: \(error)");
             }
         }
+    }
+}
+
+
+
+// cumbersome workaround solution
+// TODO: convert any (possible) value into 'BSONValue'
+class BsonExtractor {
+    static func getValue(of: Any) -> BSONValue?{
+        let value = of
+        
+        if let bsonValue = value as? String {
+            return bsonValue
+        }
+        
+        if let bsonValue = value as? Int {
+            return bsonValue
+        }
+        
+        
+        if let bsonValue = value as? Double {
+            return bsonValue
+        }
+        
+        
+        // TODO: check this conversion
+        if let bsonValue = value as? Array<Any> {
+            return bsonValue
+        }
+        
+        return nil
     }
 }
