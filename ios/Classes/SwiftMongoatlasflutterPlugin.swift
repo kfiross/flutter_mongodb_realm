@@ -7,7 +7,7 @@ import StitchCore
 import StitchRemoteMongoDBService
 
 public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
-    var mongoClient: RemoteMongoClient?
+    var client: MongoAtlasClient?
 
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -21,10 +21,39 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case "getPlatformVersion":
             self.getPlatformVersion(result: result)
-        case "connectMongo" :
+            break
+
+        case "connectMongo":
             self.connectMongo(call: call,result: result)
+            break
+
         case "insertDocument":
             self.insertDocument(call: call, result: result)
+            break
+            
+//        case "insertDocuments":
+//            self.insertDocuments(call: call, result: result)
+
+        case "deleteDocument":
+            self.deleteDocument(call: call, result: result)
+            break
+
+//        case "deleteDocuments":
+//            self.deleteDocuments(call: call, result: result)
+//            break
+        
+        case "findDocuments":
+            self.findDocuments(call: call, result: result)
+            break
+            
+        case "findDocument":
+            self.findDocument(call: call, result: result)
+            break
+            
+        case "countDocuments":
+            self.countDocuments(call: call, result: result)
+            break
+            
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -48,20 +77,19 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
                                 details: nil))
         }
 
-        let client = try? Stitch.initializeDefaultAppClient(withClientAppID: clientAppId!/*"mystitchapp-fjpmn"*/)
+        let stitchAppClient = try? Stitch.initializeDefaultAppClient(
+            withClientAppID: clientAppId!/*"mystitchapp-fjpmn"*/)
 //
 //
 //
-        client?.auth.login(withCredential: AnonymousCredential()) { authResult in
+        stitchAppClient?.auth.login(withCredential: AnonymousCredential()) { authResult in
             switch authResult {
             case .success(let user):
-//                mongoClient = client.serviceClient(
-//                    fromFactory: remoteMongoClientFactory, withName: "mongodb-atlas"
-//                )
-
-                self.mongoClient = try? client?.serviceClient(
+                let mongoClient = try? stitchAppClient?.serviceClient(
                     fromFactory: remoteMongoClientFactory, withName: "mongodb-atlas"
                 )
+                
+                self.client = MongoAtlasClient(client: mongoClient!)
 
                 result(true)
                 break
@@ -75,6 +103,7 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
         }
     }
 
+    // DONE!
     func insertDocument(call: FlutterMethodCall, result: @escaping FlutterResult)  {
         
         let args = call.arguments as! Dictionary<String, Any>
@@ -83,94 +112,124 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
 //        let collectionName = call.argument<String>("collection_name")
 //        let data = call.argument<HashMap<String, Any>>("data")
         
-        let databaseName = args["database_name"] as! String
-        let collectionName = args["collection_name"] as! String
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
         let data = args["data"] as? Dictionary<String, Any>
         
-//        return mongoClient!!.insertDocument(
-//            databaseName,
-//            collectionName,
-//            data
-//        )
-        
-        // TODO: move to designated function..
-        
-        //let collection = getCollection(databaseName, collectionName)
-        
-        let collection = self.mongoClient!.db(databaseName).collection(collectionName)
-        
-//
-//        let dict = [
-//            "7": 5,
-//            "key": "value"
-//        ]
-//
-        
-//        let doc: Dictionary<String, Any> = [
-//            "name": "kfir",
-//            "time": 1578836236
-//        ]
-//
-        
-        //Document.parse(json)
-        //let document =  x as? Document //Document()
-        
-        if(data == nil){
-            result(FlutterError(code: "ERROR",
-                                message: "Not provided data to insert",
-                                details: nil))
-            return
-        }
- 
-        var document = Document()
-        for (key) in data!.keys{
-            let value = data![key]
-
-            if (value != nil){
-                document[key] = BsonExtractor.getValue(of: value!)
+        self.client?.insertDocument(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            data: data,
+            onCompleted: {
+                result(true)
+            },
+            onError: {
+                result(FlutterError(
+                    code: "ERROR",
+                    message: "Failed to insert a document",
+                    details: nil
+                ))
             }
-        }
-
-      
+        )
         
-        collection.insertOne(document) { result in
-            switch result {
-            case .success(let result):
-                print("Successfully inserted item with _id: \(result.insertedId))");
-            case .failure(let error):
-                print("Failed to insert item: \(error)");
+    }
+    
+    func deleteDocument(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let args = call.arguments as! Dictionary<String, Any>
+
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
+        let filter = args["filter"] as? Dictionary<String, Any>
+        
+        self.client?.deleteDocument(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            filter: nil,
+            onCompleted: {
+                result(true)
+            },
+            onError: {
+                result(FlutterError(
+                    code: "ERROR",
+                    message: "Failed to delete a document",
+                    details: nil
+                ))
             }
-        }
+        )
+    }
+    
+    func findDocuments(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
+        let filter = args["filter"] as? Dictionary<String, Any>
+        
+        self.client?.findDocuments(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            filter: nil,
+            onCompleted: {value in
+                result(value)
+            },
+            onError: {
+                result(FlutterError(
+                    code: "ERROR",
+                    message: "Failed to find documents",
+                    details: nil
+                ))
+            }
+        )
+    }
+    
+    func findDocument(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
+        let filter = args["filter"] as? Dictionary<String, Any>
+        
+        self.client?.findDocument(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            filter: nil,
+            onCompleted: {value in
+                result(value)
+            },
+            onError: {
+                result(FlutterError(
+                    code: "ERROR",
+                    message: "Failed to find a document",
+                    details: nil
+                ))
+            }
+        )
+    }
+    
+    func countDocuments(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
+        let filter = args["filter"] as? Dictionary<String, Any>
+    
+        self.client?.countDocuments(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            filter: nil,
+            onCompleted: {value in
+                result(value)
+            },
+            onError: {
+                result(FlutterError(
+                    code: "ERROR",
+                    message: "Failed to count a collection",
+                    details: nil
+                ))
+            }
+        )
     }
 }
 
 
 
-// cumbersome workaround solution
-// TODO: convert any (possible) value into 'BSONValue'
-class BsonExtractor {
-    static func getValue(of: Any) -> BSONValue?{
-        let value = of
-        
-        if let bsonValue = value as? String {
-            return bsonValue
-        }
-        
-        if let bsonValue = value as? Int {
-            return bsonValue
-        }
-        
-        
-        if let bsonValue = value as? Double {
-            return bsonValue
-        }
-        
-        
-        // TODO: check this conversion
-        if let bsonValue = value as? Array<Any> {
-            return bsonValue
-        }
-        
-        return nil
-    }
-}

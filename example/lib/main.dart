@@ -36,8 +36,9 @@ class _MyAppState extends State<MyApp> {
     try {
       var document = MongoDocument.fromMap({
         "time": DateTime.now().millisecondsSinceEpoch,
-        "user_id": "abcdefg",
-        "price": 31.78432
+        "user_id": "abcdefg67",
+        "age": 25,
+        "price": 31.72
       });
 
       await collection.insertOne(document);
@@ -60,14 +61,16 @@ class _MyAppState extends State<MyApp> {
 //      });
 
 
+//      var size = await collection.count();
+//      print(size);
+
 //      var docs = await collection.find();
 //      print(docs.length);
 
         var doc = await collection.findOne();
         int ssaa = 232;
 
-//      var size = await collection.count();
-//      print(size);
+
     } on PlatformException {
       debugPrint("Error!!!");
     }
