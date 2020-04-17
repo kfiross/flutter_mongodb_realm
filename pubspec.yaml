@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  bson: ^0.3.2
+
 #  url_launcher: ^5.4.2
 
 dev_dependencies:

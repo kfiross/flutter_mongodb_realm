@@ -208,18 +208,18 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 
         }
     }
-   
+    
+    /** ============================================================== */
+    // filter option added
     private fun findDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
-//        val filter = call.argument<HashMap<String, Any>>("filter")
-
- 
-
+        val filter = call.argument<String>("filter")
+        
         val task = client.findDocuments(
                 databaseName,
-                collectionName
-                //add: filter
+                collectionName,
+                filter
         )
 
         if (task == null)
@@ -237,16 +237,18 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 
         }
     }
+
+    // filter option added
     private fun findDocument(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
-//        val filter = call.argument<HashMap<String, Any>>("filter")
+        val filter = call.argument<String>("filter")
 
 
         val task = client.findDocument(
                 databaseName,
-                collectionName
-                //add: filter
+                collectionName,
+                filter
         )
 
         if (task == null)
@@ -261,26 +263,27 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
    
+    // filter option added
     private fun countDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
-//        val filter = call.argument<HashMap<String, Any>>("filter")
+        val filter = call.argument<String>("filter")
 
 
         val task = client.countDocuments(
              databaseName,
-             collectionName
-             //add: filter
+             collectionName,
+             filter
         )
 
         if (task == null)
-            result.error("Error", "Failed to insert a document", "")
+            result.error("Error", "Failed to count the collection", "")
 
         task!!.addOnCompleteListener {
             if(it.isSuccessful)
                 result.success(it.result)
             else
-                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+                result.error("Error", "Failed to count the collection - Permission DENIED", "")
 
         }
     }

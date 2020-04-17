@@ -24,8 +24,8 @@ class _MyAppState extends State<MyApp> {
     client.initializeApp("mystitchapp-fjpmn").then((_) {
       // after app initlized, show some data
       // insertData();
-      // fetchData();
-      deleteData();
+       fetchData();
+      //deleteData();
 
     });
   }
@@ -34,17 +34,13 @@ class _MyAppState extends State<MyApp> {
     var collection = client.getDatabase("test").getCollection("my_collection");
 
     try {
-      var document = MongoDocument.fromMap({
+      var document = MongoDocument({
         "time": DateTime.now().millisecondsSinceEpoch,
         "user_id": "abcdefg67",
         "age": 25,
         "price": 31.72
       });
 
-      await collection.insertOne(document);
-
-      var size = await collection.count();
-      print(size);
     } on PlatformException {
       debugPrint("Error!!!");
     }
@@ -61,18 +57,24 @@ class _MyAppState extends State<MyApp> {
 //      });
 
 
-//      var size = await collection.count();
+//      var size = await collection.count({
+//        "name": "kfir"
+//      });
 //      print(size);
 
-//      var docs = await collection.find();
+//      var docs = await collection.find({
+//        "name": "kfir",
+//      });
 //      print(docs.length);
 
-        var doc = await collection.findOne();
+        var doc = await collection.findOne({
+        "name": "kfir",
+        });
         int ssaa = 232;
 
 
-    } on PlatformException {
-      debugPrint("Error!!!");
+    } on PlatformException catch(e) {
+      debugPrint("Error: $e");
     }
   }
 

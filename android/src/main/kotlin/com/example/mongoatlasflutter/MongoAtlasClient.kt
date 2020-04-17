@@ -36,6 +36,8 @@ class MongoAtlasClient(
             : Task<RemoteInsertOneResult>? {
         val collection = getCollection(databaseName, collectionName)
 
+
+        
         //Document.parse(json)
         val document = Document()
 
@@ -84,30 +86,42 @@ class MongoAtlasClient(
         return collection?.deleteMany(filter)
     }
 
+    /*******************************************************************************/
 
-
-    fun findDocuments(databaseName: String?, collectionName: String?)
+    fun findDocuments(databaseName: String?, collectionName: String?, filterJson: String?)
             : RemoteFindIterable<Document>? {
         val collection = getCollection(databaseName, collectionName)
 
-        var filter = BsonDocument()
+        if (filterJson == null)
+            return collection?.find()
+
+        val filter = BsonDocument.parse(filterJson)
         return collection?.find(filter)
     }
 
 
-    // TODO:  check this implementation
-    fun findDocument(databaseName: String?, collectionName: String?): Task<Document>? {
-        val collection = getCollection(databaseName, collectionName)
 
-        var filter = BsonDocument()
+    fun findDocument(databaseName: String?, collectionName: String?, filterJson: String?)
+            : Task<Document>? {
+        val collection = getCollection(databaseName, collectionName)
+        
+        if (filterJson == null)
+            return collection?.findOne()
+
+        val filter = BsonDocument.parse(filterJson)
         return collection?.findOne(filter)
     }
 
-    // TODO:  check this implementation
-    fun countDocuments(databaseName: String?, collectionName: String?): Task<Long>? {
+
+    fun countDocuments(databaseName: String?, collectionName: String?, filterJson: String?)
+            : Task<Long>? {
         val collection = getCollection(databaseName, collectionName)
 
-        return collection?.count()
+        if (filterJson == null)
+            return collection?.count()
+        
+        val filter = BsonDocument.parse(filterJson)
+        return collection?.count(filter)
     }
 
 }

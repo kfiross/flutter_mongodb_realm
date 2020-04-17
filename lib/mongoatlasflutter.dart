@@ -1,46 +1,94 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'package:bson/bson.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-class BsonDocument {}
+//mixin ToAlias{}
+//
+//class BsonDocumentGeneric<T, U> {
+//  Map<T, U> value;
+//  BsonDocumentGeneric(this.value);
+//
+//  getValue(){
+//    return value;
+//  }
+//}
+//
+//class BsonDocument = BsonDocumentGeneric<String, Object> with ToAlias;
+//
+//BsonDocument x = BsonDocument({"age": 5});
+//x.getValue();
+
+//class BsonDocument = Map<String, Object>;
+
+// todo: maybe using 'BsonObject' instead 'dynamic'
+class BsonDocument {
+  final Map<String, dynamic> _map = Map<String, dynamic>();
+
+  Map<String, dynamic> get map => _map;
+
+
+
+  /// Creates a document instance initialized with the given map.
+  /// or an empty Document instance if not provided.
+  BsonDocument([Map<String, dynamic> map]) {
+    if (map != null) {
+      _map.addAll(map);
+    }
+  }
+
+  String toJson() => jsonEncode(_map);
+}
 
 class MongoDocument {
-  Map<String, Object> _data;
+  final Map<String, dynamic> _map = LinkedHashMap<String, dynamic>();
 
-  Map<String, Object> get data => _data;
+  Map<String, Object> get map => _map;
 
-  void append(String key, Object value) {
-    _data[key] = value;
+  /// Create a Document instance initialized with the given key/value pair.
+  MongoDocument.single(String key, dynamic value) {
+      _map[key] = value;
   }
 
-  static MongoDocument fromMap(Map<String, Object> map) {
-    var doc = MongoDocument();
-    doc._data = Map<String, Object>();
-    doc._data.addAll(map);
-
-    return doc;
+  /// Creates a Document instance initialized with the given map.
+  /// or an empty Document instance if not provided.
+  MongoDocument(Map<String, dynamic> map) {
+    if (map != null) {
+      _map.addAll(map);
+    }
   }
 
-  static MongoDocument fromJson(String jsonString) {
+  /// Parses a string in MongoDB Extended JSON format to a Document
+  static MongoDocument parse(String jsonString) {
     Map<String, dynamic> map = json.decode(jsonString);
 
     // fix MongoDB bullshit
     map.forEach((key, value) {
-      if (value is LinkedHashMap){
+      if (value is LinkedHashMap) {
         final map2 = value.entries.toList()[0];
-        if (map2.key.contains("\$")){
-          switch (map2.key.substring(1)){
+        if (map2.key.contains("\$")) {
+          switch (map2.key.substring(1)) {
             case "numberLong":
-              map[key] =  int.parse(map2.value);
+              map[key] = int.parse(map2.value);
           }
         }
       }
     });
 
-    return MongoDocument.fromMap(map);
+    return MongoDocument(map);
   }
+
+  /// Put the given key/value pair into this Document and return this.
+  /// Useful for chaining puts in a single expression, e.g.
+  /// doc.append("a", 1).append("b", 2)
+  MongoDocument append(String key, Object value) {
+    _map[key] = value;
+    return this;
+  }
+
+  String toJson() => jsonEncode(_map);
 }
 
 class MongoCollection {
@@ -49,13 +97,12 @@ class MongoCollection {
 
   MongoCollection({@required this.collectionName, @required this.databaseName});
 
-
   // DONE!
   Future insertOne(MongoDocument document) async {
     await Mongoatlasflutter._insertDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
-      data: document.data,
+      data: document.map,
     );
   }
 
@@ -67,65 +114,56 @@ class MongoCollection {
 //    );
   }
 
-
   Future<bool> deleteOne(BsonDocument filter) async {
     assert(filter != null);
 
     var result = await Mongoatlasflutter._deleteDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
-      //filter: filter,
+      filter: filter,
     );
 
     return result;
   }
 
-  void deleteMany(BsonDocument filter) {
+  void deleteMany(Map<String, Object> filter) {
     assert(filter != null);
   }
 
-
-  /// DONE!
-  Future<List<MongoDocument>> find({BsonDocument filter}) async {
+  /// FILTER WORK!
+  Future<List<MongoDocument>> find([Map<String, dynamic> filter]) async {
     List<dynamic> resultJson = await Mongoatlasflutter._findDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
-      filter: filter,
+      filter: BsonDocument(filter).toJson(),
     );
 
     var result = resultJson.map((string) {
-      return MongoDocument.fromJson(string);
+      return MongoDocument.parse(string);
     }).toList();
 
     return result;
   }
 
-  ///        collection?.find()
-  ///        collection?.find(filter)
-  ///        collection?.find(null)
 
-  /// DONE!
-  Future<void> findOne({BsonDocument filter}) async {
+  /// FILTER WORK!
+  Future<void> findOne([Map<String, dynamic> filter]) async {
     String resultJson = await Mongoatlasflutter._findFirstDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
-      filter: filter,
+      filter: BsonDocument(filter).toJson(),
     );
 
-    var result = MongoDocument.fromJson(resultJson);
+    var result = MongoDocument.parse(resultJson);
     return result;
   }
 
-  ///        collection?.findOne()
-  ///        collection?.findOne(filter)
-  ///        collection?.findOne(null)
-
-  /// DONE!
-  Future<int> count({BsonDocument filter}) async {
+  /// FILTER WORK!
+  Future<int> count([Map<String, dynamic> filter]) async {
     int size = await Mongoatlasflutter._countDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
-      filter: null, //document.data,
+      filter: BsonDocument(filter).toJson(),
     );
 
     return size;
@@ -194,6 +232,7 @@ class Mongoatlasflutter {
       'data': data
     });
   }
+
 
   static Future _countDocuments(
       {String collectionName, String databaseName, dynamic filter}) async {
