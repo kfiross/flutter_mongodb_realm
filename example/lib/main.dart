@@ -24,8 +24,8 @@ class _MyAppState extends State<MyApp> {
     client.initializeApp("mystitchapp-fjpmn").then((_) {
       // after app initlized, show some data
       // insertData();
-       fetchData();
-      //deleteData();
+//       fetchData();
+      deleteData();
 
     });
   }
@@ -47,7 +47,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> fetchData() async {
-    var collection = client.getDatabase("test").getCollection("my_collection");
+    // sample_mflix.comments
+    // test.my_collection
+    var collection = client.getDatabase("sample_mflix").getCollection("comments");
 
     try {
 //      var document = MongoDocument.fromMap({
@@ -62,15 +64,17 @@ class _MyAppState extends State<MyApp> {
 //      });
 //      print(size);
 
-//      var docs = await collection.find({
-//        "name": "kfir",
-//      });
-//      print(docs.length);
 
-        var doc = await collection.findOne({
-        "name": "kfir",
-        });
-        int ssaa = 232;
+      var docs = await collection.find({
+        // "name": "kfir",
+        "name": "Andrea Le",
+      });
+      print(docs.length);
+
+//        var doc = await collection.findOne({
+//        "name": "kfir",
+//        });
+//        int ssaa = 232;
 
 
     } on PlatformException catch(e) {
@@ -79,7 +83,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> deleteData() async {
-    var collection = client.getDatabase("test").getCollection("my_collection");
+    // sample_mflix.comments
+    // test.my_collection
+    var collection = client.getDatabase("sample_mflix").getCollection("comments");
 
     try {
 //      var document = MongoDocument.fromMap({
@@ -92,13 +98,19 @@ class _MyAppState extends State<MyApp> {
 //      var docs = await collection.find();
 //      print(docs.length);
 
-      var isDeleted = await collection.deleteOne(BsonDocument());
-      int ssaa = 232;
+//      var deletedDocs = await collection.deleteOne({"name": "Gilly"});
+//      print(deletedDocs);
+
+
+      var deletedDocs = await collection.deleteMany({"name": "Andrea Le"});
+      print(deletedDocs);
+
+
 
 //      var size = await collection.count();
 //      print(size);
-    } on PlatformException {
-      debugPrint("Error!!!");
+    } on PlatformException catch(e) {
+      debugPrint("Error! ${e.message}");
     }
   }
 

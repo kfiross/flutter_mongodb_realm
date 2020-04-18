@@ -55,7 +55,7 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 //            "insertDocuments" -> this.insertDocuments(call, result)
 //            
             "deleteDocument" -> this.deleteDocument(call, result)
-//            "deleteDocuments" -> this.deleteDocuments(call, result)
+            "deleteDocuments" -> this.deleteDocuments(call, result)
 //            
             "findDocuments" -> this.findDocuments(call, result)
             "findDocument" -> this.findDocument(call, result)
@@ -166,35 +166,35 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
     private fun deleteDocument(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
-     //   val filter = call.argument<HashMap<String, Any>>("filter")
+        val filter = call.argument<String>("filter")
 
 
         val task = client.deleteDocument(
                 databaseName,
-                collectionName
-                //add: filter
+                collectionName,
+                filter
         )
 
         if (task == null)
-            result.error("Error", "Failed to insert a document", "")
+            result.error("Error", "Failed to delete a document", "")
 
         task!!.addOnCompleteListener {
             if(it.isSuccessful)
-                result.success(true)
+                result.success(it.result.deletedCount)
             else
-                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+                result.error("Error", "Failed to delete a document - Permission DENIED", "")
 
         }
     }
     private fun deleteDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
-        //   val filter = call.argument<HashMap<String, Any>>("filter")
+        val filter = call.argument<String>("filter")
 
         val task = client.deleteDocuments(
                 databaseName,
-                collectionName
-                // add: filter
+                collectionName,
+                filter
         )
 
         if (task == null)
@@ -202,7 +202,7 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 
         task!!.addOnCompleteListener {
             if(it.isSuccessful)
-                result.success(true)
+                result.success(it.result.deletedCount)
             else
                 result.error("Error", "Failed to insert a document - Permission DENIED", "")
 

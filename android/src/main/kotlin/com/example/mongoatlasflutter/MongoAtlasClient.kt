@@ -69,20 +69,26 @@ class MongoAtlasClient(
 //    }
 
     // TODO:  check this implementation
-    fun deleteDocument(databaseName: String?, collectionName: String?)
+    fun deleteDocument(databaseName: String?, collectionName: String?, filterJson: String?)
             : Task<RemoteDeleteResult>? {
         val collection = getCollection(databaseName, collectionName)
 
-        var filter = BsonDocument()
+        if (filterJson == null)
+            return collection?.deleteOne(BsonDocument())
+
+        val filter = BsonDocument.parse(filterJson)
         return collection?.deleteOne(filter)
     }
 
     // TODO:  check this implementation
-    fun deleteDocuments(databaseName: String?, collectionName: String?)
+    fun deleteDocuments(databaseName: String?, collectionName: String?, filterJson: String?)
             : Task<RemoteDeleteResult>? {
         val collection = getCollection(databaseName, collectionName)
+        
+        if (filterJson == null)
+            return collection?.deleteMany(BsonDocument())
 
-        var filter = BsonDocument()
+        val filter = BsonDocument.parse(filterJson)
         return collection?.deleteMany(filter)
     }
 

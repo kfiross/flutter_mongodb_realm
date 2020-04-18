@@ -25,21 +25,15 @@ import 'package:flutter/services.dart';
 
 // todo: maybe using 'BsonObject' instead 'dynamic'
 class BsonDocument {
-  final Map<String, dynamic> _map = Map<String, dynamic>();
+  final Map<String, dynamic> _map;
 
   Map<String, dynamic> get map => _map;
 
-
-
   /// Creates a document instance initialized with the given map.
   /// or an empty Document instance if not provided.
-  BsonDocument([Map<String, dynamic> map]) {
-    if (map != null) {
-      _map.addAll(map);
-    }
-  }
+  const BsonDocument([this._map]);
 
-  String toJson() => jsonEncode(_map);
+  String toJson() => jsonEncode(_map ?? Map<String, dynamic>());
 }
 
 class MongoDocument {
@@ -49,7 +43,7 @@ class MongoDocument {
 
   /// Create a Document instance initialized with the given key/value pair.
   MongoDocument.single(String key, dynamic value) {
-      _map[key] = value;
+    _map[key] = value;
   }
 
   /// Creates a Document instance initialized with the given map.
@@ -70,8 +64,16 @@ class MongoDocument {
         final map2 = value.entries.toList()[0];
         if (map2.key.contains("\$")) {
           switch (map2.key.substring(1)) {
+            // Convert 'Int64' type
             case "numberLong":
               map[key] = int.parse(map2.value);
+              break;
+
+            // Convert 'Date' type
+            case "date":
+              map[key] =
+                  DateTime.fromMillisecondsSinceEpoch(map2.value, isUtc: true);
+              break;
           }
         }
       }
@@ -114,23 +116,39 @@ class MongoCollection {
 //    );
   }
 
-  Future<bool> deleteOne(BsonDocument filter) async {
-    assert(filter != null);
+  /// FILTER ANDROID WORK!
+  Future<int> deleteOne([Map<String, dynamic> filter]) async {
+    // force sending an empty filter instead asserting
+    if (filter == null) {
+      filter = Map<String, dynamic>();
+    }
 
     var result = await Mongoatlasflutter._deleteDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
-      filter: filter,
+      filter: BsonDocument(filter).toJson(),
     );
 
     return result;
   }
 
-  void deleteMany(Map<String, Object> filter) {
-    assert(filter != null);
+  /// FILTER ANDROID WORK!
+  Future<int> deleteMany([Map<String, dynamic> filter]) async {
+    // force sending an empty filter instead asserting
+    if (filter == null) {
+      filter = Map<String, dynamic>();
+    }
+
+    var result = await Mongoatlasflutter._deleteDocuments(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+    );
+
+    return result;
   }
 
-  /// FILTER WORK!
+  /// FILTER ANDROID WORK!
   Future<List<MongoDocument>> find([Map<String, dynamic> filter]) async {
     List<dynamic> resultJson = await Mongoatlasflutter._findDocuments(
       collectionName: this.collectionName,
@@ -145,8 +163,7 @@ class MongoCollection {
     return result;
   }
 
-
-  /// FILTER WORK!
+  /// FILTER ANDROID WORK!
   Future<void> findOne([Map<String, dynamic> filter]) async {
     String resultJson = await Mongoatlasflutter._findFirstDocument(
       collectionName: this.collectionName,
@@ -158,7 +175,7 @@ class MongoCollection {
     return result;
   }
 
-  /// FILTER WORK!
+  /// FILTER ANDROID WORK!
   Future<int> count([Map<String, dynamic> filter]) async {
     int size = await Mongoatlasflutter._countDocuments(
       collectionName: this.collectionName,
@@ -168,14 +185,6 @@ class MongoCollection {
 
     return size;
   }
-
-  ///        collection?.count()
-  ///        collection?.count(filter)
-  ///        collection?.count(null)
-
-//  collection?.insertOne(Document())
-//  collection?.insertMany(listOf(Document(), Document(), Document()))
-//
 
 }
 
@@ -233,7 +242,6 @@ class Mongoatlasflutter {
     });
   }
 
-
   static Future _countDocuments(
       {String collectionName, String databaseName, dynamic filter}) async {
     final size = await _channel.invokeMethod('countDocuments', {
@@ -270,6 +278,17 @@ class Mongoatlasflutter {
   static Future _deleteDocument(
       {String collectionName, String databaseName, dynamic filter}) async {
     final result = await _channel.invokeMethod('deleteDocument', {
+      'database_name': databaseName,
+      'collection_name': collectionName,
+      'filter': filter
+    });
+
+    return result;
+  }
+
+  static Future _deleteDocuments(
+      {String collectionName, String databaseName, dynamic filter}) async {
+    final result = await _channel.invokeMethod('deleteDocuments', {
       'database_name': databaseName,
       'collection_name': collectionName,
       'filter': filter
