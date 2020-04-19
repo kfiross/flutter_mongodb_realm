@@ -14,7 +14,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
 
-  MongoAtlasClient client = MongoAtlasClient();
+  MongoStitchClient client = MongoStitchClient();
 
   @override
   void initState() {
@@ -22,14 +22,26 @@ class _MyAppState extends State<MyApp> {
 
     // initialized MongoStitch App
     client.initializeApp("mystitchapp-fjpmn").then((_) async {
-      // login Anonymously
-      await client.auth.loginWithCredential(AnonymousCredential());
+      try {
+        // create a user
+//        await client.auth
+//            .registerWithEmail(email: "cookie", password: "12345678");
 
-      // after app initialized and user authenticated, show some data
+        // login Anonymously
+
+//        await client.auth.loginWithCredential(
+////            AnonymousCredential()
+//          UserEmailPasswordCredential(email: "kfir",password: "12345678")
+//        );
+
+        // after app initialized and user authenticated, show some data
 
 //      insertData();
-      fetchData();
+        fetchData();
 //      deleteData();
+      } on PlatformException catch (e) {
+        debugPrint("Error! ${e.message}");
+      }
     });
   }
 

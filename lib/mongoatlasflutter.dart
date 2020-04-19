@@ -177,7 +177,7 @@ class MongoDatabase {
 
   MongoDatabase(this._name);
 
-  get name => name;
+  get name => _name;
 
   MongoCollection getCollection(String collectionName) {
     return MongoCollection(
@@ -187,16 +187,15 @@ class MongoDatabase {
   }
 }
 
-
 abstract class StitchCredential {}
 
 class AnonymousCredential extends StitchCredential {}
 
-class UserEmailPasswordCredential extends StitchCredential {
+class UserPasswordCredential extends StitchCredential {
   final String username;
   final String password;
 
-  UserEmailPasswordCredential({
+  UserPasswordCredential({
     @required this.username,
     @required this.password,
   });
@@ -208,14 +207,12 @@ class MongoStitchAuth {
 
     if (credential is AnonymousCredential) {
       result = await Mongoatlasflutter._signInAnonymously();
-    }
-    else if (credential is UserEmailPasswordCredential) {
-      result = await Mongoatlasflutter._signInWithEmailPassword(
+    } else if (credential is UserPasswordCredential) {
+      result = await Mongoatlasflutter._signInWithUsernamePassword(
         credential.username,
         credential.password,
       );
-    }
-    else {
+    } else {
       throw UnimplementedError();
     }
 
@@ -227,19 +224,21 @@ class MongoStitchAuth {
     return result;
   }
 
-
   Future<bool> getUserId() async {
     var result = await Mongoatlasflutter._getUserId();
     return result;
   }
 
-
+  Future<bool> registerWithEmail({@required String email,@required String password}) async {
+    var result = await Mongoatlasflutter._registerWithEmail(email, password);
+    return result;
+  }
 }
 
-class MongoAtlasClient {
+class MongoStitchClient {
   final MongoStitchAuth auth = MongoStitchAuth();
 
-  Future<void> initializeApp(String appID) async {
+  Future initializeApp(String appID) async {
     await Mongoatlasflutter._connectToMongo(appID);
   }
 
@@ -267,9 +266,10 @@ class Mongoatlasflutter {
 //    return x;
 //  }
 
-  static Future _signInWithEmailPassword(String email, String password) async {
-    final result = await _channel.invokeMethod(
-        'signInWithEmailPassword', {'email': email, 'password': password});
+  static Future _signInWithUsernamePassword(
+      String username, String password) async {
+    final result = await _channel.invokeMethod('signInWithUsernamePassword',
+        {'username': username, 'password': password});
 
     return result;
   }
@@ -287,7 +287,14 @@ class Mongoatlasflutter {
   }
 
   static Future _getUserId() async {
-    final result = await _channel.invokeMethod('userId');
+    final result = await _channel.invokeMethod('getUserId');
+
+    return result;
+  }
+
+  static Future<bool> _registerWithEmail(String email, String password) async {
+    final result = await _channel.invokeMethod(
+        'registerWithEmail', {'email': email, 'password': password});
 
     return result;
   }

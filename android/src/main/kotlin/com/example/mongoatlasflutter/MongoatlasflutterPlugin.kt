@@ -64,7 +64,8 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 
             /////
             "signInAnonymously" -> signInAnonymously(result)
-            "signInWithEmailPassword" -> signInWithEmailPassword(call, result)
+            "signInWithUsernamePassword" -> signInWithUsernamePassword(call, result)
+            "registerWithEmail" -> registerWithEmail(call, result)
             "logout" -> logout(result)
             "getUserId" -> getUserId(result)
 
@@ -96,6 +97,7 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
         )
 
         client = MongoAtlasClient(mongoClient, stitchAppClient.auth)
+        result.success(true)
     }
 
 //    private fun signInWithCustomJWT(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -116,6 +118,40 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 //    }
 
 
+    private fun signInWithUsernamePassword(@NonNull call: MethodCall, @NonNull result: Result) {
+        val username = call.argument<String>("username") ?: ""
+        val password = call.argument<String>("password") ?: ""
+
+        val task = client.signInWithUsernamePassword(username, password)
+
+        if (task == null)
+            result.error("Error", "Failed to Login", "")
+
+
+        task!!.addOnSuccessListener {
+            result.success(true)
+        }.addOnFailureListener {
+            result.error("ERROR", "UserEmailPassword Provider Login failed: ${it.message}", "")
+        }
+    }
+
+    private fun registerWithEmail(@NonNull call: MethodCall, @NonNull result: Result) {
+        val email = call.argument<String>("email") ?: ""
+        val password = call.argument<String>("password") ?: ""
+
+        val task = client.registerWithEmail(email, password)
+
+        if (task == null)
+            result.error("Error", "Failed to register a user", "")
+
+        task!!.addOnCompleteListener {
+            if (it.isSuccessful) {
+                result.success(true)
+            } else {
+                result.error("ERROR", "Error registering new user: ${it.exception?.message}", "")
+            }
+        }
+    }
 
     private fun signInAnonymously(@NonNull result: Result) {
         val task = client.signInAnonymously()
@@ -130,23 +166,6 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
-    private fun signInWithEmailPassword(@NonNull call: MethodCall, @NonNull result: Result) {
-        val username = call.argument<String>("username") ?: ""
-        val password = call.argument<String>("password") ?: ""
-
-        val task = client.signInWithEmailPassword(username, password)
-
-        if (task == null)
-            result.error("Error", "Failed to Login", "")
-
-
-        task!!.addOnSuccessListener {
-            result.success(true)
-        }.addOnFailureListener {
-            result.error("ERROR", "UserEmailPassword Provider Not Deployed", "")
-        }
-    }
-
 
     private fun logout(@NonNull result: Result) {
         val task = client.logout()
@@ -158,13 +177,12 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
-    private fun getUserId(@NonNull result: Result){
+    private fun getUserId(@NonNull result: Result) {
         val id = client.getUserId()
 
-        if (id == null){
-            result.error("ERROR","", null)
-        }
-        else{
+        if (id == null) {
+            result.error("ERROR", "", null)
+        } else {
             result.success(id)
         }
 
