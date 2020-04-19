@@ -38,9 +38,9 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
             self.deleteDocument(call: call, result: result)
             break
 
-//        case "deleteDocuments":
-//            self.deleteDocuments(call: call, result: result)
-//            break
+        case "deleteDocuments":
+            self.deleteDocuments(call: call, result: result)
+            break
         
         case "findDocuments":
             self.findDocuments(call: call, result: result)
@@ -77,9 +77,7 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
                                 details: nil))
         }
 
-        let stitchAppClient = try? Stitch.initializeDefaultAppClient(
-            withClientAppID: clientAppId!/*"mystitchapp-fjpmn"*/)
-//
+        let stitchAppClient = try? Stitch.initializeDefaultAppClient(withClientAppID: clientAppId!)
 //
 //
         stitchAppClient?.auth.login(withCredential: AnonymousCredential()) { authResult in
@@ -123,10 +121,10 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
             onCompleted: {
                 result(true)
             },
-            onError: {
+            onError: { message in
                 result(FlutterError(
                     code: "ERROR",
-                    message: "Failed to insert a document",
+                    message: message,
                     details: nil
                 ))
             }
@@ -139,19 +137,43 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
 
         let databaseName = args["database_name"] as? String
         let collectionName = args["collection_name"] as? String
-        let filter = args["filter"] as? Dictionary<String, Any>
+        let filter = args["filter"] as? String
         
         self.client?.deleteDocument(
             databaseName: databaseName,
             collectionName: collectionName,
-            filter: nil,
-            onCompleted: {
-                result(true)
+            filterJson: filter,
+            onCompleted: { value in
+                result(value)
             },
-            onError: {
+            onError: { message in
                 result(FlutterError(
                     code: "ERROR",
-                    message: "Failed to delete a document",
+                    message: message,
+                    details: nil
+                ))
+            }
+        )
+    }
+    
+    func deleteDocuments(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
+        let filter = args["filter"] as? String
+        
+        self.client?.deleteDocuments(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            filterJson: filter,
+            onCompleted: { value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(
+                    code: "ERROR",
+                    message: message,
                     details: nil
                 ))
             }
@@ -163,19 +185,19 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
         
         let databaseName = args["database_name"] as? String
         let collectionName = args["collection_name"] as? String
-        let filter = args["filter"] as? Dictionary<String, Any>
+        let filter = args["filter"] as? String
         
         self.client?.findDocuments(
             databaseName: databaseName,
             collectionName: collectionName,
-            filter: nil,
+            filterJson: filter,
             onCompleted: {value in
                 result(value)
             },
-            onError: {
+            onError: { message in
                 result(FlutterError(
                     code: "ERROR",
-                    message: "Failed to find documents",
+                    message: message,
                     details: nil
                 ))
             }
@@ -187,19 +209,19 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
         
         let databaseName = args["database_name"] as? String
         let collectionName = args["collection_name"] as? String
-        let filter = args["filter"] as? Dictionary<String, Any>
+        let filter = args["filter"] as? String
         
         self.client?.findDocument(
             databaseName: databaseName,
             collectionName: collectionName,
-            filter: nil,
+            filterJson: filter,
             onCompleted: {value in
                 result(value)
             },
-            onError: {
+            onError: { message in
                 result(FlutterError(
                     code: "ERROR",
-                    message: "Failed to find a document",
+                    message: message,
                     details: nil
                 ))
             }
@@ -211,19 +233,19 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
         
         let databaseName = args["database_name"] as? String
         let collectionName = args["collection_name"] as? String
-        let filter = args["filter"] as? Dictionary<String, Any>
+        let filter = args["filter"] as? String
     
         self.client?.countDocuments(
             databaseName: databaseName,
             collectionName: collectionName,
-            filter: nil,
+            filterJson: filter,
             onCompleted: {value in
                 result(value)
             },
-            onError: {
+            onError: { message in
                 result(FlutterError(
                     code: "ERROR",
-                    message: "Failed to count a collection",
+                    message: message,
                     details: nil
                 ))
             }

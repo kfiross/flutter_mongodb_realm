@@ -60,21 +60,23 @@ class _MyAppState extends State<MyApp> {
 
 
 //      var size = await collection.count({
-//        "name": "kfir"
+//        // "name": "kfir"
+//        "name": "Taylor Scott",
 //      });
 //      print(size);
 
 
-      var docs = await collection.find({
-        // "name": "kfir",
-        "name": "Andrea Le",
-      });
-      print(docs.length);
+//      var docs = await collection.find({
+//        // "name": "kfir",
+//        "name": "Taylor Scott",
+//      });
+//      print(docs.length);
 
-//        var doc = await collection.findOne({
-//        "name": "kfir",
-//        });
-//        int ssaa = 232;
+        var doc = await collection.findOne({
+        //"name": "kfir",
+          "name": "Taylor Scott",
+        });
+        int ssaa = 232;
 
 
     } on PlatformException catch(e) {

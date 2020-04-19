@@ -66,7 +66,7 @@ class MongoAtlasClient {
         collectionName: String?,
         data: Dictionary<String, Any>?,
         onCompleted: @escaping ()->Void,
-        onError: @escaping ()->Void
+        onError: @escaping (String?)->Void
    ) {
         do {
             let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
@@ -87,73 +87,96 @@ class MongoAtlasClient {
                     print("Successfully inserted item with _id: \(result.insertedId))");
                     onCompleted()
                 case .failure(let error):
-                    print("Failed to insert item: \(error)");
-                    onError()
+                    onError("Failed to insert a document: \(error)")
                 }
             }
         }
         catch {
-            onError()
+            onError("Failed to insert a document")
         }
     }
     
     ///////////////////////////
-    // DONE!
+ 
     func deleteDocument(
         databaseName: String?,
         collectionName: String?,
-        filter: Dictionary<String, Any>?,
-        onCompleted: @escaping ()->Void,
-        onError: @escaping ()->Void
-        ) {
-        do {
-            let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
-            
-            var documentFilter = Document()
-//            for (key) in data!.keys{
-//                let value = data![key]
-//
-//                if (value != nil){
-//                    documentFilter[key] = BsonExtractor.getValue(of: value!)
-//                }
-//            }
-//
-            
-            
-            collection?.deleteOne(documentFilter) { result in
-                switch result {
-                case .success(let result):
-                    onCompleted()
-                case .failure(let error):
-                    onError()
-                }
-            }
-        }
-        catch {
-            onError()
-        }
-    }
-    
-    // DONE!
-    func findDocuments(
-        databaseName: String?,
-        collectionName: String?,
-        filter: Dictionary<String, Any>?,
+        filterJson: String?,
         onCompleted: @escaping (Any?)->Void,
-        onError: @escaping ()->Void
+        onError: @escaping (String?)->Void
         ) {
         do {
             let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
             
             var document = Document()
-//            for (key) in data!.keys{
-//                let value = data![key]
-//
-//                if (value != nil){
-//                    document[key] = BsonExtractor.getValue(of: value!)
-//                }
-//            }
             
+            if (filterJson != nil){
+                document = try Document.init(fromJSON: filterJson!)
+            }
+        
+            
+            collection?.deleteOne(document) { result in
+                switch result {
+                case .success(let result):
+                    onCompleted(result)
+                case .failure(let error):
+                    onError("Failed to delete a document : \(error)")
+                }
+            }
+        }
+        catch {
+            onError("Failed to delete a document")
+        }
+    }
+    
+    // CHECK
+    func deleteDocuments(
+        databaseName: String?,
+        collectionName: String?,
+        filterJson: String?,
+        onCompleted: @escaping (Any?)->Void,
+        onError: @escaping (String?)->Void
+        ) {
+        do {
+            let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
+            
+            var document = Document()
+            
+            if (filterJson != nil){
+                document = try Document.init(fromJSON: filterJson!)
+            }
+            
+            collection?.deleteMany(document) { result in
+                switch result {
+                case .success(let result):
+                    onCompleted(result)
+                case .failure(let error):
+                    onError("Failed to delete documents : \(error)")
+                }
+            }
+        
+        }
+        catch {
+            onError("Failed to delete documents")
+        }
+    }
+  
+  
+    func findDocuments(
+        databaseName: String?,
+        collectionName: String?,
+        filterJson: String?,
+        onCompleted: @escaping (Any?)->Void,
+        onError: @escaping (String?)->Void
+        ) {
+        do {
+            let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
+            
+            var document = Document()
+            
+            if (filterJson != nil){
+                document = try Document.init(fromJSON: filterJson!)
+            }
             
             let task = collection?.find(document, options: nil)
 
@@ -163,86 +186,78 @@ class MongoAtlasClient {
                     let queryResults =  results.map({ $0.extendedJSON })
                     onCompleted(queryResults)
                 case .failure(let error):
-                    print("Failed to insert item: \(error)");
-                    onError()
+                    onError("Failed to find documents: \(error)")
                 }
             }
         }
         catch {
-            onError()
+            onError("Failed to find documents")
         }
     }
     
-    // DONE!
+ 
     func findDocument(
         databaseName: String?,
         collectionName: String?,
-        filter: Dictionary<String, Any>?,
+        filterJson: String?,
         onCompleted: @escaping (Any?)->Void,
-        onError: @escaping ()->Void
+        onError: @escaping (String?)->Void
         ) {
         do {
             let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
             
             var document = Document()
-//            for (key) in data!.keys{
-//                let value = data![key]
-//
-//                if (value != nil){
-//                    document[key] = BsonExtractor.getValue(of: value!)
-//                }
-//            }
             
+            if (filterJson != nil){
+                document = try Document.init(fromJSON: filterJson!)
+            }
             
             collection?.findOne(document) { result in
                 switch result {
                 case .success(let result):
                     onCompleted(result?.extendedJSON)
+                    break
                 case .failure(let error):
-                    print("Failed to insert item: \(error)");
-                    onError()
+                    onError("Failed to find item: \(error)")
+                    break
                 }
             }
         }
         catch {
-            onError()
+            onError("Failed to find item")
         }
     }
     
-    // DONE!
+
     func countDocuments(
         databaseName: String?,
         collectionName: String?,
-        filter: Dictionary<String, Any>?,
+        filterJson: String?,
         onCompleted: @escaping (Any)->Void,
-        onError: @escaping ()->Void
+        onError: @escaping (String?)->Void
         ) {
         do {
             let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
             
             var document = Document()
-//            for (key) in filter!.keys{
-//                let value = data![key]
-//
-//                if (value != nil){
-//                    document[key] = BsonExtractor.getValue(of: value!)
-//                }
-//            }
-            
+        
+            if (filterJson != nil){
+                document = try Document.init(fromJSON: filterJson!)
+            }
+
             
             collection?.count(document) { result in
                 switch result {
                 case .success(let result):
                     onCompleted(result)
                 case .failure(let error):
-                    print("Failed with error: \(error)");
-                    onError()
+                    onError("Failed to count collection: \(error)")
                 }
             }
         
         }
         catch {
-            onError()
+            onError("Failed to count collection")
         }
     }
 }

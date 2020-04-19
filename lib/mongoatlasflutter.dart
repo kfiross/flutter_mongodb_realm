@@ -71,8 +71,11 @@ class MongoDocument {
 
             // Convert 'Date' type
             case "date":
-              map[key] =
-                  DateTime.fromMillisecondsSinceEpoch(map2.value, isUtc: true);
+              if (map2.value is int)
+                map[key] =
+                    DateTime.fromMillisecondsSinceEpoch(map2.value, isUtc: true);
+              else if (map2.value is String)
+                map[key] = DateTime.parse(map2.value);
               break;
           }
         }
@@ -175,7 +178,7 @@ class MongoCollection {
     return result;
   }
 
-  /// FILTER ANDROID WORK!
+  /// FILTER ANDROID+IOS WORK!
   Future<int> count([Map<String, dynamic> filter]) async {
     int size = await Mongoatlasflutter._countDocuments(
       collectionName: this.collectionName,
