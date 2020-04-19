@@ -102,6 +102,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.8"
+  mongo_dart_query:
+    dependency: "direct main"
+    description:
+      name: mongo_dart_query
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1"
   more:
     dependency: transitive
     description:

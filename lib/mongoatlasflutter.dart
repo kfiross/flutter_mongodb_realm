@@ -4,8 +4,11 @@ import 'dart:convert';
 import 'package:bson/bson.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:mongoatlasflutter/query_selector.dart';
 
-// todo: maybe using 'BsonObject' instead 'dynamic'
+export 'query_selector.dart';
+
+// TODO: maybe using 'BsonObject' instead 'dynamic'
 class BsonDocument {
   final Map<String, dynamic> _map;
 
@@ -98,6 +101,7 @@ class MongoCollection {
     );
   }
 
+  // TODO: implement this
   void insertMany(List<MongoDocument> documents) {
 //    Mongoatlasflutter._insertDocument(
 //      collectionName: this.collectionName,
@@ -112,6 +116,13 @@ class MongoCollection {
     if (filter == null) {
       filter = Map<String, dynamic>();
     }
+
+    // convert 'QuerySelector' into map, too
+    filter.forEach((key, value) {
+      if (value is QuerySelector){
+        filter[key] = value.values;
+      }
+    });
 
     var result = await Mongoatlasflutter._deleteDocument(
       collectionName: this.collectionName,
@@ -129,6 +140,13 @@ class MongoCollection {
       filter = Map<String, dynamic>();
     }
 
+    // convert 'QuerySelector' into map, too
+    filter.forEach((key, value) {
+      if (value is QuerySelector){
+        filter[key] = value.values;
+      }
+    });
+
     var result = await Mongoatlasflutter._deleteDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
@@ -140,6 +158,26 @@ class MongoCollection {
 
   /// FILTER ANDROID+IOS WORK!
   Future<List<MongoDocument>> find([Map<String, dynamic> filter]) async {
+    // fix map
+    // ex. {"year": { "$gt": 2014 }}
+
+    // {"year":{"$gt":2014}}
+
+
+    // Me
+    // {"year":{"$gt":2010,"$lte":2014}}
+
+    // Site
+    // {"year": { "$gt": 2010, "$lte": 2014 }}
+
+    // convert 'QuerySelector' into map, too
+    filter.forEach((key, value) {
+      if (value is QuerySelector){
+       filter[key] = value.values;
+      }
+    });
+
+
     List<dynamic> resultJson = await Mongoatlasflutter._findDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
@@ -153,7 +191,7 @@ class MongoCollection {
     return result;
   }
 
-  /// FILTER ANDROID+IOS WORK!
+
   Future<void> findOne([Map<String, dynamic> filter]) async {
     String resultJson = await Mongoatlasflutter._findFirstDocument(
       collectionName: this.collectionName,
@@ -161,12 +199,27 @@ class MongoCollection {
       filter: BsonDocument(filter).toJson(),
     );
 
+    // convert 'QuerySelector' into map, too
+    filter.forEach((key, value) {
+      if (value is QuerySelector){
+        filter[key] = value.values;
+      }
+    });
+
     var result = MongoDocument.parse(resultJson);
     return result;
   }
 
-  /// FILTER ANDROID+IOS WORK!
+
   Future<int> count([Map<String, dynamic> filter]) async {
+
+    // convert 'QuerySelector' into map, too
+    filter.forEach((key, value) {
+      if (value is QuerySelector){
+        filter[key] = value.values;
+      }
+    });
+
     int size = await Mongoatlasflutter._countDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,

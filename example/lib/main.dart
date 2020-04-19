@@ -4,6 +4,9 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:mongoatlasflutter/mongoatlasflutter.dart';
 
+
+
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -64,7 +67,7 @@ class _MyAppState extends State<MyApp> {
     // sample_mflix.comments
     // test.my_collection
     var collection =
-        client.getDatabase("sample_mflix").getCollection("comments");
+        client.getDatabase("sample_mflix").getCollection("movies");
 
     try {
 //      var document = MongoDocument.fromMap({
@@ -79,9 +82,11 @@ class _MyAppState extends State<MyApp> {
 //      });
 //      print(size);
 
+
+
       var docs = await collection.find({
-        // "name": "kfir",
-        "name": "Taylor Scott",
+        "year": QuerySelector.gt(2010)..lte(2014),
+     // "year":{"$gt":2010,"$lte":2014}}
       });
       print(docs.length);
 
