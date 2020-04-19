@@ -20,13 +20,16 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    // initiliize MongoStitch App
-    client.initializeApp("mystitchapp-fjpmn").then((_) {
-      // after app initlized, show some data
-      // insertData();
-//       fetchData();
-      deleteData();
+    // initialized MongoStitch App
+    client.initializeApp("mystitchapp-fjpmn").then((_) async {
+      // login Anonymously
+      await client.auth.loginWithCredential(AnonymousCredential());
 
+      // after app initialized and user authenticated, show some data
+
+//      insertData();
+      fetchData();
+//      deleteData();
     });
   }
 
@@ -40,7 +43,6 @@ class _MyAppState extends State<MyApp> {
         "age": 25,
         "price": 31.72
       });
-
     } on PlatformException {
       debugPrint("Error!!!");
     }
@@ -49,7 +51,8 @@ class _MyAppState extends State<MyApp> {
   Future<void> fetchData() async {
     // sample_mflix.comments
     // test.my_collection
-    var collection = client.getDatabase("sample_mflix").getCollection("comments");
+    var collection =
+        client.getDatabase("sample_mflix").getCollection("comments");
 
     try {
 //      var document = MongoDocument.fromMap({
@@ -57,7 +60,6 @@ class _MyAppState extends State<MyApp> {
 //        "user_id": "abcdefg",
 //        "price": 31.78432
 //      });
-
 
 //      var size = await collection.count({
 //        // "name": "kfir"
@@ -65,21 +67,19 @@ class _MyAppState extends State<MyApp> {
 //      });
 //      print(size);
 
+      var docs = await collection.find({
+        // "name": "kfir",
+        "name": "Taylor Scott",
+      });
+      print(docs.length);
 
-//      var docs = await collection.find({
-//        // "name": "kfir",
+//      var doc = await collection.findOne({
+//        //"name": "kfir",
 //        "name": "Taylor Scott",
 //      });
-//      print(docs.length);
+//      int ssaa = 232;
 
-        var doc = await collection.findOne({
-        //"name": "kfir",
-          "name": "Taylor Scott",
-        });
-        int ssaa = 232;
-
-
-    } on PlatformException catch(e) {
+    } on PlatformException catch (e) {
       debugPrint("Error: $e");
     }
   }
@@ -87,7 +87,8 @@ class _MyAppState extends State<MyApp> {
   Future<void> deleteData() async {
     // sample_mflix.comments
     // test.my_collection
-    var collection = client.getDatabase("sample_mflix").getCollection("comments");
+    var collection =
+        client.getDatabase("sample_mflix").getCollection("comments");
 
     try {
 //      var document = MongoDocument.fromMap({
@@ -96,22 +97,18 @@ class _MyAppState extends State<MyApp> {
 //        "price": 31.78432
 //      });
 
-
 //      var docs = await collection.find();
 //      print(docs.length);
 
 //      var deletedDocs = await collection.deleteOne({"name": "Gilly"});
 //      print(deletedDocs);
 
-
       var deletedDocs = await collection.deleteMany({"name": "Andrea Le"});
       print(deletedDocs);
 
-
-
 //      var size = await collection.count();
 //      print(size);
-    } on PlatformException catch(e) {
+    } on PlatformException catch (e) {
       debugPrint("Error! ${e.message}");
     }
   }

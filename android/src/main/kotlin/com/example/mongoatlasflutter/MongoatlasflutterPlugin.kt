@@ -9,7 +9,6 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import com.mongodb.stitch.android.core.Stitch
 import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
-import com.mongodb.stitch.core.auth.providers.anonymous.AnonymousCredential
 
 
 /** MongoatlasflutterPlugin */
@@ -17,6 +16,7 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 
 
     private lateinit var client: MongoAtlasClient
+
 
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
@@ -59,9 +59,15 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 //            
             "findDocuments" -> this.findDocuments(call, result)
             "findDocument" -> this.findDocument(call, result)
-            
-            "countDocuments" ->  this.countDocuments(call, result)
-            
+
+            "countDocuments" -> this.countDocuments(call, result)
+
+            /////
+            "signInAnonymously" -> signInAnonymously(result)
+            "signInWithEmailPassword" -> signInWithEmailPassword(call, result)
+            "logout" -> logout(result)
+            "getUserId" -> getUserId(result)
+
             else -> result.notImplemented()
         }
 
@@ -84,33 +90,87 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 
         val stitchAppClient = Stitch.getDefaultAppClient()
 
+        val mongoClient = stitchAppClient.getServiceClient(
+                RemoteMongoClient.factory,
+                "mongodb-atlas"
+        )
 
+        client = MongoAtlasClient(mongoClient, stitchAppClient.auth)
+    }
 
-        stitchAppClient.auth.loginWithCredential(AnonymousCredential())
-                .addOnSuccessListener {
-                    // More code here
-
-                    val mongoClient = stitchAppClient.getServiceClient(
-                            RemoteMongoClient.factory,
-                            "mongodb-atlas"
-                    )
-
-                    client = MongoAtlasClient(mongoClient)
-
-
-                    result.success(true)
-                }
-                .addOnFailureListener {
-                    result.error("ERROR", "Anonymous Provider Not Deployed", "")
-                }
+//    private fun signInWithCustomJWT(@NonNull call: MethodCall, @NonNull result: Result) {
+////        val username = call.argument<String>("username") ?: ""
+//        val token = call.argument<String>("token") ?: ""
 //
-//      }
+//        val task = client.signInWithCustomJWT(token)
+//
+//        if (task == null)
+//            result.error("Error", "Failed to Login", "")
+//
+//
+//        task.addOnSuccessListener {
+//            result.success(true)
+//        }.addOnFailureListener {
+//            result.error("ERROR", "UserEmailPassword Provider Not Deployed", "")
+//        }
 //    }
-//
-//    thread.start()
+
+
+
+    private fun signInAnonymously(@NonNull result: Result) {
+        val task = client.signInAnonymously()
+
+        if (task == null)
+            result.error("Error", "Failed to Login", "")
+
+        task!!.addOnSuccessListener {
+            result.success(true)
+        }.addOnFailureListener {
+            result.error("ERROR", "Anonymous Provider Not Deployed", "")
+        }
+    }
+
+    private fun signInWithEmailPassword(@NonNull call: MethodCall, @NonNull result: Result) {
+        val username = call.argument<String>("username") ?: ""
+        val password = call.argument<String>("password") ?: ""
+
+        val task = client.signInWithEmailPassword(username, password)
+
+        if (task == null)
+            result.error("Error", "Failed to Login", "")
+
+
+        task!!.addOnSuccessListener {
+            result.success(true)
+        }.addOnFailureListener {
+            result.error("ERROR", "UserEmailPassword Provider Not Deployed", "")
+        }
+    }
+
+
+    private fun logout(@NonNull result: Result) {
+        val task = client.logout()
+
+        task.addOnSuccessListener {
+            result.success(true)
+        }.addOnFailureListener {
+            result.error("ERROR", "Cannot logout user", "")
+        }
+    }
+
+    private fun getUserId(@NonNull result: Result){
+        val id = client.getUserId()
+
+        if (id == null){
+            result.error("ERROR","", null)
+        }
+        else{
+            result.success(id)
+        }
 
     }
 
+    //////////////////////////////////////////////////////////////////////////////
     /**
      *
      */
@@ -130,7 +190,7 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
             result.error("Error", "Failed to insert a document", "")
 
         task!!.addOnCompleteListener {
-            if(it.isSuccessful)
+            if (it.isSuccessful)
                 result.success(true)
             else
                 result.error("Error", "Failed to insert a document - Permission DENIED", "")
@@ -162,7 +222,7 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 //
 //        }
     }
-   
+
     private fun deleteDocument(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
@@ -179,13 +239,14 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
             result.error("Error", "Failed to delete a document", "")
 
         task!!.addOnCompleteListener {
-            if(it.isSuccessful)
+            if (it.isSuccessful)
                 result.success(it.result.deletedCount)
             else
                 result.error("Error", "Failed to delete a document - Permission DENIED", "")
 
         }
     }
+
     private fun deleteDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
@@ -201,21 +262,21 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
             result.error("Error", "Failed to insert a document", "")
 
         task!!.addOnCompleteListener {
-            if(it.isSuccessful)
+            if (it.isSuccessful)
                 result.success(it.result.deletedCount)
             else
                 result.error("Error", "Failed to insert a document - Permission DENIED", "")
 
         }
     }
-    
+
     /** ============================================================== */
     // filter option added
     private fun findDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val filter = call.argument<String>("filter")
-        
+
         val task = client.findDocuments(
                 databaseName,
                 collectionName,
@@ -230,7 +291,7 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
         task!!.forEach {
             queryResults.add(it.toJson())
         }.continueWith {
-            if(it.isSuccessful)
+            if (it.isSuccessful)
                 result.success(queryResults)
             else
                 result.error("Error", "Failed to insert a document - Permission DENIED", "")
@@ -255,14 +316,14 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
             result.error("Error", "Failed to insert a document", "")
 
         task!!.addOnCompleteListener {
-            if(it.isSuccessful)
+            if (it.isSuccessful)
                 result.success(it.result.toJson())
             else
                 result.error("Error", "Failed to insert a document - Permission DENIED", "")
 
         }
     }
-   
+
     // filter option added
     private fun countDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
@@ -271,16 +332,16 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
 
 
         val task = client.countDocuments(
-             databaseName,
-             collectionName,
-             filter
+                databaseName,
+                collectionName,
+                filter
         )
 
         if (task == null)
             result.error("Error", "Failed to count the collection", "")
 
         task!!.addOnCompleteListener {
-            if(it.isSuccessful)
+            if (it.isSuccessful)
                 result.success(it.result)
             else
                 result.error("Error", "Failed to count the collection - Permission DENIED", "")

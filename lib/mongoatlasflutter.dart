@@ -5,24 +5,6 @@ import 'package:bson/bson.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-//mixin ToAlias{}
-//
-//class BsonDocumentGeneric<T, U> {
-//  Map<T, U> value;
-//  BsonDocumentGeneric(this.value);
-//
-//  getValue(){
-//    return value;
-//  }
-//}
-//
-//class BsonDocument = BsonDocumentGeneric<String, Object> with ToAlias;
-//
-//BsonDocument x = BsonDocument({"age": 5});
-//x.getValue();
-
-//class BsonDocument = Map<String, Object>;
-
 // todo: maybe using 'BsonObject' instead 'dynamic'
 class BsonDocument {
   final Map<String, dynamic> _map;
@@ -72,8 +54,8 @@ class MongoDocument {
             // Convert 'Date' type
             case "date":
               if (map2.value is int)
-                map[key] =
-                    DateTime.fromMillisecondsSinceEpoch(map2.value, isUtc: true);
+                map[key] = DateTime.fromMillisecondsSinceEpoch(map2.value,
+                    isUtc: true);
               else if (map2.value is String)
                 map[key] = DateTime.parse(map2.value);
               break;
@@ -119,7 +101,7 @@ class MongoCollection {
 //    );
   }
 
-  /// FILTER ANDROID WORK!
+  /// FILTER ANDROID+IOS WORK!
   Future<int> deleteOne([Map<String, dynamic> filter]) async {
     // force sending an empty filter instead asserting
     if (filter == null) {
@@ -135,7 +117,7 @@ class MongoCollection {
     return result;
   }
 
-  /// FILTER ANDROID WORK!
+  /// FILTER ANDROID+IOS WORK!
   Future<int> deleteMany([Map<String, dynamic> filter]) async {
     // force sending an empty filter instead asserting
     if (filter == null) {
@@ -151,7 +133,7 @@ class MongoCollection {
     return result;
   }
 
-  /// FILTER ANDROID WORK!
+  /// FILTER ANDROID+IOS WORK!
   Future<List<MongoDocument>> find([Map<String, dynamic> filter]) async {
     List<dynamic> resultJson = await Mongoatlasflutter._findDocuments(
       collectionName: this.collectionName,
@@ -166,7 +148,7 @@ class MongoCollection {
     return result;
   }
 
-  /// FILTER ANDROID WORK!
+  /// FILTER ANDROID+IOS WORK!
   Future<void> findOne([Map<String, dynamic> filter]) async {
     String resultJson = await Mongoatlasflutter._findFirstDocument(
       collectionName: this.collectionName,
@@ -188,13 +170,14 @@ class MongoCollection {
 
     return size;
   }
-
 }
 
 class MongoDatabase {
-  final String name;
+  final String _name;
 
-  MongoDatabase(this.name);
+  MongoDatabase(this._name);
+
+  get name => name;
 
   MongoCollection getCollection(String collectionName) {
     return MongoCollection(
@@ -204,7 +187,58 @@ class MongoDatabase {
   }
 }
 
+
+abstract class StitchCredential {}
+
+class AnonymousCredential extends StitchCredential {}
+
+class UserEmailPasswordCredential extends StitchCredential {
+  final String username;
+  final String password;
+
+  UserEmailPasswordCredential({
+    @required this.username,
+    @required this.password,
+  });
+}
+
+class MongoStitchAuth {
+  Future<bool> loginWithCredential(StitchCredential credential) async {
+    var result;
+
+    if (credential is AnonymousCredential) {
+      result = await Mongoatlasflutter._signInAnonymously();
+    }
+    else if (credential is UserEmailPasswordCredential) {
+      result = await Mongoatlasflutter._signInWithEmailPassword(
+        credential.username,
+        credential.password,
+      );
+    }
+    else {
+      throw UnimplementedError();
+    }
+
+    return result;
+  }
+
+  Future<bool> logout() async {
+    var result = await Mongoatlasflutter._logout();
+    return result;
+  }
+
+
+  Future<bool> getUserId() async {
+    var result = await Mongoatlasflutter._getUserId();
+    return result;
+  }
+
+
+}
+
 class MongoAtlasClient {
+  final MongoStitchAuth auth = MongoStitchAuth();
+
   Future<void> initializeApp(String appID) async {
     await Mongoatlasflutter._connectToMongo(appID);
   }
@@ -232,6 +266,33 @@ class Mongoatlasflutter {
 //
 //    return x;
 //  }
+
+  static Future _signInWithEmailPassword(String email, String password) async {
+    final result = await _channel.invokeMethod(
+        'signInWithEmailPassword', {'email': email, 'password': password});
+
+    return result;
+  }
+
+  static Future _signInAnonymously() async {
+    final result = await _channel.invokeMethod('signInAnonymously');
+
+    return result;
+  }
+
+  static Future _logout() async {
+    final result = await _channel.invokeMethod('logout');
+
+    return result;
+  }
+
+  static Future _getUserId() async {
+    final result = await _channel.invokeMethod('userId');
+
+    return result;
+  }
+
+  /// /////////////////////////////////////////////////////////////////
 
   static Future _insertDocument({
     @required String collectionName,
