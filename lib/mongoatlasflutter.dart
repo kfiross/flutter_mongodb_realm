@@ -46,6 +46,11 @@ class MongoDocument {
         final map2 = value.entries.toList()[0];
         if (map2.key.contains("\$")) {
           switch (map2.key.substring(1)) {
+            // Convert 'ObjectId' type
+            case "oid":
+              map[key] = ObjectId.fromHexString(map2.value);
+              break;
+
             // Convert 'Int64' type
             case "numberLong":
               map[key] = int.parse(map2.value);
