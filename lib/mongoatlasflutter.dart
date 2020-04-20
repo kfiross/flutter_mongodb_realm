@@ -39,6 +39,46 @@ class MongoDocument {
     }
   }
 
+  static fixMapMismatchedTypes(Map map){
+    final map2 = map.entries.toList();
+    var result;
+    if (map2.length == 1 && map2[0].key.contains("\$")) {
+      switch (map2[0].key.substring(1)) {
+      // Convert 'ObjectId' type
+        case "oid":
+          result = ObjectId.fromHexString(map2[0].value);
+          break;
+
+      // Convert 'Int64' type
+        case "numberLong":
+          result = int.parse(map2[0].value);
+          break;
+
+      // Convert 'Date' type
+        case "date":
+          if (map2[0].value is int)
+            result = DateTime.fromMillisecondsSinceEpoch(map2[0].value,
+                isUtc: true);
+          else if (map2[0].value is String)
+            result = DateTime.parse(map2[0].value);
+          break;
+      }
+    }
+
+    // fix 'Object' attribute types
+    else {
+      map.forEach((key, value) {
+        if (value is LinkedHashMap) {
+          map[key] = fixMapMismatchedTypes(value);
+        }
+      });
+      result = map;
+
+    }
+
+    return result;
+  }
+
   /// Parses a string in MongoDB Extended JSON format to a Document
   static MongoDocument parse(String jsonString) {
     Map<String, dynamic> map = json.decode(jsonString);
@@ -46,29 +86,7 @@ class MongoDocument {
     // fix MongoDB bullshit
     map.forEach((key, value) {
       if (value is LinkedHashMap) {
-        final map2 = value.entries.toList()[0];
-        if (map2.key.contains("\$")) {
-          switch (map2.key.substring(1)) {
-            // Convert 'ObjectId' type
-            case "oid":
-              map[key] = ObjectId.fromHexString(map2.value);
-              break;
-
-            // Convert 'Int64' type
-            case "numberLong":
-              map[key] = int.parse(map2.value);
-              break;
-
-            // Convert 'Date' type
-            case "date":
-              if (map2.value is int)
-                map[key] = DateTime.fromMillisecondsSinceEpoch(map2.value,
-                    isUtc: true);
-              else if (map2.value is String)
-                map[key] = DateTime.parse(map2.value);
-              break;
-          }
-        }
+        map[key] = fixMapMismatchedTypes(value);
       }
     });
 
