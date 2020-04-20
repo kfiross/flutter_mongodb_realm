@@ -1,6 +1,6 @@
-package com.example.mongoatlasflutter
+package com.example.mongostitchflutter
 
-import androidx.annotation.NonNull;
+import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -11,11 +11,11 @@ import com.mongodb.stitch.android.core.Stitch
 import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
 
 
-/** MongoatlasflutterPlugin */
-public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
+/** MongostitchflutterPlugin */
+public class MongostitchflutterPlugin : FlutterPlugin, MethodCallHandler {
 
 
-    private lateinit var client: MongoAtlasClient
+    private lateinit var client: MyMongoStitchClient
 
 
     /// The MethodChannel that will the communication between Flutter and native Android
@@ -25,7 +25,7 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var channel: MethodChannel
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "mongoatlasflutter")
+        channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "mongostitchflutter")
         channel.setMethodCallHandler(this);
     }
 
@@ -41,8 +41,8 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
     companion object {
         @JvmStatic
         fun registerWith(registrar: Registrar) {
-            val channel = MethodChannel(registrar.messenger(), "mongoatlasflutter")
-            channel.setMethodCallHandler(MongoatlasflutterPlugin())
+            val channel = MethodChannel(registrar.messenger(), "mongostitchflutter")
+            channel.setMethodCallHandler(MongostitchflutterPlugin())
         }
     }
 
@@ -52,15 +52,15 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
             "connectMongo" -> connectMongo(call, result)
             "insertDocument" -> insertDocument(call, result)
 
-//            "insertDocuments" -> this.insertDocuments(call, result)
+            "insertDocuments" -> insertDocuments(call, result)
 //            
-            "deleteDocument" -> this.deleteDocument(call, result)
-            "deleteDocuments" -> this.deleteDocuments(call, result)
+            "deleteDocument" -> deleteDocument(call, result)
+            "deleteDocuments" -> deleteDocuments(call, result)
 //            
-            "findDocuments" -> this.findDocuments(call, result)
-            "findDocument" -> this.findDocument(call, result)
+            "findDocuments" -> findDocuments(call, result)
+            "findDocument" -> findDocument(call, result)
 
-            "countDocuments" -> this.countDocuments(call, result)
+            "countDocuments" -> countDocuments(call, result)
 
             /////
             "signInAnonymously" -> signInAnonymously(result)
@@ -96,7 +96,7 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
                 "mongodb-atlas"
         )
 
-        client = MongoAtlasClient(mongoClient, stitchAppClient.auth)
+        client = MyMongoStitchClient(mongoClient, stitchAppClient.auth)
         result.success(true)
     }
 
@@ -216,29 +216,29 @@ public class MongoatlasflutterPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
-    // TODO: CHECK ALL THIS OPERATIONS !!!!
+    // TODO: CHECK THIS OPERATION !!!!
     private fun insertDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
-        val data = call.argument<HashMap<String, Any>>("data")
+        val list = call.argument<List<String>>("list")
 
 
-//        val task = client.insertDocuments(
-//                databaseName,
-//                collectionName,
-//                data
-//        )
-//
-//        if (task == null)
-//            result.error("Error", "Failed to insert a document", "")
-//
-//        task!!.addOnCompleteListener {
-//            if(it.isSuccessful)
-//                result.success(true)
-//            else
-//                result.error("Error", "Failed to insert a document - Permission DENIED", "")
-//
-//        }
+        val task = client.insertDocuments(
+                databaseName,
+                collectionName,
+                list
+        )
+
+        if (task == null)
+            result.error("Error", "Failed to insert a document", "")
+
+        task!!.addOnCompleteListener {
+            if(it.isSuccessful)
+                result.success(true)
+            else
+                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+
+        }
     }
 
     private fun deleteDocument(@NonNull call: MethodCall, @NonNull result: Result) {

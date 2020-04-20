@@ -109,14 +109,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.8"
-  mongo_dart_query:
-    dependency: transitive
-    description:
-      name: mongo_dart_query
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1"
-  mongoatlasflutter:
+  mongostitchflutter:
     dependency: "direct dev"
     description:
       path: ".."

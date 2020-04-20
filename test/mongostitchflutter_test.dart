@@ -1,9 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mongoatlasflutter/mongoatlasflutter.dart';
+import 'package:mongostitchflutter/mongostitchflutter.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('mongoatlasflutter');
+  const MethodChannel channel = MethodChannel('mongostitchflutter');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -18,6 +18,6 @@ void main() {
   });
 
 //  test('getPlatformVersion', () async {
-//    //expect(await Mongoatlasflutter.platformVersion, '42');
+//    //expect(await Mongostitchflutter.platformVersion, '42');
 //  });
 }

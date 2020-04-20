@@ -1,5 +1,5 @@
-name: mongoatlasflutter_example
-description: Demonstrates how to use the mongoatlasflutter plugin.
+name: mongostitchflutter_example
+description: Demonstrates how to use the mongostitchflutter plugin.
 publish_to: 'none'
 
 environment:
@@ -17,7 +17,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  mongoatlasflutter:
+  mongostitchflutter:
     path: ../
 
 # For information on the generic Dart part of this file, see the

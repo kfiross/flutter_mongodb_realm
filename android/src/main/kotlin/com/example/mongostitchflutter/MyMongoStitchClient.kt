@@ -1,4 +1,4 @@
-package com.example.mongoatlasflutter
+package com.example.mongostitchflutter
 
 import com.google.android.gms.tasks.Task
 import com.mongodb.stitch.android.core.auth.StitchAuth
@@ -15,11 +15,12 @@ import org.bson.Document
 import java.lang.Exception
 import kotlin.collections.HashMap
 import com.mongodb.stitch.android.core.auth.providers.userpassword.UserPasswordAuthProviderClient
+import com.mongodb.stitch.core.services.mongodb.remote.RemoteInsertManyResult
 
 
 // Basic CRUD..
 
-class MongoAtlasClient(
+class MyMongoStitchClient(
     private var client: RemoteMongoClient,
     private var auth: StitchAuth
 ) {
@@ -84,24 +85,21 @@ class MongoAtlasClient(
         return collection?.insertOne(document)
     }
 
-//    fun insertDocuments(databaseName: String?, collectionName: String?, data: HashMap<String, Any>?)
-//            : Task<RemoteInsertOneResult>? {
-//        val collection = getCollection(databaseName, collectionName)
-//
-//        //Document.parse(json)
-//        val document = Document()
-//
-//        if(data == null)
-//            return null
-//
-//        for (item in data.entries){
-//            document[item.key] = item.value
-//        }
-//
-//        return collection?.insertOne(document)
-//    }
+    fun insertDocuments(databaseName: String?, collectionName: String?, list: List<String>?)
+            : Task<RemoteInsertManyResult>? {
+        val collection = getCollection(databaseName, collectionName)
 
-    // TODO:  check this implementation
+        if (list == null)
+          return null
+
+        val documents = list.map {
+            Document.parse(it)
+        }
+
+        return collection?.insertMany(documents)
+    }
+
+
     fun deleteDocument(databaseName: String?, collectionName: String?, filterJson: String?)
             : Task<RemoteDeleteResult>? {
         val collection = getCollection(databaseName, collectionName)

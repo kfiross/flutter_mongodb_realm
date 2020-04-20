@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:bson/bson.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:mongoatlasflutter/query_selector.dart';
+import './query_selector.dart';
 
 export 'query_selector.dart';
 
@@ -112,7 +112,7 @@ class MongoCollection {
 
   // DONE!
   Future insertOne(MongoDocument document) async {
-    await Mongoatlasflutter._insertDocument(
+    await Mongostitchflutter._insertDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       data: document.map,
@@ -121,11 +121,11 @@ class MongoCollection {
 
   // TODO: implement this
   void insertMany(List<MongoDocument> documents) {
-//    Mongoatlasflutter._insertDocument(
-//      collectionName: this.collectionName,
-//      databaseName: this.databaseName,
-//      data: document.data,
-//    );
+    Mongostitchflutter._insertDocuments(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      list: documents.map((doc) => jsonEncode(doc._map)).toList(),
+    );
   }
 
   /// FILTER ANDROID+IOS WORK!
@@ -142,7 +142,7 @@ class MongoCollection {
       }
     });
 
-    var result = await Mongoatlasflutter._deleteDocument(
+    var result = await Mongostitchflutter._deleteDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -165,7 +165,7 @@ class MongoCollection {
       }
     });
 
-    var result = await Mongoatlasflutter._deleteDocuments(
+    var result = await Mongostitchflutter._deleteDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -196,7 +196,7 @@ class MongoCollection {
     });
 
 
-    List<dynamic> resultJson = await Mongoatlasflutter._findDocuments(
+    List<dynamic> resultJson = await Mongostitchflutter._findDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -211,7 +211,7 @@ class MongoCollection {
 
 
   Future<void> findOne([Map<String, dynamic> filter]) async {
-    String resultJson = await Mongoatlasflutter._findFirstDocument(
+    String resultJson = await Mongostitchflutter._findFirstDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -238,7 +238,7 @@ class MongoCollection {
       }
     });
 
-    int size = await Mongoatlasflutter._countDocuments(
+    int size = await Mongostitchflutter._countDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -282,9 +282,9 @@ class MongoStitchAuth {
     var result;
 
     if (credential is AnonymousCredential) {
-      result = await Mongoatlasflutter._signInAnonymously();
+      result = await Mongostitchflutter._signInAnonymously();
     } else if (credential is UserPasswordCredential) {
-      result = await Mongoatlasflutter._signInWithUsernamePassword(
+      result = await Mongostitchflutter._signInWithUsernamePassword(
         credential.username,
         credential.password,
       );
@@ -296,17 +296,17 @@ class MongoStitchAuth {
   }
 
   Future<bool> logout() async {
-    var result = await Mongoatlasflutter._logout();
+    var result = await Mongostitchflutter._logout();
     return result;
   }
 
   Future<bool> getUserId() async {
-    var result = await Mongoatlasflutter._getUserId();
+    var result = await Mongostitchflutter._getUserId();
     return result;
   }
 
   Future<bool> registerWithEmail({@required String email,@required String password}) async {
-    var result = await Mongoatlasflutter._registerWithEmail(email, password);
+    var result = await Mongostitchflutter._registerWithEmail(email, password);
     return result;
   }
 }
@@ -315,7 +315,7 @@ class MongoStitchClient {
   final MongoStitchAuth auth = MongoStitchAuth();
 
   Future initializeApp(String appID) async {
-    await Mongoatlasflutter._connectToMongo(appID);
+    await Mongostitchflutter._connectToMongo(appID);
   }
 
   MongoDatabase getDatabase(String name) {
@@ -323,9 +323,9 @@ class MongoStitchClient {
   }
 }
 
-class Mongoatlasflutter {
+class Mongostitchflutter {
   static const MethodChannel _channel =
-      const MethodChannel('mongoatlasflutter');
+      const MethodChannel('mongostitchflutter');
 
   static Future _connectToMongo(String appId) async {
     await _channel.invokeMethod('connectMongo', {'app_id': appId});
@@ -386,6 +386,18 @@ class Mongoatlasflutter {
       'database_name': databaseName,
       'collection_name': collectionName,
       'data': data
+    });
+  }
+
+  static Future _insertDocuments({
+    @required String collectionName,
+    @required String databaseName,
+    @required List<String> list,
+  }) async {
+    final result = await _channel.invokeMethod('insertDocuments', {
+      'database_name': databaseName,
+      'collection_name': collectionName,
+      'list': list
     });
   }
 

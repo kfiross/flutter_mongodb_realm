@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:mongoatlasflutter/mongoatlasflutter.dart';
+import 'package:mongostitchflutter/mongostitchflutter.dart';
 
 
 
@@ -39,8 +39,8 @@ class _MyAppState extends State<MyApp> {
 
         // after app initialized and user authenticated, show some data
 
-//      insertData();
-        fetchData();
+      insertData();
+//        fetchData();
 //      deleteData();
       } on PlatformException catch (e) {
         debugPrint("Error! ${e.message}");
@@ -58,6 +58,22 @@ class _MyAppState extends State<MyApp> {
         "age": 25,
         "price": 31.72
       });
+
+
+      collection.insertMany([
+        MongoDocument({
+          "time": DateTime.now().millisecondsSinceEpoch,
+          "user_id": "kfir",
+          "age": 25,
+        }),
+        MongoDocument({
+          "time": DateTime.now().millisecondsSinceEpoch,
+          "name": "naama",
+          "age": 22,
+        }),
+      ]);
+
+
     } on PlatformException {
       debugPrint("Error!!!");
     }
@@ -135,7 +151,7 @@ class _MyAppState extends State<MyApp> {
 //    String platformVersion;
 //    // Platform messages may fail, so we use a try/catch PlatformException.
 //    try {
-//      platformVersion = await Mongoatlasflutter.platformVersion;
+//      platformVersion = await Mongostitchflutter.platformVersion;
 //    } on PlatformException {
 //      platformVersion = 'Failed to get platform version.';
 //    }

@@ -11,7 +11,7 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
 
 
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "mongoatlasflutter", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: "mongostitchflutter", binaryMessenger: registrar.messenger())
         let instance = SwiftMongoatlasflutterPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
   }
