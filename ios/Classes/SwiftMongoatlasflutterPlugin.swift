@@ -53,6 +53,28 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
         case "countDocuments":
             self.countDocuments(call: call, result: result)
             break
+        
+        /////
+
+        case "signInAnonymously":
+            self.signInAnonymously(result)
+            break
+  
+        case "signInWithUsernamePassword":
+            self.signInWithUsernamePassword(call: call, result: result)
+            break
+            
+        case "registerWithEmail":
+            self.registerWithEmail(call: call, result: result)
+            break
+            
+        case "logout":
+            self.logout(result)
+            break
+            
+        case "getUserId":
+            self.getUserId(result)
+            break
             
         default:
             result(FlutterMethodNotImplemented)
@@ -65,8 +87,6 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
     }
 
     func connectMongo(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        // todo: implement this
-
 
         var args = call.arguments as! Dictionary<String, Any>
         let clientAppId = args["app_id"] as? String
@@ -77,29 +97,87 @@ public class SwiftMongoatlasflutterPlugin: NSObject, FlutterPlugin {
                                 details: nil))
         }
 
-        let stitchAppClient = try? Stitch.initializeDefaultAppClient(withClientAppID: clientAppId!)
+        let stitchAppClient = try! Stitch.initializeDefaultAppClient(withClientAppID: clientAppId!)
 //
 //
-        stitchAppClient?.auth.login(withCredential: AnonymousCredential()) { authResult in
-            switch authResult {
-            case .success(let user):
-                let mongoClient = try? stitchAppClient?.serviceClient(
-                    fromFactory: remoteMongoClientFactory, withName: "mongodb-atlas"
-                )
-                
-                self.client = MongoAtlasClient(client: mongoClient!)
-
-                result(true)
-                break
-
-            case .failure(let error):
-                // todo:
-                break
-
-
+        
+        let mongoClient = try? stitchAppClient.serviceClient(
+            fromFactory: remoteMongoClientFactory, withName: "mongodb-atlas"
+        )
+        
+        self.client = MongoAtlasClient(client: mongoClient!, auth: stitchAppClient.auth)
+        result(true)
+    }
+    
+    func signInAnonymously(_ result: @escaping FlutterResult){
+        self.client?.signInAnonymously(
+            onCompleted: { value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message, details: nil))
             }
+        )
+    }
+    
+    func signInWithUsernamePassword(call: FlutterMethodCall, result: @escaping FlutterResult){
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let username = args["username"] as! String?
+        let password = args["password"] as! String?
+
+        self.client?.signInWithUsernamePassword(
+            username: username ?? "",
+            password: password ?? "",
+            onCompleted: { value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message, details: nil))
+            }
+        )
+    }
+    
+    func registerWithEmail(call: FlutterMethodCall, result: @escaping FlutterResult){
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let email = args["email"] as! String?
+        let password = args["password"] as! String?
+        
+        self.client?.registerWithEmail(
+            email: email ?? "",
+            password: password ?? "",
+            onCompleted: { value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message, details: nil))
+            }
+        )
+    }
+    
+    func logout(_ result: @escaping FlutterResult){
+        self.client?.logout(
+            onCompleted: { value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message, details: nil))
+            }
+        )
+    }
+    
+    func getUserId(_ result: @escaping FlutterResult){
+        let id = self.client?.getUserId()
+        
+        if (id == nil) {
+            result(FlutterError(code: "ERROR", message: "can't get user id ", details: nil))
+        } else {
+            result(id)
         }
     }
+    
+    /// ====================================
 
     // DONE!
     func insertDocument(call: FlutterMethodCall, result: @escaping FlutterResult)  {

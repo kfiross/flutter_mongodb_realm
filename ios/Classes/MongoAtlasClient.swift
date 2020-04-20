@@ -47,11 +47,99 @@ enum MyError : Error {
 
 class MongoAtlasClient {
     var client: RemoteMongoClient
+    var auth: StitchAuth
     
-    init(client: RemoteMongoClient) {
+    init(client: RemoteMongoClient, auth: StitchAuth) {
         self.client = client
+        self.auth = auth
     }
     
+    
+    func signInAnonymously(
+        onCompleted: @escaping (Bool)->Void,
+        onError: @escaping (String?)->Void
+    ) {
+        self.auth.login(withCredential: AnonymousCredential()) { authResult in
+            switch authResult {
+            case .success(let user):
+                onCompleted(true)
+                break
+                
+            case .failure(let error):
+                onError("\(error)")
+                break
+            }
+        }
+    }
+    
+    func signInWithUsernamePassword(
+        username: String,
+        password: String,
+        onCompleted: @escaping (Bool)->Void,
+        onError: @escaping (String?)->Void
+    ) {
+        self.auth.login(
+            withCredential: UserPasswordCredential(withUsername: username, withPassword: password)
+        ) { authResult in
+            switch authResult {
+            case .success(let user):
+                onCompleted(true)
+                break
+                
+            case .failure(let error):
+                onError("UsernamePassword Provider Login failed \(error)")
+                break
+            }
+        }
+    }
+    
+    func registerWithEmail(
+        email: String,
+        password: String,
+        onCompleted: @escaping (Bool)->Void,
+        onError: @escaping (String?)->Void
+    ) {
+        
+        let emailPassClient = self.auth.providerClient(
+            fromFactory: userPasswordClientFactory
+        )
+        
+        emailPassClient.register(withEmail: email, withPassword: password) { result in
+            switch result {
+            case .success(let user):
+                onCompleted(true)
+                break
+                
+            case .failure(let error):
+                onError("Error registering new user: \(error)")
+                break
+            }
+        }
+    }
+    
+    func logout(
+        onCompleted: @escaping (Bool)->Void,
+        onError: @escaping (String?)->Void
+    ) {
+        self.auth.logout { result in
+            switch result {
+            case .success(let user):
+                onCompleted(true)
+                break
+                
+            case .failure(let error):
+                onError("Cannot logout user: \(error)")
+                break
+            }
+        }
+        
+    }
+    
+    func getUserId() -> String? {
+        return self.auth.currentUser?.id
+    }
+    
+    /// ========================== Database related ========================================== ///
     private func getCollection(databaseName: String?, collectionName: String?) throws
         -> RemoteMongoCollection<Document>? {
         if(databaseName == nil || collectionName == nil) {
@@ -180,6 +268,7 @@ class MongoAtlasClient {
             
             let task = collection?.find(document, options: nil)
 
+            
             task!.toArray(){result in
                 switch result {
                 case .success(let results):
