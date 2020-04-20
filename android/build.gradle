@@ -1,4 +1,4 @@
-group 'com.example.mongostitchflutter'
+group 'com.example.flutter_mongo_stitch'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -37,16 +37,9 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-//    implementation 'org.mongodb:mongo-java-driver:3.12.0'
-
     implementation 'org.mongodb:stitch-android-sdk:4.5.0'
 }
-

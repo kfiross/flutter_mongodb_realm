@@ -1,6 +1,6 @@
-# mongoatlasflutter_example
+# flutter_mongo_stitch_example
 
-Demonstrates how to use the mongoatlasflutter plugin.
+Demonstrates how to use the flutter_mongo_stitch plugin.
 
 ## Getting Started
 

@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:mongostitchflutter/mongostitchflutter.dart';
-
-
-
+import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
 
 void main() => runApp(MyApp());
 
@@ -39,7 +36,7 @@ class _MyAppState extends State<MyApp> {
 
         // after app initialized and user authenticated, show some data
 
-      insertData();
+        insertData();
 //        fetchData();
 //      deleteData();
       } on PlatformException catch (e) {
@@ -60,18 +57,18 @@ class _MyAppState extends State<MyApp> {
       });
 
 
-      collection.insertMany([
-        MongoDocument({
-          "time": DateTime.now().millisecondsSinceEpoch,
-          "user_id": "kfir",
-          "age": 25,
-        }),
-        MongoDocument({
-          "time": DateTime.now().millisecondsSinceEpoch,
-          "name": "naama",
-          "age": 22,
-        }),
-      ]);
+//      collection.insertMany([
+//        MongoDocument({
+//          "time": DateTime.now().millisecondsSinceEpoch,
+//          "user_id": "kfir",
+//          "age": 25,
+//        }),
+//        MongoDocument({
+//          "time": DateTime.now().millisecondsSinceEpoch,
+//          "name": "naama",
+//          "age": 22,
+//        }),
+//      ]);
 
 
     } on PlatformException {
@@ -83,7 +80,7 @@ class _MyAppState extends State<MyApp> {
     // sample_mflix.comments
     // test.my_collection
     var collection =
-        client.getDatabase("sample_mflix").getCollection("movies");
+    client.getDatabase("sample_mflix").getCollection("movies");
 
     try {
 //      var document = MongoDocument.fromMap({
@@ -102,7 +99,7 @@ class _MyAppState extends State<MyApp> {
 
       var docs = await collection.find({
         "year": QuerySelector.gt(2010)..lte(2014),
-     // "year":{"$gt":2010,"$lte":2014}
+        // "year":{"$gt":2010,"$lte":2014}
       });
       print(docs.length);
 
@@ -121,7 +118,7 @@ class _MyAppState extends State<MyApp> {
     // sample_mflix.comments
     // test.my_collection
     var collection =
-        client.getDatabase("sample_mflix").getCollection("comments");
+    client.getDatabase("sample_mflix").getCollection("comments");
 
     try {
 //      var document = MongoDocument.fromMap({
@@ -151,7 +148,7 @@ class _MyAppState extends State<MyApp> {
 //    String platformVersion;
 //    // Platform messages may fail, so we use a try/catch PlatformException.
 //    try {
-//      platformVersion = await Mongostitchflutter.platformVersion;
+//      platformVersion = await FlutterMongoStitch.platformVersion;
 //    } on PlatformException {
 //      platformVersion = 'Failed to get platform version.';
 //    }

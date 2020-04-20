@@ -1,4 +1,4 @@
-package com.example.mongostitchflutter
+package com.example.flutter_mongo_stitch
 
 import com.google.android.gms.tasks.Task
 import com.mongodb.stitch.android.core.auth.StitchAuth

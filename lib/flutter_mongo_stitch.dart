@@ -112,7 +112,7 @@ class MongoCollection {
 
   // DONE!
   Future insertOne(MongoDocument document) async {
-    await Mongostitchflutter._insertDocument(
+    await FlutterMongoStitch._insertDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       data: document.map,
@@ -121,7 +121,7 @@ class MongoCollection {
 
   // TODO: implement this
   void insertMany(List<MongoDocument> documents) {
-    Mongostitchflutter._insertDocuments(
+    FlutterMongoStitch._insertDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       list: documents.map((doc) => jsonEncode(doc._map)).toList(),
@@ -142,7 +142,7 @@ class MongoCollection {
       }
     });
 
-    var result = await Mongostitchflutter._deleteDocument(
+    var result = await FlutterMongoStitch._deleteDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -165,7 +165,7 @@ class MongoCollection {
       }
     });
 
-    var result = await Mongostitchflutter._deleteDocuments(
+    var result = await FlutterMongoStitch._deleteDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -191,12 +191,12 @@ class MongoCollection {
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
       if (value is QuerySelector){
-       filter[key] = value.values;
+        filter[key] = value.values;
       }
     });
 
 
-    List<dynamic> resultJson = await Mongostitchflutter._findDocuments(
+    List<dynamic> resultJson = await FlutterMongoStitch._findDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -211,7 +211,7 @@ class MongoCollection {
 
 
   Future<void> findOne([Map<String, dynamic> filter]) async {
-    String resultJson = await Mongostitchflutter._findFirstDocument(
+    String resultJson = await FlutterMongoStitch._findFirstDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -238,7 +238,7 @@ class MongoCollection {
       }
     });
 
-    int size = await Mongostitchflutter._countDocuments(
+    int size = await FlutterMongoStitch._countDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -282,9 +282,9 @@ class MongoStitchAuth {
     var result;
 
     if (credential is AnonymousCredential) {
-      result = await Mongostitchflutter._signInAnonymously();
+      result = await FlutterMongoStitch._signInAnonymously();
     } else if (credential is UserPasswordCredential) {
-      result = await Mongostitchflutter._signInWithUsernamePassword(
+      result = await FlutterMongoStitch._signInWithUsernamePassword(
         credential.username,
         credential.password,
       );
@@ -296,17 +296,17 @@ class MongoStitchAuth {
   }
 
   Future<bool> logout() async {
-    var result = await Mongostitchflutter._logout();
+    var result = await FlutterMongoStitch._logout();
     return result;
   }
 
   Future<bool> getUserId() async {
-    var result = await Mongostitchflutter._getUserId();
+    var result = await FlutterMongoStitch._getUserId();
     return result;
   }
 
   Future<bool> registerWithEmail({@required String email,@required String password}) async {
-    var result = await Mongostitchflutter._registerWithEmail(email, password);
+    var result = await FlutterMongoStitch._registerWithEmail(email, password);
     return result;
   }
 }
@@ -315,7 +315,7 @@ class MongoStitchClient {
   final MongoStitchAuth auth = MongoStitchAuth();
 
   Future initializeApp(String appID) async {
-    await Mongostitchflutter._connectToMongo(appID);
+    await FlutterMongoStitch._connectToMongo(appID);
   }
 
   MongoDatabase getDatabase(String name) {
@@ -323,9 +323,15 @@ class MongoStitchClient {
   }
 }
 
-class Mongostitchflutter {
+class FlutterMongoStitch {
   static const MethodChannel _channel =
-      const MethodChannel('mongostitchflutter');
+      const MethodChannel('flutter_mongo_stitch');
+
+  static Future<String> get platformVersion async {
+    final String version = await _channel.invokeMethod('getPlatformVersion');
+    return version;
+  }
+
 
   static Future _connectToMongo(String appId) async {
     await _channel.invokeMethod('connectMongo', {'app_id': appId});

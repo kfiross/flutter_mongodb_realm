@@ -1,10 +1,10 @@
 PODS:
   - Flutter (1.0.0)
-  - mongo-embedded-c-driver (1.13.0-4.0.4)
-  - mongo_embedded (4.0.4)
-  - mongoatlasflutter (0.0.1):
+  - flutter_mongo_stitch (0.0.1):
     - Flutter
     - StitchSDK (~> 6.1.0)
+  - mongo-embedded-c-driver (1.13.0-4.0.4)
+  - mongo_embedded (4.0.4)
   - mongoc_embedded (4.0.4):
     - mongo-embedded-c-driver (~> 1.13.0-4.0.4)
     - mongo_embedded (~> 4.0.4)
@@ -36,7 +36,7 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - mongoatlasflutter (from `.symlinks/plugins/mongoatlasflutter/ios`)
+  - flutter_mongo_stitch (from `.symlinks/plugins/flutter_mongo_stitch/ios`)
 
 SPEC REPOS:
   trunk:
@@ -55,14 +55,14 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  mongoatlasflutter:
-    :path: ".symlinks/plugins/mongoatlasflutter/ios"
+  flutter_mongo_stitch:
+    :path: ".symlinks/plugins/flutter_mongo_stitch/ios"
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_mongo_stitch: c4034add09d7ade4dff599f936d1dab7f7ff6c02
   mongo-embedded-c-driver: b46360baa15fc142baae80628822f26663220bde
   mongo_embedded: e413134eb6b60544e7278add03007f8fe384a00c
-  mongoatlasflutter: ce1cee538b8930f795289c8a6f253c78f8e8bbf8
   mongoc_embedded: 41aadbb756b07070d6f0471192a84750cb42c580
   MongoMobile: 988e8d2fd322761d6358570dde8a2b3d44801823
   MongoSwift: e20f86eae1beb06bbba49c2d73bb570961cc4c85

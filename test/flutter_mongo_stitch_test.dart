@@ -1,9 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mongostitchflutter/mongostitchflutter.dart';
+import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('mongostitchflutter');
+  const MethodChannel channel = MethodChannel('flutter_mongo_stitch');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -17,7 +17,7 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-//  test('getPlatformVersion', () async {
-//    //expect(await Mongostitchflutter.platformVersion, '42');
-//  });
+  test('getPlatformVersion', () async {
+    expect(await FlutterMongoStitch.platformVersion, '42');
+  });
 }
