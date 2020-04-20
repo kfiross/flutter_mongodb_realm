@@ -28,14 +28,14 @@ class _MyAppState extends State<MyApp> {
       try {
         // create a user
 //        await client.auth
-//            .registerWithEmail(email: "cookie", password: "12345678");
+//            .registerWithEmail(email: "cookie2", password: "12345678");
 
         // login Anonymously
 
-//        await client.auth.loginWithCredential(
-////            AnonymousCredential()
-//          UserEmailPasswordCredential(email: "kfir",password: "12345678")
-//        );
+        await client.auth.loginWithCredential(
+            AnonymousCredential()
+//          UserPasswordCredential(username: "kfir25816@gmail.com",password: "12345678")
+        );
 
         // after app initialized and user authenticated, show some data
 
@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> {
 
       var docs = await collection.find({
         "year": QuerySelector.gt(2010)..lte(2014),
-     // "year":{"$gt":2010,"$lte":2014}}
+     // "year":{"$gt":2010,"$lte":2014}
       });
       print(docs.length);
 
