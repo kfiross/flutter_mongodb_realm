@@ -30,7 +30,7 @@ packages:
     source: hosted
     version: "1.0.5"
   bson:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: bson
       url: "https://pub.dartlang.org"
