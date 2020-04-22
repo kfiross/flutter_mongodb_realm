@@ -49,26 +49,26 @@ class _MyAppState extends State<MyApp> {
     var collection = client.getDatabase("test").getCollection("my_collection");
 
     try {
-      var document = MongoDocument({
-        "time": DateTime.now().millisecondsSinceEpoch,
-        "user_id": "abcdefg67",
-        "age": 25,
-        "price": 31.72
-      });
+//      var document = MongoDocument({
+//        "time": DateTime.now().millisecondsSinceEpoch,
+//        "user_id": "abcdefg67",
+//        "age": 25,
+//        "price": 31.72
+//      });
 
 
-//      collection.insertMany([
-//        MongoDocument({
-//          "time": DateTime.now().millisecondsSinceEpoch,
-//          "user_id": "kfir",
-//          "age": 25,
-//        }),
-//        MongoDocument({
-//          "time": DateTime.now().millisecondsSinceEpoch,
-//          "name": "naama",
-//          "age": 22,
-//        }),
-//      ]);
+      collection.insertMany([
+        MongoDocument({
+          "time": DateTime.now().millisecondsSinceEpoch,
+          "user_id": "michael",
+          "age": 28,
+        }),
+        MongoDocument({
+          "time": DateTime.now().millisecondsSinceEpoch,
+          "name": "adiel",
+          "age": 23,
+        }),
+      ]);
 
 
     } on PlatformException {

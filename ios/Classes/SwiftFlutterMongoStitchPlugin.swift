@@ -30,8 +30,8 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
               self.insertDocument(call: call, result: result)
               break
 
-  //        case "insertDocuments":
-  //            self.insertDocuments(call: call, result: result)
+          case "insertDocuments":
+              self.insertDocuments(call: call, result: result)
 
           case "deleteDocument":
               self.deleteDocument(call: call, result: result)
@@ -178,7 +178,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
 
       /// ====================================
 
-      // DONE!
+   
       func insertDocument(call: FlutterMethodCall, result: @escaping FlutterResult)  {
 
           let args = call.arguments as! Dictionary<String, Any>
@@ -207,6 +207,30 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
               }
           )
 
+      }
+    
+      func insertDocuments(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+          let args = call.arguments as! Dictionary<String, Any>
+      
+          let databaseName = args["database_name"] as? String
+          let collectionName = args["collection_name"] as? String
+          let list = args["list"] as? Array<String>
+      
+          self.client?.insertDocuments(
+              databaseName: databaseName,
+              collectionName: collectionName,
+              list: list,
+              onCompleted: {
+                  result(true)
+              },
+              onError: { message in
+                  result(FlutterError(
+                      code: "ERROR",
+                      message: message,
+                      details: nil
+                  ))
+              }
+          )
       }
 
       func deleteDocument(call: FlutterMethodCall, result: @escaping FlutterResult)  {

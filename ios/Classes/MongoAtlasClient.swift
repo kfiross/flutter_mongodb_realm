@@ -155,7 +155,7 @@ class MongoAtlasClient {
         data: Dictionary<String, Any>?,
         onCompleted: @escaping ()->Void,
         onError: @escaping (String?)->Void
-   ) {
+     ) {
         do {
             let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
         
@@ -176,6 +176,46 @@ class MongoAtlasClient {
                     onCompleted()
                 case .failure(let error):
                     onError("Failed to insert a document: \(error)")
+                }
+            }
+        }
+        catch {
+            onError("Failed to insert a document")
+        }
+    }
+    
+    func insertDocuments(
+        databaseName: String?,
+        collectionName: String?,
+        list: Array<String>?,
+        onCompleted: @escaping ()->Void,
+        onError: @escaping (String?)->Void
+    ) {
+        do {
+            let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
+            
+            if(list == nil){
+               onError("Insertion failed. No document")
+            }
+            
+            let documents = try list!.map({ try Document.init(fromJSON: $0) })
+//            var document = Document()
+//            for (key) in data!.keys{
+//                let value = data![key]
+//
+//                if (value != nil){
+//                    document[key] = BsonExtractor.getValue(of: value!)
+//                }
+//            }
+            
+            
+            collection?.insertMany(documents) { result in
+                switch result {
+                case .success(let result):
+                    print("Successfully inserted docs with the ids: \(result.insertedIds))");
+                    onCompleted()
+                case .failure(let error):
+                    onError("Failed to insert documents: \(error)")
                 }
             }
         }
