@@ -154,13 +154,14 @@ class _MyAppState extends State<MyApp> {
           filter:{
             "name": "adiel",
           },
+//
 //          update: UpdateSelector.set({
 //            "quantity": 670,
 //          })
 
-//          update: UpdateSelector.rename({
-//            "quantity": "count",
-//          }),
+          update: UpdateSelector.rename({
+            "count": "quantity",
+          }),
 
 //          update: UpdateSelector.unset(["age"]),
 

@@ -7,15 +7,15 @@ import StitchCore
 import StitchRemoteMongoDBService
 
 public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
-  var client: MongoAtlasClient?
+    var client: MyMongoStitchClient?
 
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "flutter_mongo_stitch", binaryMessenger: registrar.messenger())
-    let instance = SwiftFlutterMongoStitchPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let channel = FlutterMethodChannel(name: "flutter_mongo_stitch", binaryMessenger: registrar.messenger())
+        let instance = SwiftFlutterMongoStitchPlugin()
+        registrar.addMethodCallDelegate(instance, channel: channel)
+    }
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
 
           switch call.method {
           case "getPlatformVersion":
@@ -52,6 +52,14 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
           case "countDocuments":
               self.countDocuments(call: call, result: result)
               break
+            
+          case "updateDocument":
+            self.updateDocument(call: call, result: result)
+            break
+            
+          case "updateDocuments":
+            self.updateDocuments(call: call, result: result)
+            break
 
           /////
 
@@ -104,7 +112,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
               fromFactory: remoteMongoClientFactory, withName: "mongodb-atlas"
           )
 
-          self.client = MongoAtlasClient(client: mongoClient!, auth: stitchAppClient.auth)
+          self.client = MyMongoStitchClient(client: mongoClient!, auth: stitchAppClient.auth)
           result(true)
       }
 
@@ -278,79 +286,131 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
                       details: nil
                   ))
               }
-          )
+        )
+    }
+
+    func findDocuments(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let args = call.arguments as! Dictionary<String, Any>
+
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
+        let filter = args["filter"] as? String
+
+        self.client?.findDocuments(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            filterJson: filter,
+            onCompleted: {value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(
+                    code: "ERROR",
+                    message: message,
+                    details: nil
+                ))
+            }
+        )
+    }
+
+    func findDocument(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let args = call.arguments as! Dictionary<String, Any>
+
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
+        let filter = args["filter"] as? String
+
+        self.client?.findDocument(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            filterJson: filter,
+            onCompleted: {value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(
+                    code: "ERROR",
+                    message: message,
+                    details: nil
+                ))
+            }
+        )
+    }
+
+    func countDocuments(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let args = call.arguments as! Dictionary<String, Any>
+
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
+        let filter = args["filter"] as? String
+
+        self.client?.countDocuments(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            filterJson: filter,
+            onCompleted: {value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(
+                    code: "ERROR",
+                    message: message,
+                    details: nil
+                ))
+            }
+        )
       }
-
-      func findDocuments(call: FlutterMethodCall, result: @escaping FlutterResult)  {
-          let args = call.arguments as! Dictionary<String, Any>
-
-          let databaseName = args["database_name"] as? String
-          let collectionName = args["collection_name"] as? String
-          let filter = args["filter"] as? String
-
-          self.client?.findDocuments(
-              databaseName: databaseName,
-              collectionName: collectionName,
-              filterJson: filter,
-              onCompleted: {value in
-                  result(value)
-              },
-              onError: { message in
-                  result(FlutterError(
-                      code: "ERROR",
-                      message: message,
-                      details: nil
-                  ))
-              }
-          )
-      }
-
-      func findDocument(call: FlutterMethodCall, result: @escaping FlutterResult)  {
-          let args = call.arguments as! Dictionary<String, Any>
-
-          let databaseName = args["database_name"] as? String
-          let collectionName = args["collection_name"] as? String
-          let filter = args["filter"] as? String
-
-          self.client?.findDocument(
-              databaseName: databaseName,
-              collectionName: collectionName,
-              filterJson: filter,
-              onCompleted: {value in
-                  result(value)
-              },
-              onError: { message in
-                  result(FlutterError(
-                      code: "ERROR",
-                      message: message,
-                      details: nil
-                  ))
-              }
-          )
-      }
-
-      func countDocuments(call: FlutterMethodCall, result: @escaping FlutterResult)  {
-          let args = call.arguments as! Dictionary<String, Any>
-
-          let databaseName = args["database_name"] as? String
-          let collectionName = args["collection_name"] as? String
-          let filter = args["filter"] as? String
-
-          self.client?.countDocuments(
-              databaseName: databaseName,
-              collectionName: collectionName,
-              filterJson: filter,
-              onCompleted: {value in
-                  result(value)
-              },
-              onError: { message in
-                  result(FlutterError(
-                      code: "ERROR",
-                      message: message,
-                      details: nil
-                  ))
-              }
-          )
-      }
-  }
+    
+    func updateDocument(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
+        let filter = args["filter"] as? String
+        let update = (args["update"] as? String)!
+        
+        self.client?.updateDocument(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            filterJson: filter,
+            updateJson: update,
+            onCompleted: {value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(
+                    code: "ERROR",
+                    message: message,
+                    details: nil
+            ))
+            }
+        )
+    }
+    
+    func updateDocuments(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
+        let filter = args["filter"] as? String
+        let update = (args["update"] as? String)!
+        
+        self.client?.updateDocuments(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            filterJson: filter,
+            updateJson: update,
+            onCompleted: { value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(
+                    code: "ERROR",
+                    message: message,
+                    details: nil
+                ))
+            }
+        )
+    }
+}
 

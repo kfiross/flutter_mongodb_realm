@@ -1,8 +1,8 @@
 //
-//  MongoAtlasClient.swift
-//  fluttermongostitcg
+//  MyMongoStitchClient.swift
+//  fluttermongostitch
 //
-//  Created by kfir Matit on 16/04/2020.
+//  Created by kfir Matityahu on 16/04/2020.
 //
 
 import Foundation
@@ -45,7 +45,7 @@ enum MyError : Error {
 }
 
 
-class MongoAtlasClient {
+class MyMongoStitchClient {
     var client: RemoteMongoClient
     var auth: StitchAuth
     
@@ -384,6 +384,74 @@ class MongoAtlasClient {
                 }
             }
         
+        }
+        catch {
+            onError("Failed to count collection")
+        }
+    }
+    
+    //
+    func updateDocument(
+        databaseName: String?,
+        collectionName: String?,
+        filterJson: String?,
+        updateJson: String,
+        onCompleted: @escaping (Any)->Void,
+        onError: @escaping (String?)->Void
+        ) {
+        do {
+            let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
+            
+            var document = Document()
+            
+            if (filterJson != nil){
+                document = try Document.init(fromJSON: filterJson!)
+            }
+            let update = try Document.init(fromJSON: updateJson)
+            
+            collection?.updateOne(filter: document, update: update) { result in
+                switch result {
+                case .success(let result):
+                    onCompleted([result.matchedCount, result.modifiedCount])
+                case .failure(let error):
+                    onError("Failed to update collection: \(error)")
+                }
+            }
+            
+        }
+        catch {
+            onError("Failed to count collection")
+        }
+    }
+    
+    func updateDocuments(
+        databaseName: String?,
+        collectionName: String?,
+        filterJson: String?,
+        updateJson: String,
+        onCompleted: @escaping (Any)->Void,
+        onError: @escaping (String?)->Void
+        ) {
+        do {
+            let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
+            
+            var document = Document()
+            
+            if (filterJson != nil){
+                document = try Document.init(fromJSON: filterJson!)
+            }
+            
+            let update = try Document.init(fromJSON: updateJson)
+            
+            collection?.updateMany(filter: document, update: update) { result in
+                switch result {
+                case .success(let result):
+                    onCompleted([result.matchedCount, result.modifiedCount])
+                case .failure(let error):
+                    onError("Failed to update collection: \(error)")
+                }
+            }
+            
         }
         catch {
             onError("Failed to count collection")
