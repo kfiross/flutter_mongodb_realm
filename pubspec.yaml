@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
 
   bson: ^0.3.2
+  extension: ^0.0.5
+
 
 dev_dependencies:
   flutter_test:

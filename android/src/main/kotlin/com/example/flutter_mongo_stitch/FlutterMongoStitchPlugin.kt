@@ -63,6 +63,10 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
       "countDocuments" -> countDocuments(call, result)
 
+      ////
+      "updateDocument" -> updateDocument(call , result)
+      "updateDocuments" -> updateDocuments(call , result)
+
       /////
       "signInAnonymously" -> signInAnonymously(result)
       "signInWithUsernamePassword" -> signInWithUsernamePassword(call, result)
@@ -349,7 +353,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     val collectionName = call.argument<String>("collection_name")
     val filter = call.argument<String>("filter")
 
-
     val task = client.countDocuments(
             databaseName,
             collectionName,
@@ -367,6 +370,58 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
     }
   }
+
+  //
+  private fun updateDocument(@NonNull call: MethodCall, @NonNull result: Result){
+    val databaseName = call.argument<String>("database_name")
+    val collectionName = call.argument<String>("collection_name")
+    val filter = call.argument<String>("filter")
+    val update = call.argument<String>("update")
+
+    val task = client.updateDocument(
+            databaseName,
+            collectionName,
+            filter,
+            update!!
+    )
+
+    if (task == null)
+      result.error("Error", "Failed to update a document", "")
+
+    task!!.addOnCompleteListener {
+      if (it.isSuccessful)
+        result.success(listOf(it.result.matchedCount,it.result.modifiedCount))
+      else
+        result.error("Error", "Failed to count the collection - Permission DENIED", "")
+
+    }
+  }
+
+  private fun updateDocuments(@NonNull call: MethodCall, @NonNull result: Result){
+    val databaseName = call.argument<String>("database_name")
+    val collectionName = call.argument<String>("collection_name")
+    val filter = call.argument<String>("filter")
+    val update = call.argument<String>("update")
+
+    val task = client.updateDocuments(
+            databaseName,
+            collectionName,
+            filter,
+            update!!
+    )
+
+    if (task == null)
+      result.error("Error", "Failed to update a document", "")
+
+    task!!.addOnCompleteListener {
+      if (it.isSuccessful)
+        result.success(listOf(it.result.matchedCount,it.result.modifiedCount))
+      else
+        result.error("Error", "Failed to count the collection - Permission DENIED", "")
+
+    }
+  }
+
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)

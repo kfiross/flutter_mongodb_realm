@@ -36,9 +36,10 @@ class _MyAppState extends State<MyApp> {
 
         // after app initialized and user authenticated, show some data
 
-        insertData();
+//        insertData();
 //        fetchData();
 //      deleteData();
+        updateData();
       } on PlatformException catch (e) {
         debugPrint("Error! ${e.message}");
       }
@@ -141,6 +142,94 @@ class _MyAppState extends State<MyApp> {
     } on PlatformException catch (e) {
       debugPrint("Error! ${e.message}");
     }
+  }
+
+
+  Future<void> updateData() async {
+    var collection =
+    client.getDatabase("test").getCollection("my_collection");
+
+    try {
+      var results = await collection.updateOne(
+          filter:{
+            "name": "adiel",
+          },
+//          update: UpdateSelector.set({
+//            "quantity": 670,
+//          })
+
+//          update: UpdateSelector.rename({
+//            "quantity": "count",
+//          }),
+
+//          update: UpdateSelector.unset(["age"]),
+
+//        update: UpdateSelector.inc({
+//            "age": -2,
+//            "quantity": 30,
+//          }),
+
+//          update: UpdateSelector.max({
+//            "quantity": 50.5,
+//            "name": "x",
+//          }),
+
+//          update: UpdateSelector.mul({
+//            "quantity": 2,
+//          }),
+
+//          update: UpdateSelector.mul({
+//            "quantity": 2,
+//          }),
+
+//        update: UpdateSelector.pop({
+//          "grades": PopValue.LAST, //PopValue.FIRST,
+//        }),
+
+//        update: UpdateSelector.push({
+//          "grades": ArrayModifier.each([22, 88 ,91])
+//
+////          "grades": ArrayModifier.each([88, 90 ,22])
+////            ..sort({"score": SortValue.ASC})
+////            ..slice(3)
+////            ..position(0)
+//
+//        }),
+
+//          update: UpdateSelector.pullAll({
+//              "grades": [22, 4]
+//          })
+
+//          update: UpdateSelector.pull({
+//              /// all grades <= 77 in array 'grades'
+//              "grades": QuerySelector.lte(77),
+//
+//              /// all values matched 'orange or kiwis' in array 'fruits'
+////              "fruits": ["orange", "kiwis"]
+//          })
+
+      );
+      print(results);
+
+
+//      var results = await collection.updateMany(
+//          filter:{
+//            "name": "adiel",
+//          },
+//          update: UpdateSelector.set({
+//            "quantity": 87,
+//          })
+//      );
+//      print(results);
+
+
+
+    } on PlatformException catch (e) {
+      debugPrint("Error: $e");
+    } on Exception {
+      debugPrint("unkown error");
+    }
+
   }
 
 //  // Platform messages are asynchronous, so we initialize in an async method.

@@ -4,9 +4,11 @@ import 'dart:convert';
 import 'package:bson/bson.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mongo_stitch/update_selector.dart';
 import './query_selector.dart';
 
 export 'query_selector.dart';
+export 'update_selector.dart';
 
 // TODO: maybe using 'BsonObject' instead 'dynamic'
 class BsonDocument {
@@ -246,6 +248,72 @@ class MongoCollection {
 
     return size;
   }
+
+  /// NEW FEATURES!!
+  Future<List> updateOne({@required Map<String, dynamic> filter,
+    @required UpdateSelector update}) async {
+
+    // convert 'QuerySelector' into map, too
+    filter.forEach((key, value) {
+      if (value is QuerySelector) {
+        filter[key] = value.values;
+      }
+    });
+
+
+
+    var updateValues = update.values.map((key, value) {
+      if (value is Map<String, dynamic>) {
+        var valueNew = <String, dynamic>{};
+        valueNew.addAll(value);
+
+        valueNew.forEach((key2, value2) {
+          if (value2 is ArrayModifier){
+            valueNew[key2] = value2.values;
+          }
+
+          else if(value2 is QuerySelector){
+            valueNew[key2] = value2.values;
+          }
+        });
+
+        return MapEntry<String, dynamic>(key, valueNew);
+      }
+      return MapEntry<String, dynamic>(key, value);
+    });
+
+
+    List results = await FlutterMongoStitch._updateDocument(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+      update: BsonDocument(updateValues).toJson(),
+    );
+
+    return results;
+  }
+
+  Future<List<int>> updateMany(
+      {@required Map<String, dynamic> filter,
+       @required UpdateSelector update}) async {
+
+    // convert 'QuerySelector' into map, too
+    filter.forEach((key, value) {
+      if (value is QuerySelector) {
+        filter[key] = value.values;
+      }
+    });
+
+
+    List<int> results = await FlutterMongoStitch._updateDocuments(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+      update: BsonDocument(update.values).toJson(),
+    );
+
+    return results;
+  }
 }
 
 class MongoDatabase {
@@ -407,17 +475,6 @@ class FlutterMongoStitch {
     });
   }
 
-  static Future _countDocuments(
-      {String collectionName, String databaseName, dynamic filter}) async {
-    final size = await _channel.invokeMethod('countDocuments', {
-      'database_name': databaseName,
-      'collection_name': collectionName,
-      'filter': filter
-    });
-
-    return size;
-  }
-
   static Future _findDocuments(
       {String collectionName, String databaseName, dynamic filter}) async {
     final result = await _channel.invokeMethod('findDocuments', {
@@ -460,5 +517,47 @@ class FlutterMongoStitch {
     });
 
     return result;
+  }
+
+  static Future _countDocuments(
+      {String collectionName, String databaseName, dynamic filter}) async {
+    final size = await _channel.invokeMethod('countDocuments', {
+      'database_name': databaseName,
+      'collection_name': collectionName,
+      'filter': filter
+    });
+
+    return size;
+  }
+
+  ///
+  static Future _updateDocument(
+      {String collectionName,
+        String databaseName,
+        String filter,
+        String update}) async {
+    final results = await _channel.invokeMethod('updateDocument', {
+      'database_name': databaseName,
+      'collection_name': collectionName,
+      'filter': filter,
+      'update': update
+    });
+
+    return results;
+  }
+
+  static Future _updateDocuments(
+      {String collectionName,
+       String databaseName,
+       String filter,
+       String update}) async {
+    final results = await _channel.invokeMethod('updateDocuments', {
+      'database_name': databaseName,
+      'collection_name': collectionName,
+      'filter': filter,
+      'update': update
+    });
+
+    return results;
   }
 }

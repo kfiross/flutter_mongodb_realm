@@ -10,39 +10,57 @@ import 'dart:convert';
 class QuerySelector {
   Map<String, dynamic> _map = <String, dynamic>{};
 
-
-  QuerySelector.ne(value){
-    this.ne(value);
-  }
-
+  // Comparison
   QuerySelector.gt(value){
     this.gt(value);
-  }
-
-  QuerySelector.lt(value){
-    this.lt(value);
   }
 
   QuerySelector.gte(value){
     this.gte(value);
   }
 
+  QuerySelector.in$(List values){
+    this.in$(values);
+  }
+
+  QuerySelector.lt(value){
+    this.lt(value);
+  }
+
   QuerySelector.lte(value){
     this.lte(value);
   }
 
-  QuerySelector.all(List values){
-    this.all(values);
+
+  QuerySelector.ne(value){
+    this.ne(value);
   }
 
   QuerySelector.nin(List values){
     this.nin(values);
   }
 
-  QuerySelector.oneFrom(List values){
-    this.oneFrom(values);
-  }
 
+  // Logical
+
+//  QuerySelector.and(List values){
+//    this.and(values);
+//  }
+//
+//  QuerySelector.not(List values){
+//    this.not(values);
+//  }
+//
+//  QuerySelector.nor(List values){
+//    this.nor(values);
+//  }
+//
+//  QuerySelector.or(List values){
+//    this.or(values);
+//  }
+
+
+  // Element
   QuerySelector.exists(){
     this.exists();
   }
@@ -51,11 +69,43 @@ class QuerySelector {
     this.notExists();
   }
 
+//  QuerySelector.type(){
+//    this.type();
+//  }
+
+  // Evaluation
   QuerySelector.mod(int value){
     this.mod(value);
   }
 
-  get values => _map;
+  // Geospatial
+
+
+  // Array
+  QuerySelector.all(List values){
+    this.all(values);
+  }
+
+//  QuerySelector.elemMatch(List values){
+//    this.elemMatch(values);
+//  }
+
+//  QuerySelector.size(List values){
+//    this.size(values);
+//  }
+
+
+  // Bitwise
+
+
+  // Comments
+
+
+
+
+
+
+  Map<String, dynamic>  get values => _map;
 
 
 
@@ -117,10 +167,8 @@ class QuerySelector {
 
   }
 
- void oneFrom(List values) {
+ void in$(List values) {
     _addExpression("\$in", values);
-
-
   }
 
  void exists() {

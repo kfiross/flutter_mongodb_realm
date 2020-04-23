@@ -16,6 +16,7 @@ import java.lang.Exception
 import kotlin.collections.HashMap
 import com.mongodb.stitch.android.core.auth.providers.userpassword.UserPasswordAuthProviderClient
 import com.mongodb.stitch.core.services.mongodb.remote.RemoteInsertManyResult
+import com.mongodb.stitch.core.services.mongodb.remote.RemoteUpdateResult
 
 
 // Basic CRUD..
@@ -159,6 +160,30 @@ class MyMongoStitchClient(
         
         val filter = BsonDocument.parse(filterJson)
         return collection?.count(filter)
+    }
+
+    fun updateDocument(databaseName: String?, collectionName: String?, filterJson: String?, updateJson: String)
+            : Task<RemoteUpdateResult>? {
+        val collection = getCollection(databaseName, collectionName)
+
+        val update = BsonDocument.parse(updateJson)
+        if (filterJson == null)
+            return collection?.updateOne(BsonDocument(), update)
+
+        val filter = BsonDocument.parse(filterJson)
+        return collection?.updateOne(filter, update)
+    }
+
+    fun updateDocuments(databaseName: String?, collectionName: String?, filterJson: String?, updateJson: String)
+            : Task<RemoteUpdateResult>? {
+        val collection = getCollection(databaseName, collectionName)
+
+        val update = BsonDocument.parse(updateJson)
+        if (filterJson == null)
+            return collection?.updateMany(BsonDocument(), update)
+
+        val filter = BsonDocument.parse(filterJson)
+        return collection?.updateMany(filter, update)
     }
 
 }
