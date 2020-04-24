@@ -8,15 +8,13 @@ import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
 import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoCollection
 import com.mongodb.stitch.core.auth.providers.anonymous.AnonymousCredential
 import com.mongodb.stitch.core.auth.providers.userpassword.UserPasswordCredential
-import com.mongodb.stitch.core.services.mongodb.remote.RemoteDeleteResult
-import com.mongodb.stitch.core.services.mongodb.remote.RemoteInsertOneResult
 import org.bson.BsonDocument
 import org.bson.Document
 import java.lang.Exception
 import kotlin.collections.HashMap
 import com.mongodb.stitch.android.core.auth.providers.userpassword.UserPasswordAuthProviderClient
-import com.mongodb.stitch.core.services.mongodb.remote.RemoteInsertManyResult
-import com.mongodb.stitch.core.services.mongodb.remote.RemoteUpdateResult
+import com.mongodb.stitch.android.services.mongodb.remote.AsyncChangeStream
+import com.mongodb.stitch.core.services.mongodb.remote.*
 
 
 // Basic CRUD..
@@ -182,8 +180,22 @@ class MyMongoStitchClient(
         if (filterJson == null)
             return collection?.updateMany(BsonDocument(), update)
 
+
         val filter = BsonDocument.parse(filterJson)
         return collection?.updateMany(filter, update)
+    }
+
+    //?
+    fun watchCollection(
+        databaseName: String?, collectionName: String?, filterJson: String?
+    ): Task<AsyncChangeStream<Document, ChangeEvent<Document>>>? {
+        val collection = getCollection(databaseName, collectionName)
+
+        if (filterJson == null)
+            return collection?.watch()
+
+        val matchFilter = BsonDocument.parse(filterJson)
+        return collection?.watchWithFilter(matchFilter)
     }
 
 }

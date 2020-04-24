@@ -1,7 +1,6 @@
 package com.example.flutter_mongo_stitch
 
 import androidx.annotation.NonNull;
-import com.example.flutter_mongo_stitch.MyMongoStitchClient
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -11,6 +10,9 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 
 import com.mongodb.stitch.android.core.Stitch
 import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
+import io.flutter.plugin.common.EventChannel
+
+
 
 /** FlutterMongoStitchPlugin */
 public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
@@ -25,9 +27,20 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel: MethodChannel
 
+  private lateinit var streamsChannel: StreamsChannel
+
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+
     channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_mongo_stitch")
-    channel.setMethodCallHandler(this);
+    channel.setMethodCallHandler(this)
+
+    streamsChannel = StreamsChannel(flutterPluginBinding.binaryMessenger, "streams_channel_test")
+    streamsChannel.setStreamHandlerFactory(object: StreamsChannel.StreamHandlerFactory{
+      override fun create(arguments: Any?): EventChannel.StreamHandler {
+        return StreamHandler(client, arguments)
+      }
+
+    })
   }
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -66,6 +79,9 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
       ////
       "updateDocument" -> updateDocument(call , result)
       "updateDocuments" -> updateDocuments(call , result)
+
+      /////
+      "watch" -> watchCollection(call, result)
 
       /////
       "signInAnonymously" -> signInAnonymously(result)
@@ -392,7 +408,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
       if (it.isSuccessful)
         result.success(listOf(it.result.matchedCount,it.result.modifiedCount))
       else
-        result.error("Error", "Failed to count the collection - Permission DENIED", "")
+        result.error("Error", "Failed to update the collection - Permission DENIED", "")
 
     }
   }
@@ -417,9 +433,30 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
       if (it.isSuccessful)
         result.success(listOf(it.result.matchedCount,it.result.modifiedCount))
       else
-        result.error("Error", "Failed to count the collection - Permission DENIED", "")
+        result.error("Error", "Failed to update the collection - Permission DENIED", "")
 
     }
+  }
+
+  private fun watchCollection(@NonNull call: MethodCall, @NonNull result: Result){
+    val databaseName = call.argument<String>("database_name")
+    val collectionName = call.argument<String>("collection_name")
+    val filter = call.argument<String>("filter")
+    val update = call.argument<String>("update")
+
+    val task = client.watchCollection(
+            databaseName,
+            collectionName,
+            filter
+    )
+
+//    task!!.addOnCompleteListener {
+//      if (it.isSuccessful)
+//        result.success()
+//      else
+//        result.error("Error", "Failed to update the collection - Permission DENIED", "")
+//
+//    }
   }
 
 

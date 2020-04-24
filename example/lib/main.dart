@@ -20,6 +20,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
+
+
     // initialized MongoStitch App
     client.initializeApp("mystitchapp-fjpmn").then((_) async {
       try {
@@ -34,12 +36,15 @@ class _MyAppState extends State<MyApp> {
 //          UserPasswordCredential(username: "kfir25816@gmail.com",password: "12345678")
         );
 
+
         // after app initialized and user authenticated, show some data
 
 //        insertData();
 //        fetchData();
 //      deleteData();
-        updateData();
+//        updateData();
+
+      watchData();
       } on PlatformException catch (e) {
         debugPrint("Error! ${e.message}");
       }
@@ -251,6 +256,25 @@ class _MyAppState extends State<MyApp> {
 //    setState(() {
 //      _platformVersion = platformVersion;
 //    });
+
+  void watchData() {
+    var myCollection = client.getDatabase("test").getCollection("my_collection");
+
+    try {
+      final stream = myCollection.watch();
+
+      stream.listen((data) {
+        var fullDocument = MongoDocument.parse(data);
+        print("a document with '${fullDocument.map["_id"]}' is changed");
+        // do something
+      });
+    }
+    on PlatformException catch (e){
+      debugPrint("Error! ${e.message}");
+    }
+
+  }
+
 //  }
 
   @override

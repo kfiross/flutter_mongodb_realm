@@ -5,6 +5,7 @@ import 'package:bson/bson.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mongo_stitch/update_selector.dart';
+import 'package:streams_channel/streams_channel.dart';
 import './query_selector.dart';
 
 export 'query_selector.dart';
@@ -139,7 +140,7 @@ class MongoCollection {
 
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
-      if (value is QuerySelector){
+      if (value is QuerySelector) {
         filter[key] = value.values;
       }
     });
@@ -162,7 +163,7 @@ class MongoCollection {
 
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
-      if (value is QuerySelector){
+      if (value is QuerySelector) {
         filter[key] = value.values;
       }
     });
@@ -192,7 +193,7 @@ class MongoCollection {
 
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
-      if (value is QuerySelector){
+      if (value is QuerySelector) {
         filter[key] = value.values;
       }
     });
@@ -221,7 +222,7 @@ class MongoCollection {
 
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
-      if (value is QuerySelector){
+      if (value is QuerySelector) {
         filter[key] = value.values;
       }
     });
@@ -232,10 +233,9 @@ class MongoCollection {
 
 
   Future<int> count([Map<String, dynamic> filter]) async {
-
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
-      if (value is QuerySelector){
+      if (value is QuerySelector) {
         filter[key] = value.values;
       }
     });
@@ -252,7 +252,6 @@ class MongoCollection {
   /// NEW FEATURES!!
   Future<List> updateOne({@required Map<String, dynamic> filter,
     @required UpdateSelector update}) async {
-
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
       if (value is QuerySelector) {
@@ -261,18 +260,17 @@ class MongoCollection {
     });
 
 
-
     var updateValues = update.values.map((key, value) {
       if (value is Map<String, dynamic>) {
         var valueNew = <String, dynamic>{};
         valueNew.addAll(value);
 
         valueNew.forEach((key2, value2) {
-          if (value2 is ArrayModifier){
+          if (value2 is ArrayModifier) {
             valueNew[key2] = value2.values;
           }
 
-          else if(value2 is QuerySelector){
+          else if (value2 is QuerySelector) {
             valueNew[key2] = value2.values;
           }
         });
@@ -293,10 +291,8 @@ class MongoCollection {
     return results;
   }
 
-  Future<List<int>> updateMany(
-      {@required Map<String, dynamic> filter,
-       @required UpdateSelector update}) async {
-
+  Future<List<int>> updateMany({@required Map<String, dynamic> filter,
+    @required UpdateSelector update}) async {
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
       if (value is QuerySelector) {
@@ -314,6 +310,36 @@ class MongoCollection {
 
     return results;
   }
+
+  Stream watch() {
+    var stream = FlutterMongoStitch._watchCollection(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+    );
+
+    return stream;
+  }
+
+  // TODO: need to be checked!
+  Stream watchWithFilter(Map<String, dynamic> filter) {
+    // convert 'QuerySelector' into map, too
+    filter.forEach((key, value) {
+      if (value is QuerySelector) {
+        filter[key] = value.values;
+      }
+    });
+
+    var stream = FlutterMongoStitch._watchCollection(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+    );
+
+    return stream;
+
+  }
+
+
 }
 
 class MongoDatabase {
@@ -394,6 +420,8 @@ class MongoStitchClient {
 class FlutterMongoStitch {
   static const MethodChannel _channel =
       const MethodChannel('flutter_mongo_stitch');
+
+  static StreamsChannel _streamsChannel = StreamsChannel('streams_channel_test');
 
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
@@ -559,5 +587,18 @@ class FlutterMongoStitch {
     });
 
     return results;
+  }
+
+  //NEW NEW!!!
+
+  static Stream _watchCollection(
+      {@required String collectionName, @required String databaseName, String filter,}) {
+
+    // continuous stream of events from platform side, match some args
+    return _streamsChannel.receiveBroadcastStream({
+      "db": databaseName,
+      "collection": collectionName,
+      "filter": filter
+    });
   }
 }
