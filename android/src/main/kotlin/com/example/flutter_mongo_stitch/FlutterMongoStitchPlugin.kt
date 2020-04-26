@@ -438,26 +438,26 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private fun watchCollection(@NonNull call: MethodCall, @NonNull result: Result){
-    val databaseName = call.argument<String>("database_name")
-    val collectionName = call.argument<String>("collection_name")
-    val filter = call.argument<String>("filter")
-    val update = call.argument<String>("update")
-
-    val task = client.watchCollection(
-            databaseName,
-            collectionName,
-            filter
-    )
-
-//    task!!.addOnCompleteListener {
-//      if (it.isSuccessful)
-//        result.success()
-//      else
-//        result.error("Error", "Failed to update the collection - Permission DENIED", "")
+//  private fun watchCollection(@NonNull call: MethodCall, @NonNull result: Result){
+//    val databaseName = call.argument<String>("database_name")
+//    val collectionName = call.argument<String>("collection_name")
+//    val filter = call.argument<String>("filter")
 //
-//    }
-  }
+//
+//    val task = client.watchCollection(
+//            databaseName,
+//            collectionName,
+//            filter
+//    )
+//
+////    task!!.addOnCompleteListener {
+////      if (it.isSuccessful)
+////        result.success()
+////      else
+////        result.error("Error", "Failed to update the collection - Permission DENIED", "")
+////
+////    }
+//  }
 
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {

@@ -6,6 +6,8 @@ import MongoSwift
 import StitchCore
 import StitchRemoteMongoDBService
 
+
+
 public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
     var client: MyMongoStitchClient?
 
@@ -13,6 +15,12 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         let channel = FlutterMethodChannel(name: "flutter_mongo_stitch", binaryMessenger: registrar.messenger())
         let instance = SwiftFlutterMongoStitchPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
+        
+       
+        let streamsChannel = FlutterStreamsChannel(name: "streams_channel_test", binaryMessenger: registrar.messenger())
+        streamsChannel.setStreamHandlerFactory { arguments in
+            return StreamHandler(client: instance.client!) // StreamHandler is an instance FlutterStreamHandler
+        }
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -412,5 +420,6 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             }
         )
     }
+
 }
 

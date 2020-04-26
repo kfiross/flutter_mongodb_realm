@@ -264,6 +264,7 @@ class _MyAppState extends State<MyApp> {
       final stream = myCollection.watch();
 
       stream.listen((data) {
+      //  print(data);
         var fullDocument = MongoDocument.parse(data);
         print("a document with '${fullDocument.map["_id"]}' is changed");
         // do something
