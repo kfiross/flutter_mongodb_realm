@@ -32,6 +32,9 @@ class MyMongoStitchClient(
 //
 
 
+    fun getUser(): StitchUser? {
+        return auth.user
+    }
 
     fun getUserId(): String?{
         return auth.user?.id

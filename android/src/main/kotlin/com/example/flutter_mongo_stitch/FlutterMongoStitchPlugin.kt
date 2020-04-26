@@ -80,8 +80,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
       "updateDocument" -> updateDocument(call , result)
       "updateDocuments" -> updateDocuments(call , result)
 
-      /////
-      "watch" -> watchCollection(call, result)
 
       /////
       "signInAnonymously" -> signInAnonymously(result)
@@ -150,7 +148,10 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
 
     task!!.addOnSuccessListener {
-      result.success(true)
+      result.success(mapOf(
+              "id" to it.id,
+              "device_id" to it.deviceId
+      ))
     }.addOnFailureListener {
       result.error("ERROR", "UserEmailPassword Provider Login failed: ${it.message}", "")
     }

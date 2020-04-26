@@ -21,7 +21,7 @@ class StreamHandler(val client: MyMongoStitchClient, val arguments: Any?) : Even
         val args = arguments as Map<*, *>
         val dbName = args["db"] as String
         val collectionName = args["collection"] as String
-        val filter = args["collection"] as String?
+        val filter = args["filter"] as String?
 
         val task = this.client.watchCollection(dbName,collectionName, filter)
 
