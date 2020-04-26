@@ -140,7 +140,7 @@ class MyMongoStitchClient {
     }
     
     /// ========================== Database related ========================================== ///
-    private func getCollection(databaseName: String?, collectionName: String?) throws
+    /*private*/ func getCollection(databaseName: String?, collectionName: String?) throws
         -> RemoteMongoCollection<Document>? {
         if(databaseName == nil || collectionName == nil) {
             throw MyError.nilError
@@ -454,7 +454,75 @@ class MyMongoStitchClient {
             
         }
         catch {
-            onError("Failed to count collection")
+            onError("Failed to update collection")
         }
     }
+    
+    // NEW!!!
+    func watchCollection(
+        databaseName: String?,
+        collectionName: String?,
+        //filterJson: String?,
+        onCompleted: @escaping (Any)->Void
+        //onError: @escaping (String?)->Void
+        ) -> ChangeStreamSession<Document>? {
+        do {
+            let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
+            
+            var document = Document()
+            
+//            if (filterJson != nil){
+//                document = try Document.init(fromJSON: filterJson!)
+//            }
+            
+    
+            
+//            switch result {
+//            case .success(let result):
+//                onCompleted([result.matchedCount, result.modifiedCount])
+//            case .failure(let error):
+//                onError("Failed to update collection: \(error)")
+//            }
+            var x = try collection?.watch(delegate: MyCustomDelegate<Document>.init(onCompleted))
+            return x
+        }
+        catch {
+            //onError("Failed to watch collection")
+            return nil
+        }
+    }
+}
+
+class MyCustomDelegate<T>: ChangeStreamDelegate
+    where T: Encodable, T: Decodable
+{
+    var _onCompleted: (Any)->Void
+    init(_ onCompleted: @escaping (Any)->Void){
+        self._onCompleted = onCompleted
+    }
+    
+    func didReceive(event: ChangeEvent<T>) {
+        self._onCompleted((event.fullDocument as! Document).extendedJSON)
+    }
+    
+
+    typealias DocumentT = T
+    
+//    func didReceive(event: ChangeEvent<T>) {
+//        // react to events
+//        ev
+//    }
+    
+    func didReceive(streamError: Error) {
+
+    }
+    
+    func didOpen() {
+        
+    }
+    
+    func didClose() {
+        
+    }
+  
 }
