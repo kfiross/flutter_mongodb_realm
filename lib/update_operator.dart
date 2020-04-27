@@ -17,7 +17,7 @@ class PopValue extends Enum<int> {
 //
 //get where => UpdateSelector();
 
-class UpdateSelector {
+class UpdateOperator {
   Map<String, dynamic> _map = <String, dynamic>{};
 
   Map<String, dynamic> get values => _map;
@@ -32,52 +32,52 @@ class UpdateSelector {
 //    this.currentDate(value);
 //  }
 
-  UpdateSelector.inc(Map<String, num> values){
+  UpdateOperator.inc(Map<String, num> values){
     this.inc(values);
   }
 
-  UpdateSelector.min(Map<String, dynamic> values){
+  UpdateOperator.min(Map<String, dynamic> values){
     this.min(values);
   }
 
-  UpdateSelector.max(Map<String, dynamic> values){
+  UpdateOperator.max(Map<String, dynamic> values){
     this.max(values);
   }
 
-  UpdateSelector.mul(Map<String, num> values){
+  UpdateOperator.mul(Map<String, num> values){
     this.mul(values);
   }
 
 
-  UpdateSelector.rename(Map<String, String> values){
+  UpdateOperator.rename(Map<String, String> values){
     this.rename(values);
   }
 
-  UpdateSelector.set(Map<String, dynamic> value){
+  UpdateOperator.set(Map<String, dynamic> value){
     this.set(value);
   }
 
 
-  UpdateSelector.unset(List<String> fields){
+  UpdateOperator.unset(List<String> fields){
     this.unset(fields);
   }
 
 
 
   // Array
-  UpdateSelector.pop(Map<String, PopValue> values){
+  UpdateOperator.pop(Map<String, PopValue> values){
     this.pop(values);
   }
 
-  UpdateSelector.pull(Map<String, dynamic> values){
+  UpdateOperator.pull(Map<String, dynamic> values){
     this.pull(values);
   }
 
-  UpdateSelector.push(Map<String, ArrayModifier> values){
+  UpdateOperator.push(Map<String, ArrayModifier> values){
     this.push(values);
   }
 
-  UpdateSelector.pullAll(Map<String, List<dynamic>> values){
+  UpdateOperator.pullAll(Map<String, List<dynamic>> values){
     this.pullAll(values);
   }
 

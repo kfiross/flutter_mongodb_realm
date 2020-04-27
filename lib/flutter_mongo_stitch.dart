@@ -1,119 +1,29 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-import 'package:bson/bson.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mongo_stitch/update_selector.dart';
+import 'package:flutter_mongo_stitch/update_operator.dart';
 import 'package:streams_channel/streams_channel.dart';
-import './query_selector.dart';
 
-export 'query_selector.dart';
-export 'update_selector.dart';
+import 'query_operator.dart';
+import 'bson_document.dart';
+import 'mongo_document.dart';
 
-// TODO: maybe using 'BsonObject' instead 'dynamic'
-class BsonDocument {
-  final Map<String, dynamic> _map;
+export 'query_operator.dart';
+export 'update_operator.dart';
+export 'mongo_document.dart';
 
-  Map<String, dynamic> get map => _map;
 
-  /// Creates a document instance initialized with the given map.
-  /// or an empty Document instance if not provided.
-  const BsonDocument([this._map]);
 
-  String toJson() => jsonEncode(_map ?? Map<String, dynamic>());
-}
-
-class MongoDocument {
-  final Map<String, dynamic> _map = LinkedHashMap<String, dynamic>();
-
-  Map<String, Object> get map => _map;
-
-  /// Create a Document instance initialized with the given key/value pair.
-  MongoDocument.single(String key, dynamic value) {
-    _map[key] = value;
-  }
-
-  /// Creates a Document instance initialized with the given map.
-  /// or an empty Document instance if not provided.
-  MongoDocument(Map<String, dynamic> map) {
-    if (map != null) {
-      _map.addAll(map);
-    }
-  }
-
-  static fixMapMismatchedTypes(Map map){
-    final map2 = map.entries.toList();
-    var result;
-    if (map2.length == 1 && map2[0].key.contains("\$")) {
-      switch (map2[0].key.substring(1)) {
-      // Convert 'ObjectId' type
-        case "oid":
-          result = ObjectId.fromHexString(map2[0].value);
-          break;
-
-      // Convert 'Int64' type
-        case "numberLong":
-          result = int.parse(map2[0].value);
-          break;
-
-      // Convert 'Date' type
-        case "date":
-          if (map2[0].value is int)
-            result = DateTime.fromMillisecondsSinceEpoch(map2[0].value,
-                isUtc: true);
-          else if (map2[0].value is String)
-            result = DateTime.parse(map2[0].value);
-          break;
-      }
-    }
-
-    // fix 'Object' attribute types
-    else {
-      map.forEach((key, value) {
-        if (value is LinkedHashMap) {
-          map[key] = fixMapMismatchedTypes(value);
-        }
-      });
-      result = map;
-
-    }
-
-    return result;
-  }
-
-  /// Parses a string in MongoDB Extended JSON format to a Document
-  static MongoDocument parse(String jsonString) {
-    Map<String, dynamic> map = json.decode(jsonString);
-
-    // fix MongoDB bullshit
-    map.forEach((key, value) {
-      if (value is LinkedHashMap) {
-        map[key] = fixMapMismatchedTypes(value);
-      }
-    });
-
-    return MongoDocument(map);
-  }
-
-  /// Put the given key/value pair into this Document and return this.
-  /// Useful for chaining puts in a single expression, e.g.
-  /// doc.append("a", 1).append("b", 2)
-  MongoDocument append(String key, Object value) {
-    _map[key] = value;
-    return this;
-  }
-
-  String toJson() => jsonEncode(_map);
-}
-
+/// MongoCollection provides read and write access to documents.
 class MongoCollection {
   final String collectionName;
   final String databaseName;
 
   MongoCollection({@required this.collectionName, @required this.databaseName});
 
-  // DONE!
+  /// Inserts the provided document to the collection
   Future insertOne(MongoDocument document) async {
     await FlutterMongoStitch._insertDocument(
       collectionName: this.collectionName,
@@ -122,28 +32,38 @@ class MongoCollection {
     );
   }
 
-  // TODO: implement this
+  /// Inserts one or more documents to the collection
   void insertMany(List<MongoDocument> documents) {
     FlutterMongoStitch._insertDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
-      list: documents.map((doc) => jsonEncode(doc._map)).toList(),
+      list: documents.map((doc) => jsonEncode(doc.map)).toList(),
     );
   }
 
-  /// FILTER ANDROID+IOS WORK!
-  Future<int> deleteOne([Map<String, dynamic> filter]) async {
+  /// Removes at most one document from the collection that matches the given
+  /// filter. If no documents match, the collection is not modified.
+  Future<int> deleteOne([filter]) async {
     // force sending an empty filter instead asserting
     if (filter == null) {
       filter = Map<String, dynamic>();
     }
+    else{
+      assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
-    // convert 'QuerySelector' into map, too
-    filter.forEach((key, value) {
-      if (value is QuerySelector) {
-        filter[key] = value.values;
+      if (filter is Map<String, dynamic>) {
+
+        // convert 'QuerySelector' into map, too
+        filter?.forEach((key, value) {
+          if (value is QueryOperator) {
+            filter[key] = value.values;
+          }
+        });
       }
-    });
+      if (filter is LogicalQueryOperator){
+        filter = filter.values;
+      }
+    }
 
     var result = await FlutterMongoStitch._deleteDocument(
       collectionName: this.collectionName,
@@ -154,19 +74,31 @@ class MongoCollection {
     return result;
   }
 
-  /// FILTER ANDROID+IOS WORK!
-  Future<int> deleteMany([Map<String, dynamic> filter]) async {
+
+  /// Removes all documents from the collection that matches the given
+  /// filter. If no documents match, the collection is not modified.
+  Future<int> deleteMany([filter]) async {
     // force sending an empty filter instead asserting
     if (filter == null) {
       filter = Map<String, dynamic>();
     }
+    else {
+      assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
-    // convert 'QuerySelector' into map, too
-    filter.forEach((key, value) {
-      if (value is QuerySelector) {
-        filter[key] = value.values;
+      if (filter is Map<String, dynamic>) {
+
+        // convert 'QuerySelector' into map, too
+        filter?.forEach((key, value) {
+          if (value is QueryOperator) {
+            filter[key] = value.values;
+          }
+        });
       }
-    });
+      if (filter is LogicalQueryOperator){
+        filter = filter.values;
+      }
+    }
+
 
     var result = await FlutterMongoStitch._deleteDocuments(
       collectionName: this.collectionName,
@@ -177,26 +109,24 @@ class MongoCollection {
     return result;
   }
 
-  /// FILTER ANDROID+IOS WORK!
-  Future<List<MongoDocument>> find([Map<String, dynamic> filter]) async {
-    // fix map
-    // ex. {"year": { "$gt": 2014 }}
 
-    // {"year":{"$gt":2014}}
+  ///Finds all documents in the collection according to the given filter
+  Future<List<MongoDocument>> find([filter])async {
 
+    assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
-    // Me
-    // {"year":{"$gt":2010,"$lte":2014}}
+    if (filter is Map<String, dynamic>) {
 
-    // Site
-    // {"year": { "$gt": 2010, "$lte": 2014 }}
-
-    // convert 'QuerySelector' into map, too
-    filter.forEach((key, value) {
-      if (value is QuerySelector) {
-        filter[key] = value.values;
-      }
-    });
+      // convert 'QuerySelector' into map, too
+      filter?.forEach((key, value) {
+        if (value is QueryOperator) {
+          filter[key] = value.values;
+        }
+      });
+    }
+    if (filter is LogicalQueryOperator){
+        filter = filter.values;
+    }
 
 
     List<dynamic> resultJson = await FlutterMongoStitch._findDocuments(
@@ -212,33 +142,51 @@ class MongoCollection {
     return result;
   }
 
+  /// Finds a document in the collection according to the given filter
+  Future<void> findOne([filter]) async {
 
-  Future<void> findOne([Map<String, dynamic> filter]) async {
+    assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
+
+    if (filter is Map<String, dynamic>) {
+
+      // convert 'QuerySelector' into map, too
+      filter?.forEach((key, value) {
+        if (value is QueryOperator) {
+          filter[key] = value.values;
+        }
+      });
+    }
+    if (filter is LogicalQueryOperator){
+      filter = filter.values;
+    }
+
     String resultJson = await FlutterMongoStitch._findFirstDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
     );
 
-    // convert 'QuerySelector' into map, too
-    filter.forEach((key, value) {
-      if (value is QuerySelector) {
-        filter[key] = value.values;
-      }
-    });
-
     var result = MongoDocument.parse(resultJson);
     return result;
   }
 
+  /// Counts the number of all documents in the collection.
+  /// unless according to the given filter
+  Future<int> count([filter]) async {
+    assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
-  Future<int> count([Map<String, dynamic> filter]) async {
-    // convert 'QuerySelector' into map, too
-    filter.forEach((key, value) {
-      if (value is QuerySelector) {
-        filter[key] = value.values;
-      }
-    });
+    if (filter is Map<String, dynamic>) {
+
+      // convert 'QuerySelector' into map, too
+      filter?.forEach((key, value) {
+        if (value is QueryOperator) {
+          filter[key] = value.values;
+        }
+      });
+    }
+    if (filter is LogicalQueryOperator){
+      filter = filter.values;
+    }
 
     int size = await FlutterMongoStitch._countDocuments(
       collectionName: this.collectionName,
@@ -250,14 +198,21 @@ class MongoCollection {
   }
 
   /// NEW FEATURES!!
-  Future<List> updateOne({@required Map<String, dynamic> filter,
-    @required UpdateSelector update}) async {
-    // convert 'QuerySelector' into map, too
-    filter.forEach((key, value) {
-      if (value is QuerySelector) {
-        filter[key] = value.values;
-      }
-    });
+  Future<List> updateOne({@required filter, @required UpdateOperator update}) async {
+    assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
+
+    if (filter is Map<String, dynamic>) {
+
+      // convert 'QuerySelector' into map, too
+      filter?.forEach((key, value) {
+        if (value is QueryOperator) {
+          filter[key] = value.values;
+        }
+      });
+    }
+    if (filter is LogicalQueryOperator){
+      filter = filter.values;
+    }
 
 
     var updateValues = update.values.map((key, value) {
@@ -270,7 +225,7 @@ class MongoCollection {
             valueNew[key2] = value2.values;
           }
 
-          else if (value2 is QuerySelector) {
+          else if (value2 is QueryOperator) {
             valueNew[key2] = value2.values;
           }
         });
@@ -291,14 +246,21 @@ class MongoCollection {
     return results;
   }
 
-  Future<List<int>> updateMany({@required Map<String, dynamic> filter,
-    @required UpdateSelector update}) async {
-    // convert 'QuerySelector' into map, too
-    filter.forEach((key, value) {
-      if (value is QuerySelector) {
-        filter[key] = value.values;
-      }
-    });
+  Future<List<int>> updateMany({@required filter, @required UpdateOperator update}) async {
+    assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
+
+    if (filter is Map<String, dynamic>) {
+
+      // convert 'QuerySelector' into map, too
+      filter?.forEach((key, value) {
+        if (value is QueryOperator) {
+          filter[key] = value.values;
+        }
+      });
+    }
+    if (filter is LogicalQueryOperator){
+      filter = filter.values;
+    }
 
 
     List<int> results = await FlutterMongoStitch._updateDocuments(
@@ -324,7 +286,7 @@ class MongoCollection {
   Stream watchWithFilter(Map<String, dynamic> filter) {
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
-      if (value is QuerySelector) {
+      if (value is QueryOperator) {
         filter[key] = value.values;
       }
     });
@@ -342,6 +304,7 @@ class MongoCollection {
 
 }
 
+/// MongoDatabase provides access to its 'MongoCollection'-s.
 class MongoDatabase {
   final String _name;
 
@@ -357,6 +320,8 @@ class MongoDatabase {
   }
 }
 
+/// A StitchCredential provides a Stitch client the information needed to log
+/// in or link a user with an identity.
 abstract class StitchCredential {}
 
 class AnonymousCredential extends StitchCredential {}
@@ -371,8 +336,12 @@ class UserPasswordCredential extends StitchCredential {
   });
 }
 
+/// MongoStitchAuth manages authentication for any Stitch based client.
 class MongoStitchAuth {
-  Future<bool> loginWithCredential(StitchCredential credential) async {
+
+  /// Logs in as a user with the given credentials associated with an
+  /// authentication provider.
+  Future<CoreStitchUser> loginWithCredential(StitchCredential credential) async {
     var result;
 
     if (credential is AnonymousCredential) {
@@ -405,10 +374,33 @@ class MongoStitchAuth {
   }
 }
 
+/// A user that belongs to a MongoDB Stitch application.
+class CoreStitchUser{
+  final String id;
+  final String deviceId;
+
+
+  CoreStitchUser({@required this.id, @required this.deviceId});
+//  final String loggedInProviderType;
+//  final String loggedInProviderName;
+  //final StitchUserProfileImpl profile;
+//  final bool isLoggedIn;
+//  final DateTime lastAuthActivity;
+
+  static fromMap(Map<String, dynamic> map){
+    return CoreStitchUser(
+      id: map["id"],
+      deviceId: map["device_id"]
+    );
+  }
+}
+
+/// The MongoStitchClient is the entry point for working with data in MongoDB
+/// remotely via Stitch.
 class MongoStitchClient {
   final MongoStitchAuth auth = MongoStitchAuth();
 
-  Future initializeApp(String appID) async {
+  static Future initializeApp(String appID) async {
     await FlutterMongoStitch._connectToMongo(appID);
   }
 
@@ -433,23 +425,17 @@ class FlutterMongoStitch {
     await _channel.invokeMethod('connectMongo', {'app_id': appId});
   }
 
-//  static Future MongoCollection() async {
-//    final collectionName = "myCollection";
-//    final databaseName = "test";
-//    final x = await _channel.invokeMethod('getMongoCollection', {
-//      'database_name': databaseName,
-//      'collection_name': collectionName,
-//    });
-//
-//    return x;
-//  }
-
-  static Future _signInWithUsernamePassword(
+  static Future<CoreStitchUser> _signInWithUsernamePassword(
       String username, String password) async {
-    final result = await _channel.invokeMethod('signInWithUsernamePassword',
+    final LinkedHashMap result = await _channel.invokeMethod('signInWithUsernamePassword',
         {'username': username, 'password': password});
 
-    return result;
+    var map = <String, dynamic>{};
+    result.forEach((key, value) {
+      map[key] = value;
+    });
+
+    return CoreStitchUser.fromMap(map);
   }
 
   static Future _signInAnonymously() async {
@@ -589,12 +575,11 @@ class FlutterMongoStitch {
     return results;
   }
 
-  //NEW NEW!!!
 
   static Stream _watchCollection(
       {@required String collectionName, @required String databaseName, String filter,}) {
 
-    // continuous stream of events from platform side, match some args
+    // continuous stream of events from platform side
     return _streamsChannel.receiveBroadcastStream({
       "db": databaseName,
       "collection": collectionName,
