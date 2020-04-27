@@ -56,13 +56,13 @@ class MyMongoStitchClient {
     
     
     func signInAnonymously(
-        onCompleted: @escaping (Bool)->Void,
+        onCompleted: @escaping (StitchUser)->Void,
         onError: @escaping (String?)->Void
     ) {
         self.auth.login(withCredential: AnonymousCredential()) { authResult in
             switch authResult {
             case .success(let user):
-                onCompleted(true)
+                onCompleted(user)
                 break
                 
             case .failure(let error):
@@ -75,15 +75,16 @@ class MyMongoStitchClient {
     func signInWithUsernamePassword(
         username: String,
         password: String,
-        onCompleted: @escaping (Bool)->Void,
+        onCompleted: @escaping (StitchUser)->Void,
         onError: @escaping (String?)->Void
     ) {
+
         self.auth.login(
             withCredential: UserPasswordCredential(withUsername: username, withPassword: password)
         ) { authResult in
             switch authResult {
             case .success(let user):
-                onCompleted(true)
+                onCompleted(user)
                 break
                 
             case .failure(let error):
@@ -106,7 +107,7 @@ class MyMongoStitchClient {
         
         emailPassClient.register(withEmail: email, withPassword: password) { result in
             switch result {
-            case .success(let user):
+            case .success( _):
                 onCompleted(true)
                 break
                 
@@ -123,7 +124,7 @@ class MyMongoStitchClient {
     ) {
         self.auth.logout { result in
             switch result {
-            case .success(let user):
+            case .success(_):
                 onCompleted(true)
                 break
                 
@@ -199,15 +200,6 @@ class MyMongoStitchClient {
             }
             
             let documents = try list!.map({ try Document.init(fromJSON: $0) })
-//            var document = Document()
-//            for (key) in data!.keys{
-//                let value = data![key]
-//
-//                if (value != nil){
-//                    document[key] = BsonExtractor.getValue(of: value!)
-//                }
-//            }
-            
             
             collection?.insertMany(documents) { result in
                 switch result {
@@ -458,39 +450,7 @@ class MyMongoStitchClient {
         }
     }
     
-    // NEW!!!
-    func watchCollection(
-        databaseName: String?,
-        collectionName: String?,
-        //filterJson: String?,
-        onCompleted: @escaping (Any)->Void
-        //onError: @escaping (String?)->Void
-        ) -> ChangeStreamSession<Document>? {
-        do {
-            let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
-            
-            var document = Document()
-            
-//            if (filterJson != nil){
-//                document = try Document.init(fromJSON: filterJson!)
-//            }
-            
     
-            
-//            switch result {
-//            case .success(let result):
-//                onCompleted([result.matchedCount, result.modifiedCount])
-//            case .failure(let error):
-//                onError("Failed to update collection: \(error)")
-//            }
-            var x = try collection?.watch(delegate: MyCustomDelegate<Document>.init(onCompleted))
-            return x
-        }
-        catch {
-            //onError("Failed to watch collection")
-            return nil
-        }
-    }
 }
 
 class MyCustomDelegate<T>: ChangeStreamDelegate

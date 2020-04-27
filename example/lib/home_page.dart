@@ -51,73 +51,76 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> list = _students.map((s) => StudentItem(s)).toList();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Welcome"),
-        actions: <Widget>[
-          FlatButton(
-            child: Icon(Icons.refresh, color: Colors.white),
-            onPressed: _fetchStudents,
-          )
-        ],
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            _filterRow(),
-            SizedBox(height: 20),
-            _header(),
-              Column(children: list),
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Welcome"),
+          actions: <Widget>[
+            FlatButton(
+              child: Icon(Icons.refresh, color: Colors.white),
+              onPressed: _fetchStudents,
+            )
           ],
         ),
-      ),
-      bottomSheet: Container(
-        margin: const EdgeInsets.only(bottom: 4),
-        child: Form(
-          key: formKey,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+        body: Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(
             children: <Widget>[
-              Expanded(
-                flex: 3,
-                child: TextFormField(
-                  decoration: InputDecoration(labelText: 'First Name'),
-                  autocorrect: false,
-                  validator: (val) => val.isEmpty ? "can't be empty." : null,
-                  onSaved: (val) => _newStudFirstName = val,
-                ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                flex: 3,
-                child: TextFormField(
-                  decoration: InputDecoration(labelText: 'Last Name'),
-                  autocorrect: false,
-                  validator: (val) => val.isEmpty ? "can't be empty." : null,
-                  onSaved: (val) => _newStudLastName = val,
-                ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                flex: 1,
-                child: TextFormField(
-                  decoration: InputDecoration(labelText: 'Year'),
-                  autocorrect: false,
-                  validator: (val) => val.isEmpty ? "can't be empty." : null,
-                  onSaved: (val) => _newStudYear = int.parse(val),
-                ),
-              ),
-              SizedBox(width: 12),
-
-              Expanded(
-                flex: 2,
-                child: RaisedButton(
-                  child: Text("Add"),
-                  onPressed: _insertNewStudent
-                ),
-              ),
+              _filterRow(),
+              SizedBox(height: 20),
+              _header(),
+                Column(children: list),
             ],
+          ),
+        ),
+        bottomSheet: Container(
+          margin: const EdgeInsets.only(bottom: 4),
+          child: Form(
+            key: formKey,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: TextFormField(
+                    decoration: InputDecoration(labelText: 'First Name'),
+                    autocorrect: false,
+                    validator: (val) => val.isEmpty ? "can't be empty." : null,
+                    onSaved: (val) => _newStudFirstName = val,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  flex: 3,
+                  child: TextFormField(
+                    decoration: InputDecoration(labelText: 'Last Name'),
+                    autocorrect: false,
+                    validator: (val) => val.isEmpty ? "can't be empty." : null,
+                    onSaved: (val) => _newStudLastName = val,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  flex: 1,
+                  child: TextFormField(
+                    decoration: InputDecoration(labelText: 'Year'),
+                    autocorrect: false,
+                    validator: (val) => val.isEmpty ? "can't be empty." : null,
+                    onSaved: (val) => _newStudYear = int.parse(val),
+                  ),
+                ),
+                SizedBox(width: 12),
+
+                Expanded(
+                  flex: 2,
+                  child: RaisedButton(
+                    child: Text("Add"),
+                    onPressed: _insertNewStudent
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
