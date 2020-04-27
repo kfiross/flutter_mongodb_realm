@@ -3,15 +3,32 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
+import 'package:flutter_mongo_stitch_example/login_screen.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await MongoStitchClient.initializeApp("mystitchapp-fjpmn");
+  runApp(MyApp2());
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: LoginScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+
+}
+
+class MyApp2 extends StatefulWidget {
+  @override
+  _MyApp2State createState() => _MyApp2State();
+}
+
+class _MyApp2State extends State<MyApp2> {
   String _platformVersion = 'Unknown';
 
   MongoStitchClient client = MongoStitchClient();
@@ -23,7 +40,7 @@ class _MyAppState extends State<MyApp> {
 
 
     // initialized MongoStitch App
-    client.initializeApp("mystitchapp-fjpmn").then((_) async {
+ //   MongoStitchClient.initializeApp("mystitchapp-fjpmn").then((_) async {
       try {
         // create a user
 //        await client.auth
@@ -31,24 +48,24 @@ class _MyAppState extends State<MyApp> {
 
         // login Anonymously
 
-        await client.auth.loginWithCredential(
-            AnonymousCredential()
-//          UserPasswordCredential(username: "kfir25816@gmail.com",password: "12345678")
-        );
+//        await client.auth.loginWithCredential(
+//            AnonymousCredential()
+////          UserPasswordCredential(username: "kfir25816@gmail.com",password: "12345678")
+//        );
 
 
         // after app initialized and user authenticated, show some data
 
 //        insertData();
-//        fetchData();
+        fetchData();
 //      deleteData();
 //        updateData();
 
-      watchData();
+//      watchData();
       } on PlatformException catch (e) {
         debugPrint("Error! ${e.message}");
       }
-    });
+//    });
   }
 
   Future<void> insertData() async {
@@ -103,10 +120,27 @@ class _MyAppState extends State<MyApp> {
 
 
 
-      var docs = await collection.find({
-        "year": QuerySelector.gt(2010)..lte(2014),
+    ///
+      // {
+      //  "$or": [
+      //    { "quantity": { "$gt": 0 } },
+      //    { "reviews": { "$size": { "$lte": 5 } } }
+      //  ]
+      // }
+      var docs = await collection.find(
+        QueryOperator.and([
+          {"year": QueryOperator.gte(2014)},
+          {"rated": "UNRATED"}
+          //{"reviews": QueryOperator.size()},
+        ])
         // "year":{"$gt":2010,"$lte":2014}
-      });
+      );
+
+
+//      var docs = await collection.find({
+//        "year": QueryOperator.gt(2010)..lte(2014),
+//        // "year":{"$gt":2010,"$lte":2014}
+//      });
       print(docs.length);
 
 //      var doc = await collection.findOne({
@@ -164,7 +198,7 @@ class _MyAppState extends State<MyApp> {
 //            "quantity": 670,
 //          })
 
-          update: UpdateSelector.rename({
+          update: UpdateOperator.rename({
             "count": "quantity",
           }),
 

@@ -3,7 +3,7 @@ description: Demonstrates how to use the flutter_mongo_stitch plugin.
 publish_to: 'none'
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -20,6 +20,9 @@ dev_dependencies:
 
   flutter_mongo_stitch:
     path: ../
+
+  fluttertoast: ^4.0.1
+  sprintf: ^4.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
