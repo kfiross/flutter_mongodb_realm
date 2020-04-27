@@ -197,7 +197,7 @@ class MyMongoStitchClient(
         if (filterJson == null)
             return collection?.watch()
 
-        collection.
+
         val matchFilter = BsonDocument.parse(filterJson)
         return collection?.watchWithFilter(matchFilter)
     }

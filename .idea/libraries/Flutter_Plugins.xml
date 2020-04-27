@@ -2,6 +2,7 @@
   <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
     <CLASSES>
       <root url="file://$PROJECT_DIR$" />
+      <root url="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/streams_channel-0.2.3" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

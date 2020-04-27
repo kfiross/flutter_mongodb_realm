@@ -1,36 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="524ecbba-39bb-48dd-a8df-52110eca8638" name="Default Changelist" comment="added support of 'insertMany' on iOS Channel">
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/ios/Classes/FlutterStreamsChannel.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/ios/Classes/FlutterStreamsChannel.m" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/ios/Classes/FlutterStreamsChannel.swift" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/ios/Classes/StreamHandler.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/ios/Classes/StreamHandler.m" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/ios/Classes/StreamHandler.swift" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Classes/FlutterStreamsChannel.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Classes/FlutterStreamsChannel.m" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Classes/FlutterStreamsChannel.swift" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Classes/StreamHandler.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Classes/StreamHandler.m" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Classes/StreamHandler.swift" afterDir="false" />
+    <list default="true" id="524ecbba-39bb-48dd-a8df-52110eca8638" name="Default Changelist" comment="added starting support for collection function &quot;updateOne&quot;, &quot;updateMany&quot;, with filtering on Android Channel + added most of the Update Operators">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/FlutterMongoStitchPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/FlutterMongoStitchPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/android/src/main/kotlin/com/example/flutter_mongo_stitch/FlutterMongoStitchPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/android/src/main/kotlin/com/example/flutter_mongo_stitch/FlutterMongoStitchPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/ios/Classes/FlutterMongoStitchPlugin.h" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/ios/Classes/FlutterMongoStitchPlugin.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/ios/Classes/SwiftFlutterMongoStitchPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/ios/Classes/SwiftFlutterMongoStitchPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/mongoatlasflutter.iml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_mongo_stitch/mongoatlasflutter.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/MyMongoStitchClient.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/MyMongoStitchClient.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/login_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/FlutterMongoStitchPlugin.h" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/FlutterMongoStitchPlugin.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/MyMongoStitchClient.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/MyMongoStitchClient.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/SwiftFlutterMongoStitchPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/SwiftFlutterMongoStitchPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mongoatlasflutter.iml" beforeDir="false" afterPath="$PROJECT_DIR$/mongoatlasflutter.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_mongo_stitch.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_mongo_stitch.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -47,58 +25,85 @@
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Nexus_5X_API_29_x86" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pubspec.yaml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="264" selection-start-line="264" selection-end-line="264" />
+            <state relative-caret-position="463">
+              <caret line="21" column="35" selection-start-line="21" selection-start-column="35" selection-end-line="21" selection-end-column="35" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/FlutterMongoStitchPlugin.kt">
+        <entry file="file://$PROJECT_DIR$/example/lib/login_screen.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7229">
-              <caret line="37" column="26" selection-start-line="37" selection-start-column="26" selection-end-line="37" selection-end-column="26" />
+            <state relative-caret-position="390">
+              <caret line="92" column="32" lean-forward="true" selection-start-line="92" selection-start-column="32" selection-end-line="92" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/StreamsChannel.java">
+        <entry file="file://$PROJECT_DIR$/lib/query_operator.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="26" column="19" selection-start-line="26" selection-start-column="19" selection-end-line="26" selection-end-column="19" />
+            <state relative-caret-position="312">
+              <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/MyMongoStitchClient.kt">
+        <entry file="file://$PROJECT_DIR$/lib/update_operator.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="31" column="2" selection-start-line="31" selection-start-column="2" selection-end-line="31" selection-end-column="2" />
+            <state relative-caret-position="346">
+              <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+              <folding>
+                <element signature="e#1#23#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/StreamHandler.kt">
+        <entry file="file://$PROJECT_DIR$/example/lib/home_page.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="36" column="22" lean-forward="true" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
+            <state relative-caret-position="308">
+              <caret line="278" column="22" selection-start-line="278" selection-start-column="22" selection-end-line="278" selection-end-column="22" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="4602">
+                <caret line="118" column="51" selection-start-line="118" selection-start-column="51" selection-end-line="118" selection-end-column="51" />
+              </first_editor>
+              <second_editor>
+                <markdownNavigatorState />
+              </second_editor>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/foundation/key.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="776">
+              <caret line="66" column="8" selection-start-line="66" selection-start-column="8" selection-end-line="66" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -106,39 +111,60 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/flutter_mongo_stitch.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7416">
-              <caret line="423" column="42" selection-start-line="423" selection-start-column="42" selection-end-line="423" selection-end-column="42" />
+            <state relative-caret-position="504">
+              <caret line="305" column="7" lean-forward="true" selection-start-line="305" selection-start-column="7" selection-end-line="305" selection-end-column="7" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
+                <element signature="e#5846#6034#0" />
+                <element signature="e#6074#6111#0" />
+                <element signature="e#6566#6754#0" />
+                <element signature="e#6794#6831#0" />
+                <element signature="e#6777#7782#0" />
+                <element signature="e#7256#7444#0" />
+                <element signature="e#7484#7521#0" />
+                <element signature="e#8565#8753#0" />
+                <element signature="e#8793#8830#0" />
+                <element signature="e#9194#9437#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/example/pubspec.yaml">
+        <entry file="file://$PROJECT_DIR$/lib/mongo_document.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="10" selection-start-line="10" selection-end-line="10" />
+            <state relative-caret-position="3588">
+              <caret line="92" column="1" selection-start-line="92" selection-start-column="1" selection-end-line="92" selection-end-column="1" />
+              <folding>
+                <element signature="e#0#25#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/query_selector.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="22" column="11" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/lib/bson_document.dart">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
       <find>mongoatlasflutter</find>
       <find>Mongoatlasflutter</find>
+      <find>jsonEncode</find>
+      <find>loginWithCredential</find>
+      <find>signInWithUsernamePassword</find>
+      <find>CoreStitchUser</find>
+      <find>MongoStitchC</find>
     </findStrings>
     <replaceStrings>
       <replace>mongoatlasflutter</replace>
@@ -153,34 +179,42 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/lib/mongoatlasflutter.dart" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/test/mongoatlasflutter_test.dart" />
         <option value="$PROJECT_DIR$/android/src/main/kotlin/com/example/mongoatlasflutter/MongoAtlasClient.kt" />
         <option value="$PROJECT_DIR$/android/src/main/kotlin/com/example/mongoatlasflutter/MongoatlasflutterPlugin.kt" />
         <option value="$PROJECT_DIR$/ios/Classes/SwiftMongoatlasflutterPlugin.swift" />
-        <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/lib/mongostitchflutter.dart" />
-        <option value="$PROJECT_DIR$/example/pubspec.yaml" />
         <option value="$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/FlutterMongoStitchPlugin.kt" />
+        <option value="$PROJECT_DIR$/pubspec.yaml" />
+        <option value="$PROJECT_DIR$/example/pubspec.yaml" />
+        <option value="$PROJECT_DIR$/example/lib/home_page.dart" />
+        <option value="$PROJECT_DIR$/example/README.md" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/lib/query_selector.dart" />
+        <option value="$PROJECT_DIR$/lib/update_selector.dart" />
+        <option value="$PROJECT_DIR$/lib/query_operation.dart" />
+        <option value="$PROJECT_DIR$/lib/update_operator.dart" />
+        <option value="$PROJECT_DIR$/lib/bson_document.dart" />
+        <option value="$PROJECT_DIR$/lib/mongo_document.dart" />
+        <option value="$PROJECT_DIR$/lib/query_operator.dart" />
         <option value="$PROJECT_DIR$/example/lib/main.dart" />
+        <option value="$PROJECT_DIR$/lib/flutter_mongo_stitch.dart" />
+        <option value="$PROJECT_DIR$/example/lib/login_screen.dart" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
-    <option name="width" value="1280" />
-    <option name="height" value="934" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="y" value="68" />
+    <option name="width" value="2078" />
+    <option name="height" value="1850" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
-      <showExcludedFiles Scope="true" ProjectPane="true" />
-      <sortByType ProjectPane="false" />
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -191,6 +225,11 @@
             <path>
               <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
               <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -257,6 +296,34 @@
             </path>
             <path>
               <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
+              <item name="ios" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
+              <item name="ios" type="462c0819:PsiDirectoryNode" />
+              <item name="Classes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
+              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
               <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
               <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -264,16 +331,23 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="adb_path" value="$USER_HOME$/Android/Sdk/platform-tools/adb" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
+    <property name="editor.config.ad.shown" value="true" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -305,28 +379,56 @@
       <option name="project" value="LOCAL" />
       <updated>1587073905385</updated>
     </task>
-    <task id="LOCAL-00002" summary="fixed pubspec dependcies">
-      <created>1587419436087</created>
+    <task id="LOCAL-00002" summary="added starting support for collection function &quot;updateOne&quot;, &quot;updateMany&quot;, with filtering on Android Channel + added most of the Update Operators">
+      <created>1587653588826</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1587419436087</updated>
+      <updated>1587653588826</updated>
     </task>
-    <task id="LOCAL-00003" summary=".">
-      <created>1587419477699</created>
+    <task id="LOCAL-00003" summary="added support for collection function &quot;watch&quot; on Android Channel">
+      <created>1587740482896</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1587419477699</updated>
+      <updated>1587740482897</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="fixed little bugs in android channel">
+      <created>1587911322196</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1587911322196</updated>
+    </task>
+    <task id="LOCAL-00005" summary="added &quot;or&quot;, &quot;and&quot; logical querying operators + make more modular code">
+      <created>1587986342517</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1587986342517</updated>
+    </task>
+    <task id="LOCAL-00006" summary="updated exmaple project">
+      <created>1587986376229</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1587986376229</updated>
+    </task>
+    <task id="LOCAL-00007" summary="fixed no-filter bug">
+      <created>1587986926621</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1587986926621</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="934" extended-state="0" />
+    <frame x="0" y="68" width="2880" height="1852" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.35379645" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.32176092" />
       <window_info id="Captures" order="1" side_tool="true" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
@@ -335,114 +437,136 @@
       <window_info id="Resources Explorer" order="6" />
       <window_info id="Capture Tool" order="7" />
       <window_info id="Favorites" order="8" side_tool="true" />
-      <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.32844934" />
-      <window_info anchor="bottom" id="Run" order="1" weight="0.32722834" />
+      <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.32831916" />
+      <window_info anchor="bottom" id="Run" order="1" sideWeight="0.49928418" visible="true" weight="0.32831916" />
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Android Profiler" order="3" show_stripe_button="false" />
       <window_info anchor="bottom" id="Logcat" order="4" />
-      <window_info anchor="bottom" id="Debug" order="5" visible="true" weight="0.33699635" />
+      <window_info anchor="bottom" id="Debug" order="5" weight="0.3381295" />
       <window_info anchor="bottom" id="Terminal" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5016155" side_tool="true" weight="0.32844934" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4983845" weight="0.32844934" />
-      <window_info anchor="bottom" id="Messages" order="9" weight="0.32722834" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5007158" side_tool="true" weight="0.32831916" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49919224" weight="0.32831916" />
+      <window_info anchor="bottom" id="Messages" order="9" weight="0.32831916" />
       <window_info anchor="bottom" id="Find" order="10" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Theme Preview" order="2" />
-      <window_info anchor="right" id="Flutter Inspector" order="3" />
-      <window_info anchor="right" id="Flutter Outline" order="4" />
-      <window_info anchor="right" id="Palette&#9;" order="5" />
-      <window_info anchor="right" id="Flutter Performance" order="6" />
-      <window_info anchor="right" id="WIFI ADB ULTIMATE" order="7" weight="0.32999283" />
+      <window_info anchor="right" id="WIFI ADB ULTIMATE" order="3" weight="0.32963493" />
+      <window_info anchor="right" id="Flutter Inspector" order="4" />
+      <window_info anchor="right" id="Flutter Outline" order="5" />
+      <window_info anchor="right" id="Palette&#9;" order="6" />
+      <window_info anchor="right" id="Flutter Performance" order="7" />
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added implementation of 'InsertOnce' on iOS Channel + configured iOS for using MongoStitch" />
     <MESSAGE value="added support for a collection's functions &quot;count&quot; , &quot;findOne&quot;, &quot;find&quot;, &quot;deleteOne&quot; , but without filtering on iOS Channel" />
     <MESSAGE value="added support for a collection's function &quot;deleteMany&quot;, &quot;deleteOne&quot;, &quot;find&quot;, &quot;findOne&quot;, &quot;count&quot; with basic filtering on iOS Channel" />
-    <MESSAGE value="fixed pubspec dependcies" />
-    <MESSAGE value="." />
-    <MESSAGE value="added support of 'insertMany' on iOS Channel" />
-    <MESSAGE value="added starting support for collection function &quot;updateOne&quot;, &quot;updateMany&quot;, with filtering on iOS Channel" />
-    <option name="LAST_COMMIT_MESSAGE" value="added starting support for collection function &quot;updateOne&quot;, &quot;updateMany&quot;, with filtering on iOS Channel" />
+    <MESSAGE value="added starting support for collection function &quot;updateOne&quot;, &quot;updateMany&quot;, with filtering on Android Channel + added most of the Update Operators" />
+    <MESSAGE value="added support for collection function &quot;watch&quot; on Android Channel" />
+    <MESSAGE value="fixed little bugs in android channel" />
+    <MESSAGE value="added &quot;or&quot;, &quot;and&quot; logical querying operators + make more modular code" />
+    <MESSAGE value="updated exmaple project" />
+    <MESSAGE value="fixed no-filter bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed no-filter bug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/mongostitchflutter.dart</url>
-          <line>334</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/mongostitchflutter.dart</url>
-          <line>341</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/mongostitchflutter.dart</url>
-          <line>198</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/mongostitchflutter.dart</url>
-          <line>204</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/mongostitchflutter.dart</url>
-          <line>208</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/mongostitchflutter.dart</url>
-          <line>226</line>
-          <option name="timeStamp" value="16" />
+          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
+          <line>95</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>112</line>
+          <line>96</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
+          <line>144</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>25</line>
+          <line>194</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>33</line>
+          <line>254</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>57</line>
-          <option name="timeStamp" value="24" />
+          <url>file://$PROJECT_DIR$/lib/update_operator.dart</url>
+          <line>119</line>
+          <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>80</line>
-          <option name="timeStamp" value="26" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>260</line>
+          <url>file://$PROJECT_DIR$/lib/flutter_mongo_stitch.dart</url>
+          <line>244</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>263</line>
-          <option name="timeStamp" value="28" />
+          <url>file://$PROJECT_DIR$/lib/flutter_mongo_stitch.dart</url>
+          <line>223</line>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/flutter_mongo_stitch.dart</url>
+          <line>228</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/flutter_mongo_stitch.dart</url>
+          <line>238</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/flutter_mongo_stitch.dart</url>
+          <line>229</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/flutter_mongo_stitch.dart</url>
+          <line>138</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/home_page.dart</url>
+          <line>279</line>
+          <option name="timeStamp" value="59" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/home_page.dart</url>
+          <line>207</line>
+          <option name="timeStamp" value="61" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/home_page.dart</url>
+          <line>210</line>
+          <option name="timeStamp" value="62" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/home_page.dart</url>
+          <line>211</line>
+          <option name="timeStamp" value="63" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/home_page.dart</url>
+          <line>218</line>
+          <option name="timeStamp" value="64" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>267</line>
-          <option name="timeStamp" value="29" />
+          <line>132</line>
+          <option name="timeStamp" value="65" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>266</line>
-          <option name="timeStamp" value="30" />
+          <url>file://$PROJECT_DIR$/example/lib/login_screen.dart</url>
+          <line>94</line>
+          <option name="timeStamp" value="71" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -458,75 +582,63 @@
   <component name="debuggerHistoryManager">
     <expressions id="watch">
       <expression>
-        <expression-string>BsonMap(value)</expression-string>
+        <expression-string>filter.values</expression-string>
         <language-id>Dart</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>BsonMap(map2)</expression-string>
+        <expression-string>form.validate()</expression-string>
         <language-id>Dart</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>MongoDocument.parse(jsonEncode(value))</expression-string>
+        <expression-string>BsonDocument(updateValues).toJson()</expression-string>
         <language-id>Dart</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>jsonEncode(value)</expression-string>
+        <expression-string>updateValues</expression-string>
         <language-id>Dart</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>jsonEncode(map2.asMap())</expression-string>
+        <expression-string>updateValues.values</expression-string>
         <language-id>Dart</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>jsonEncode(map2)</expression-string>
+        <expression-string>valueNew is Map&lt;String, ArrayModifier&gt;</expression-string>
         <language-id>Dart</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>jsonEncode(map2, Map&lt;String, dynamic&gt;())</expression-string>
+        <expression-string>value is Map&lt;String, ArrayModifier&gt;</expression-string>
         <language-id>Dart</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>jsonEncode(map2, Map&lt;String, dynamic&gt;)</expression-string>
+        <expression-string>value is Map&lt;String, dynamic&gt;</expression-string>
         <language-id>Dart</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>DateTime.parse(map2.value)</expression-string>
+        <expression-string>value is Map</expression-string>
         <language-id>Dart</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>DateTime.fromMillisecondsSinceEpoch(map2.value)</expression-string>
+        <expression-string>value[key2]</expression-string>
         <language-id>Dart</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="https://schemastore.azurewebsites.net/schemas/json/pubspec.json">
-      <provider selected="true" editor-type-id="httpFileEditor" />
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_platform_interface-1.0.6/lib/method_channel_url_launcher.dart" />
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-1.0.2/lib/plugin_platform_interface.dart" />
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.4.2/android/src/main/java/io/flutter/plugins/urllauncher/WebViewActivity.java" />
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.4.2/android/src/main/java/io/flutter/plugins/urllauncher/MethodCallHandlerImpl.java" />
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.4.2/android/src/main/java/io/flutter/plugins/urllauncher/UrlLauncherPlugin.java" />
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.4.2/pubspec.yaml" />
-    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/services/message_codecs.dart" />
-    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/services/message_codec.dart" />
     <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.4.2/lib/url_launcher.dart" />
     <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_platform_interface-1.0.6/lib/url_launcher_platform_interface.dart" />
     <entry file="file://$PROJECT_DIR$/ios/mongoatlasflutter.podspec" />
     <entry file="file://$USER_HOME$/flutter/bin/cache/dart-sdk/lib/convert/json.dart" />
     <entry file="file://$USER_HOME$/flutter/bin/cache/pkg/sky_engine/lib/convert/json.dart" />
-    <entry file="file://$PROJECT_DIR$/README.md" />
     <entry file="file://$PROJECT_DIR$/example/.flutter-plugins">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -540,78 +652,306 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/example/android/app/src/main/kotlin/com/example/mongoatlasflutter_example/MainActivity.kt" />
-    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/services/platform_channel.dart" />
+    <entry file="file://$PROJECT_DIR$/lib/mongostitchflutter.dart" />
     <entry file="file://$PROJECT_DIR$/test/mongostitchflutter_test.dart" />
     <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/mongostitchflutter/MongostitchflutterPlugin.kt" />
     <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/mongostitchflutter/MyMongoStitchClient.kt" />
     <entry file="file://$PROJECT_DIR$/ios/Classes/SwiftMongoatlasflutterPlugin.swift" />
-    <entry file="file://$PROJECT_DIR$/lib/mongostitchflutter.dart" />
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.4.5/ios/url_launcher.podspec">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
+        <state relative-caret-position="-234" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.4.5/ios/Classes/FLTURLLauncherPlugin.m">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2574" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.4.5/lib/url_launcher.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="4" column="7" lean-forward="true" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#5729#0" expanded="true" />
+            <element signature="e#166#186#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/flutter_mongo_stitch.dart">
+    <entry file="file://$USER_HOME$/devlopment/flutter/bin/cache/pkg/sky_engine/lib/wasm/wasm.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7416">
-          <caret line="423" column="42" selection-start-line="423" selection-start-column="42" selection-end-line="423" selection-end-column="42" />
+        <state>
+          <folding>
+            <element signature="e#0#2678#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/bin/cache/pkg/sky_engine/lib/core/comparable.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="73" column="15" selection-start-line="73" selection-start-column="15" selection-end-line="73" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/extension-0.0.5/lib/enum.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="24" column="8" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/bin/cache/pkg/sky_engine/lib/convert/json.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="646" column="17" selection-start-line="646" selection-start-column="17" selection-end-line="646" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/bin/cache/dart-sdk/lib/convert/json.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25116">
+          <caret line="648" column="6" selection-start-line="648" selection-start-column="6" selection-end-line="648" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/bin/cache/pkg/sky_engine/lib/core/map.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9477">
+          <caret line="247" column="14" selection-start-line="247" selection-start-column="14" selection-end-line="247" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/bin/cache/pkg/sky_engine/lib/async/stream_impl.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="13026">
+          <caret line="338" column="10" selection-start-line="338" selection-start-column="10" selection-end-line="338" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/streams_channel-0.2.3/lib/streams_channel.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/services/platform_channel.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5577">
+          <caret line="153" column="6" selection-start-line="153" selection-start-column="6" selection-end-line="153" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/FlutterMongoStitchPlugin.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="936">
+          <caret line="34" column="15" selection-start-line="34" selection-start-column="15" selection-end-line="34" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/StreamHandler.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/MyMongoStitchClient.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="21" column="25" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/bin/cache/pkg/sky_engine/lib/core/double.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="858">
+          <caret line="26" column="32" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/bin/cache/pkg/sky_engine/lib/core/num.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="14" column="15" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ios/flutter_mongo_stitch.podspec">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-234" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/widgets/framework.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="303">
+          <caret line="4306" column="4" selection-start-line="4306" selection-start-column="4" selection-end-line="4306" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/material/dropdown.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="783" column="22" selection-start-line="783" selection-start-column="22" selection-end-line="783" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-4.0.1/lib/fluttertoast.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/example/pubspec.yaml">
+    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/sprintf-4.0.2/lib/sprintf.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        <state relative-caret-position="312">
+          <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/query_selector.dart">
+    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="22" column="11" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
+        <state relative-caret-position="546">
+          <caret line="14" column="25" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/material/input_decorator.dart">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="351">
+            <caret line="9" selection-start-line="9" selection-end-line="9" />
+          </first_editor>
+          <second_editor>
+            <markdownNavigatorState />
+          </second_editor>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/pubspec.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="24" column="17" selection-start-line="24" selection-start-column="17" selection-end-line="24" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/foundation/key.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="776">
+          <caret line="66" column="8" selection-start-line="66" selection-start-column="8" selection-end-line="66" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="4602">
+            <caret line="118" column="51" selection-start-line="118" selection-start-column="51" selection-end-line="118" selection-end-column="51" />
+          </first_editor>
+          <second_editor>
+            <markdownNavigatorState />
+          </second_editor>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/update_operator.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+          <folding>
+            <element signature="e#1#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/bson_document.dart">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/lib/home_page.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="278" column="22" selection-start-line="278" selection-start-column="22" selection-end-line="278" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/mongo_document.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3588">
+          <caret line="92" column="1" selection-start-line="92" selection-start-column="1" selection-end-line="92" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/services/message_codecs.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3343">
+          <caret line="491" lean-forward="true" selection-start-line="491" selection-end-line="491" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/flutter_mongo_stitch.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="305" column="7" lean-forward="true" selection-start-line="305" selection-start-column="7" selection-end-line="305" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#5846#6034#0" />
+            <element signature="e#6074#6111#0" />
+            <element signature="e#6566#6754#0" />
+            <element signature="e#6794#6831#0" />
+            <element signature="e#6777#7782#0" />
+            <element signature="e#7256#7444#0" />
+            <element signature="e#7484#7521#0" />
+            <element signature="e#8565#8753#0" />
+            <element signature="e#8793#8830#0" />
+            <element signature="e#9194#9437#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/query_operator.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="264" selection-start-line="264" selection-end-line="264" />
+        <state relative-caret-position="463">
+          <caret line="21" column="35" selection-start-line="21" selection-start-column="35" selection-end-line="21" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/StreamsChannel.java">
+    <entry file="file://$PROJECT_DIR$/example/lib/login_screen.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="26" column="19" selection-start-line="26" selection-start-column="19" selection-end-line="26" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/MyMongoStitchClient.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="31" column="2" selection-start-line="31" selection-start-column="2" selection-end-line="31" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/StreamHandler.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="36" column="22" lean-forward="true" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/FlutterMongoStitchPlugin.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7229">
-          <caret line="37" column="26" selection-start-line="37" selection-start-column="26" selection-end-line="37" selection-end-column="26" />
+        <state relative-caret-position="390">
+          <caret line="92" column="32" lean-forward="true" selection-start-line="92" selection-start-column="32" selection-end-line="92" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
