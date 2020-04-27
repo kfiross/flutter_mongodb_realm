@@ -85,20 +85,14 @@ class _LoginScreenState extends State<LoginScreen> {
       FocusScope.of(context).requestFocus(FocusNode());
 
       try {
-//        MyAuthUser firebaseUser = await Provider.of<FireAuthService>(context)
-//            .createUser(_name, '', _email, _password);
         CoreStitchUser mongoUser = await client.auth.loginWithCredential(
             UserPasswordCredential(username: _email, password: _password)
 //            AnonymousCredential()
         );
 
         if (mongoUser != null) {
-//          setState(() {
-            String userId = mongoUser.id;
-//            //_hintText = 'Signed In\n\nUser id: $userId';
-//            //user created his account. Now directly sign-in
-//           ;
-//          });
+
+          String userId = mongoUser.id;
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomePage()));
 
           Fluttertoast.showToast(
@@ -111,15 +105,10 @@ class _LoginScreenState extends State<LoginScreen> {
         else {
           return buildErrorDialog(context, "wrong email or password");
         }
-//      } on AuthException catch (error) {
-//        return buildErrorDialog(context, error.message);
+
       } on Exception catch (_) {
 
       }
-    } else {
-//      setState(() {
-//        _hintText = '';
-//      });
     }
   }
 }

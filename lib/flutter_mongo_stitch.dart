@@ -202,7 +202,8 @@ class MongoCollection {
     return size;
   }
 
-
+  /// Update a single document in the collection according to the
+  /// specified arguments.
   Future<List> updateOne({@required filter, @required UpdateOperator update}) async {
     assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
@@ -251,6 +252,8 @@ class MongoCollection {
     return results;
   }
 
+  /// Update all documents in the collection according to the
+  /// specified arguments.
   Future<List<int>> updateMany({@required filter, @required UpdateOperator update}) async {
     assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
@@ -278,6 +281,9 @@ class MongoCollection {
     return results;
   }
 
+  /// Watches a collection. The resulting stream will be notified of all events
+  /// on this collection that the active user is authorized to see based on the
+  /// configured MongoDB rules.
   Stream watch() {
     var stream = FlutterMongoStitch._watchCollection(
       collectionName: this.collectionName,
@@ -287,7 +293,10 @@ class MongoCollection {
     return stream;
   }
 
+
   // TODO: need to be checked!
+  /// Watches a collection. The provided BSON document will be used as a match
+  /// expression filter on the change events coming from the stream.
   Stream watchWithFilter(Map<String, dynamic> filter) {
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
