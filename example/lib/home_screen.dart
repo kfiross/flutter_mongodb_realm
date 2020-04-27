@@ -3,17 +3,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
 import 'package:sprintf/sprintf.dart';
 
-class HomePage extends StatefulWidget{
+class HomeScreen extends StatefulWidget{
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   final client = MongoStitchClient();
   var _students = <Student>[];
-//    Student(firstName: "Kfir", lastName: "Matityahu", year: 4, grades: [92, 85, 79]),
-//    Student(firstName: "Naama", lastName: "Hasson", year: 2, grades: [88, 94, 75, 91])
-//  ];
 
   MongoCollection _collection;
 
@@ -265,7 +262,6 @@ class StudentItem extends StatelessWidget{
 class Student{
   final String firstName;
   final String lastName;
-//  final int age;
   final int year;
   final List<int> grades;
 
@@ -283,7 +279,6 @@ class Student{
     return Student(
       firstName: document.get("firstName") ?? "",
       lastName: document.get("lastName") ?? "",
-//      age:  document.get("age") ?? 20,
       grades: (document.get("grades")==null
           ?  <int>[]
           : (document.get("grades") as List).map((e) => int.parse("$e")).toList()),

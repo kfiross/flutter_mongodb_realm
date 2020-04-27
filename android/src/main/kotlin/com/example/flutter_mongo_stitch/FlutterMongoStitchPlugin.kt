@@ -62,24 +62,16 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     when (call.method) {
-      "getPlatformVersion" -> getPlatformVersion(result)
       "connectMongo" -> connectMongo(call, result)
       "insertDocument" -> insertDocument(call, result)
-
       "insertDocuments" -> insertDocuments(call, result)
-//
       "deleteDocument" -> deleteDocument(call, result)
       "deleteDocuments" -> deleteDocuments(call, result)
-//
       "findDocuments" -> findDocuments(call, result)
       "findDocument" -> findDocument(call, result)
-
       "countDocuments" -> countDocuments(call, result)
-
-      ////
       "updateDocument" -> updateDocument(call , result)
       "updateDocuments" -> updateDocuments(call , result)
-
 
       /////
       "signInAnonymously" -> signInAnonymously(result)
@@ -92,11 +84,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     }
 
 
-  }
-
-
-  private fun getPlatformVersion(@NonNull result: Result) {
-    result.success("Android ${android.os.Build.VERSION.RELEASE}")
   }
 
   private fun connectMongo(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -182,7 +169,10 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
       result.error("Error", "Failed to Login", "")
 
     task!!.addOnSuccessListener {
-      result.success(true)
+      result.success(mapOf(
+              "id" to it.id,
+              "device_id" to it.deviceId
+      ))
     }.addOnFailureListener {
       result.error("ERROR", "Anonymous Provider Not Deployed", "")
     }

@@ -429,12 +429,6 @@ class FlutterMongoStitch {
 
   static StreamsChannel _streamsChannel = StreamsChannel('streams_channel_test');
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-
-
   static Future _connectToMongo(String appId) async {
     await _channel.invokeMethod('connectMongo', {'app_id': appId});
   }
@@ -455,7 +449,12 @@ class FlutterMongoStitch {
   static Future _signInAnonymously() async {
     final result = await _channel.invokeMethod('signInAnonymously');
 
-    return result;
+    var map = <String, dynamic>{};
+    result.forEach((key, value) {
+      map[key] = value;
+    });
+
+    return CoreStitchUser.fromMap(map);
   }
 
   static Future _logout() async {
