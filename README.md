@@ -12,6 +12,8 @@ import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
 
 For API reference [check here](https://pub.dartlang.org/documentation/flutter_mongo_stitch/latest/)
 
+The minimum required it's Android 5.0(API 21) or iOS 11.0
+
 ## Supported Features
 
 <b>Database support:</b>
@@ -144,7 +146,7 @@ var deletedDocs =
 await collection.updateMany(
   // adding a filter (optional)
   filter:{
-    "name": "adiel",
+    "name": "adam",
   },
 
   // adding an update operation (as matched the MongoDB SDK ones)
@@ -162,8 +164,14 @@ await collection.updateOne(
 #### Watch
 ```dart
 
-// get the stream to subscribed to the collection
+// get the stream to subscribed to the all the collection
 final stream = collection.watch();
+
+// OR get the stream to subscribed to  a part of the collection applying
+// filter on the listened documents
+final stream = collection.watchWithFilter({
+  "age": QuerySelector.lte(26)
+});
 
 // listen to a change in the collection
 stream.listen((data) {
@@ -174,6 +182,7 @@ stream.listen((data) {
 });
 ```
 
+### Note: flutter_mongo_stitch is not directly and/or indirectly associated/affiliated with Flutter or Google LLC or MongoDB.
 <!--#### Aggregation-->
 <!--```dart-->
 
