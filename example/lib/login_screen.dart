@@ -116,9 +116,10 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     if (mongoUser != null) {
-      String userId = mongoUser.id;
+      // String userId = mongoUser.id;
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => HomeScreen()));
+
 
       Fluttertoast.showToast(
           msg: "Welcome Geust!",
@@ -144,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
               );
 
           if (mongoUser != null) {
-            String userId = mongoUser.id;
+            // String userId = mongoUser.id;
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (_) => HomeScreen()));
 

@@ -1,0 +1,311 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+
+import '../bson_document.dart';
+import '../plugin.dart';
+import 'mongo_document.dart';
+import 'query_operator.dart';
+import 'update_operator.dart';
+
+/// MongoCollection provides read and write access to documents.
+class MongoCollection {
+  final String collectionName;
+  final String databaseName;
+
+  MongoCollection({@required this.collectionName, @required this.databaseName});
+
+  /// Inserts the provided document to the collection
+  Future insertOne(MongoDocument document) async {
+    await FlutterMongoStitch.insertDocument(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      data: document.map,
+    );
+  }
+
+  /// Inserts one or more documents to the collection
+  void insertMany(List<MongoDocument> documents) {
+    FlutterMongoStitch.insertDocuments(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      list: documents.map((doc) => jsonEncode(doc.map)).toList(),
+    );
+  }
+
+  /// Removes at most one document from the collection that matches the given
+  /// filter. If no documents match, the collection is not modified.
+  Future<int> deleteOne([filter]) async {
+    // force sending an empty filter instead asserting
+    if (filter == null) {
+      filter = Map<String, dynamic>();
+    }
+    else{
+      assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
+
+      if (filter is Map<String, dynamic>) {
+
+        // convert 'QuerySelector' into map, too
+        filter?.forEach((key, value) {
+          if (value is QueryOperator) {
+            filter[key] = value.values;
+          }
+        });
+      }
+      if (filter is LogicalQueryOperator){
+        filter = filter.values;
+      }
+    }
+
+    var result = await FlutterMongoStitch.deleteDocument(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+    );
+
+    return result;
+  }
+
+
+  /// Removes all documents from the collection that matches the given
+  /// filter. If no documents match, the collection is not modified.
+  Future<int> deleteMany([filter]) async {
+    // force sending an empty filter instead asserting
+    if (filter == null) {
+      filter = Map<String, dynamic>();
+    }
+    else {
+      assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
+
+      if (filter is Map<String, dynamic>) {
+
+        // convert 'QuerySelector' into map, too
+        filter?.forEach((key, value) {
+          if (value is QueryOperator) {
+            filter[key] = value.values;
+          }
+        });
+      }
+      if (filter is LogicalQueryOperator){
+        filter = filter.values;
+      }
+    }
+
+
+    var result = await FlutterMongoStitch.deleteDocuments(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+    );
+
+    return result;
+  }
+
+
+  ///Finds all documents in the collection according to the given filter
+  Future<List<MongoDocument>> find([filter])async {
+
+    if (filter != null) {
+      assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
+
+      if (filter is Map<String, dynamic>) {
+        // convert 'QuerySelector' into map, too
+        filter?.forEach((key, value) {
+          if (value is QueryOperator) {
+            filter[key] = value.values;
+          }
+        });
+      }
+      if (filter is LogicalQueryOperator) {
+        filter = filter.values;
+      }
+    }
+
+
+    List<dynamic> resultJson = await FlutterMongoStitch.findDocuments(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+    );
+
+    var result = resultJson.map((string) {
+      return MongoDocument.parse(string);
+    }).toList();
+
+    return result;
+  }
+
+  /// Finds a document in the collection according to the given filter
+  Future<void> findOne([filter]) async {
+
+    if (filter != null) {
+      assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
+
+      if (filter is Map<String, dynamic>) {
+        // convert 'QuerySelector' into map, too
+        filter?.forEach((key, value) {
+          if (value is QueryOperator) {
+            filter[key] = value.values;
+          }
+        });
+      }
+      if (filter is LogicalQueryOperator) {
+        filter = filter.values;
+      }
+
+    }
+
+    String resultJson = await FlutterMongoStitch.findFirstDocument(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+    );
+
+
+    var result = MongoDocument.parse(resultJson);
+    return result;
+  }
+
+  /// Counts the number of all documents in the collection.
+  /// unless according to the given filter
+  Future<int> count([filter]) async {
+    if (filter!=null) {
+      assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
+
+      if (filter is Map<String, dynamic>) {
+        // convert 'QuerySelector' into map, too
+        filter?.forEach((key, value) {
+          if (value is QueryOperator) {
+            filter[key] = value.values;
+          }
+        });
+      }
+      if (filter is LogicalQueryOperator) {
+        filter = filter.values;
+      }
+    }
+
+    int size = await FlutterMongoStitch.countDocuments(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+    );
+
+    return size;
+  }
+
+  /// Update a single document in the collection according to the
+  /// specified arguments.
+  Future<List> updateOne({@required filter, @required UpdateOperator update}) async {
+    assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
+
+    if (filter is Map<String, dynamic>) {
+
+      // convert 'QuerySelector' into map, too
+      filter?.forEach((key, value) {
+        if (value is QueryOperator) {
+          filter[key] = value.values;
+        }
+      });
+    }
+    if (filter is LogicalQueryOperator){
+      filter = filter.values;
+    }
+
+
+    var updateValues = update.values.map((key, value) {
+      if (value is Map<String, dynamic>) {
+        var valueNew = <String, dynamic>{};
+        valueNew.addAll(value);
+
+        valueNew.forEach((key2, value2) {
+          if (value2 is ArrayModifier) {
+            valueNew[key2] = value2.values;
+          }
+
+          else if (value2 is QueryOperator) {
+            valueNew[key2] = value2.values;
+          }
+        });
+
+        return MapEntry<String, dynamic>(key, valueNew);
+      }
+      return MapEntry<String, dynamic>(key, value);
+    });
+
+
+    List results = await FlutterMongoStitch.updateDocument(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+      update: BsonDocument(updateValues).toJson(),
+    );
+
+    return results;
+  }
+
+  /// Update all documents in the collection according to the
+  /// specified arguments.
+  Future<List<int>> updateMany({@required filter, @required UpdateOperator update}) async {
+    assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
+
+    if (filter is Map<String, dynamic>) {
+
+      // convert 'QuerySelector' into map, too
+      filter?.forEach((key, value) {
+        if (value is QueryOperator) {
+          filter[key] = value.values;
+        }
+      });
+    }
+    if (filter is LogicalQueryOperator){
+      filter = filter.values;
+    }
+
+
+    List<int> results = await FlutterMongoStitch.updateDocuments(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+      update: BsonDocument(update.values).toJson(),
+    );
+
+    return results;
+  }
+
+  /// Watches a collection. The resulting stream will be notified of all events
+  /// on this collection that the active user is authorized to see based on the
+  /// configured MongoDB rules.
+  Stream watch() {
+    var stream = FlutterMongoStitch.watchCollection(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+    );
+
+    return stream;
+  }
+
+
+  // TODO: need to be checked!
+  /// Watches a collection. The provided BSON document will be used as a match
+  /// expression filter on the change events coming from the stream.
+  Stream watchWithFilter(Map<String, dynamic> filter) {
+    // convert 'QuerySelector' into map, too
+    filter.forEach((key, value) {
+      if (value is QueryOperator) {
+        filter[key] = value.values;
+      }
+    });
+
+    var stream = FlutterMongoStitch.watchCollection(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      filter: BsonDocument(filter).toJson(),
+    );
+
+    return stream;
+
+  }
+
+
+}

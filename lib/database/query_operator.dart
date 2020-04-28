@@ -39,8 +39,10 @@ class LogicalQueryOperator {
   }
 }
 
+
 class QueryOperator {
   Map<String, dynamic> _map = <String, dynamic>{};
+
 
   // Comparison
   QueryOperator.gt(value){

@@ -12,6 +12,21 @@ import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
 
 For API reference [check here](https://pub.dartlang.org/documentation/flutter_mongo_stitch/latest/)
 
+## Supported Features
+
+<b>Database support:</b>
+* Insert
+* Find
+* Delete
+* Update
+* Watch
+
+<b>Auth Providers:</b>
+* Email/Password
+* Anonymously
+
+<b>Note:</b> Other features will come in the future (like Functions)
+
 ## Usage
 ### Initialization
 Inorder to connect a StitchApp to flutter add your main function:
