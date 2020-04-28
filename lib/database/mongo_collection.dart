@@ -268,7 +268,6 @@ class MongoCollection {
     return stream;
   }
 
-  // TODO: need to be checked!
   /// Watches a collection. The provided BSON document will be used as a match
   /// expression filter on the change events coming from the stream.
   Stream watchWithFilter(Map<String, dynamic> filter) {
