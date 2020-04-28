@@ -34,7 +34,7 @@ flutter:
         package: com.example.flutter_mongo_stitch
         pluginClass: FlutterMongoStitchPlugin
       ios:
-        pluginClass: HelloPlugin
+        pluginClass: FlutterMongoStitchPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
