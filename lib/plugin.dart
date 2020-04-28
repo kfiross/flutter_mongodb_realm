@@ -7,9 +7,10 @@ import 'auth/auth.dart';
 
 class FlutterMongoStitch {
   static const MethodChannel _channel =
-  const MethodChannel('flutter_mongo_stitch');
+      const MethodChannel('flutter_mongo_stitch');
 
-  static StreamsChannel _streamsChannel = StreamsChannel('streams_channel_test');
+  static StreamsChannel _streamsChannel =
+      StreamsChannel('streams_channel_test');
 
   static Future connectToMongo(String appId) async {
     await _channel.invokeMethod('connectMongo', {'app_id': appId});
@@ -17,7 +18,8 @@ class FlutterMongoStitch {
 
   static Future<CoreStitchUser> signInWithUsernamePassword(
       String username, String password) async {
-    final LinkedHashMap result = await _channel.invokeMethod('signInWithUsernamePassword',
+    final LinkedHashMap result = await _channel.invokeMethod(
+        'signInWithUsernamePassword',
         {'username': username, 'password': password});
 
     var map = <String, dynamic>{};
@@ -142,9 +144,9 @@ class FlutterMongoStitch {
   ///
   static Future updateDocument(
       {String collectionName,
-        String databaseName,
-        String filter,
-        String update}) async {
+      String databaseName,
+      String filter,
+      String update}) async {
     final results = await _channel.invokeMethod('updateDocument', {
       'database_name': databaseName,
       'collection_name': collectionName,
@@ -157,9 +159,9 @@ class FlutterMongoStitch {
 
   static Future updateDocuments(
       {String collectionName,
-        String databaseName,
-        String filter,
-        String update}) async {
+      String databaseName,
+      String filter,
+      String update}) async {
     final results = await _channel.invokeMethod('updateDocuments', {
       'database_name': databaseName,
       'collection_name': collectionName,
@@ -170,10 +172,11 @@ class FlutterMongoStitch {
     return results;
   }
 
-
-  static Stream watchCollection(
-      {@required String collectionName, @required String databaseName, String filter,}) {
-
+  static Stream watchCollection({
+    @required String collectionName,
+    @required String databaseName,
+    String filter,
+  }) {
     // continuous stream of events from platform side
     return _streamsChannel.receiveBroadcastStream({
       "database": databaseName,

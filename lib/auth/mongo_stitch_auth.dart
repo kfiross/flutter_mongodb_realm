@@ -7,7 +7,6 @@ import 'credentials/credentials.dart';
 /// MongoStitchAuth manages authentication for any Stitch based client.
 class MongoStitchAuth {
 
-
   /// Logs in as a user with the given credentials associated with an
   /// authentication provider.
   Future<CoreStitchUser> loginWithCredential(StitchCredential credential) async {

@@ -23,30 +23,30 @@ class MongoDocument {
     }
   }
 
-  get(String key){
+  get(String key) {
     return _map[key];
   }
 
-  static fixMapMismatchedTypes(Map map){
+  static fixMapMismatchedTypes(Map map) {
     final map2 = map.entries.toList();
     var result;
     if (map2.length == 1 && map2[0].key.contains("\$")) {
       switch (map2[0].key.substring(1)) {
-      // Convert 'ObjectId' type
+        // Convert 'ObjectId' type
         case "oid":
           result = ObjectId.fromHexString(map2[0].value);
           break;
 
-      // Convert 'Int64' type
+        // Convert 'Int64' type
         case "numberLong":
           result = int.parse(map2[0].value);
           break;
 
-      // Convert 'Date' type
+        // Convert 'Date' type
         case "date":
           if (map2[0].value is int)
-            result = DateTime.fromMillisecondsSinceEpoch(map2[0].value,
-                isUtc: true);
+            result =
+                DateTime.fromMillisecondsSinceEpoch(map2[0].value, isUtc: true);
           else if (map2[0].value is String)
             result = DateTime.parse(map2[0].value);
           break;
@@ -61,7 +61,6 @@ class MongoDocument {
         }
       });
       result = map;
-
     }
 
     return result;
