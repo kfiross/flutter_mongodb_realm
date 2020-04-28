@@ -182,7 +182,11 @@ stream.listen((data) {
 });
 ```
 
-### Note: flutter_mongo_stitch is not directly and/or indirectly associated/affiliated with Flutter or Google LLC or MongoDB.
+<!--> If you found this project helpful or you learned something from the source code and want to thank me, consider buying me a cup of :coffee:-->
+<!-->-->
+<!--> - [PayPal](https://www.paypal.me/kfiross)-->
+
+### Note: flutter_mongo_stitch is not directly and/or indirectly associated/affiliated with MongoDB<sup>TM</sup> , Flutter or Google LLC.
 <!--#### Aggregation-->
 <!--```dart-->
 
