@@ -1,6 +1,6 @@
 name: flutter_mongo_stitch
-description: A Flutter plugin for using MongoStitch services.
-version: 0.0.1
+description: A Flutter plugin for using services of the serverless platform MongoDB Stitch.
+version: 0.1.0+1
 homepage: https://github.com/kfiross/flutter_mongo_stitch
 
 environment:
@@ -13,7 +13,7 @@ dependencies:
 
   bson: ^0.3.2
   extension: ^0.0.5
-  streams_channel: ^0.2.3
+  streams_channel: ^0.3.0
 
 dev_dependencies:
   flutter_test:
