@@ -28,7 +28,7 @@ class MongoCollection {
   }
 
   /// Inserts one or more documents to the collection
-  void insertMany(List<MongoDocument> documents) {
+  Future insertMany(List<MongoDocument> documents) {
     FlutterMongoStitch.insertDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
@@ -130,7 +130,7 @@ class MongoCollection {
   }
 
   /// Finds a document in the collection according to the given filter
-  Future<void> findOne([filter]) async {
+  Future<MongoDocument> findOne([filter]) async {
     if (filter != null) {
       assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
