@@ -4,7 +4,7 @@ import 'package:flutter_mongo_stitch_example/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MongoStitchClient.initializeApp("APP_ID");
+  await MongoStitchClient.initializeApp("mystitchapp-fjpmn");
   runApp(MyApp());
 
 }

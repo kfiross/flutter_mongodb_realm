@@ -3,6 +3,8 @@ PODS:
   - flutter_mongo_stitch (0.0.1):
     - Flutter
     - StitchSDK (~> 6.1.0)
+  - fluttertoast (0.0.2):
+    - Flutter
   - mongo-embedded-c-driver (1.13.0-4.0.4)
   - mongo_embedded (4.0.4)
   - mongoc_embedded (4.0.4):
@@ -33,10 +35,14 @@ PODS:
     - StitchRemoteMongoDBService (= 6.1.0)
   - StitchSDK/StitchSDK (6.1.0):
     - StitchSDK/StitchRemoteMongoDBService
+  - streams_channel (0.2.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_mongo_stitch (from `.symlinks/plugins/flutter_mongo_stitch/ios`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - streams_channel (from `.symlinks/plugins/streams_channel/ios`)
 
 SPEC REPOS:
   trunk:
@@ -57,10 +63,15 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_mongo_stitch:
     :path: ".symlinks/plugins/flutter_mongo_stitch/ios"
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
+  streams_channel:
+    :path: ".symlinks/plugins/streams_channel/ios"
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_mongo_stitch: c4034add09d7ade4dff599f936d1dab7f7ff6c02
+  fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   mongo-embedded-c-driver: b46360baa15fc142baae80628822f26663220bde
   mongo_embedded: e413134eb6b60544e7278add03007f8fe384a00c
   mongoc_embedded: 41aadbb756b07070d6f0471192a84750cb42c580
@@ -72,6 +83,7 @@ SPEC CHECKSUMS:
   StitchCoreSDK: 2c789433bd72429b4a39d8d481008037bc8bb4d4
   StitchRemoteMongoDBService: 7a3fb5e8e6d74e98e303f52b0af0cf246d07b9bf
   StitchSDK: f534f7db2d3b0f29d30a8fe0b010bf92ec65e385
+  streams_channel: 733858967fb8b62e0d63a1d03f6b8f0cb7d3bfc2
 
 PODFILE CHECKSUM: 73d69d282a87aa0aafabdecb47f632fc347a9aac
 
