@@ -28,8 +28,8 @@ class MongoCollection {
   }
 
   /// Inserts one or more documents to the collection
-  Future insertMany(List<MongoDocument> documents) {
-    FlutterMongoStitch.insertDocuments(
+  Future insertMany(List<MongoDocument> documents) async {
+    await FlutterMongoStitch.insertDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       list: documents.map((doc) => jsonEncode(doc.map)).toList(),
