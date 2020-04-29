@@ -91,6 +91,12 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             self.getUserId(result)
             break
             
+        ////
+        case "callFunction":
+            self.callFunction(call: call, result: result)
+            break
+            
+            
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -120,7 +126,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             fromFactory: remoteMongoClientFactory, withName: "mongodb-atlas"
         )
         
-        self.client = MyMongoStitchClient(client: mongoClient!, auth: stitchAppClient.auth)
+        self.client = MyMongoStitchClient(client: mongoClient!, appClient: stitchAppClient)
         result(true)
     }
     
@@ -414,14 +420,34 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             updateJson: update,
             onCompleted: { value in
                 result(value)
-        },
+            },
             onError: { message in
-                result(FlutterError(
-                    code: "ERROR",
-                    message: message,
-                    details: nil
-                ))
+                result(FlutterError(code: "ERROR",message: message,details: nil))
+            }
+        )
+    }
+    
+    func callFunction(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let callArgs = call.arguments as! Dictionary<String, Any>
+        
+        let name = callArgs["name"] as? String
+        let args = callArgs["args"] as? Array<Any>
+        let timeout = callArgs["filter"] as? Int64
+        
+        if(name == nil || name!.isEmpty){
+            result(FlutterError(code: "ERROR", message: "", details: nil))
         }
+        
+        self.client?.callFunction(
+            name: name!,
+            args: args,
+            requestTimeout: timeout,
+            onCompleted: { value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message, details: nil))
+            }
         )
     }
     

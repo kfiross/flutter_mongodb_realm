@@ -10,22 +10,83 @@ import MongoSwift
 import StitchCore
 import StitchRemoteMongoDBService
 
+extension AnyBSONValue{
+    func toSimpleType() -> Any{
+        
+        if let value = self.value as? Double{
+            return value
+        }
+        
+        if let value = self.value as? String{
+            return value
+        }
+        
+        if let value = self.value as? Document{
+            return value.extendedJSON
+        }
+        
+        if let value = self.value as? Array<Any>{
+            return value
+        }
+        
+        if let value = self.value as? ObjectId{
+            return value.hex
+        }
+        
+        if let value = self.value as? Bool{
+            return value
+        }
+        
+        if let value = self.value as? NSDate{
+            return value.timeIntervalSince1970
+        }
+        
+        if let value = self.value as? Int32{
+            return value
+        }
+        
+        if let value = self.value as? Int64{
+            return value
+        }
+        
+        if let value = self.value as? Decimal128{
+            return value.doubleValue ?? 0.0
+        }
+        
+//        switch(self.value.bsonType){
+//        case BSONNumber:
+//            return (self.value as BSONNumber).;
+//        default:
+//            return ""
+//        }
+        return self.value as? String ?? "";
+    }
+}
+
 // cumbersome workaround solution
 // TODO: convert any (possible) value into 'BSONValue'
-class BsonExtractor {
+class BsonExtractor {    
     static func getValue(of: Any) -> BSONValue?{
         let value = of
         
-        if let bsonValue = value as? String {
-            return bsonValue
-        }
-        
-        if let bsonValue = value as? Int {
-            return bsonValue
-        }
-        
-        
         if let bsonValue = value as? Double {
+            return bsonValue
+        }
+        
+        else if let bsonValue = value as? Int64 {
+            return bsonValue
+        }
+        
+        else if let bsonValue = value as? String {
+            return bsonValue
+        }
+        
+        else if let bsonValue = value as? Int {
+            return bsonValue
+        }
+        
+        
+        else if let bsonValue = value as? Double {
             return bsonValue
         }
         
@@ -47,11 +108,12 @@ enum MyError : Error {
 
 class MyMongoStitchClient {
     var client: RemoteMongoClient
-    var auth: StitchAuth
+    var appClient: StitchAppClient
+    lazy var auth = appClient.auth
     
-    init(client: RemoteMongoClient, auth: StitchAuth) {
+    init(client: RemoteMongoClient, appClient: StitchAppClient) {
         self.client = client
-        self.auth = auth
+        self.appClient = appClient
     }
     
     
@@ -447,6 +509,40 @@ class MyMongoStitchClient {
         }
         catch {
             onError("Failed to update collection")
+        }
+    }
+    
+    
+    func callFunction(name: String,
+                      args: Array<Any>?,
+                      requestTimeout: Int64?,
+                      onCompleted: @escaping (Any)->Void,
+                      onError: @escaping (String?)->Void
+        ){
+        
+        
+        
+        var argsBson = [BSONValue]()
+        args?.forEach { value in
+            argsBson.append(BsonExtractor.getValue(of: value) ?? "")
+        }
+        
+        var timeoutInSeconds:TimeInterval = 15
+        if (requestTimeout != nil){
+            timeoutInSeconds = Double(requestTimeout!)/1000.0
+        }
+        
+        self.appClient.callFunction(
+            withName: name,
+            withArgs: argsBson,
+            withRequestTimeout: timeoutInSeconds ){ (result: StitchResult<AnyBSONValue>) in
+            
+                switch result {
+                case .success(let data):
+                    onCompleted(data.value)//toSimpleType())
+                case .failure(let error):
+                    onError("Failed to call function: \(error)")
+            }
         }
     }
     
