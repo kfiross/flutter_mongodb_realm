@@ -13,6 +13,9 @@ class MongoCollection {
   final String collectionName;
   final String databaseName;
 
+  /// The namespace of this collection, i.e. the database and collection names together.
+  String get namespace  => "$collectionName.$databaseName";
+
   MongoCollection({@required this.collectionName, @required this.databaseName});
 
   /// Inserts the provided document to the collection

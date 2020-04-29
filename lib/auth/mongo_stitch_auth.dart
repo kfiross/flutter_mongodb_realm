@@ -6,12 +6,11 @@ import 'credentials/credentials.dart';
 
 /// MongoStitchAuth manages authentication for any Stitch based client.
 class MongoStitchAuth {
-
   /// Logs in as a user with the given credentials associated with an
   /// authentication provider.
-  Future<CoreStitchUser> loginWithCredential(StitchCredential credential) async {
+  Future<CoreStitchUser> loginWithCredential(
+      StitchCredential credential) async {
     var result;
-
 
     if (credential is AnonymousCredential) {
       result = await FlutterMongoStitch.signInAnonymously();
@@ -37,7 +36,8 @@ class MongoStitchAuth {
     return result;
   }
 
-  Future<bool> registerWithEmail({@required String email,@required String password}) async {
+  Future<bool> registerWithEmail(
+      {@required String email, @required String password}) async {
     var result = await FlutterMongoStitch.registerWithEmail(email, password);
     return result;
   }
