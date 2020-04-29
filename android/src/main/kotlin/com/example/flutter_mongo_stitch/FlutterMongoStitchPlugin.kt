@@ -80,6 +80,9 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
       "logout" -> logout(result)
       "getUserId" -> getUserId(result)
 
+      ////
+      "callFunction" -> callFunction(call, result)
+
       else -> result.notImplemented()
     }
 
@@ -102,7 +105,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             "mongodb-atlas"
     )
 
-    client = MyMongoStitchClient(mongoClient, stitchAppClient.auth)
+    client = MyMongoStitchClient(mongoClient, stitchAppClient)
     result.success(true)
   }
 
@@ -429,27 +432,31 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     }
   }
 
-//  private fun watchCollection(@NonNull call: MethodCall, @NonNull result: Result){
-//    val databaseName = call.argument<String>("database_name")
-//    val collectionName = call.argument<String>("collection_name")
-//    val filter = call.argument<String>("filter")
-//
-//
-//    val task = client.watchCollection(
-//            databaseName,
-//            collectionName,
-//            filter
-//    )
-//
-////    task!!.addOnCompleteListener {
-////      if (it.isSuccessful)
-////        result.success()
-////      else
-////        result.error("Error", "Failed to update the collection - Permission DENIED", "")
-////
-////    }
-//  }
 
+  ///
+  private fun callFunction(@NonNull call: MethodCall, @NonNull result: Result){
+    val functionName = call.argument<String>("name")
+    val args = call.argument<List<Any>>("args")
+    val timeout = call.argument<Long>("timeout")
+
+    if(functionName.isNullOrEmpty()){
+      result.error("Error", "Function name is missing", null)
+    }
+
+    val task = client.callFunction(functionName!!, args, timeout)
+
+    if (task == null)
+      result.error("Error", "Failed to call function - Task Failed", "")
+
+    task!!.addOnCompleteListener {
+      if (it.isSuccessful) {
+        result.success(it.result.toJavaValue())
+      }
+      else
+        result.error("Error", "Failed to call function: ${it.exception?.message}", "")
+
+    }
+  }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)

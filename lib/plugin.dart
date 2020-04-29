@@ -184,4 +184,14 @@ class FlutterMongoStitch {
       "filter": filter
     });
   }
+
+  static Future callFunction(String name, {List args, int requestTimeout}) async{
+    final result = _channel.invokeMethod('callFunction', {
+      "name": name,
+      "args": args,
+      "timeout": requestTimeout
+    });
+
+    return result;
+  }
 }

@@ -14,4 +14,15 @@ class MongoStitchClient {
   MongoDatabase getDatabase(String name) {
     return MongoDatabase(name);
   }
+
+  /// Calls the specified Stitch function
+  Future callFunction(String name, {List args, int requestTimeout}) async {
+    var result = await FlutterMongoStitch.callFunction(
+      name,
+      args: args,
+      requestTimeout: requestTimeout,
+    );
+
+    return result;
+  }
 }

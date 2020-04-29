@@ -1,6 +1,8 @@
 package com.example.flutter_mongo_stitch
 
+import android.util.Log
 import com.google.android.gms.tasks.Task
+import com.mongodb.stitch.android.core.StitchAppClient
 import com.mongodb.stitch.android.core.auth.StitchAuth
 import com.mongodb.stitch.android.core.auth.StitchUser
 import com.mongodb.stitch.android.services.mongodb.remote.RemoteFindIterable
@@ -15,22 +17,22 @@ import kotlin.collections.HashMap
 import com.mongodb.stitch.android.core.auth.providers.userpassword.UserPasswordAuthProviderClient
 import com.mongodb.stitch.android.services.mongodb.remote.AsyncChangeStream
 import com.mongodb.stitch.core.services.mongodb.remote.*
+import org.bson.BsonValue
 
 
 // Basic CRUD..
 
 class MyMongoStitchClient(
     private var client: RemoteMongoClient,
-    private var auth: StitchAuth
+    private var appClient: StitchAppClient
 ) {
-
+    private var auth: StitchAuth = appClient.auth
 
     /** ========================== Auth-related function  ========================= **/
 //    fun signInWithCustomJWT(jwtString: String): Task<StitchUser>? {
 //        return auth.loginWithCredential(CustomCredential(jwtString))
 //    }
 //
-
 
     fun getUser(): StitchUser? {
         return auth.user
@@ -135,6 +137,7 @@ class MyMongoStitchClient(
             return collection?.find()
 
         val filter = BsonDocument.parse(filterJson)
+
         return collection?.find(filter)
     }
 
@@ -202,4 +205,14 @@ class MyMongoStitchClient(
         return collection?.watchWithFilter(matchFilter)
     }
 
+    fun callFunction(name: String, args: List<Any>?, requestTimeout: Long?)
+            : Task<BsonValue>? {
+
+        return appClient.callFunction(
+                name,
+                args ?: emptyList<Any>(),
+                requestTimeout ?: 15*1000,
+                BsonValue::class.java
+        )
+    }
 }

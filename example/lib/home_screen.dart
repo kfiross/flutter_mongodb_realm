@@ -38,6 +38,15 @@ class _HomeScreenState extends State<HomeScreen> {
   int _newStudYear;
 
   @override
+  void initState() {
+    super.initState();
+
+   client.callFunction("sum", args: [3, 4]).then((value) {
+     print(value);
+   });
+  }
+
+  @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
