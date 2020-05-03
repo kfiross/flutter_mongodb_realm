@@ -203,7 +203,12 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Functions ///
 
   _fetchStudents() async {
-    List documents = await _collection.find();
+    List documents = await _collection.find(
+
+//      projection: {
+//        "field": ProjectionValue.INCLUDE,
+//      }
+    );
     _students.clear();
     documents.forEach((document) {
       _students.add(Student.fromDocument(document));

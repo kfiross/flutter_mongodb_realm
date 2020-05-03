@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:extension/enum.dart';
 import 'package:flutter/foundation.dart';
 
 import '../bson_document.dart';
@@ -7,6 +8,13 @@ import '../plugin.dart';
 import 'mongo_document.dart';
 import 'query_operator.dart';
 import 'update_operator.dart';
+
+class ProjectionValue extends Enum<int> {
+  const ProjectionValue._(int val) : super(val);
+
+  static const ProjectionValue INCLUDE = const ProjectionValue._(1);
+  static const ProjectionValue EXCLUDE = const ProjectionValue._(0);
+}
 
 /// MongoCollection provides read and write access to documents.
 class MongoCollection {
@@ -99,27 +107,36 @@ class MongoCollection {
   }
 
   ///Finds all documents in the collection according to the given filter
-  Future<List<MongoDocument>> find([filter]) async {
+  Future<List<MongoDocument>> find({filter, RemoteFindOptions options}) async {
+
+    var filterCopy = <String, dynamic>{};
     if (filter != null) {
       assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
       if (filter is Map<String, dynamic>) {
+
         // convert 'QuerySelector' into map, too
         filter?.forEach((key, value) {
           if (value is QueryOperator) {
-            filter[key] = value.values;
+            filterCopy[key] = value.values;
           }
+          else
+            filterCopy[key] = value;
         });
       }
       if (filter is LogicalQueryOperator) {
-        filter = filter.values;
+        filterCopy = filter.values;
       }
     }
+
+
 
     List<dynamic> resultJson = await FlutterMongoStitch.findDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
-      filter: BsonDocument(filter).toJson(),
+      filter: BsonDocument(filterCopy).toJson(),
+      projection: jsonEncode(options.projection.map((k, v) => MapEntry(k, v.value))),
+      limit: options.limit,
     );
 
     var result = resultJson.map((string) {
@@ -130,27 +147,32 @@ class MongoCollection {
   }
 
   /// Finds a document in the collection according to the given filter
-  Future<MongoDocument> findOne([filter]) async {
+  Future<MongoDocument> findOne({filter, Map<String, ProjectionValue> projection}) async {
+    var filterCopy = <String, dynamic>{};
     if (filter != null) {
       assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
       if (filter is Map<String, dynamic>) {
+
         // convert 'QuerySelector' into map, too
         filter?.forEach((key, value) {
           if (value is QueryOperator) {
-            filter[key] = value.values;
+            filterCopy[key] = value.values;
           }
+          else
+            filterCopy[key] = value;
         });
       }
       if (filter is LogicalQueryOperator) {
-        filter = filter.values;
+        filterCopy = filter.values;
       }
     }
 
     String resultJson = await FlutterMongoStitch.findFirstDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
-      filter: BsonDocument(filter).toJson(),
+      filter: BsonDocument(filterCopy).toJson(),
+      projection: jsonEncode(projection.map((k, v) => MapEntry(k, v.value))),
     );
 
     var result = MongoDocument.parse(resultJson);
@@ -289,4 +311,12 @@ class MongoCollection {
 
     return stream;
   }
+}
+
+class RemoteFindOptions{
+  final int limit;
+  final Map<String, ProjectionValue> projection;
+  //final MapEntry<String, int> sort;
+
+  RemoteFindOptions({this.limit, this.projection});//, this.sort});
 }

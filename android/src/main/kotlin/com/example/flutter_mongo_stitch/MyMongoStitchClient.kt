@@ -129,29 +129,56 @@ class MyMongoStitchClient(
 
     /*******************************************************************************/
 
-    fun findDocuments(databaseName: String?, collectionName: String?, filterJson: String?)
-            : RemoteFindIterable<Document>? {
+    fun findDocuments(
+            databaseName: String?,
+            collectionName: String?,
+            filterJson: String?,
+            projectionJson: String?,
+            limit: Int?
+    ): RemoteFindIterable<Document>? {
         val collection = getCollection(databaseName, collectionName)
 
-        if (filterJson == null)
-            return collection?.find()
 
-        val filter = BsonDocument.parse(filterJson)
+        var filter = BsonDocument()
+        var projection = BsonDocument()
 
-        return collection?.find(filter)
+        if (filterJson != null)
+            filter = BsonDocument.parse(filterJson)
+
+        if (projectionJson != null)
+            projection = BsonDocument.parse(projectionJson)
+
+        if (limit != null){
+            return collection?.find(filter)?.projection(projection)?.limit(limit)
+        }
+
+        return collection?.find(filter)?.projection(projection)
     }
 
 
 
-    fun findDocument(databaseName: String?, collectionName: String?, filterJson: String?)
+    fun findDocument(databaseName: String?, collectionName: String?, filterJson: String?, projectionJson: String?)
             : Task<Document>? {
         val collection = getCollection(databaseName, collectionName)
-        
-        if (filterJson == null)
-            return collection?.findOne()
 
-        val filter = BsonDocument.parse(filterJson)
-        return collection?.findOne(filter)
+
+//        if (filterJson == null)
+//            return collection?.findOne()
+//
+//        val filter = BsonDocument.parse(filterJson)
+//
+//        return collection?.findOne(filter)
+
+        var filter = BsonDocument()
+        val options = RemoteFindOptions()
+
+        if (filterJson != null)
+            filter = BsonDocument.parse(filterJson)
+
+        if (projectionJson != null)
+            options.projection(BsonDocument.parse(projectionJson))
+
+        return collection?.findOne(filter, options)
     }
 
 
