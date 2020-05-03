@@ -27,6 +27,9 @@ The minimum required it's Android 5.0(API 21) or iOS 11.0
 * Email/Password
 * Anonymously
 
+<<b>Functions</b>
+* Calling a Stitch function
+
 <b>Note:</b> Other features will come in the future (like Functions)
 
 ## Usage
@@ -180,6 +183,16 @@ stream.listen((data) {
   
   // Do other stuff...
 });
+```
+
+### Functions
+for calling a defined stitch function "sum" with argument 3&4
+```dart
+var result = await client.callFunction("sum", args: [3, 4])
+```
+You can also add a timeout (in ms), i.e 60 seconds:
+```dart
+var result = await client.callFunction("sum", args: [3, 4], requestTimeout: 60000)
 ```
 
 
