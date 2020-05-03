@@ -16,6 +16,13 @@ class ProjectionValue extends Enum<int> {
   static const ProjectionValue EXCLUDE = const ProjectionValue._(0);
 }
 
+class OrderValue extends Enum<int> {
+  const OrderValue._(int val) : super(val);
+
+  static const OrderValue ASCENDING = const OrderValue._(1);
+  static const OrderValue DESCENDING = const OrderValue._(-1);
+}
+
 /// MongoCollection provides read and write access to documents.
 class MongoCollection {
   final String collectionName;
@@ -129,14 +136,17 @@ class MongoCollection {
       }
     }
 
+    var sortMap = options.sort?.map((k, v) => MapEntry(k, v.value));
+    var projectionMap = options.projection?.map((k, v) => MapEntry(k, v.value));
 
 
     List<dynamic> resultJson = await FlutterMongoStitch.findDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filterCopy).toJson(),
-      projection: jsonEncode(options.projection.map((k, v) => MapEntry(k, v.value))),
+      projection: projectionMap==null? null : jsonEncode(projectionMap),
       limit: options.limit,
+      sort: sortMap==null ? null : jsonEncode(sortMap),
     );
 
     var result = resultJson.map((string) {
@@ -168,11 +178,13 @@ class MongoCollection {
       }
     }
 
+    var projectionMap = projection?.map((k, v) => MapEntry(k, v.value));
+
     String resultJson = await FlutterMongoStitch.findFirstDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filterCopy).toJson(),
-      projection: jsonEncode(projection.map((k, v) => MapEntry(k, v.value))),
+        projection: projectionMap==null? null : jsonEncode(projectionMap),
     );
 
     var result = MongoDocument.parse(resultJson);
@@ -316,7 +328,7 @@ class MongoCollection {
 class RemoteFindOptions{
   final int limit;
   final Map<String, ProjectionValue> projection;
-  //final MapEntry<String, int> sort;
+  final Map<String, OrderValue> sort;
 
-  RemoteFindOptions({this.limit, this.projection});//, this.sort});
+  RemoteFindOptions({this.limit, this.projection, this.sort});
 }

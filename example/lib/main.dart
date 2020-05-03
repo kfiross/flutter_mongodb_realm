@@ -133,8 +133,12 @@ class _MyAppState extends State<MyApp> {
             projection: {
               "title": ProjectionValue.INCLUDE,
               "rated": ProjectionValue.INCLUDE,
+              "year": ProjectionValue.INCLUDE,
             },
             limit: 70,
+            sort: {
+              "year": OrderValue.DESCENDING,
+            }
           ),
       );
       print(docs.length);

@@ -313,11 +313,18 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         let databaseName = args["database_name"] as? String
         let collectionName = args["collection_name"] as? String
         let filter = args["filter"] as? String
+        let projection = args["projection"] as? String
+        let limit = args["limit"] as? Int
+        let sort = args["sort"] as? String
+        
         
         self.client?.findDocuments(
             databaseName: databaseName,
             collectionName: collectionName,
             filterJson: filter,
+            projectionJson: projection,
+            limit: limit,
+            sortJson: sort,
             onCompleted: {value in
                 result(value)
         },
@@ -337,11 +344,14 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         let databaseName = args["database_name"] as? String
         let collectionName = args["collection_name"] as? String
         let filter = args["filter"] as? String
+        let projection = args["projection"] as? String
+        
         
         self.client?.findDocument(
             databaseName: databaseName,
             collectionName: collectionName,
             filterJson: filter,
+            projectionJson: projection,
             onCompleted: {value in
                 result(value)
         },

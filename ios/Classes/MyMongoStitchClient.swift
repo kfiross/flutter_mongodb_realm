@@ -348,6 +348,9 @@ class MyMongoStitchClient {
         databaseName: String?,
         collectionName: String?,
         filterJson: String?,
+        projectionJson: String?,
+        limit: Int?,
+        sortJson: String?,
         onCompleted: @escaping (Any?)->Void,
         onError: @escaping (String?)->Void
         ) {
@@ -356,11 +359,35 @@ class MyMongoStitchClient {
             
             var document = Document()
             
+            // options (optional) attributes
+            var projectionBson = Document()
+            var docsLimit:Int64? = nil
+            var sortBson:Document? = nil
+            
+            
             if (filterJson != nil){
                 document = try Document.init(fromJSON: filterJson!)
             }
             
-            let task = collection?.find(document, options: nil)
+            if (projectionJson != nil) {
+                projectionBson = try Document.init(fromJSON: projectionJson!)
+            }
+            
+            if(limit != nil){
+                docsLimit = Int64(limit!)
+            }
+            
+            if (sortJson != nil){
+                sortBson = try Document.init(fromJSON: sortJson!)
+            }
+            
+            let options = RemoteFindOptions(
+                limit: docsLimit,
+                projection: projectionBson,
+                sort: sortBson
+            )
+            
+            let task = collection?.find(document, options: options)
 
             
             task!.toArray(){result in
@@ -383,6 +410,7 @@ class MyMongoStitchClient {
         databaseName: String?,
         collectionName: String?,
         filterJson: String?,
+        projectionJson: String?,
         onCompleted: @escaping (Any?)->Void,
         onError: @escaping (String?)->Void
         ) {
@@ -390,12 +418,21 @@ class MyMongoStitchClient {
             let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
             
             var document = Document()
+            var projectionBson = Document()
             
-            if (filterJson != nil){
+            if (filterJson != nil) {
                 document = try Document.init(fromJSON: filterJson!)
             }
             
-            collection?.findOne(document) { result in
+            if (projectionJson != nil) {
+               projectionBson = try Document.init(fromJSON: projectionJson!)
+            }
+            
+            let options = RemoteFindOptions(
+                projection: projectionBson
+            )
+            
+            collection?.findOne(document, options: options) { result in
                 switch result {
                 case .success(let result):
                     onCompleted(result?.extendedJSON)

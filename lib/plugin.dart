@@ -87,13 +87,15 @@ class FlutterMongoStitch {
   }
 
   static Future findDocuments(
-      {String collectionName, String databaseName, dynamic filter, String projection, int limit}) async {
+      {String collectionName, String databaseName, dynamic filter,
+        String projection, int limit, String sort}) async {
     final result = await _channel.invokeMethod('findDocuments', {
       'database_name': databaseName,
       'collection_name': collectionName,
       'filter': filter,
       'projection': projection,
-      'limit': limit
+      'limit': limit,
+      'sort': sort
     });
 
     return result;
