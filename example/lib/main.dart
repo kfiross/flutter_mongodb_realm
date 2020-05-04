@@ -137,7 +137,7 @@ class _MyAppState extends State<MyApp> {
             },
             limit: 70,
             sort: {
-              "year": OrderValue.DESCENDING,
+              "year": OrderValue.ASCENDING,
             }
           ),
       );

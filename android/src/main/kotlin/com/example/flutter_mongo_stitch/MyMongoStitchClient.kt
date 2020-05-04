@@ -1,6 +1,5 @@
 package com.example.flutter_mongo_stitch
 
-import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.mongodb.stitch.android.core.StitchAppClient
 import com.mongodb.stitch.android.core.auth.StitchAuth
@@ -134,25 +133,38 @@ class MyMongoStitchClient(
             collectionName: String?,
             filterJson: String?,
             projectionJson: String?,
-            limit: Int?
+            limit: Int?,
+            sortJson: String?
     ): RemoteFindIterable<Document>? {
         val collection = getCollection(databaseName, collectionName)
 
 
         var filter = BsonDocument()
-        var projection = BsonDocument()
+        var projectionBson = BsonDocument()
+        var sortBson:BsonDocument? = null
 
         if (filterJson != null)
             filter = BsonDocument.parse(filterJson)
 
         if (projectionJson != null)
-            projection = BsonDocument.parse(projectionJson)
+            projectionBson = BsonDocument.parse(projectionJson)
 
+        if (sortJson != null)
+            sortBson = BsonDocument.parse(sortJson)
+
+        val result = collection?.find(filter)?.projection(projectionBson)
+
+        //  add optional limit
         if (limit != null){
-            return collection?.find(filter)?.projection(projection)?.limit(limit)
+            result?.limit(limit)
         }
 
-        return collection?.find(filter)?.projection(projection)
+        // add optional sort
+        if (sortBson != null){
+            result?.sort(sortBson)
+        }
+
+        return result
     }
 
 

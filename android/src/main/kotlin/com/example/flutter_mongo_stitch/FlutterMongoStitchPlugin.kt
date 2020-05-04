@@ -312,13 +312,15 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
     val projection = call.argument<String>("projection")
     val limit = call.argument<Int>("limit")
+    val sort = call.argument<String>("sort")
 
     val task = client.findDocuments(
             databaseName,
             collectionName,
             filter,
             projection,
-            limit
+            limit,
+            sort
     )
 
     if (task == null)
