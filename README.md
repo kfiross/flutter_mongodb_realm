@@ -30,7 +30,7 @@ The minimum required it's Android 5.0(API 21) or iOS 11.0
 <<b>Functions</b>
 * Calling a Stitch function
 
-<b>Note:</b> Other features will come in the future (like Functions)
+<b>Note:</b> Other more features will come in the future :)
 
 ## Usage
 ### Initialization
@@ -105,23 +105,44 @@ filtering can be used with QuerySelector class for more robust code
 ```dart
 
 // fetch all document in the collection
-collection.find();
+var docs = collection.find();
 
 // fetch all document in the collection applying some filter
-collection.find({
-  "year": QuerySelector.gt(2010)..lte(2014), // == 'year'>2010 && 'year'<=2014
+var docs = collection.find(
+  filter: {
+    "year": QuerySelector.gt(2010)..lte(2014), // == 'year'>2010 && 'year'<=2014
 });
 
-// the same as above, but just get the first matched one
-collection.findOne();
+// optional: can also add find options (projection/limit/sort)
+var docs = await collection.find(
+  filter: {
+    "year": QueryOperator.gt(2010)..lte(2014),
+  },
+  options: RemoteFindOptions(
+    projection: {
+      "title": ProjectionValue.INCLUDE,
+      "rated": ProjectionValue.INCLUDE,
+      "year": ProjectionValue.INCLUDE,
+    },
+    limit: 70,
+    sort: {
+      "year": OrderValue.ASCENDING,
+    }
+  ),
+);
 
-collection.findOne({
-  "year": QuerySelector.gt(2010)..lte(2014),
+
+// the same as above, but just get the first matched one
+var document = await collection.findOne();
+
+var document = await collection.findOne(
+  filter: {
+    "year": QuerySelector.gt(2010)..lte(2014), // == 'year'>2010 && 'year'<=2014
 });
 
 
 // fetch the number of document in the collection
-collection.count();
+int collectionSize = await collection.count();
 
 // count the number of document that apply to some filter
 int size = await collection.count({
@@ -176,7 +197,7 @@ final stream = collection.watchWithFilter({
   "age": QuerySelector.lte(26)
 });
 
-// listen to a change in the collection
+// the, set a listener to a change in the collection
 stream.listen((data) {
   // data contains JSON string of the document that was changed
   var fullDocument = MongoDocument.parse(data);
@@ -194,6 +215,13 @@ You can also add a timeout (in ms), i.e 60 seconds:
 ```dart
 var result = await client.callFunction("sum", args: [3, 4], requestTimeout: 60000)
 ```
+
+# Donate
+
+> If you found this project helpful or you learned something from the source code and want to thank me, consider buying me a cup of :coffee:
+>
+> - [PayPal](https://www.paypal.me/naama24198/)
+
 
 
 ### Note: flutter_mongo_stitch is not directly and/or indirectly associated/affiliated with MongoDB<sup>TM</sup> , Flutter or Google LLC.

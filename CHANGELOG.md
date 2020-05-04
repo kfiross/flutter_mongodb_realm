@@ -1,3 +1,7 @@
+## 0.3.0
+
+* updated `find` and `findOne` collection functions to be able to use projection/sort/limit
+
 ## 0.2.0+3
 
 * fixed missing find/insert results.
