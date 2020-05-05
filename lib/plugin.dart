@@ -16,6 +16,17 @@ class FlutterMongoStitch {
     await _channel.invokeMethod('connectMongo', {'app_id': appId});
   }
 
+  static Future signInAnonymously() async {
+    final result = await _channel.invokeMethod('signInAnonymously');
+
+    var map = <String, dynamic>{};
+    result.forEach((key, value) {
+      map[key] = value;
+    });
+
+    return CoreStitchUser.fromMap(map);
+  }
+
   static Future<CoreStitchUser> signInWithUsernamePassword(
       String username, String password) async {
     final LinkedHashMap result = await _channel.invokeMethod(
@@ -30,8 +41,9 @@ class FlutterMongoStitch {
     return CoreStitchUser.fromMap(map);
   }
 
-  static Future signInAnonymously() async {
-    final result = await _channel.invokeMethod('signInAnonymously');
+  static Future<CoreStitchUser> signInWithGoogle(String authCode) async{
+    final LinkedHashMap result = await _channel.invokeMethod(
+        'signInWithGoogle', {'code': authCode});
 
     var map = <String, dynamic>{};
     result.forEach((key, value) {
@@ -40,6 +52,20 @@ class FlutterMongoStitch {
 
     return CoreStitchUser.fromMap(map);
   }
+
+  static Future<CoreStitchUser> signInWithFacebook(String accessToken) async{
+    final LinkedHashMap result = await _channel.invokeMethod(
+        'signInWithFacebook', {'token': accessToken});
+
+    var map = <String, dynamic>{};
+    result.forEach((key, value) {
+      map[key] = value;
+    });
+
+    return CoreStitchUser.fromMap(map);
+  }
+
+
 
   static Future logout() async {
     final result = await _channel.invokeMethod('logout');

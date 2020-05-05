@@ -15,6 +15,15 @@ dependencies:
   extension: ^0.0.5
   streams_channel: ^0.3.0
 
+  # for using custom provider logins
+  google_sign_in:
+    git:
+      url: git://github.com/fbcouch/plugins.git
+      path: packages/google_sign_in
+      ref: server-auth-code
+
+  flutter_facebook_login: ^3.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

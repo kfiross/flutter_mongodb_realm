@@ -27,7 +27,7 @@ class StreamHandler(val client: MyMongoStitchClient, val arguments: Any?) : Even
 
         task?.addOnCompleteListener{
             val changeStream = it.result
-            changeStream.addChangeEventListener { documentId: BsonValue, event: ChangeEvent<Document> ->
+            changeStream?.addChangeEventListener { documentId: BsonValue, event: ChangeEvent<Document> ->
                 // handle change event
 
                 Handler(Looper.getMainLooper()).post {

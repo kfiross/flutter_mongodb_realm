@@ -15,6 +15,8 @@ import java.lang.Exception
 import kotlin.collections.HashMap
 import com.mongodb.stitch.android.core.auth.providers.userpassword.UserPasswordAuthProviderClient
 import com.mongodb.stitch.android.services.mongodb.remote.AsyncChangeStream
+import com.mongodb.stitch.core.auth.providers.facebook.FacebookCredential
+import com.mongodb.stitch.core.auth.providers.google.GoogleCredential
 import com.mongodb.stitch.core.services.mongodb.remote.*
 import org.bson.BsonValue
 
@@ -50,6 +52,14 @@ class MyMongoStitchClient(
 
     fun signInWithUsernamePassword(username: String, password: String ): Task<StitchUser>? {
         return auth.loginWithCredential(UserPasswordCredential(username, password))
+    }
+
+    fun signInWithGoogle(authCode: String): Task<StitchUser> {
+        return auth.loginWithCredential(GoogleCredential(authCode))
+    }
+
+    fun signInWithFacebook(accessToken: String): Task<StitchUser> {
+        return auth.loginWithCredential(FacebookCredential(accessToken))
     }
 
     fun logout(): Task<Void> = auth.logout()
