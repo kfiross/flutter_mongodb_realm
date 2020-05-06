@@ -17,7 +17,7 @@ dependencies:
 
   # for using custom provider logins
   google_sign_in: ^4.4.4
-# Un-comment the above in order to user serverAuthCode
+# Un-comment the above in order to use serverAuthCode
 #    git:
 #      url: git://github.com/fbcouch/plugins.git
 #      path: packages/google_sign_in
