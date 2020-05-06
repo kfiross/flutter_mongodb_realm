@@ -156,6 +156,49 @@ class MyMongoStitchClient {
         }
     }
     
+    func signInWithGoogle(
+        authCode: String,
+        onCompleted: @escaping (StitchUser)->Void,
+        onError: @escaping (String?)->Void
+        ) {
+        
+        self.auth.login(
+            withCredential: GoogleCredential(withAuthCode: authCode)
+        ) { authResult in
+            switch authResult {
+            case .success(let user):
+                onCompleted(user)
+                break
+                
+            case .failure(let error):
+                onError("Google Provider Login failed \(error)")
+                break
+            }
+        }
+    }
+    
+    
+    func signInWithFacebook(
+        accessToken: String,
+        onCompleted: @escaping (StitchUser)->Void,
+        onError: @escaping (String?)->Void
+        ) {
+        
+        self.auth.login(
+            withCredential: FacebookCredential(withAccessToken: accessToken)
+        ) { authResult in
+            switch authResult {
+            case .success(let user):
+                onCompleted(user)
+                break
+                
+            case .failure(let error):
+                onError("Facebook Provider Login failed \(error)")
+                break
+            }
+        }
+    }
+    
     func registerWithEmail(
         email: String,
         password: String,

@@ -1,3 +1,7 @@
+## 0.4.0
+
+* added Google and Facebook as available login providers
+
 ## 0.3.0
 
 * updated `find` and `findOne` collection functions to be able to use projection/sort/limit

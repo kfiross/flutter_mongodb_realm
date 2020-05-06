@@ -79,6 +79,14 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             self.signInWithUsernamePassword(call: call, result: result)
             break
             
+        case "signInWithGoogle":
+            self.signInWithGoogle(call: call, result: result)
+            break
+            
+        case "signInWithFacebook":
+            self.signInWithFacebook(call: call, result: result)
+            break
+            
         case "registerWithEmail":
             self.registerWithEmail(call: call, result: result)
             break
@@ -152,6 +160,44 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         self.client?.signInWithUsernamePassword(
             username: username ?? "",
             password: password ?? "",
+            onCompleted: { user in
+                result([
+                    "id": user.id
+                ])
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message, details: nil))
+            }
+        )
+    }
+    
+    func signInWithGoogle(call: FlutterMethodCall, result: @escaping FlutterResult){
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let authCode = args["code"] as! String?
+        
+        self.client?.signInWithGoogle(
+            authCode: authCode ?? "",
+            onCompleted: { user in
+                result([
+                    "id": user.id
+                ])
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message, details: nil))
+            }
+        )
+    }
+    
+    
+    
+    func signInWithFacebook(call: FlutterMethodCall, result: @escaping FlutterResult){
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let accessToken = args["token"] as! String?
+        
+        self.client?.signInWithFacebook(
+            accessToken: accessToken ?? "",
             onCompleted: { user in
                 result([
                     "id": user.id

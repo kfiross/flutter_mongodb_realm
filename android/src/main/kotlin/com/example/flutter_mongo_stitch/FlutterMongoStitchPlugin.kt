@@ -11,6 +11,19 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 import com.mongodb.stitch.android.core.Stitch
 import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
 import io.flutter.plugin.common.EventChannel
+import com.google.android.gms.common.Scopes
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.Scope
+import android.R.attr.data
+import android.content.Context
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
+import androidx.core.app.ActivityCompat.startActivityForResult
+import android.content.Intent
+
+
+
 
 
 
@@ -19,7 +32,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
 
   private lateinit var client: MyMongoStitchClient
-
+  private lateinit var appContext: Context
 
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -33,6 +46,8 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
     channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_mongo_stitch")
     channel.setMethodCallHandler(this)
+
+    appContext = flutterPluginBinding.applicationContext
 
     streamsChannel = StreamsChannel(flutterPluginBinding.binaryMessenger, "streams_channel_test")
     streamsChannel.setStreamHandlerFactory(object: StreamsChannel.StreamHandlerFactory{
@@ -76,6 +91,9 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
       /////
       "signInAnonymously" -> signInAnonymously(result)
       "signInWithUsernamePassword" -> signInWithUsernamePassword(call, result)
+      "signInWithGoogle" -> signInWithGoogle(call, result)
+      "signInWithFacebook" -> signInWithFacebook(call, result)
+
       "registerWithEmail" -> registerWithEmail(call, result)
       "logout" -> logout(result)
       "getUserId" -> getUserId(result)
@@ -127,6 +145,22 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 //    }
 
 
+  private fun signInAnonymously(@NonNull result: Result) {
+    val task = client.signInAnonymously()
+
+    if (task == null)
+      result.error("Error", "Failed to Login", "")
+
+    task!!.addOnSuccessListener {
+      result.success(mapOf(
+              "id" to it.id,
+              "device_id" to it.deviceId
+      ))
+    }.addOnFailureListener {
+      result.error("ERROR", "Anonymous Provider Not Deployed", "")
+    }
+  }
+
   private fun signInWithUsernamePassword(@NonNull call: MethodCall, @NonNull result: Result) {
     val username = call.argument<String>("username") ?: ""
     val password = call.argument<String>("password") ?: ""
@@ -147,6 +181,44 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     }
   }
 
+  private fun signInWithGoogle(@NonNull call: MethodCall, @NonNull result: Result){
+    val authCode = call.argument<String>("code") ?: ""
+
+    val task = client.signInWithGoogle(authCode)
+
+
+    task.addOnCompleteListener {
+      if(it.isSuccessful){
+        result.success(mapOf(
+                "id" to it.result?.id,
+                "device_id" to it.result?.deviceId
+        ))
+      }
+      else{
+        result.error("ERROR", "Google Provider Login failed: ", null)//${it.exception?.message}", "")
+      }
+    }
+  }
+
+  private fun signInWithFacebook(@NonNull call: MethodCall, @NonNull result: Result){
+    val token = call.argument<String>("token") ?: ""
+
+    val task = client.signInWithFacebook(token)
+
+
+    task.addOnCompleteListener {
+      if(it.isSuccessful){
+        result.success(mapOf(
+                "id" to it.result?.id,
+                "device_id" to it.result?.deviceId
+        ))
+      }
+      else{
+        result.error("ERROR", "Facebook Provider Login failed: ", null)//${it.exception?.message}", "")
+      }
+    }
+  }
+
   private fun registerWithEmail(@NonNull call: MethodCall, @NonNull result: Result) {
     val email = call.argument<String>("email") ?: ""
     val password = call.argument<String>("password") ?: ""
@@ -162,22 +234,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
       } else {
         result.error("ERROR", "Error registering new user: ${it.exception?.message}", "")
       }
-    }
-  }
-
-  private fun signInAnonymously(@NonNull result: Result) {
-    val task = client.signInAnonymously()
-
-    if (task == null)
-      result.error("Error", "Failed to Login", "")
-
-    task!!.addOnSuccessListener {
-      result.success(mapOf(
-              "id" to it.id,
-              "device_id" to it.deviceId
-      ))
-    }.addOnFailureListener {
-      result.error("ERROR", "Anonymous Provider Not Deployed", "")
     }
   }
 
@@ -273,7 +329,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
     task!!.addOnCompleteListener {
       if (it.isSuccessful)
-        result.success(it.result.deletedCount)
+        result.success(it.result?.deletedCount)
       else
         result.error("Error", "Failed to delete a document - Permission DENIED", "")
 
@@ -296,7 +352,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
     task!!.addOnCompleteListener {
       if (it.isSuccessful)
-        result.success(it.result.deletedCount)
+        result.success(it.result?.deletedCount)
       else
         result.error("Error", "Failed to insert a document - Permission DENIED", "")
 
@@ -358,7 +414,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
     task!!.addOnCompleteListener {
       if (it.isSuccessful)
-        result.success(it.result.toJson())
+        result.success(it.result?.toJson())
       else
         result.error("Error", "Failed to insert a document - Permission DENIED", "")
 
@@ -408,7 +464,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
     task!!.addOnCompleteListener {
       if (it.isSuccessful)
-        result.success(listOf(it.result.matchedCount,it.result.modifiedCount))
+        result.success(listOf(it.result?.matchedCount,it.result?.modifiedCount))
       else
         result.error("Error", "Failed to update the collection - Permission DENIED", "")
 
@@ -433,7 +489,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
     task!!.addOnCompleteListener {
       if (it.isSuccessful)
-        result.success(listOf(it.result.matchedCount,it.result.modifiedCount))
+        result.success(listOf(it.result?.matchedCount,it.result?.modifiedCount))
       else
         result.error("Error", "Failed to update the collection - Permission DENIED", "")
 
@@ -458,7 +514,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
     task!!.addOnCompleteListener {
       if (it.isSuccessful) {
-        result.success(it.result.toJavaValue())
+        result.success(it.result?.toJavaValue())
       }
       else
         result.error("Error", "Failed to call function: ${it.exception?.message}", "")
