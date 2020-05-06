@@ -77,6 +77,7 @@ For login with Google/Facebook just configure in the native side
 No need to import the required flutter's packages
 
 Login a user using Google provider:
+<b> un-commnet the google_sign_in version in `pubspec.yaml` and use git repo version insted
 ```dart
 CoreStitchUser mongoUser = await auth.loginWithCredential(
   GoogleCredential(

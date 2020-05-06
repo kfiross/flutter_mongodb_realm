@@ -12,19 +12,12 @@ import com.mongodb.stitch.android.core.Stitch
 import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
 import io.flutter.plugin.common.EventChannel
 import com.google.android.gms.common.Scopes
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import android.R.attr.data
 import android.content.Context
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import androidx.core.app.ActivityCompat.startActivityForResult
 import android.content.Intent
-
-
-
-
 
 
 /** FlutterMongoStitchPlugin */
