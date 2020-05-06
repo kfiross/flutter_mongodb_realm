@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_mongo_stitch/auth/credentials/google_credential.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_mongo_stitch/google_sign_in_git_mock/google_sign_in.dart';
 
 import '../plugin.dart';
 import 'core_stitch_user.dart';
