@@ -44,11 +44,11 @@ class _MyAppState extends State<MyApp> {
 //      );
 
       CoreStitchUser mongoUser = await client.auth.loginWithCredential(
-          GoogleCredential(
-            serverClientId: "281897935076-dlab9116cid9cmivd6nilofihip552cr.apps.googleusercontent.com",
-            scopes: ["email"],
-          )
-//        FacebookCredential(permissions: ["email"])
+//          GoogleCredential(
+//            serverClientId: "281897935076-dlab9116cid9cmivd6nilofihip552cr.apps.googleusercontent.com",
+//            scopes: ["email"],
+//          )
+        FacebookCredential(permissions: ["email"])
       );
       if(mongoUser != null){
         print("logged in as ${mongoUser.id}");
