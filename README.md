@@ -26,6 +26,8 @@ The minimum required it's Android 5.0(API 21) or iOS 11.0
 <b>Auth Providers:</b>
 * Email/Password
 * Anonymously
+* Google
+* Facebook
 
 <<b>Functions</b>
 * Calling a Stitch function
@@ -55,19 +57,41 @@ Inorder to use the client define:
 ### Authentication
 
 #### Login
+ Inorder to use the auth part define:
 ```dart
-//  Inorder to use the auth part define:
 final auth = client.auth;
-
-// Login a user with Email\Password provider:
-CoreStitchUser mongoUser = await auth.loginWithCredential(
-    UserPasswordCredential(username: <email_address>, password: <password>));
-
-// Login a user with Anonymous provider:
-CoreStitchUser mongoUser = await auth.loginWithCredential(AnonymousCredential());
-
-//NOTE: In any case , if mongoUser != null the login was successful.
 ```
+
+Login a user with Anonymous provider:
+```dart
+CoreStitchUser mongoUser = await auth.loginWithCredential(AnonymousCredential());
+```
+
+Login a user with Email\Password provider:
+```dart
+CoreStitchUser mongoUser = await auth.loginWithCredential(
+  UserPasswordCredential(username: <email_address>, password: <password>));
+```
+
+For login with Google/Facebook just configure in the native side
+No need to import the required flutter's packages
+
+Login a user using Google provider:
+```dart
+CoreStitchUser mongoUser = await auth.loginWithCredential(
+  GoogleCredential(
+    serverClientId: <Google Client Id>,
+    scopes: <list of scopes>,
+));
+```
+
+Login a user using Facebook provider:
+```dart
+CoreStitchUser mongoUser = await auth.loginWithCredential(
+  FacebookCredential(permissions: <list of permissions>));
+```
+
+<b>NOTE: In any case , if mongoUser != null the login was successful.</b>
 
 #### Register
 ```dart
