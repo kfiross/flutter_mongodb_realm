@@ -41,5 +41,40 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+
+	<key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+        	<key>CFBundleTypeRole</key>
+        	<string>Editor</string>
+       		<key>CFBundleURLSchemes</key>
+       		<array>
+       		<!-- com.googleusercontent.apps.281897935076-0te1p07eb9blop2hiaqr2cvsaa37isgt -->
+       			<!-- TODO Replace this value: -->
+       			<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+       			<string>com.googleusercontent.apps.281897935076-0te1p07eb9blop2hiaqr2cvsaa37isgt</string>
+       		</array>
+       	</dict>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>fb262433301550083</string>
+            </array>
+        </dict>
+    </array>
+
+    <key>FacebookAppID</key>
+    <string>262433301550083</string>
+
+    <key>FacebookDisplayName</key>
+    <string>demo</string>
+
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>fbapi</string>
+        <string>fb-messenger-share-api</string>
+        <string>fbauth2</string>
+        <string>fbshareextension</string>
+    </array>
 </dict>
 </plist>
