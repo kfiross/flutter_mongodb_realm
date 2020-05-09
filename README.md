@@ -29,7 +29,7 @@ The minimum required it's Android 5.0(API 21) or iOS 11.0
 * Google
 * Facebook
 
-<<b>Functions</b>
+<b>Functions</b>
 * Calling a Stitch function
 
 <b>Note:</b> Other more features will come in the future :)
@@ -81,13 +81,13 @@ Login a user using Google provider:
 
 <b>
     un-comment the part under google_sign_in in pubspec.yaml to use git repo version instead
-    this has to be donr in order to get the auth code need by the Mongo Stitch SDK
+    this has to be done in order to get the auth code need by the Mongo Stitch SDK
 </b>
 
 ```dart
 CoreStitchUser mongoUser = await auth.loginWithCredential(
   GoogleCredential(
-    serverClientId: <Google Client Id>,
+    serverClientId: <Google Server Client Id>, // just the start from "<ID>.apps.googleusercontent.com"   
     scopes: <list of scopes>,
 ));
 ```

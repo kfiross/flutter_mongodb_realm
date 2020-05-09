@@ -1,3 +1,11 @@
+## 0.4.0+2
+
+* using id-part only for auth code instead full string
+
+## 0.4.0+1
+
+* bug fixing
+
 ## 0.4.0
 
 * added Google and Facebook as available login providers

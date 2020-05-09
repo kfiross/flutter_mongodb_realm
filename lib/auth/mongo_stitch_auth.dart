@@ -31,7 +31,7 @@ class MongoStitchAuth {
     }
     else if (credential is GoogleCredential){
       _googleLoginWrapper.init(
-          serverClientId: credential.serverClientId,
+          serverClientId: "${credential.serverClientId}.apps.googleusercontent.com",
           scopes: credential.scopes,
       );
 
