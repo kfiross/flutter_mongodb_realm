@@ -4,9 +4,6 @@ import com.google.android.gms.tasks.Task
 import com.mongodb.stitch.android.core.StitchAppClient
 import com.mongodb.stitch.android.core.auth.StitchAuth
 import com.mongodb.stitch.android.core.auth.StitchUser
-import com.mongodb.stitch.android.services.mongodb.remote.RemoteFindIterable
-import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
-import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoCollection
 import com.mongodb.stitch.core.auth.providers.anonymous.AnonymousCredential
 import com.mongodb.stitch.core.auth.providers.userpassword.UserPasswordCredential
 import org.bson.BsonDocument
@@ -14,7 +11,7 @@ import org.bson.Document
 import java.lang.Exception
 import kotlin.collections.HashMap
 import com.mongodb.stitch.android.core.auth.providers.userpassword.UserPasswordAuthProviderClient
-import com.mongodb.stitch.android.services.mongodb.remote.AsyncChangeStream
+import com.mongodb.stitch.android.services.mongodb.remote.*
 import com.mongodb.stitch.core.auth.providers.facebook.FacebookCredential
 import com.mongodb.stitch.core.auth.providers.google.GoogleCredential
 import com.mongodb.stitch.core.services.mongodb.remote.*
@@ -254,6 +251,17 @@ class MyMongoStitchClient(
         return collection?.watchWithFilter(matchFilter)
     }
 
+
+    fun aggregate(databaseName: String?, collectionName: String?, pipelineStrings: List<String>?): RemoteAggregateIterable<Document>? {
+        val collection = getCollection(databaseName, collectionName)
+
+        val pipeline = pipelineStrings?.map {
+            BsonDocument.parse(it)
+        }
+
+        return collection?.aggregate(pipeline)
+    }
+
     fun callFunction(name: String, args: List<Any>?, requestTimeout: Long?)
             : Task<BsonValue>? {
 
@@ -264,4 +272,6 @@ class MyMongoStitchClient(
                 BsonValue::class.java
         )
     }
+
+
 }

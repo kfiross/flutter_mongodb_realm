@@ -80,6 +80,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             "countDocuments" -> countDocuments(call, result)
             "updateDocument" -> updateDocument(call , result)
             "updateDocuments" -> updateDocuments(call , result)
+            "aggregate" -> aggregate(call, result)
 
             /////
             "signInAnonymously" -> signInAnonymously(result)
@@ -490,7 +491,34 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     }
 
 
-    ///
+    private fun aggregate(@NonNull call: MethodCall, @NonNull result: Result){
+        val databaseName = call.argument<String>("database_name")
+        val collectionName = call.argument<String>("collection_name")
+        val pipelineStrings = call.argument<List<String>>("pipeline")
+
+
+        val task = client.aggregate(
+                databaseName,
+                collectionName,
+                pipelineStrings
+        )
+
+        if (task == null)
+            result.error("Error", "Failed to perform aggregation", "")
+
+        val aggregationResults = ArrayList<String>()
+        task!!.forEach {
+            aggregationResults.add(it.toJson())
+        }.continueWith {
+            if (it.isSuccessful)
+                result.success(aggregationResults)
+            else
+                result.error("Error", "Failed to perform aggregation - Permission DENIED", "")
+
+        }
+    }
+
+    ///====================================================================
     private fun callFunction(@NonNull call: MethodCall, @NonNull result: Result){
         val functionName = call.argument<String>("name")
         val args = call.argument<List<Any>>("args")

@@ -216,6 +216,17 @@ class FlutterMongoStitch {
     });
   }
 
+  static aggregate({ @required String collectionName,  @required String databaseName,
+    List<String> pipeline}) async {
+    final results = await _channel.invokeMethod('aggregate', {
+      'database_name': databaseName,
+      'collection_name': collectionName,
+      'pipeline': pipeline,
+    });
+
+    return results;
+  }
+
   static Future callFunction(String name, {List args, int requestTimeout}) async{
     final result = _channel.invokeMethod('callFunction', {
       "name": name,
@@ -225,4 +236,6 @@ class FlutterMongoStitch {
 
     return result;
   }
+
+
 }

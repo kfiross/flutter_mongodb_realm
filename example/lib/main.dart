@@ -18,8 +18,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   MongoStitchClient client = MongoStitchClient();
 
   @override
@@ -38,27 +36,25 @@ class _MyAppState extends State<MyApp> {
 
       // login Anonymously
 
-//      await client.auth.loginWithCredential(
-//          AnonymousCredential()
-////          UserPasswordCredential(username: "kfir25816@gmail.com",password: "12345678")
-//      );
+      CoreStitchUser mongoUser =
+          await client.auth.loginWithCredential(AnonymousCredential()
+//          UserPasswordCredential(username: "kfir25816@gmail.com",password: "12345678")
+              );
 
-      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
-          // todo: check this, is for more 'secure' code
-          GoogleCredential(
-            serverClientId: "281897935076-dlab9116cid9cmivd6nilofihip552cr",
-            scopes: ["email"],
-          )
-//          FacebookCredential(permissions: ["email"])
-      );
-      if(mongoUser != null){
+//      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
+//          GoogleCredential(
+//        serverClientId: "281897935076-dlab9116cid9cmivd6nilofihip552cr",
+//        scopes: ["email"],
+//      )
+////          FacebookCredential(permissions: ["email"])
+//          );
+      if (mongoUser != null) {
         print("logged in as ${mongoUser.id}");
       }
 
       // sign out
 
-      client.auth.logout();
-
+//      client.auth.logout();
 
       // after app initialized and user authenticated, show some data
 
@@ -68,12 +64,11 @@ class _MyAppState extends State<MyApp> {
 //        updateData();
 
 //        watchData();
+
+      aggregateCollection();
     } on PlatformException catch (e) {
       debugPrint("Error! ${e.message}");
-    }
-    on Exception{
-
-    }
+    } on Exception {}
   }
 
   Future<void> insertData() async {
@@ -87,19 +82,14 @@ class _MyAppState extends State<MyApp> {
 //        "price": 31.72
 //      });
 
-
       collection.insertMany([
         MongoDocument({
-          "time": DateTime
-              .now()
-              .millisecondsSinceEpoch,
+          "time": DateTime.now().millisecondsSinceEpoch,
           "user_id": "michael",
           "age": 28,
         }),
         MongoDocument({
-          "time": DateTime
-              .now()
-              .millisecondsSinceEpoch,
+          "time": DateTime.now().millisecondsSinceEpoch,
           "name": "adiel",
           "age": 23,
         }),
@@ -112,8 +102,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> fetchData() async {
     // sample_mflix.comments
     // test.my_collection
-    var collection =
-    client.getDatabase("sample_mflix").getCollection("movies");
+    var collection = client.getDatabase("sample_mflix").getCollection("movies");
 
     try {
 //      var document = MongoDocument.fromMap({
@@ -128,7 +117,6 @@ class _MyAppState extends State<MyApp> {
 //      });
 //      print(size);
 
-
 //      var docs = await collection.find(
 //          filter: {
 //            "year": QueryOperator.gt(2010)..lte(2014),
@@ -141,7 +129,6 @@ class _MyAppState extends State<MyApp> {
 //        "name": "Taylor Scott",
 //      });
 //      int ssaa = 232;
-
 
       /// with projection/limit
       var docs = await collection.find(
@@ -157,8 +144,7 @@ class _MyAppState extends State<MyApp> {
             limit: 70,
             sort: {
               "year": OrderValue.DESCENDING,
-            }
-        ),
+            }),
       );
       print(docs.length);
 
@@ -174,7 +160,6 @@ class _MyAppState extends State<MyApp> {
         },
       );
       print(doc.map);
-
     } on PlatformException catch (e) {
       debugPrint("Error: $e");
     }
@@ -184,7 +169,7 @@ class _MyAppState extends State<MyApp> {
     // sample_mflix.comments
     // test.my_collection
     var collection =
-    client.getDatabase("sample_mflix").getCollection("comments");
+        client.getDatabase("sample_mflix").getCollection("comments");
 
     try {
 //      var document = MongoDocument.fromMap({
@@ -209,10 +194,8 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-
   Future<void> updateData() async {
-    var collection =
-    client.getDatabase("test").getCollection("my_collection");
+    var collection = client.getDatabase("test").getCollection("my_collection");
 
     try {
       var results = await collection.updateOne(
@@ -273,10 +256,8 @@ class _MyAppState extends State<MyApp> {
 //              /// all values matched 'orange or kiwis' in array 'fruits'
 ////              "fruits": ["orange", "kiwis"]
 //          })
-
       );
       print(results);
-
 
 //      var results = await collection.updateMany(
 //          filter:{
@@ -287,7 +268,6 @@ class _MyAppState extends State<MyApp> {
 //          })
 //      );
 //      print(results);
-
 
     } on PlatformException catch (e) {
       debugPrint("Error: $e");
@@ -316,8 +296,8 @@ class _MyAppState extends State<MyApp> {
 //    });
 
   void watchData() {
-    var myCollection = client.getDatabase("test").getCollection(
-        "my_collection");
+    var myCollection =
+        client.getDatabase("test").getCollection("my_collection");
 
     try {
       final stream = myCollection.watch();
@@ -328,13 +308,63 @@ class _MyAppState extends State<MyApp> {
         print("a document with '${fullDocument.map["_id"]}' is changed");
         // do something
       });
-    }
-    on PlatformException catch (e) {
+    } on PlatformException catch (e) {
       debugPrint("Error! ${e.message}");
     }
   }
 
 //  }
+
+  Future<void> aggregateCollection() async {
+    var collection = client.getDatabase("test").getCollection(
+          //"scores"
+          "orders",
+        );
+
+    try {
+
+      /// addFields
+//      List<PipelineStage> pipeline = [
+//        PipelineStage.addFields({
+//          "totalHomework": AggregateOperator.sum("homework"),
+//          "totalQuiz": AggregateOperator.sum("quiz"),
+//        }),
+//        PipelineStage.addFields({
+//          "totalScore": AggregateOperator.add(
+//              ["totalHomework", "totalQuiz", "extraCredit"]),
+//        }),
+//      ];
+
+      /// match, group, skip
+//      List<PipelineStage> pipeline = [
+//        PipelineStage.skip(2),
+//        PipelineStage.match({"status": "A"}),
+//        PipelineStage.group(
+//          "cust_id",
+//          accumulators: {"total": AggregateOperator.sum("amount")},
+//        ),
+//
+//      ];
+
+      List<PipelineStage> pipeline = [
+        PipelineStage.sample(2),
+      ];
+
+//      List<PipelineStage> pipeline = [
+//        PipelineStage.raw({
+//          ""
+//        }),
+//      ];
+
+
+      var list = await collection.aggregate(pipeline);
+      print(list.length);
+    } on PlatformException catch (e) {
+      debugPrint("Error! ${e.message}");
+    }
+
+    // return Future.value([]);
+  }
 
   @override
   Widget build(BuildContext context) {

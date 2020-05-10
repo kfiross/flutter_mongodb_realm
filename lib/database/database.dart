@@ -3,3 +3,4 @@ export 'mongo_databsase.dart';
 export 'mongo_document.dart';
 export 'query_operator.dart';
 export 'update_operator.dart';
+export 'pipeline_stage.dart';

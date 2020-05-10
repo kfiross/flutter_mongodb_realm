@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:extension/enum.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_mongo_stitch/database/pipeline_stage.dart';
 
 import '../bson_document.dart';
 import '../plugin.dart';
@@ -322,6 +323,22 @@ class MongoCollection {
     );
 
     return stream;
+  }
+
+
+  ///
+  Future<List<MongoDocument>> aggregate(List<PipelineStage> pipeline) async{
+    List<dynamic> resultJson = await FlutterMongoStitch.aggregate(
+      collectionName: this.collectionName,
+      databaseName: this.databaseName,
+      pipeline: pipeline.map((doc) => jsonEncode(doc.values)).toList(),
+    );
+
+    var result = resultJson.map((string) {
+      return MongoDocument.parse(string);
+    }).toList();
+
+    return result;
   }
 }
 
