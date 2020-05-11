@@ -1,3 +1,8 @@
+## 0.4.1
+
+* added support of using aggregation on a collection
+
+
 ## 0.4.0+2
 
 * using id-part only for auth code instead full string

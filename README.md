@@ -22,6 +22,7 @@ The minimum required it's Android 5.0(API 21) or iOS 11.0
 * Delete
 * Update
 * Watch
+* Aggregate
 
 <b>Auth Providers:</b>
 * Email/Password
@@ -237,6 +238,56 @@ stream.listen((data) {
 });
 ```
 
+#### Aggregation
+define Pipeline Stages for aggregation, i.e:
+```dart
+List<PipelineStage> pipeline = [
+  PipelineStage.addFields({
+    "totalHomework": AggregateOperator.sum("homework"),
+    "totalQuiz": AggregateOperator.sum("quiz"),
+  }),
+  PipelineStage.addFields({
+    "totalScore": AggregateOperator.add(
+        ["totalHomework", "totalQuiz", "extraCredit"]),
+  }),
+];
+```
+
+And then set the pipelines stages to the aggregate function:
+```dart
+ var list = await collection.aggregate(pipeline);
+```
+
+Another usages (not all stages are supported):
+```
+List<PipelineStage> pipeline = [
+  PipelineStage.skip(2),
+  PipelineStage.match({"status": "A"}),
+  PipelineStage.group(
+    "cust_id",
+    accumulators: {"total": AggregateOperator.sum("amount")},
+  ),
+];
+
+List<PipelineStage> pipeline = [
+  PipelineStage.sample(2),
+];
+
+// can also RAW typed one
+List<PipelineStage> pipeline = [
+
+  PipelineStage.raw({
+        //... some expression according to the MongoDB API
+  }),
+  PipelineStage.raw({
+        //... some expression according to the MongoDB API
+  }),
+  ...
+];
+```
+
+
+
 ### Functions
 for calling a defined stitch function "sum" with argument 3&4
 ```dart
@@ -256,8 +307,3 @@ var result = await client.callFunction("sum", args: [3, 4], requestTimeout: 6000
 
 
 ### Note: flutter_mongo_stitch is not directly and/or indirectly associated/affiliated with MongoDB<sup>TM</sup> , Flutter or Google LLC.
-<!--#### Aggregation-->
-<!--```dart-->
-
-
-<!--```-->
