@@ -69,7 +69,11 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             self.updateDocuments(call: call, result: result)
             break
             
-            /////
+        case "aggregate":
+            self.aggregate(call: call, result: result)
+            break
+            
+        /////
             
         case "signInAnonymously":
             self.signInAnonymously(result)
@@ -342,14 +346,14 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             filterJson: filter,
             onCompleted: { value in
                 result(value)
-        },
+            },
             onError: { message in
                 result(FlutterError(
                     code: "ERROR",
                     message: message,
                     details: nil
                 ))
-        }
+            }
         )
     }
     
@@ -482,6 +486,32 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             }
         )
     }
+    
+    
+    func aggregate(call: FlutterMethodCall, result: @escaping FlutterResult)  {
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let databaseName = args["database_name"] as? String
+        let collectionName = args["collection_name"] as? String
+        let pipeline = args["pipeline"] as? Array<String>
+    
+        
+        self.client?.aggregate(
+            databaseName: databaseName,
+            collectionName: collectionName,
+            pipelineList: pipeline,
+            onCompleted: { value in
+                result(value)
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message,details: nil))
+            }
+        )
+    }
+    
+    
+    
+    
     
     func callFunction(call: FlutterMethodCall, result: @escaping FlutterResult)  {
         let callArgs = call.arguments as! Dictionary<String, Any>

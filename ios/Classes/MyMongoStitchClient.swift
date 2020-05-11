@@ -321,7 +321,6 @@ class MyMongoStitchClient {
         }
     }
     
-    ///////////////////////////
  
     func deleteDocument(
         databaseName: String?,
@@ -354,7 +353,7 @@ class MyMongoStitchClient {
         }
     }
     
-    // CHECK
+    
     func deleteDocuments(
         databaseName: String?,
         collectionName: String?,
@@ -589,6 +588,34 @@ class MyMongoStitchClient {
         }
         catch {
             onError("Failed to update collection")
+        }
+    }
+    
+    
+    func aggregate(
+        databaseName: String?,
+        collectionName: String?,
+        pipelineList: Array<String>?,
+        onCompleted: @escaping (Any)->Void,
+        onError: @escaping (String?)->Void
+        ) {
+        do {
+            let collection = try getCollection(databaseName: databaseName, collectionName: collectionName)
+            
+            let documents = try pipelineList!.map({ try Document.init(fromJSON: $0) })
+            
+            collection?.aggregate(documents).toArray() { result in
+                switch result {
+                case .success(let results):
+                    let aggregateResults =  results.map({ $0.extendedJSON })
+                    onCompleted(aggregateResults)
+                case .failure(let error):
+                    onError("Failed to perform aggregate: \(error)")
+                }
+            }
+        }
+        catch {
+            onError("Failed to perform aggregate")
         }
     }
     
