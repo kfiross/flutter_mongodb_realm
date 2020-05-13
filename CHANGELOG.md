@@ -1,3 +1,7 @@
+## 0.4.1+1
+
+* updated dependencies
+
 ## 0.4.1
 
 * added support of using aggregation on a collection
