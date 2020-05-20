@@ -518,7 +518,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         
         let name = callArgs["name"] as? String
         let args = callArgs["args"] as? Array<Any>
-        let timeout = callArgs["filter"] as? Int64
+        let timeout = callArgs["timeout"] as? Int64
         
         if(name == nil || name!.isEmpty){
             result(FlutterError(code: "ERROR", message: "", details: nil))

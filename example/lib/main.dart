@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
 //        watchData();
 //      aggregateCollection();
 
-      await client.callFunction("sum", args: [8, 4], requestTimeout: 30000).then((value) {
+      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
         print(value);
       });
 
