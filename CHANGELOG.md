@@ -1,3 +1,7 @@
+## 0.4.1+2
+
+*  fixed bugs for not using correctly defined timeout in calling a stitch function
+
 ## 0.4.1+1
 
 * updated dependencies
