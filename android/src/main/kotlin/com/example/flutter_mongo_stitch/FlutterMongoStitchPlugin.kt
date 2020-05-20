@@ -522,13 +522,13 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     private fun callFunction(@NonNull call: MethodCall, @NonNull result: Result){
         val functionName = call.argument<String>("name")
         val args = call.argument<List<Any>>("args")
-        val timeout = call.argument<Long>("timeout")
+        val timeout = call.argument<Int>("timeout")
 
         if(functionName.isNullOrEmpty()){
             result.error("Error", "Function name is missing", null)
         }
 
-        val task = client.callFunction(functionName!!, args, timeout)
+        val task = client.callFunction(functionName!!, args, timeout?.toLong())
 
         if (task == null)
             result.error("Error", "Failed to call function - Task Failed", "")

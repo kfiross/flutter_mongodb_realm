@@ -42,4 +42,6 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'org.mongodb:stitch-android-sdk:4.5.0'
+//    implementation 'com.google.android.gms:play-services-auth:18.0.0'
+//    implementation 'com.google.guava:guava:20.0'
 }

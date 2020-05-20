@@ -62,12 +62,15 @@ class _MyAppState extends State<MyApp> {
 //      fetchData();
 //      deleteData();
 //        updateData();
-
 //        watchData();
+//      aggregateCollection();
 
-      aggregateCollection();
+      await client.callFunction("sum", args: [8, 4], requestTimeout: 30000).then((value) {
+        print(value);
+      });
+
     } on PlatformException catch (e) {
-      debugPrint("Error! ${e.message}");
+      print("Error! ${e.message}");
     } on Exception {}
   }
 
