@@ -30,6 +30,10 @@ The minimum required it's Android 5.0(API 21) or iOS 11.0
 * Google
 * Facebook
 
+<b>Authentication</b>
+* Reset Password
+* Login/Sign in/Logout
+
 <b>Functions</b>
 * Calling a Stitch function
 
@@ -57,12 +61,21 @@ Inorder to use the client define:
 
 ### Authentication
 
-#### Login
  Inorder to use the auth part define:
 ```dart
 final auth = client.auth;
 ```
 
+You can retrieve the current logged user by:
+```dart
+final user = client.auth.user;
+
+// for more details (like email,birthday) use his 'profile' attribute
+// For example:
+final userEmail = user.profile.email;
+```
+
+#### Login
 Login a user with Anonymous provider:
 ```dart
 CoreStitchUser mongoUser = await auth.loginWithCredential(AnonymousCredential());
@@ -112,6 +125,13 @@ CoreStitchUser mongoUser = await auth.registerWithEmail(
 ```dart
 // Logout the current user:
 await auth.logout()
+```
+
+#### Reset Password
+You can send an email to reset user password:
+(email must be linked to an existing account)
+```dart
+await client.auth.sendResetPasswordEmail(<YOUR_DESIRED_EMAIL>);
 ```
 
 ### Database
