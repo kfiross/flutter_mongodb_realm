@@ -150,10 +150,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             result.error("Error", "Failed to Login", "")
 
         task!!.addOnSuccessListener {
-            result.success(mapOf(
-                    "id" to it.id,
-                    "device_id" to it.deviceId
-            ))
+            result.success(it.toMap())
         }.addOnFailureListener {
             result.error("ERROR", "Anonymous Provider Not Deployed", "")
         }
@@ -165,15 +162,8 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         val task = client.signInWithUsernamePassword(username, password)
 
-        if (task == null)
-            result.error("Error", "Failed to Login", "")
-
-
-        task!!.addOnSuccessListener {
-            result.success(mapOf(
-                    "id" to it.id,
-                    "device_id" to it.deviceId
-            ))
+        task.addOnSuccessListener {
+            result.success(it.toMap())
         }.addOnFailureListener {
             result.error("ERROR", "UserEmailPassword Provider Login failed: ${it.message}", "")
         }
@@ -184,16 +174,12 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         val task = client.signInWithGoogle(authCode)
 
-
         task.addOnCompleteListener {
             if(it.isSuccessful){
-                result.success(mapOf(
-                        "id" to it.result?.id,
-                        "device_id" to it.result?.deviceId
-                ))
+                result.success(it.result!!.toMap())
             }
             else{
-                result.error("ERROR", "Google Provider Login failed: ", null)//${it.exception?.message}", "")
+                result.error("ERROR", "Google Provider Login failed: ${it.exception?.message ?: '?'}", null)//${it.exception?.message}", "")
             }
         }
     }
@@ -202,14 +188,10 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         val token = call.argument<String>("token") ?: ""
 
         val task = client.signInWithFacebook(token)
-
-
+        
         task.addOnCompleteListener {
             if(it.isSuccessful){
-                result.success(mapOf(
-                        "id" to it.result?.id,
-                        "device_id" to it.result?.deviceId
-                ))
+                result.success(it.result!!.toMap())
             }
             else{
                 result.error("ERROR", "Facebook Provider Login failed: ", null)//${it.exception?.message}", "")
@@ -259,21 +241,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     private fun getUser(@NonNull result: Result) {
         val user = client.getUser()
 
-        result.success(mapOf(
-                "id" to user?.id,
-                "device_id" to user?.deviceId,
-                "profile" to mapOf(
-                    "name" to user?.profile?.name,
-                    "email" to user?.profile?.email,
-                    "pictureUrl" to user?.profile?.pictureUrl,
-                    "firstName" to user?.profile?.firstName,
-                    "lastName" to user?.profile?.lastName,
-                    "gender" to user?.profile?.gender,
-                    "birthday" to user?.profile?.birthday,
-                    "minAge" to user?.profile?.minAge,
-                    "maxAge" to user?.profile?.maxAge
-                )
-        ))
+        result.success(user?.toMap() ?: emptyMap<String, Any>())
     }
 
     private fun sendResetPasswordEmail(@NonNull call: MethodCall, @NonNull result: Result){
@@ -286,13 +254,13 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         val task = client.sendResetPasswordEmail(email!!)
 
         if (task == null)
-            result.error("Error", "Failed to insert a document", "")
+            result.error("Error", "Failed to send a reset password email", "")
 
         task!!.addOnCompleteListener {
             if (it.isSuccessful)
                 result.success(true)
             else
-                result.error("Error", "Failed to send a reset password email: ${it.exception?.message ?: '?'}", null)
+                result.error("Error", "Failed to send a reset password email: ${it.exception?.message}", null)
 
         }
     }
@@ -320,7 +288,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccessful)
                 result.success(true)
             else
-                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+                result.error("Error", "Failed to insert a document: ${it.exception?.message ?: '?'}", null)
 
         }
     }
@@ -345,7 +313,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if(it.isSuccessful)
                 result.success(true)
             else
-                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+                result.error("Error", "Failed to insert a document ${it.exception?.message}", null)
 
         }
     }
@@ -369,7 +337,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccessful)
                 result.success(it.result?.deletedCount)
             else
-                result.error("Error", "Failed to delete a document - Permission DENIED", "")
+                result.error("Error", "Failed to delete a document: ${it.exception?.message ?: '?'}", "")
 
         }
     }
@@ -392,7 +360,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccessful)
                 result.success(it.result?.deletedCount)
             else
-                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+                result.error("Error", "Failed to insert a document: ${it.exception?.message ?: '?'}", "")
 
         }
     }
@@ -428,7 +396,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccessful)
                 result.success(queryResults)
             else
-                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+                result.error("Error", "Failed to insert a document: ${it.exception?.message ?: '?'}", "")
 
         }
     }
@@ -454,7 +422,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccessful)
                 result.success(it.result?.toJson())
             else
-                result.error("Error", "Failed to insert a document - Permission DENIED", "")
+                result.error("Error", "Failed to insert a document: ${it.exception?.message ?: '?'}", "")
 
         }
     }
@@ -478,7 +446,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccessful)
                 result.success(it.result)
             else
-                result.error("Error", "Failed to count the collection - Permission DENIED", "")
+                result.error("Error", "Failed to count the collection: ${it.exception?.message ?: '?'}", "")
 
         }
     }
@@ -504,7 +472,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccessful)
                 result.success(listOf(it.result?.matchedCount,it.result?.modifiedCount))
             else
-                result.error("Error", "Failed to update the collection - Permission DENIED", "")
+                result.error("Error", "Failed to update the collection: ${it.exception?.message ?: '?'}", "")
 
         }
     }
@@ -523,13 +491,13 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         )
 
         if (task == null)
-            result.error("Error", "Failed to update a document", "")
+            result.error("Error", "Failed to update the collection", null)
 
         task!!.addOnCompleteListener {
             if (it.isSuccessful)
                 result.success(listOf(it.result?.matchedCount,it.result?.modifiedCount))
             else
-                result.error("Error", "Failed to update the collection - Permission DENIED", "")
+                result.error("Error", "Failed to update the collection: : ${it.exception?.message ?: '?'}", "")
 
         }
     }
@@ -557,7 +525,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccessful)
                 result.success(aggregationResults)
             else
-                result.error("Error", "Failed to perform aggregation - Permission DENIED", "")
+                result.error("Error", "Failed to perform aggregation: ${it.exception?.message ?: '?'}", "")
 
         }
     }

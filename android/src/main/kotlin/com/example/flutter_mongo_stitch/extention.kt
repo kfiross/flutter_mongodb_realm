@@ -1,10 +1,11 @@
 package com.example.flutter_mongo_stitch
 
+import com.mongodb.stitch.android.core.auth.StitchUser
 import org.bson.BsonType
 import org.bson.BsonValue
 
 fun BsonValue.toJavaValue(): Any {
-    return when(this.bsonType){
+    return when (this.bsonType) {
 //        BsonType.END_OF_DOCUMENT -> null
         BsonType.DOUBLE -> this.asDouble().value
         BsonType.STRING -> this.asString().value
@@ -30,4 +31,22 @@ fun BsonValue.toJavaValue(): Any {
 
         else -> this.asString().value //??
     }
+}
+
+fun StitchUser.toMap(): Map<String, Any> {
+    return mapOf(
+            "id" to id,
+            "device_id" to deviceId,
+            "profile" to mapOf(
+                    "name" to profile?.name,
+                    "email" to profile?.email,
+                    "pictureUrl" to profile?.pictureUrl,
+                    "firstName" to profile?.firstName,
+                    "lastName" to profile?.lastName,
+                    "gender" to profile?.gender,
+                    "birthday" to profile?.birthday,
+                    "minAge" to profile?.minAge,
+                    "maxAge" to profile?.maxAge
+            )
+    )
 }

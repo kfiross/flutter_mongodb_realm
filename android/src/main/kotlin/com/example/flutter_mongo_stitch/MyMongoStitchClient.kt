@@ -71,10 +71,10 @@ class MyMongoStitchClient(
         return auth.user?.isLoggedIn ?: false
     }
 
-    fun signInAnonymously(): Task<StitchUser>?
+    fun signInAnonymously(): Task<StitchUser>
             = auth.loginWithCredential(AnonymousCredential())
 
-    fun signInWithUsernamePassword(username: String, password: String ): Task<StitchUser>? {
+    fun signInWithUsernamePassword(username: String, password: String ): Task<StitchUser> {
         return auth.loginWithCredential(UserPasswordCredential(username, password))
     }
 
