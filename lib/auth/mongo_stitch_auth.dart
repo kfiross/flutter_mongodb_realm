@@ -81,6 +81,14 @@ class MongoStitchAuth {
     var result = await FlutterMongoStitch.registerWithEmail(email, password);
     return result;
   }
+
+  Future<bool> sendResetPasswordEmail(String email) async{
+    var result = await FlutterMongoStitch.sendResetPasswordEmail(email);
+    return result;
+  }
+
+  Future<CoreStitchUser> get user async => await FlutterMongoStitch.getUser();
+
 }
 
 

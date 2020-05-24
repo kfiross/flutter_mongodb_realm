@@ -1,5 +1,7 @@
 package com.example.flutter_mongo_stitch
 
+import android.net.Uri
+import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.mongodb.stitch.android.core.StitchAppClient
 import com.mongodb.stitch.android.core.auth.StitchAuth
@@ -35,6 +37,31 @@ class MyMongoStitchClient(
     fun getUser(): StitchUser? {
         return auth.user
     }
+
+//    fun confirmUser() {
+//        //var uri = Intent.getIntent().getData();
+//
+//        val token = uri.getQueryParameter("token");
+//        val tokenId = uri.getQueryParameter("tokenId");
+//
+//        val emailPassClient = auth.getProviderClient(UserPasswordAuthProviderClient.factory)
+//
+//        emailPassClient.confirmUser(token, tokenId)
+//                .addOnCompleteListener {
+//                    if (it.isSuccessful) {
+//                        Log.d("stitch", "Successfully reset user's password");
+//                    } else {
+//                        Log.e("stitch", "Error resetting user's password:", task.getException());
+//                    }
+//
+//                }
+//    }
+
+    fun sendResetPasswordEmail(email: String): Task<Void>? {
+        val emailPassClient = auth.getProviderClient(UserPasswordAuthProviderClient.factory)
+        return emailPassClient.sendResetPasswordEmail(email)
+    }
+
 
     fun getUserId(): String?{
         return auth.user?.id

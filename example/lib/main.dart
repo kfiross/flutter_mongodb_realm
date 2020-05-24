@@ -37,8 +37,9 @@ class _MyAppState extends State<MyApp> {
       // login Anonymously
 
       CoreStitchUser mongoUser =
-          await client.auth.loginWithCredential(AnonymousCredential()
-//          UserPasswordCredential(username: "kfir25816@gmail.com",password: "12345678")
+          await client.auth.loginWithCredential(
+//              AnonymousCredential()
+          UserPasswordCredential(username: "kfir25816@gmail.com",password: "asdfghj")
               );
 
 //      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
@@ -50,6 +51,9 @@ class _MyAppState extends State<MyApp> {
 //          );
       if (mongoUser != null) {
         print("logged in as ${mongoUser.id}");
+      }
+      else {
+        print("wrong pass or username");
       }
 
       // sign out
@@ -65,9 +69,9 @@ class _MyAppState extends State<MyApp> {
 //        watchData();
 //      aggregateCollection();
 
-      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
-        print(value);
-      });
+//      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
+//        print(value);
+//      });
 
     } on PlatformException catch (e) {
       print("Error! ${e.message}");
@@ -377,7 +381,24 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: \n'),
+          child: Column(
+            children: <Widget>[
+              Text('Running on: \n'),
+              RaisedButton(
+                child: Text("Reset Password"),
+                onPressed: () async{
+                  try {
+                    var currUser = await client.auth.user;
+                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
+                    print(success);
+                  }
+                  on PlatformException catch (e){
+                    print(e.message ?? 'Unkown error');
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

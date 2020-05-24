@@ -18,54 +18,30 @@ class FlutterMongoStitch {
 
   static Future signInAnonymously() async {
     final result = await _channel.invokeMethod('signInAnonymously');
-
-    var map = <String, dynamic>{};
-    result.forEach((key, value) {
-      map[key] = value;
-    });
-
-    return CoreStitchUser.fromMap(map);
+    return CoreStitchUser.fromMap(result);
   }
 
   static Future<CoreStitchUser> signInWithUsernamePassword(
       String username, String password) async {
-    final LinkedHashMap result = await _channel.invokeMethod(
+    final result = await _channel.invokeMethod(
         'signInWithUsernamePassword',
         {'username': username, 'password': password});
 
-    var map = <String, dynamic>{};
-    result.forEach((key, value) {
-      map[key] = value;
-    });
-
-    return CoreStitchUser.fromMap(map);
+    return CoreStitchUser.fromMap(result);
   }
 
   static Future<CoreStitchUser> signInWithGoogle(String authCode) async{
     final LinkedHashMap result = await _channel.invokeMethod(
         'signInWithGoogle', {'code': authCode});
-
-    var map = <String, dynamic>{};
-    result.forEach((key, value) {
-      map[key] = value;
-    });
-
-    return CoreStitchUser.fromMap(map);
+    return CoreStitchUser.fromMap(result);
   }
 
   static Future<CoreStitchUser> signInWithFacebook(String accessToken) async{
     final LinkedHashMap result = await _channel.invokeMethod(
         'signInWithFacebook', {'token': accessToken});
 
-    var map = <String, dynamic>{};
-    result.forEach((key, value) {
-      map[key] = value;
-    });
-
-    return CoreStitchUser.fromMap(map);
+    return CoreStitchUser.fromMap(result);
   }
-
-
 
   static Future logout() async {
     final result = await _channel.invokeMethod('logout');
@@ -85,6 +61,20 @@ class FlutterMongoStitch {
 
     return result;
   }
+
+  static Future<CoreStitchUser> getUser() async{
+    final LinkedHashMap result = await _channel.invokeMethod('getUser');
+    return CoreStitchUser.fromMap(result);
+  }
+
+  static Future<bool> sendResetPasswordEmail(String email) async {
+    final result = await _channel.invokeMethod(
+        'sendResetPasswordEmail', {'email': email});
+
+    return result;
+  }
+
+
 
   /// /////////////////////////////////////////////////////////////////
 

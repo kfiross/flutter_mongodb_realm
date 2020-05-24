@@ -71,6 +71,8 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
             "connectMongo" -> connectMongo(call, result)
+
+            // Database
             "insertDocument" -> insertDocument(call, result)
             "insertDocuments" -> insertDocuments(call, result)
             "deleteDocument" -> deleteDocument(call, result)
@@ -82,7 +84,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             "updateDocuments" -> updateDocuments(call , result)
             "aggregate" -> aggregate(call, result)
 
-            /////
+            // Auth
             "signInAnonymously" -> signInAnonymously(result)
             "signInWithUsernamePassword" -> signInWithUsernamePassword(call, result)
             "signInWithGoogle" -> signInWithGoogle(call, result)
@@ -91,8 +93,10 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             "registerWithEmail" -> registerWithEmail(call, result)
             "logout" -> logout(result)
             "getUserId" -> getUserId(result)
+            "getUser" -> getUser(result)
+            "sendResetPasswordEmail" -> sendResetPasswordEmail(call, result)
 
-            ////
+            // Stitch Functions
             "callFunction" -> callFunction(call, result)
 
             else -> result.notImplemented()
@@ -250,7 +254,47 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         } else {
             result.success(id)
         }
+    }
 
+    private fun getUser(@NonNull result: Result) {
+        val user = client.getUser()
+
+        result.success(mapOf(
+                "id" to user?.id,
+                "device_id" to user?.deviceId,
+                "profile" to mapOf(
+                    "name" to user?.profile?.name,
+                    "email" to user?.profile?.email,
+                    "pictureUrl" to user?.profile?.pictureUrl,
+                    "firstName" to user?.profile?.firstName,
+                    "lastName" to user?.profile?.lastName,
+                    "gender" to user?.profile?.gender,
+                    "birthday" to user?.profile?.birthday,
+                    "minAge" to user?.profile?.minAge,
+                    "maxAge" to user?.profile?.maxAge
+                )
+        ))
+    }
+
+    private fun sendResetPasswordEmail(@NonNull call: MethodCall, @NonNull result: Result){
+        val email = call.argument<String>("email")
+
+        if(email.isNullOrEmpty()){
+            result.error("ERROR", "must sent to a valid email", null)
+        }
+
+        val task = client.sendResetPasswordEmail(email!!)
+
+        if (task == null)
+            result.error("Error", "Failed to insert a document", "")
+
+        task!!.addOnCompleteListener {
+            if (it.isSuccessful)
+                result.success(true)
+            else
+                result.error("Error", "Failed to send a reset password email: ${it.exception?.message ?: '?'}", null)
+
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////////
