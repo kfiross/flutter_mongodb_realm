@@ -198,7 +198,6 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
     }
     
     
-    
     func signInWithFacebook(call: FlutterMethodCall, result: @escaping FlutterResult){
         let args = call.arguments as! Dictionary<String, Any>
         
