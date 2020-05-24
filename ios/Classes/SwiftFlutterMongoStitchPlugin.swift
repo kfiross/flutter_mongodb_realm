@@ -103,6 +103,14 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             self.getUserId(result)
             break
             
+        case "getUser":
+            self.getUser(result)
+            break
+            
+        case "sendResetPasswordEmail":
+            self.sendResetPasswordEmail(call: call, result: result)
+            break
+            
         ////
         case "callFunction":
             self.callFunction(call: call, result: result)
@@ -137,7 +145,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         let mongoClient = try? stitchAppClient.serviceClient(
             fromFactory: remoteMongoClientFactory, withName: "mongodb-atlas"
         )
-        
+                
         self.client = MyMongoStitchClient(client: mongoClient!, appClient: stitchAppClient)
         result(true)
     }
@@ -165,9 +173,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             username: username ?? "",
             password: password ?? "",
             onCompleted: { user in
-                result([
-                    "id": user.id
-                ])
+                result(user.toMap())
             },
             onError: { message in
                 result(FlutterError(code: "ERROR",message: message, details: nil))
@@ -183,9 +189,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         self.client?.signInWithGoogle(
             authCode: authCode ?? "",
             onCompleted: { user in
-                result([
-                    "id": user.id
-                ])
+                 result(user.toMap())
             },
             onError: { message in
                 result(FlutterError(code: "ERROR",message: message, details: nil))
@@ -203,9 +207,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         self.client?.signInWithFacebook(
             accessToken: accessToken ?? "",
             onCompleted: { user in
-                result([
-                    "id": user.id
-                ])
+                 result(user.toMap())
             },
             onError: { message in
                 result(FlutterError(code: "ERROR",message: message, details: nil))
@@ -250,6 +252,37 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         } else {
             result(id)
         }
+    }
+    
+    func getUser(_ result: @escaping FlutterResult){
+        let user = self.client?.getUser()
+    
+        if (user == nil){
+            result([])
+        }
+        else {
+            result(user!.toMap())
+        }
+    }
+    
+    func sendResetPasswordEmail(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let args = call.arguments as! Dictionary<String, Any>
+        let email = args["email"] as? String
+        
+        if(email==nil || email!.isEmpty){
+            result(FlutterError(code: "ERROR", message: "must send to a valid email", details: nil))
+        }
+        
+        self.client?.sendResetPasswordEmail(
+            email: email!,
+            onCompleted: {
+                result(true)
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR", message: message, details: nil))
+            }
+        )
+        
     }
     
     /// ====================================

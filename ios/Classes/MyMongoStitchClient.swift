@@ -241,6 +241,27 @@ class MyMongoStitchClient {
         
     }
     
+    func sendResetPasswordEmail(
+        email: String,
+        onCompleted: @escaping ()->Void,
+        onError: @escaping (String?)->Void
+    ) {
+        let emailPassClient = self.auth.providerClient(fromFactory: userPasswordClientFactory)
+        
+        return emailPassClient.sendResetPasswordEmail(toEmail: email) { result in
+        switch result {
+        case .success(let _):
+            onCompleted()
+        case .failure(let error):
+            onError("Failed to send a reset password email: \(error)")
+            }
+        }
+    }
+    
+    func getUser() -> StitchUser? {
+        return self.auth.currentUser
+    }
+    
     func getUserId() -> String? {
         return self.auth.currentUser?.id
     }
