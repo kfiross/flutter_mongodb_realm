@@ -41,9 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-   client.callFunction("sum", args: [3, 4]).then((value) {
-     print(value);
-   });
+//   client.callFunction("sum", args: [3, 4]).then((value) {
+//     print(value);
+//   });
   }
 
   @override
@@ -61,11 +61,15 @@ class _HomeScreenState extends State<HomeScreen> {
       top: false,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Welcome"),
+          title: Text("Home Screen"),
           actions: <Widget>[
             FlatButton(
               child: Icon(Icons.refresh, color: Colors.white),
               onPressed: _fetchStudents,
+            ),
+            FlatButton(
+              child: Icon(Icons.exit_to_app, color: Colors.white),
+              onPressed: () { client.auth.logout(); },
             )
           ],
         ),

@@ -6,6 +6,9 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+import 'home_screen.dart';
+import 'login_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MongoStitchClient.initializeApp("mystitchapp-fjpmn");
@@ -30,6 +33,14 @@ class _MyAppState extends State<MyApp> {
     // initialized MongoStitch App
 
     try {
+      client.auth.authListener().listen((data) {
+        final user = data == null ? null : CoreStitchUser.fromMap(data);
+
+        if (user != null) {
+          // enter the home screen
+        }
+      });
+
       // create a user
 //        await client.auth
 //            .registerWithEmail(email: "cookie2", password: "12345678");
@@ -49,6 +60,7 @@ class _MyAppState extends State<MyApp> {
 //      )
 ////          FacebookCredential(permissions: ["email"])
 //          );
+
       if (mongoUser != null) {
         print("logged in as ${mongoUser.id}");
       }
@@ -66,7 +78,7 @@ class _MyAppState extends State<MyApp> {
 //      fetchData();
 //      deleteData();
 //        updateData();
-//        watchData();
+        watchData();
 //      aggregateCollection();
 
 //      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
@@ -329,7 +341,6 @@ class _MyAppState extends State<MyApp> {
         );
 
     try {
-
       /// addFields
 //      List<PipelineStage> pipeline = [
 //        PipelineStage.addFields({
@@ -363,7 +374,6 @@ class _MyAppState extends State<MyApp> {
 //        }),
 //      ];
 
-
       var list = await collection.aggregate(pipeline);
       print(list.length);
     } on PlatformException catch (e) {
@@ -376,6 +386,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+//      home: _authBuilder(context),
+
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
@@ -401,6 +413,44 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
+    );
+  }
+
+  StreamBuilder _authBuilder(BuildContext context) {
+    return StreamBuilder(
+      stream: client.auth.authListener(),
+      builder: (context, AsyncSnapshot snapshot) {
+
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            // show loading indicator
+            return Scaffold(body: Center(child: CircularProgressIndicator()));
+
+          case ConnectionState.active:
+            // log error to console
+            if (snapshot.error != null) {
+              print("error");
+              return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  snapshot.error.toString(),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontFamily: "ariel",
+                  ),
+                ),
+              );
+            }
+
+            // redirect to the proper page
+            return snapshot.hasData ? HomeScreen() : LoginScreen();
+
+          default:
+            return LoginScreen();
+        }
+      },
     );
   }
 }

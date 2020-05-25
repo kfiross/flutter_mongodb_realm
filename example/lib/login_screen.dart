@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login To MongoStitch"),
+        title: Text("Welcome To MongoStitch"),
       ),
       body: Center(
         child: Form(
@@ -58,8 +58,8 @@ class _LoginScreenState extends State<LoginScreen> {
               validator: (String val) {
                 if (val.isEmpty) return "Password can't be empty.";
 
-                if (val.length < 8)
-                  return "Password must be at least 8 charcaters long";
+                if (val.length < 6)
+                  return "Password must be at least 6 charcaters long";
 
                 return null;
               },
@@ -117,8 +117,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (mongoUser != null) {
       // String userId = mongoUser.id;
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => HomeScreen()));
+//      Navigator.pushReplacement(
+//          context, MaterialPageRoute(builder: (_) => HomeScreen()));
 
 
       Fluttertoast.showToast(
@@ -146,8 +146,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
           if (mongoUser != null) {
             // String userId = mongoUser.id;
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => HomeScreen()));
+//            Navigator.pushReplacement(
+//                context, MaterialPageRoute(builder: (_) => HomeScreen()));
 
             Fluttertoast.showToast(
                 msg: "Welcome back!",
