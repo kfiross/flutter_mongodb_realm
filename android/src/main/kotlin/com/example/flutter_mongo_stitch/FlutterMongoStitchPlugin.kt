@@ -11,19 +11,16 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 import com.mongodb.stitch.android.core.Stitch
 import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
 import io.flutter.plugin.common.EventChannel
-import com.google.android.gms.common.Scopes
-import com.google.android.gms.common.api.Scope
-import android.R.attr.data
 import android.content.Context
-import com.google.android.gms.tasks.Task
-import androidx.core.app.ActivityCompat.startActivityForResult
-import android.content.Intent
+import com.example.flutter_mongo_stitch.streamHandlers.AuthStreamHandler
+import com.example.flutter_mongo_stitch.streamHandlers.StreamHandler
+import com.mongodb.stitch.android.core.StitchAppClient
 
 
 /** FlutterMongoStitchPlugin */
 public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
-
+    private lateinit var stitchAppClient: StitchAppClient
     private lateinit var client: MyMongoStitchClient
     private lateinit var appContext: Context
 
@@ -44,10 +41,16 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         streamsChannel = StreamsChannel(flutterPluginBinding.binaryMessenger, "streams_channel_test")
         streamsChannel.setStreamHandlerFactory(object: StreamsChannel.StreamHandlerFactory{
-            override fun create(arguments: Any?): EventChannel.StreamHandler {
-                return StreamHandler(client, arguments)
-            }
+            override fun create(arguments: Any?): EventChannel.StreamHandler? {
+                if (arguments == null || arguments !is Map<*, *> || arguments["handler"] == null)
+                    return null
 
+                return when(arguments["handler"]){
+                    "watchCollection" -> StreamHandler(client, arguments)
+                    "auth" -> AuthStreamHandler(stitchAppClient, arguments)
+                    else -> null
+                }
+            }
         })
     }
 
@@ -114,7 +117,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         Stitch.initializeDefaultAppClient(clientAppId!!)
 
-        val stitchAppClient = Stitch.getDefaultAppClient()
+        stitchAppClient = Stitch.getDefaultAppClient()
 
         val mongoClient = stitchAppClient.getServiceClient(
                 RemoteMongoClient.factory,
@@ -146,10 +149,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     private fun signInAnonymously(@NonNull result: Result) {
         val task = client.signInAnonymously()
 
-        if (task == null)
-            result.error("Error", "Failed to Login", "")
-
-        task!!.addOnSuccessListener {
+        task.addOnSuccessListener {
             result.success(it.toMap())
         }.addOnFailureListener {
             result.error("ERROR", "Anonymous Provider Not Deployed", "")
@@ -188,7 +188,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         val token = call.argument<String>("token") ?: ""
 
         val task = client.signInWithFacebook(token)
-        
+
         task.addOnCompleteListener {
             if(it.isSuccessful){
                 result.success(it.result!!.toMap())
@@ -241,7 +241,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     private fun getUser(@NonNull result: Result) {
         val user = client.getUser()
 
-        result.success(user?.toMap() ?: emptyMap<String, Any>())
+        result.success(user?.toMap())
     }
 
     private fun sendResetPasswordEmail(@NonNull call: MethodCall, @NonNull result: Result){

@@ -89,9 +89,18 @@ class MongoStitchAuth {
 
   Future<CoreStitchUser> get user async => await FlutterMongoStitch.getUser();
 
+
+  Stream authListener() {
+    var stream = FlutterMongoStitch.authListener(
+
+    );
+
+    return stream;
+  }
+
 }
 
-
+/// ////////////////////////////////////////////////////////////////
 
 class _FacebookLoginWrapper{
   final FacebookLogin _facebookSignIn = FacebookLogin();

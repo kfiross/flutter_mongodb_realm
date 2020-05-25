@@ -95,6 +95,7 @@ class MyMongoStitchClient(
         return emailPassClient.registerWithEmail(email, password)
     }
 
+
     /** ========================== Database-related function  ========================= **/
     private fun getCollection(databaseName: String?, collectionName: String?): RemoteMongoCollection<Document>? {
         if(databaseName == null || collectionName == null)
@@ -299,6 +300,8 @@ class MyMongoStitchClient(
                 BsonValue::class.java
         )
     }
+
+
 
 
 }
