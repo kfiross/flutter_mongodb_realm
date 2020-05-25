@@ -200,7 +200,8 @@ class FlutterMongoStitch {
   }) {
     // continuous stream of events from platform side
     return _streamsChannel.receiveBroadcastStream({
-      "database": databaseName,
+      "handler": "watchCollection",
+      "db": databaseName,
       "collection": collectionName,
       "filter": filter
     });
@@ -225,6 +226,13 @@ class FlutterMongoStitch {
     });
 
     return result;
+  }
+
+  static Stream authListener() {
+    // continuous stream of events from platform side
+    return _streamsChannel.receiveBroadcastStream({
+      "handler": "auth",
+    });
   }
 
 

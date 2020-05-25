@@ -137,8 +137,8 @@ class MongoCollection {
       }
     }
 
-    var sortMap = options.sort?.map((k, v) => MapEntry(k, v.value));
-    var projectionMap = options.projection?.map((k, v) => MapEntry(k, v.value));
+    var sortMap = options?.sort?.map((k, v) => MapEntry(k, v.value));
+    var projectionMap = options?.projection?.map((k, v) => MapEntry(k, v.value));
 
 
     List<dynamic> resultJson = await FlutterMongoStitch.findDocuments(
@@ -146,7 +146,7 @@ class MongoCollection {
       databaseName: this.databaseName,
       filter: BsonDocument(filterCopy).toJson(),
       projection: projectionMap==null? null : jsonEncode(projectionMap),
-      limit: options.limit,
+      limit: options?.limit ?? 0,
       sort: sortMap==null ? null : jsonEncode(sortMap),
     );
 
