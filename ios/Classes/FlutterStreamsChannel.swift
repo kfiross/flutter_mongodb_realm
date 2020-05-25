@@ -89,7 +89,7 @@ class FlutterStreamsChannel{
             let name = "\(self._name)#\(key)";
             
             
-            if (event as! NSObject == FlutterEndOfEventStream) {
+            if (event==nil || event as! NSObject == FlutterEndOfEventStream) {
                 self._messenger.send(onChannel: name, message: nil)
             } else if (event is FlutterError){ //([event isKindOfClass:[FlutterError class]]) {
                 self._messenger.send(onChannel: name, message: self._codec.encodeSuccessEnvelope(event as! FlutterError))

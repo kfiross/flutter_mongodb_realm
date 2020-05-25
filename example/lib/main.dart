@@ -33,13 +33,7 @@ class _MyAppState extends State<MyApp> {
     // initialized MongoStitch App
 
     try {
-      client.auth.authListener().listen((data) {
-        final user = data == null ? null : CoreStitchUser.fromMap(data);
 
-        if (user != null) {
-          // enter the home screen
-        }
-      });
 
       // create a user
 //        await client.auth
@@ -47,11 +41,11 @@ class _MyAppState extends State<MyApp> {
 
       // login Anonymously
 
-      CoreStitchUser mongoUser =
-          await client.auth.loginWithCredential(
-//              AnonymousCredential()
-          UserPasswordCredential(username: "kfir25816@gmail.com",password: "asdfghj")
-              );
+//      CoreStitchUser mongoUser =
+//          await client.auth.loginWithCredential(
+////              AnonymousCredential()
+//          UserPasswordCredential(username: "kfir25816@gmail.com",password: "asdfghj")
+//              );
 
 //      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
 //          GoogleCredential(
@@ -61,12 +55,12 @@ class _MyAppState extends State<MyApp> {
 ////          FacebookCredential(permissions: ["email"])
 //          );
 
-      if (mongoUser != null) {
-        print("logged in as ${mongoUser.id}");
-      }
-      else {
-        print("wrong pass or username");
-      }
+//      if (mongoUser != null) {
+//        print("logged in as ${mongoUser.id}");
+//      }
+//      else {
+//        print("wrong pass or username");
+//      }
 
       // sign out
 
@@ -386,33 +380,33 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-//      home: _authBuilder(context),
+      home: _authBuilder(context),
 
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Text('Running on: \n'),
-              RaisedButton(
-                child: Text("Reset Password"),
-                onPressed: () async{
-                  try {
-                    var currUser = await client.auth.user;
-                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
-                    print(success);
-                  }
-                  on PlatformException catch (e){
-                    print(e.message ?? 'Unkown error');
-                  }
-                },
-              )
-            ],
-          ),
-        ),
-      ),
+//      home: Scaffold(
+//        appBar: AppBar(
+//          title: const Text('Plugin example app'),
+//        ),
+//        body: Center(
+//          child: Column(
+//            children: <Widget>[
+//              Text('Running on: \n'),
+//              RaisedButton(
+//                child: Text("Reset Password"),
+//                onPressed: () async{
+//                  try {
+//                    var currUser = await client.auth.user;
+//                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
+//                    print(success);
+//                  }
+//                  on PlatformException catch (e){
+//                    print(e.message ?? 'Unkown error');
+//                  }
+//                },
+//              )
+//            ],
+//          ),
+//        ),
+//      ),
     );
   }
 

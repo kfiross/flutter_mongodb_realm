@@ -19,7 +19,25 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         
         let streamsChannel = FlutterStreamsChannel(name: "streams_channel_test", binaryMessenger: registrar.messenger())
         streamsChannel.setStreamHandlerFactory { arguments in
-            return StreamHandler(client: instance.client!) // StreamHandler is an instance FlutterStreamHandler
+            if (arguments==nil || !(arguments is Dictionary<String, Any>)){
+                return nil
+            }
+            
+            if let args = arguments as? Dictionary<String, Any> {
+                if let handlerName = args["handler"] as? String{
+                    switch(handlerName){
+                    case "watchCollection":
+                        return StreamHandler(client: instance.client!) // StreamHandler is an instance FlutterStreamHandler
+                    
+                    case "auth":
+                        return AuthStreamHandler(appClient: instance.client!.appClient)
+                    
+                    default:
+                        return nil
+                    }
+                }
+            }
+            return nil
         }
     }
     
@@ -129,7 +147,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
     
     func connectMongo(call: FlutterMethodCall, result: @escaping FlutterResult) {
         
-        var args = call.arguments as! Dictionary<String, Any>
+        let args = call.arguments as! Dictionary<String, Any>
         let clientAppId = args["app_id"] as? String
         
         if (clientAppId == nil) {
