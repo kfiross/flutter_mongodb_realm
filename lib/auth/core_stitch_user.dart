@@ -18,10 +18,14 @@ class CoreStitchUser {
 //  final bool isLoggedIn;
 //  final DateTime lastAuthActivity;
 
-  CoreStitchUser.fromMap(Map map)
-      : id = map["id"],
-        deviceId = map["device_id"],
-        profile = StitchUserProfile.fromMap(map['profile'] ?? Map());
+  static fromMap(Map map) {
+    return (map == null)
+        ? null
+        : CoreStitchUser(
+            id: map["id"],
+            deviceId: map["device_id"],
+            profile: StitchUserProfile.fromMap(map['profile'] ?? Map()));
+  }
 }
 
 class StitchUserProfile {
@@ -48,8 +52,8 @@ class StitchUserProfile {
   });
 
   StitchUserProfile.fromMap(Map map)
-    :name = map["name"] ?? '',
-        email = map["email"]?? '',
+      : name = map["name"] ?? '',
+        email = map["email"] ?? '',
         pictureUrl = map["pictureUrl"] ?? '',
         firstName = map["firstName"] ?? '',
         lastName = map["lastName"] ?? '',
