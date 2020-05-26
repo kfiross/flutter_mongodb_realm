@@ -1,6 +1,6 @@
 # flutter_mongo_stitch
 
-A Flutter plugin for using MongoStitch services.
+Unofficial Flutter plugin for using MongoStitch services.
 
 
 ## Getting started
@@ -132,6 +132,40 @@ You can send an email to reset user password:
 (email must be linked to an existing account)
 ```dart
 await client.auth.sendResetPasswordEmail(<YOUR_DESIRED_EMAIL>);
+```
+
+#### Auth Listener
+You can be notified when the auth state changes, such as login/logout..
+
+<b>Currently works on Android only!</b>
+```dart
+/// for using as smart navigation according to user logged in or not
+StreamBuilder _authBuilder(BuildContext context) {
+  return StreamBuilder(
+    stream: client.auth.authListener(),
+    builder: (context, AsyncSnapshot snapshot) {
+      switch (snapshot.connectionState) {
+        case ConnectionState.none:case ConnectionState.waiting:
+          // show loading indicator
+          return Scaffold(body: Center(child: CircularProgressIndicator()));
+        case ConnectionState.active:
+          // log error to console
+          if (snapshot.error != null) {
+            return Container(
+              alignment: Alignment.center,
+              child: Text(snapshot.error.toString()),
+            );
+          }
+
+          // redirect to the proper page
+          return snapshot.hasData ? HomeScreen() : LoginScreen();
+
+          default:
+            return LoginScreen();
+        }
+      },
+  );
+}
 ```
 
 ### Database
