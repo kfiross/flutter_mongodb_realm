@@ -51,7 +51,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.didChangeDependencies();
 
     _collection = client.getDatabase("test").getCollection("students");
-    await _fetchStudents();
+    try{
+      await _fetchStudents();
+    }
+    catch (e){
+
+    }
   }
 
   @override

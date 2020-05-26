@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
 //      fetchData();
 //      deleteData();
 //        updateData();
-        watchData();
+//        watchData();
 //      aggregateCollection();
 
 //      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
@@ -410,12 +410,14 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  var currentScreen = 0;
   StreamBuilder _authBuilder(BuildContext context) {
+    Stream stream = client.auth.authListener();
     return StreamBuilder(
-      stream: client.auth.authListener(),
+      stream: stream,
       builder: (context, AsyncSnapshot snapshot) {
 
-        switch (snapshot.connectionState) {
+        switch (snapshot. connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
             // show loading indicator
@@ -437,12 +439,19 @@ class _MyAppState extends State<MyApp> {
                 ),
               );
             }
+            currentScreen = snapshot.hasData ? 1 : 0;
 
             // redirect to the proper page
             return snapshot.hasData ? HomeScreen() : LoginScreen();
 
+//          case ConnectionState.done:
+//            stream.take(count)
+
+
+//            return currentScreen == 1 ? HomeScreen() : LoginScreen();
+
           default:
-            return LoginScreen();
+              return Container();
         }
       },
     );

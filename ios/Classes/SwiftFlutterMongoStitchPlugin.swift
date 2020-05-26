@@ -43,6 +43,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         
+        
         switch call.method {
         case "getPlatformVersion":
             self.getPlatformVersion(result: result)

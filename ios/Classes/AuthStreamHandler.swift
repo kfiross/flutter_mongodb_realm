@@ -21,9 +21,9 @@ import StitchRemoteMongoDBService
 //    func watch(eventSink events: @escaping FlutterEventSink) throws {
 //        // Watch the collection for any changes. As long as the changeStreamSession
 //        // is alive, it will continue to send events to the delegate.
-//        self.appClient.auth.add(authDelegate: MyStitchAuthDelegate(eventSink: events))
-//
-//
+//        self.appClient.auth.add(authDelegate: MyStitchAuthDelegate({result in
+//            events(result)
+//        }))
 //    }
 //}
 
@@ -34,13 +34,24 @@ class MyStitchAuthDelegate: StitchAuthDelegate
         self._events = events
     }
     
+//    var _onCompleted: (Any?)->Void
+//    init(_ onCompleted: @escaping (Any?)->Void){
+//        self._onCompleted = onCompleted
+//    }
+    
     func onAuthEvent(fromAuth: StitchAuth) {
-        if let user = fromAuth.currentUser as? StitchUser {
-            _events(user.toMap())
-        }
-        else {
-            _events(nil)
-        }
+//        DispatchQueue.main.async {
+            // Call the desired channel message here.
+            let user = fromAuth.currentUser
+            
+            if (user != nil){
+                self._events(user!.toMap())
+            }
+            else {
+                self._events(nil)
+            }
+//        }
+        
     }
   
 }
@@ -77,6 +88,7 @@ class AuthStreamHandler : FlutterStreamHandler{
 //        }
 //        do{
 //      try self.authWatcher.watch(eventSink: events)
+//
         self.appClient.auth.add(authDelegate: self.authDelegate!)
 //        }
 //        catch{

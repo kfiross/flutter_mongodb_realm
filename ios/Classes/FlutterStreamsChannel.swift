@@ -88,11 +88,13 @@ class FlutterStreamsChannel{
         stream = FlutterStreamsChannelStream(sink: { event in
             let name = "\(self._name)#\(key)";
             
-            
-            if (event==nil || event as! NSObject == FlutterEndOfEventStream) {
+            if(event == nil){
+                self._messenger.send(onChannel: name, message: self._codec.encodeSuccessEnvelope(nil))
+            }
+            else if (event as! NSObject == FlutterEndOfEventStream) {
                 self._messenger.send(onChannel: name, message: nil)
             } else if (event is FlutterError){ //([event isKindOfClass:[FlutterError class]]) {
-                self._messenger.send(onChannel: name, message: self._codec.encodeSuccessEnvelope(event as! FlutterError))
+                self._messenger.send(onChannel: name, message: self._codec.encodeErrorEnvelope(event as! FlutterError))
             } else {
                 self._messenger.send(onChannel: name, message: self._codec.encodeSuccessEnvelope(event))
             }
@@ -118,7 +120,7 @@ class FlutterStreamsChannel{
         ){
 
         let stream = streams[String(key)] as? FlutterStreamsChannelStream
-        if(stream != nil) {
+        if(stream == nil) {
             callback(self._codec.encodeErrorEnvelope(
                 FlutterError(code: "error", message: "No active stream to cancel", details: nil)
             ))
