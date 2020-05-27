@@ -12,6 +12,40 @@ import MongoSwift
 import StitchCore
 import StitchRemoteMongoDBService
 
+
+class MyCustomDelegate<T>: ChangeStreamDelegate
+    where T: Encodable, T: Decodable
+{
+    var _onCompleted: (Any)->Void
+    init(_ onCompleted: @escaping (Any)->Void){
+        self._onCompleted = onCompleted
+    }
+    
+    func didReceive(event: ChangeEvent<T>) {
+        self._onCompleted((event.fullDocument as! Document).extendedJSON)
+    }
+    
+
+    typealias DocumentT = T
+    
+//    func didReceive(event: ChangeEvent<T>) {
+//        // react to events
+//        ev
+//    }
+    
+    func didReceive(streamError: Error) {
+
+    }
+    
+    func didOpen() {
+        
+    }
+    
+    func didClose() {
+        
+    }
+}
+
 class Watcher {
     var changeStreamSession: ChangeStreamSession<Document>?
     
@@ -65,6 +99,4 @@ class StreamHandler : FlutterStreamHandler{
         
         return nil;
     }
-    
-    
 }

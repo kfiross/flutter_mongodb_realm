@@ -410,7 +410,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  var currentScreen = 0;
   StreamBuilder _authBuilder(BuildContext context) {
     Stream stream = client.auth.authListener();
     return StreamBuilder(
@@ -439,16 +438,10 @@ class _MyAppState extends State<MyApp> {
                 ),
               );
             }
-            currentScreen = snapshot.hasData ? 1 : 0;
 
             // redirect to the proper page
             return snapshot.hasData ? HomeScreen() : LoginScreen();
 
-//          case ConnectionState.done:
-//            stream.take(count)
-
-
-//            return currentScreen == 1 ? HomeScreen() : LoginScreen();
 
           default:
               return Container();

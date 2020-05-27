@@ -648,8 +648,6 @@ class MyMongoStitchClient {
                       onError: @escaping (String?)->Void
         ){
         
-        
-        
         var argsBson = [BSONValue]()
         args?.forEach { value in
             argsBson.append(BsonExtractor.getValue(of: value) ?? "")
@@ -673,40 +671,5 @@ class MyMongoStitchClient {
             }
         }
     }
-    
-    
 }
 
-class MyCustomDelegate<T>: ChangeStreamDelegate
-    where T: Encodable, T: Decodable
-{
-    var _onCompleted: (Any)->Void
-    init(_ onCompleted: @escaping (Any)->Void){
-        self._onCompleted = onCompleted
-    }
-    
-    func didReceive(event: ChangeEvent<T>) {
-        self._onCompleted((event.fullDocument as! Document).extendedJSON)
-    }
-    
-
-    typealias DocumentT = T
-    
-//    func didReceive(event: ChangeEvent<T>) {
-//        // react to events
-//        ev
-//    }
-    
-    func didReceive(streamError: Error) {
-
-    }
-    
-    func didOpen() {
-        
-    }
-    
-    func didClose() {
-        
-    }
-  
-}
