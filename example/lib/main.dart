@@ -380,33 +380,33 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: _authBuilder(context),
+//      home: _authBuilder(context),
 
-//      home: Scaffold(
-//        appBar: AppBar(
-//          title: const Text('Plugin example app'),
-//        ),
-//        body: Center(
-//          child: Column(
-//            children: <Widget>[
-//              Text('Running on: \n'),
-//              RaisedButton(
-//                child: Text("Reset Password"),
-//                onPressed: () async{
-//                  try {
-//                    var currUser = await client.auth.user;
-//                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
-//                    print(success);
-//                  }
-//                  on PlatformException catch (e){
-//                    print(e.message ?? 'Unkown error');
-//                  }
-//                },
-//              )
-//            ],
-//          ),
-//        ),
-//      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Plugin example app'),
+        ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              Text('Running on: \n'),
+              RaisedButton(
+                child: Text("Reset Password"),
+                onPressed: () async{
+                  try {
+                    var currUser = await client.auth.user;
+                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
+                    print(success);
+                  }
+                  on PlatformException catch (e){
+                    print(e.message ?? 'Unkown error');
+                  }
+                },
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
