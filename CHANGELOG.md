@@ -1,6 +1,10 @@
+## 0.5.1
+
+* Added auth listener support also on iOS
+
 ## 0.5.0
 
-* Added auth listener support inorder to monitor auth state changes
+* Added auth listener support inorder to monitor auth state changes (Android only)
 
 ## 0.4.2
 

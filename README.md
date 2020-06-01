@@ -136,8 +136,6 @@ await client.auth.sendResetPasswordEmail(<YOUR_DESIRED_EMAIL>);
 
 #### Auth Listener
 You can be notified when the auth state changes, such as login/logout..
-
-<b>Currently works on Android only!</b>
 ```dart
 /// for using as smart navigation according to user logged in or not
 StreamBuilder _authBuilder(BuildContext context) {
