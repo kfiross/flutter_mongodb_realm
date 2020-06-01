@@ -1,6 +1,6 @@
 name: flutter_mongo_stitch
 description: A Flutter plugin for using services of the serverless platform MongoDB Stitch.
-version: 0.5.0
+version: 0.6.0
 homepage: https://github.com/kfiross/flutter_mongo_stitch
 
 environment:
@@ -14,19 +14,7 @@ dependencies:
   bson: ^0.3.2
   extension: ^0.1.1
   streams_channel: ^0.3.0
-
-  # for using custom provider logins
-  google_sign_in: ^4.4.4
   meta: ^1.0.4
-#  in order to use plugin version from git
-#  remove 2 rows above and Un-comment the following:
-#  google_sign_in:
-#    git:
-#      url: git://github.com/fbcouch/plugins.git
-#      path: packages/google_sign_in
-#      ref: server-auth-code
-
-  flutter_facebook_login: ^3.0.0
 
 dev_dependencies:
   flutter_test:

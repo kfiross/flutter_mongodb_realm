@@ -47,20 +47,7 @@ class _MyAppState extends State<MyApp> {
 //          UserPasswordCredential(username: "kfir25816@gmail.com",password: "asdfghj")
 //              );
 
-//      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
-//          GoogleCredential(
-//        serverClientId: "281897935076-dlab9116cid9cmivd6nilofihip552cr",
-//        scopes: ["email"],
-//      )
-////          FacebookCredential(permissions: ["email"])
-//          );
 
-//      if (mongoUser != null) {
-//        print("logged in as ${mongoUser.id}");
-//      }
-//      else {
-//        print("wrong pass or username");
-//      }
 
       // sign out
 

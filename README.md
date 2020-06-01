@@ -87,16 +87,37 @@ CoreStitchUser mongoUser = await auth.loginWithCredential(
   UserPasswordCredential(username: <email_address>, password: <password>));
 ```
 
-For login with Google/Facebook just configure in the native side.
-
-No need to import the required flutter's packages
+For login with Facebook import the required flutter's package and configure in the native side as their instructions.
 
 Login a user using Google provider:
 
 <b>
-    un-comment the part under google_sign_in in pubspec.yaml to use git repo version instead
-    this has to be done in order to get the auth code need by the Mongo Stitch SDK
+    Inorder to make Google login works, please follow the follwing instructions use the following:<br><br>
+    1. Remove (if used) the version used from pubspec.yaml (ex. google_sign_in: ^4.5.1) <br>
+    2. Use git repo version instead (copy from below)<br>
+    3. In dart code use also serverClientId parmeter
+    <br><br>
+    This has to be done in order to get the auth code need by the Mongo Stitch SDK
 </b>
+
+calling on flutter:
+```dart
+CoreStitchUser mongoUser = await auth.loginWithCredential(
+  GoogleCredential(
+    serverClientId: <Google Server Client Id>, // just the start from "<ID>.apps.googleusercontent.com"   
+    scopes: <list of scopes>,
+));
+```
+in pubspec.yaml:
+```
+.. (other dependencies)
+google_sign_in:
+  git:
+    url: git://github.com/fbcouch/plugins.git
+    path: packages/google_sign_in
+    ref: server-auth-code
+```
+
 
 ```dart
 CoreStitchUser mongoUser = await auth.loginWithCredential(
@@ -109,7 +130,7 @@ CoreStitchUser mongoUser = await auth.loginWithCredential(
 Login a user using Facebook provider:
 ```dart
 CoreStitchUser mongoUser = await auth.loginWithCredential(
-  FacebookCredential(permissions: <list of permissions>));
+  FacebookCredential(<access_token>));
 ```
 
 <b>NOTE: In any case , if mongoUser != null the login was successful.</b>

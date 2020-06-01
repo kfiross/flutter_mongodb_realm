@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 import 'home_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -77,16 +78,40 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 12),
             (_state == LoginState.login)
-                ? Container(
-                    width: 200,
-                    margin: const EdgeInsets.only(bottom: 12),
-                    child: RaisedButton(
-                      color: Colors.red,
-                      child: Text("Login as Anonymous",
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: _loginAnonymously,
-                    ),
-                  )
+                ? Column(
+              children: <Widget>[
+                Container(
+                  width: 200,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: RaisedButton(
+                    color: Colors.red,
+                    child: Text("Login as Anonymous",
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: _loginAnonymously,
+                  ),
+                ),
+                Container(
+                  width: 200,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: RaisedButton(
+                    color: Colors.red,
+                    child: Text("Login with Facebook",
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: _loginWithFacebook,
+                  ),
+                ),
+                Container(
+                  width: 200,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: RaisedButton(
+                    color: Colors.red,
+                    child: Text("Login with Google",
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: _loginWithGoogle,
+                  ),
+                ),
+              ],
+            )
                 : Container(),
             Container(
               width: 200,
@@ -129,6 +154,72 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  _loginWithGoogle() async {
+    CoreStitchUser mongoUser = await client.auth.loginWithCredential(
+        GoogleCredential(
+          serverClientId: "281897935076-dlab9116cid9cmivd6nilofihip552cr",
+          scopes: ["email"],
+        )
+    );
+
+    if (mongoUser != null) {
+      print("logged in as ${mongoUser.id}");
+
+      Fluttertoast.showToast(
+        msg: "Welcome Google user!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+      );
+    }
+    else {
+      print("wrong pass or username");
+    }
+  }
+
+  _loginWithFacebook() async {
+    final FacebookLogin fbLogin = FacebookLogin();
+
+    fbLogin.loginBehavior = FacebookLoginBehavior.webViewOnly;
+
+    FacebookLoginResult result = await fbLogin.logIn([
+      'email',
+      'public_profile',
+    ]);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        var facebookToken = await fbLogin.currentAccessToken;
+        String accessToken = facebookToken.token;
+
+        CoreStitchUser mongoUser = await client.auth.loginWithCredential(
+            FacebookCredential(accessToken)
+        );
+
+        if (mongoUser != null) {
+          print("logged in as ${mongoUser.id}");
+
+          Fluttertoast.showToast(
+              msg: "Welcome Facebook user!",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+          );
+        }
+        else {
+          print("wrong pass or username");
+        }
+
+        break;
+
+      case FacebookLoginStatus.cancelledByUser:
+        break;
+
+      case FacebookLoginStatus.error:
+        break;
+    }
+
+  }
   void _submitForm() async {
     final form = formKey.currentState;
     if (form.validate()) {
@@ -142,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
           CoreStitchUser mongoUser = await client.auth.loginWithCredential(
               UserPasswordCredential(username: _email, password: _password)
 //            AnonymousCredential()
-              );
+          );
 
           if (mongoUser != null) {
             // String userId = mongoUser.id;

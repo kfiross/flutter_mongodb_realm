@@ -1,3 +1,9 @@
+## 0.6.0
+
+<b> Breaking Changes </b>
+* Google/Facebook login dependencies used outside of the plugin
+* fix bug crashing the app when using plugin on new Flutter projects
+
 ## 0.5.1
 
 * Added auth listener support also on iOS
