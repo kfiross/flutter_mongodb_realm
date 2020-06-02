@@ -46,17 +46,50 @@ class MyCustomDelegate<T>: ChangeStreamDelegate
     }
 }
 
+
 class Watcher {
     var changeStreamSession: ChangeStreamSession<Document>?
     
     func watch(collection: RemoteMongoCollection<Document>,
-               eventSink events: @escaping FlutterEventSink) throws {
+               eventSink events: @escaping FlutterEventSink,
+               filter: String?,
+               ids: Array<String>?,
+               asObjectIds: Bool
+    ) throws {
+        
+        let changeStreamDelegate = MyCustomDelegate<Document>.init({result in
+                events(result)
+        })
+        
         // Watch the collection for any changes. As long as the changeStreamSession
         // is alive, it will continue to send events to the delegate.
-        changeStreamSession = try collection.watch(
-            delegate: MyCustomDelegate<Document>.init({result in
-                    events(result)
-            }))
+        if (filter == nil){
+            if (ids == nil) {
+                changeStreamSession = try collection.watch(delegate: changeStreamDelegate)
+            }
+            else{
+                if(asObjectIds) {
+                    let idsVars = ids!.map { ObjectId($0) }
+                    changeStreamSession = try collection.watch(
+                        ids: idsVars as! [BSONValue],
+                        forStreamType: ChangeStreamType<Document>.fullDocument(withDelegate: changeStreamDelegate)
+                    )
+                }
+                else {
+                    //let idsVars = ids!.map { ObjectId($0) }
+                    changeStreamSession = try collection.watch(
+                        ids: ids as! [BSONValue],
+                        forStreamType: ChangeStreamType<Document>.fullDocument(withDelegate: changeStreamDelegate)
+                    )
+                }
+            }
+        }
+        else{
+            let matchFilter = try Document.init(fromJSON: filter!)
+            changeStreamSession = try collection.watch(
+                matchFilter: matchFilter, delegate: changeStreamDelegate
+            )
+        }
         
     }
     
@@ -79,13 +112,24 @@ class StreamHandler : FlutterStreamHandler{
         
         let dbName = args["db"] as! String?
         let collectionName = args["collection"] as! String?
+        let filter = args["filter"] as? String
+        let ids = args["ids"] as? Array<String>
+        let asObjectIds = args["as_object_ids"] as? Bool
         
         
         do{
             let collection = try self.client.getCollection(
-                databaseName: dbName, collectionName: collectionName)
+                databaseName: dbName,
+                collectionName: collectionName
+            )
 
-            try self.watcher.watch(collection: collection!, eventSink: events)
+            try self.watcher.watch(
+                collection: collection!,
+                eventSink: events,
+                filter: filter,
+                ids: ids,
+                asObjectIds: asObjectIds ?? true
+            )
         }
         catch{
             
