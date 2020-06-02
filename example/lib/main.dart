@@ -302,9 +302,9 @@ class _MyAppState extends State<MyApp> {
     try {
       final stream = myCollection.watch(ids: ["22", "8"], asObjectIds: false);
       final stream2 = myCollection.watch(ids: ["5eca2d9fff448a4cbf8f6627"]);
-      final stream3 = myCollection.watchWithFilter({"age": 25});
+      final stream3 = myCollection.watchWithFilter({/*"fullDocument.*/"age": 25});
 
-      stream.listen((data) {
+      stream3.listen((data) {
         //  print(data);
         var fullDocument = MongoDocument.parse(data);
         print("a document with '${fullDocument.map["_id"]}' is changed");

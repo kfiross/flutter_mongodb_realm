@@ -318,13 +318,18 @@ class MongoCollection {
       if (value is QueryOperator) {
         filter[key] = value.values;
       }
-      filter[key] = "fullDocument.${filter[key]}";
     });
+
+    var fixFilter = <String, dynamic>{};
+    filter.forEach((key, value) {
+      fixFilter["fullDocument.$key"] = value;
+    });
+
 
     var stream = FlutterMongoStitch.watchCollection(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
-      filter: BsonDocument(filter).toJson(),
+      filter: BsonDocument(fixFilter).toJson(),
     );
 
     return stream;
