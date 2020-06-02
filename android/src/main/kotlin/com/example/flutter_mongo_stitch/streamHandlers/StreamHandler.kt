@@ -8,11 +8,6 @@ import org.bson.BsonValue
 import org.bson.Document
 import android.os.Looper
 import com.example.flutter_mongo_stitch.MyMongoStitchClient
-import com.example.flutter_mongo_stitch.toMap
-import com.mongodb.stitch.android.core.StitchAppClient
-import com.mongodb.stitch.android.core.auth.StitchAuth
-import com.mongodb.stitch.android.core.auth.StitchAuthListener
-import com.mongodb.stitch.android.core.auth.StitchUser
 
 
 class StreamHandler(val client: MyMongoStitchClient, val arguments: Any?)
@@ -26,11 +21,13 @@ class StreamHandler(val client: MyMongoStitchClient, val arguments: Any?)
         //runnable.run()
 
         val args = arguments as Map<*, *>
-        val dbName = args["db"] as String?
-        val collectionName = args["collection"] as String?
-        val filter = args["filter"] as String?
+        val dbName = args["db"] as? String
+        val collectionName = args["collection"] as? String
+        val filter = args["filter"] as? String
+        val ids = args["ids"] as? List<String>
+        val asObjectIds = args["as_object_ids"] as? Boolean
 
-        val task = this.client.watchCollection(dbName,collectionName, filter)
+        val task = this.client.watchCollection(dbName,collectionName, filter, ids, asObjectIds ?: true)
 
         task?.addOnCompleteListener{
             val changeStream = it.result
