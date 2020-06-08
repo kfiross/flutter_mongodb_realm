@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
 
@@ -11,7 +12,8 @@ import 'login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MongoStitchClient.initializeApp("mystitchapp-fjpmn");
+  if(!kIsWeb)
+    await MongoStitchClient.initializeApp("mystitchapp-fjpmn");
   runApp(MyApp());
 }
 
@@ -68,7 +70,7 @@ class _MyAppState extends State<MyApp> {
 
       // after app initialized and user authenticated, show some data
 
-//        insertData();
+        insertData();
 //      fetchData();
 //      deleteData();
 //        updateData();
@@ -88,25 +90,27 @@ class _MyAppState extends State<MyApp> {
     var collection = client.getDatabase("test").getCollection("my_collection");
 
     try {
-//      var document = MongoDocument({
-//        "time": DateTime.now().millisecondsSinceEpoch,
-//        "user_id": "abcdefg67",
-//        "age": 25,
-//        "price": 31.72
-//      });
+      var document = MongoDocument({
+        "time": DateTime.now().millisecondsSinceEpoch,
+        "user_id": "abcdefg67",
+        "age": 25,
+        "price": 31.72
+      });
 
-      collection.insertMany([
-        MongoDocument({
-          "time": DateTime.now().millisecondsSinceEpoch,
-          "user_id": "michael",
-          "age": 28,
-        }),
-        MongoDocument({
-          "time": DateTime.now().millisecondsSinceEpoch,
-          "name": "adiel",
-          "age": 23,
-        }),
-      ]);
+      collection.insertOne(document);
+
+//      collection.insertMany([
+//        MongoDocument({
+//          "time": DateTime.now().millisecondsSinceEpoch,
+//          "user_id": "michael",
+//          "age": 28,
+//        }),
+//        MongoDocument({
+//          "time": DateTime.now().millisecondsSinceEpoch,
+//          "name": "adiel",
+//          "age": 23,
+//        }),
+//      ]);
     } on PlatformException {
       debugPrint("Error!!!");
     }

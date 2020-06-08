@@ -33,7 +33,19 @@
 <!--        navigator.serviceWorker.register('flutter_service_worker.js');-->
 <!--      });-->
 <!--    }-->
+<!--  </script>-->
+  <script>
+    const stitchClient = stitch.Stitch.initializeDefaultAppClient('mystitchapp-fjpmn');
+
+    const mongoClient = stitchClient.getServiceClient(
+      stitch.RemoteMongoClient.factory,
+      "mongodb-atlas"
+    );
+
+    console.log(45)
   </script>
+
+
   <script defer type="application/javascript" src="main.dart.js"></script>
 <!--  <script src="main.dart.js" type="application/javascript"></script>-->
 </body>
