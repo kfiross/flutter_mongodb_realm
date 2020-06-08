@@ -12,8 +12,7 @@ import 'login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if(!kIsWeb)
-    await MongoStitchClient.initializeApp("mystitchapp-fjpmn");
+  await MongoStitchClient.initializeApp("mystitchapp-fjpmn");
   runApp(MyApp());
 }
 
@@ -43,11 +42,11 @@ class _MyAppState extends State<MyApp> {
 
       // login Anonymously
 
-//      CoreStitchUser mongoUser =
-//          await client.auth.loginWithCredential(
-////              AnonymousCredential()
+      CoreStitchUser mongoUser =
+          await client.auth.loginWithCredential(
+              AnonymousCredential()
 //          UserPasswordCredential(username: "kfir25816@gmail.com",password: "asdfghj")
-//              );
+              );
 
 //      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
 //          GoogleCredential(
@@ -57,12 +56,12 @@ class _MyAppState extends State<MyApp> {
 ////          FacebookCredential(permissions: ["email"])
 //          );
 
-//      if (mongoUser != null) {
-//        print("logged in as ${mongoUser.id}");
-//      }
-//      else {
-//        print("wrong pass or username");
-//      }
+      if (mongoUser != null) {
+        print("logged in as ${mongoUser.id ?? '?'}");
+      }
+      else {
+        print("wrong pass or username");
+      }
 
       // sign out
 
@@ -70,12 +69,12 @@ class _MyAppState extends State<MyApp> {
 
       // after app initialized and user authenticated, show some data
 
-        insertData();
-//      fetchData();
-//      deleteData();
-//        updateData();
-//        watchData();
-//      aggregateCollection();
+//        insertData(); //TODO: check
+      fetchData();
+//      deleteData(); //TODO: check
+//        updateData(); //TODO: check
+//        watchData(); //TODO: check
+//      aggregateCollection(); //TODO: check
 
 //      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
 //        print(value);
@@ -147,36 +146,38 @@ class _MyAppState extends State<MyApp> {
 //      });
 //      int ssaa = 232;
 
+
       /// with projection/limit
       var docs = await collection.find(
-        filter: {
-          "year": QueryOperator.gt(2010)..lte(2014),
-        },
-        options: RemoteFindOptions(
-            projection: {
-              "title": ProjectionValue.INCLUDE,
-              "rated": ProjectionValue.INCLUDE,
-              "year": ProjectionValue.INCLUDE,
-            },
-            limit: 70,
-            sort: {
-              "year": OrderValue.DESCENDING,
-            }),
+//        filter: {
+//          "year": QueryOperator.gt(2010)..lte(2014),
+//        },
+//        options: RemoteFindOptions(
+//            projection: {
+//              "title": ProjectionValue.INCLUDE,
+//              "rated": ProjectionValue.INCLUDE,
+//              "year": ProjectionValue.INCLUDE,
+//            },
+//            limit: 70,
+//            sort: {
+//              "year": OrderValue.DESCENDING,
+//            }),
       );
+      print(docs);
       print(docs.length);
 
-      /// with projection
-      var doc = await collection.findOne(
-        filter: {
-          "year": 2014,
-        },
-        projection: {
-          "title": ProjectionValue.INCLUDE,
-          "rated": ProjectionValue.INCLUDE,
-          "year": ProjectionValue.INCLUDE,
-        },
-      );
-      print(doc.map);
+//      /// with projection
+//      var doc = await collection.findOne(
+////        filter: {
+////          "year": 2014,
+////        },
+////        projection: {
+////          "title": ProjectionValue.INCLUDE,
+////          "rated": ProjectionValue.INCLUDE,
+////          "year": ProjectionValue.INCLUDE,
+////        },
+//      );
+//      print(doc.map);
     } on PlatformException catch (e) {
       debugPrint("Error: $e");
     }

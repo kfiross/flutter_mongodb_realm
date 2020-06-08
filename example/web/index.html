@@ -22,6 +22,8 @@
   <!-- To support Mongo Stitch web SDK -->
   <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.9.0/stitch.js"></script>
 
+  <script src='./stitchUtils.js'></script>
+
 </head>
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to
@@ -34,19 +36,7 @@
 <!--      });-->
 <!--    }-->
 <!--  </script>-->
-  <script>
-    const stitchClient = stitch.Stitch.initializeDefaultAppClient('mystitchapp-fjpmn');
-
-    const mongoClient = stitchClient.getServiceClient(
-      stitch.RemoteMongoClient.factory,
-      "mongodb-atlas"
-    );
-
-    console.log(45)
-  </script>
-
 
   <script defer type="application/javascript" src="main.dart.js"></script>
-<!--  <script src="main.dart.js" type="application/javascript"></script>-->
 </body>
 </html>

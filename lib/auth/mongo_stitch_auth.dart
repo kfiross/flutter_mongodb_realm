@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+//import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_mongo_stitch/auth/credentials/google_credential.dart';
 import 'package:flutter_mongo_stitch/google_sign_in_git_mock/google_sign_in.dart';
 
@@ -12,7 +12,7 @@ class MongoStitchAuth {
 
   // embedded Login providers wrappers for better handling
   static var _googleLoginWrapper = _GoogleLoginWrapper();
-  static var _facebookLoginWrapper = _FacebookLoginWrapper();
+//  static var _facebookLoginWrapper = _FacebookLoginWrapper();
 
 
   /// Logs in as a user with the given credentials associated with an
@@ -31,8 +31,8 @@ class MongoStitchAuth {
     }
     else if (credential is GoogleCredential){
       _googleLoginWrapper.init(
-          serverClientId: "${credential.serverClientId}.apps.googleusercontent.com",
-          scopes: credential.scopes,
+        serverClientId: "${credential.serverClientId}.apps.googleusercontent.com",
+        scopes: credential.scopes,
       );
 
       try {
@@ -45,9 +45,9 @@ class MongoStitchAuth {
       }
     }
     else if (credential is FacebookCredential){
-      var accessToken = await _facebookLoginWrapper.handleSignInAndGetToken(
-          credential.permissions);
-      result = await FlutterMongoStitch.signInWithFacebook(accessToken);
+//      var accessToken = await _facebookLoginWrapper.handleSignInAndGetToken(
+//          credential.permissions);
+      result = await FlutterMongoStitch.signInWithFacebook(credential.accessToken);
     }
     else {
       throw UnimplementedError();
@@ -60,13 +60,13 @@ class MongoStitchAuth {
     var result = await FlutterMongoStitch.logout();
 
     bool loggedWithGoogle = await _googleLoginWrapper.isLogged;
-    bool loggedWithFacebook = await _facebookLoginWrapper.isLogged;
-
+//    bool loggedWithFacebook = await _facebookLoginWrapper.isLogged;
+//
     if (loggedWithGoogle)
       await _googleLoginWrapper.handleSignOut();
-
-    if (loggedWithFacebook)
-      await _facebookLoginWrapper.handleSignOut();
+//
+//    if (loggedWithFacebook)
+//      await _facebookLoginWrapper.handleSignOut();
 
     return result;
   }
@@ -101,48 +101,47 @@ class MongoStitchAuth {
 }
 
 /// ////////////////////////////////////////////////////////////////
-
-class _FacebookLoginWrapper{
-  final FacebookLogin _facebookSignIn = FacebookLogin();
-
-  Future<bool> get isLogged => _facebookSignIn.isLoggedIn;
-
-  Future<String> handleSignInAndGetToken([List<String> permissions]) async {
-    var x = await _facebookSignIn.isLoggedIn;
-    print(x);
-
-    String token;
-    _facebookSignIn.loginBehavior = FacebookLoginBehavior.webViewOnly;
-    final FacebookLoginResult result = await _facebookSignIn.logIn(permissions ?? []);
-
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final FacebookAccessToken accessToken = result.accessToken;
-        print('''
-         Logged in!
-         
-         Token: ${accessToken.token}
-         User id: ${accessToken.userId}
-         Expires: ${accessToken.expires}
-         Permissions: ${accessToken.permissions}
-         Declined permissions: ${accessToken.declinedPermissions}
-         ''');
-        token = accessToken.token;
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        print('Login cancelled by the user.');
-        break;
-      case FacebookLoginStatus.error:
-        print('Something went wrong with the login process.\n'
-            'Here\'s the error Facebook gave us: ${result.errorMessage}');
-        break;
-    }
-
-    return token;
-  }
-
-  Future<void> handleSignOut() => _facebookSignIn.logOut();
-}
+//class _FacebookLoginWrapper{
+//  final FacebookLogin _facebookSignIn = FacebookLogin();
+//
+//  Future<bool> get isLogged => _facebookSignIn.isLoggedIn;
+//
+//  Future<String> handleSignInAndGetToken([List<String> permissions]) async {
+//    var x = await _facebookSignIn.isLoggedIn;
+//    print(x);
+//
+//    String token;
+//    _facebookSignIn.loginBehavior = FacebookLoginBehavior.webViewOnly;
+//    final FacebookLoginResult result = await _facebookSignIn.logIn(permissions ?? []);
+//
+//    switch (result.status) {
+//      case FacebookLoginStatus.loggedIn:
+//        final FacebookAccessToken accessToken = result.accessToken;
+//        print('''
+//         Logged in!
+//
+//         Token: ${accessToken.token}
+//         User id: ${accessToken.userId}
+//         Expires: ${accessToken.expires}
+//         Permissions: ${accessToken.permissions}
+//         Declined permissions: ${accessToken.declinedPermissions}
+//         ''');
+//        token = accessToken.token;
+//        break;
+//      case FacebookLoginStatus.cancelledByUser:
+//        print('Login cancelled by the user.');
+//        break;
+//      case FacebookLoginStatus.error:
+//        print('Something went wrong with the login process.\n'
+//            'Here\'s the error Facebook gave us: ${result.errorMessage}');
+//        break;
+//    }
+//
+//    return token;
+//  }
+//
+//  Future<void> handleSignOut() => _facebookSignIn.logOut();
+//}
 
 class _GoogleLoginWrapper{
   GoogleSignIn _googleSignIn;
@@ -151,8 +150,8 @@ class _GoogleLoginWrapper{
 
   init({@required String serverClientId, List<String> scopes}){
     _googleSignIn = GoogleSignIn(
-      serverClientId: serverClientId,
-      scopes: scopes
+        serverClientId: serverClientId,
+        scopes: scopes
     );
   }
 
