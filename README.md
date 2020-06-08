@@ -21,7 +21,7 @@ The minimum required it's Android 5.0(API 21) or iOS 11.0
 * Find
 * Delete
 * Update
-* Watch
+* Watch (also to specified IDs or with Filter)
 * Aggregate
 
 <b>Auth Providers:</b>
@@ -291,18 +291,30 @@ await collection.updateOne(
 ```
 
 #### Watch
-```dart
 
-// get the stream to subscribed to the all the collection
+
+First, Get the stream to subscribed to any document change in the collection
+```dart
 final stream = collection.watch();
 
-// OR get the stream to subscribed to  a part of the collection applying
-// filter on the listened documents
-final stream = collection.watchWithFilter({
+// (optional) can watch only specified documents by their ids:
+// 1. if they defined as ObjectId type
+final stream2 = myCollection.watch(ids: ["5eca2d9fff448a4cbf8f6627"]);
+
+// 2. if they defined as String type (`asObjectIds` is true by default)
+final stream3 = myCollection.watch(ids: ["22", "8"], asObjectIds: false);
+```
+
+OR get the stream to subscribed to  a part of the collection applying
+filter on the listened documents
+```dart
+final streamFilter = collection.watchWithFilter({
   "age": QuerySelector.lte(26)
 });
+```
 
-// the, set a listener to a change in the collection
+Afterwards, set a listener to a change in the collection
+```dart
 stream.listen((data) {
   // data contains JSON string of the document that was changed
   var fullDocument = MongoDocument.parse(data);

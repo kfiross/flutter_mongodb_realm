@@ -1,3 +1,7 @@
+## 0.6.1
+* Added support of watch collection with specified list of ids
+* Fixed `watchWithFilter()` to work correctly
+
 ## 0.6.0
 
 <b> Breaking Changes </b>
