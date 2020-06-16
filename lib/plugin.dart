@@ -196,14 +196,17 @@ class FlutterMongoStitch {
   static Stream watchCollection({
     @required String collectionName,
     @required String databaseName,
-    String filter,
+    List<String> ids,
+    String filter, bool asObjectIds = true,
   }) {
     // continuous stream of events from platform side
     return _streamsChannel.receiveBroadcastStream({
       "handler": "watchCollection",
       "db": databaseName,
       "collection": collectionName,
-      "filter": filter
+      "filter": filter,
+      "ids": ids,
+      "as_object_ids": asObjectIds,
     });
   }
 

@@ -1,6 +1,20 @@
+## 0.6.1
+* Added support of watch collection with specified list of ids
+* Fixed `watchWithFilter()` to work correctly
+
+## 0.6.0
+
+<b> Breaking Changes </b>
+* Google/Facebook login dependencies used outside of the plugin
+* fix bug crashing the app when using plugin on new Flutter projects
+
+## 0.5.1
+
+* Added auth listener support also on iOS
+
 ## 0.5.0
 
-* Added auth listener support inorder to monitor auth state changes
+* Added auth listener support inorder to monitor auth state changes (Android only)
 
 ## 0.4.2
 

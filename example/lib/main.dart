@@ -63,6 +63,7 @@ class _MyAppState extends State<MyApp> {
         print("wrong pass or username");
       }
 
+
       // sign out
 
 //      client.auth.logout();
@@ -75,6 +76,7 @@ class _MyAppState extends State<MyApp> {
 //        updateData(); //TODO: check
 //        watchData(); //TODO: check
 //      aggregateCollection(); //TODO: check
+
 
 //      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
 //        print(value);
@@ -318,9 +320,11 @@ class _MyAppState extends State<MyApp> {
         client.getDatabase("test").getCollection("my_collection");
 
     try {
-      final stream = myCollection.watch();
+      final stream = myCollection.watch(ids: ["22", "8"], asObjectIds: false);
+      final stream2 = myCollection.watch(ids: ["5eca2d9fff448a4cbf8f6627"]);
+      final stream3 = myCollection.watchWithFilter({/*"fullDocument.*/"age": 25});
 
-      stream.listen((data) {
+      stream3.listen((data) {
         //  print(data);
         var fullDocument = MongoDocument.parse(data);
         print("a document with '${fullDocument.map["_id"]}' is changed");

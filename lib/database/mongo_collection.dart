@@ -297,10 +297,13 @@ class MongoCollection {
   /// Watches a collection. The resulting stream will be notified of all events
   /// on this collection that the active user is authorized to see based on the
   /// configured MongoDB rules.
-  Stream watch() {
+  /// can optionally watch only specifies documents with the provided ids
+  Stream watch({List<String> ids, bool asObjectIds = true}) {
     var stream = FlutterMongoStitch.watchCollection(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
+      ids: ids,
+      asObjectIds: asObjectIds,
     );
 
     return stream;
@@ -309,6 +312,7 @@ class MongoCollection {
   /// Watches a collection. The provided BSON document will be used as a match
   /// expression filter on the change events coming from the stream.
   Stream watchWithFilter(Map<String, dynamic> filter) {
+    assert (filter != null);
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
       if (value is QueryOperator) {
@@ -316,10 +320,16 @@ class MongoCollection {
       }
     });
 
+    var fixFilter = <String, dynamic>{};
+    filter.forEach((key, value) {
+      fixFilter["fullDocument.$key"] = value;
+    });
+
+
     var stream = FlutterMongoStitch.watchCollection(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
-      filter: BsonDocument(filter).toJson(),
+      filter: BsonDocument(fixFilter).toJson(),
     );
 
     return stream;

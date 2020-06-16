@@ -1,15 +1,11 @@
 package com.example.flutter_mongo_stitch
 
-import android.net.Uri
-import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.mongodb.stitch.android.core.StitchAppClient
 import com.mongodb.stitch.android.core.auth.StitchAuth
 import com.mongodb.stitch.android.core.auth.StitchUser
 import com.mongodb.stitch.core.auth.providers.anonymous.AnonymousCredential
 import com.mongodb.stitch.core.auth.providers.userpassword.UserPasswordCredential
-import org.bson.BsonDocument
-import org.bson.Document
 import java.lang.Exception
 import kotlin.collections.HashMap
 import com.mongodb.stitch.android.core.auth.providers.userpassword.UserPasswordAuthProviderClient
@@ -17,7 +13,9 @@ import com.mongodb.stitch.android.services.mongodb.remote.*
 import com.mongodb.stitch.core.auth.providers.facebook.FacebookCredential
 import com.mongodb.stitch.core.auth.providers.google.GoogleCredential
 import com.mongodb.stitch.core.services.mongodb.remote.*
-import org.bson.BsonValue
+import org.bson.*
+import org.bson.codecs.BsonValueCodec
+import org.bson.types.ObjectId
 
 
 // Basic CRUD..
@@ -267,13 +265,24 @@ class MyMongoStitchClient(
 
     //?
     fun watchCollection(
-        databaseName: String?, collectionName: String?, filterJson: String?
+            databaseName: String?, collectionName: String?, filterJson: String?, ids: List<String>?, asObjectIds: Boolean
     ): Task<AsyncChangeStream<Document, ChangeEvent<Document>>>? {
         val collection = getCollection(databaseName, collectionName)
 
-        if (filterJson == null)
-            return collection?.watch()
 
+        if (filterJson == null) {
+            if (ids == null) {
+                return collection?.watch()
+            }
+
+            return if(asObjectIds) {
+                val idsVars = ids.map { ObjectId(it) }.toTypedArray()
+                collection?.watch(*idsVars)
+            } else {
+                val idsVars = ids.map { BsonString(it) }.toTypedArray()
+                collection?.watch(*idsVars)
+            }
+        }
 
         val matchFilter = BsonDocument.parse(filterJson)
         return collection?.watchWithFilter(matchFilter)
