@@ -124,6 +124,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
                 "mongodb-atlas"
         )
 
+        
         client = MyMongoStitchClient(mongoClient, stitchAppClient)
         result.success(true)
     }

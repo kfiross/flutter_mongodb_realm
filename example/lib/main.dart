@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
 
@@ -43,10 +44,24 @@ class _MyAppState extends State<MyApp> {
 
       CoreStitchUser mongoUser =
           await client.auth.loginWithCredential(
-//              AnonymousCredential()
-          UserPasswordCredential(username: "kfir25816@gmail.com",password: "asdfghj")
+              AnonymousCredential()
+//          UserPasswordCredential(username: "kfir25816@gmail.com",password: "asdfghj")
               );
 
+//      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
+//          GoogleCredential(
+//        serverClientId: "281897935076-dlab9116cid9cmivd6nilofihip552cr",
+//        scopes: ["email"],
+//      )
+////          FacebookCredential(permissions: ["email"])
+//          );
+
+      if (mongoUser != null) {
+        print("logged in as ${mongoUser.id ?? '?'}");
+      }
+      else {
+        print("wrong pass or username");
+      }
 
 
       // sign out
@@ -55,12 +70,13 @@ class _MyAppState extends State<MyApp> {
 
       // after app initialized and user authenticated, show some data
 
-//        insertData();
-//      fetchData();
-//      deleteData();
-//        updateData();
-        watchData();
-//      aggregateCollection();
+//        insertData(); //TODO: check
+      fetchData();
+//      deleteData(); //TODO: check
+//        updateData(); //TODO: check
+//        watchData(); //TODO: check
+//      aggregateCollection(); //TODO: check
+
 
 //      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
 //        print(value);
@@ -75,25 +91,27 @@ class _MyAppState extends State<MyApp> {
     var collection = client.getDatabase("test").getCollection("my_collection");
 
     try {
-//      var document = MongoDocument({
-//        "time": DateTime.now().millisecondsSinceEpoch,
-//        "user_id": "abcdefg67",
-//        "age": 25,
-//        "price": 31.72
-//      });
+      var document = MongoDocument({
+        "time": DateTime.now().millisecondsSinceEpoch,
+        "user_id": "abcdefg67",
+        "age": 25,
+        "price": 31.72
+      });
 
-      collection.insertMany([
-        MongoDocument({
-          "time": DateTime.now().millisecondsSinceEpoch,
-          "user_id": "michael",
-          "age": 28,
-        }),
-        MongoDocument({
-          "time": DateTime.now().millisecondsSinceEpoch,
-          "name": "adiel",
-          "age": 23,
-        }),
-      ]);
+      collection.insertOne(document);
+
+//      collection.insertMany([
+//        MongoDocument({
+//          "time": DateTime.now().millisecondsSinceEpoch,
+//          "user_id": "michael",
+//          "age": 28,
+//        }),
+//        MongoDocument({
+//          "time": DateTime.now().millisecondsSinceEpoch,
+//          "name": "adiel",
+//          "age": 23,
+//        }),
+//      ]);
     } on PlatformException {
       debugPrint("Error!!!");
     }
@@ -130,36 +148,38 @@ class _MyAppState extends State<MyApp> {
 //      });
 //      int ssaa = 232;
 
+
       /// with projection/limit
       var docs = await collection.find(
-        filter: {
-          "year": QueryOperator.gt(2010)..lte(2014),
-        },
-        options: RemoteFindOptions(
-            projection: {
-              "title": ProjectionValue.INCLUDE,
-              "rated": ProjectionValue.INCLUDE,
-              "year": ProjectionValue.INCLUDE,
-            },
-            limit: 70,
-            sort: {
-              "year": OrderValue.DESCENDING,
-            }),
+//        filter: {
+//          "year": QueryOperator.gt(2010)..lte(2014),
+//        },
+//        options: RemoteFindOptions(
+//            projection: {
+//              "title": ProjectionValue.INCLUDE,
+//              "rated": ProjectionValue.INCLUDE,
+//              "year": ProjectionValue.INCLUDE,
+//            },
+//            limit: 70,
+//            sort: {
+//              "year": OrderValue.DESCENDING,
+//            }),
       );
+      print(docs);
       print(docs.length);
 
-      /// with projection
-      var doc = await collection.findOne(
-        filter: {
-          "year": 2014,
-        },
-        projection: {
-          "title": ProjectionValue.INCLUDE,
-          "rated": ProjectionValue.INCLUDE,
-          "year": ProjectionValue.INCLUDE,
-        },
-      );
-      print(doc.map);
+//      /// with projection
+//      var doc = await collection.findOne(
+////        filter: {
+////          "year": 2014,
+////        },
+////        projection: {
+////          "title": ProjectionValue.INCLUDE,
+////          "rated": ProjectionValue.INCLUDE,
+////          "year": ProjectionValue.INCLUDE,
+////        },
+//      );
+//      print(doc.map);
     } on PlatformException catch (e) {
       debugPrint("Error: $e");
     }

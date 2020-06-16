@@ -31,8 +31,8 @@ class MongoStitchAuth {
     }
     else if (credential is GoogleCredential){
       _googleLoginWrapper.init(
-          serverClientId: "${credential.serverClientId}.apps.googleusercontent.com",
-          scopes: credential.scopes,
+        serverClientId: "${credential.serverClientId}.apps.googleusercontent.com",
+        scopes: credential.scopes,
       );
 
       try {
@@ -101,7 +101,6 @@ class MongoStitchAuth {
 }
 
 /// ////////////////////////////////////////////////////////////////
-
 //class _FacebookLoginWrapper{
 //  final FacebookLogin _facebookSignIn = FacebookLogin();
 //
@@ -151,8 +150,8 @@ class _GoogleLoginWrapper{
 
   init({@required String serverClientId, List<String> scopes}){
     _googleSignIn = GoogleSignIn(
-      serverClientId: serverClientId,
-      scopes: scopes
+        serverClientId: serverClientId,
+        scopes: scopes
     );
   }
 

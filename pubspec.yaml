@@ -1,6 +1,6 @@
 name: flutter_mongo_stitch
 description: A Flutter plugin for using services of the serverless platform MongoDB Stitch.
-version: 0.6.2
+version: 0.7.0-dev.1
 homepage: https://github.com/kfiross/flutter_mongo_stitch
 
 environment:
@@ -16,9 +16,15 @@ dependencies:
   streams_channel: ^0.3.0
   meta: ^1.0.4
 
+
+  # For supporting web sdk
+  js: ^0.6.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 
 # For information on the generic Dart part of this file, see the
@@ -37,6 +43,9 @@ flutter:
         pluginClass: FlutterMongoStitchPlugin
       ios:
         pluginClass: FlutterMongoStitchPlugin
+      web:
+        pluginClass: FlutterMongoStitchPlugin
+        fileName: plugin_web.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   assets:
