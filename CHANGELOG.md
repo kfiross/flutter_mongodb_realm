@@ -1,8 +1,11 @@
-<!--## 0.7.0-dev.3-->
+<!--## 0.7.0-dev.4-->
 <!--* Added web support (for using stitch functions)-->
 
-<!--## 0.7.0-dev.2-->
+<!--## 0.7.0-dev.3-->
 <!--* Added web support (for auth usage)-->
+
+## 0.7.0-dev.2
+* updated README for using on web
 
 ## 0.7.0-dev.1
 * Added web support (for database usage)

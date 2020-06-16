@@ -70,11 +70,11 @@ class _MyAppState extends State<MyApp> {
 
       // after app initialized and user authenticated, show some data
 
-//      countData(); // DONE ON WEB
+      countData(); // DONE ON WEB
 //        insertData(); // DONE ON WEB
 //      fetchData();    // DONE ON WEB
 //      deleteData(); // DONE ON WEB
-        updateData(); //TODO: check
+//        updateData(); // DONE ON WEB
 
 //        watchData(); //TODO: check
 //      aggregateCollection(); //TODO: check
