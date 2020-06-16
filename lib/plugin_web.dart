@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_mongo_stitch/web/implementation.dart';
-import 'package:js/js_util.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 class FlutterMongoStitchPlugin {
@@ -69,6 +68,22 @@ class FlutterMongoStitchPlugin {
 
       case 'signInWithFacebook':
         return await _signInWithFacebook(call);
+
+        //
+      case 'registerWithEmail':
+        return await _registerWithEmail(call);
+
+      case 'logout':
+        return await _logout(call);
+
+      case 'getUserId':
+        return await _getUserId(call);
+
+      case 'getUser':
+        return await _getUser(call);
+
+      case 'sendResetPasswordEmail':
+        return await _sendResetPasswordEmail(call);
 
 
       // Stitch Functions
@@ -145,7 +160,7 @@ class FlutterMongoStitchPlugin {
     final String databaseName = call.arguments['database_name'];
     final String collectionName = call.arguments['collection_name'];
     final String filter = call.arguments['filter'];
-    final String projection = call.arguments['projection'];
+    //todo, ADD: final String projection = call.arguments['projection'];
 
 
     var list = await _mongoClient.findDocument(databaseName, collectionName, filter);
@@ -183,7 +198,6 @@ class FlutterMongoStitchPlugin {
 
     String resultString = await _mongoClient.updateDocuments(databaseName, collectionName, filter, update);
     Map<String, dynamic> map = json.decode(resultString);
-    print(186);
 
     return [map["matchedCount"] , map["modifiedCount"]];
   }
