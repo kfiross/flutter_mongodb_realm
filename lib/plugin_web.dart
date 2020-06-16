@@ -1,64 +1,80 @@
-@JS()
-library stitch.js;
-
-import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
-import 'dart:js_util';
-
 
 import 'package:flutter/services.dart';
+import 'package:flutter_mongo_stitch/web/implementation.dart';
+import 'package:js/js_util.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import "package:js/js.dart";
-
-
-@JS()
-external void connectMongo(String appId);
-
-@JS()
-external loginAnonymously();
-
-@JS()
-external findDocuments(String databaseName,String collectionName);
 
 class FlutterMongoStitchPlugin {
-  static void registerWith(Registrar registrar) {
+  static void registerWith(Registrar registrar) async {
     final MethodChannel channel = MethodChannel(
-        'flutter_mongo_stitch',
-        const StandardMethodCodec(),
-        registrar.messenger,
+      'flutter_mongo_stitch',
+      const StandardMethodCodec(),
+      registrar.messenger,
     );
 
     final instance = FlutterMongoStitchPlugin();
     channel.setMethodCallHandler(instance.handleMethodCall);
   }
 
+  var _mongoClient = MyMongoClient();
+
   Future<dynamic> handleMethodCall(MethodCall call) async {
     switch (call.method) {
       case 'connectMongo':
-        final String appId = call.arguments['app_id'];
-        print(appId);
-        connectMongo(appId);
-        return true;
+        return _connectMongo(call);
 
-//      case 'insertDocument':
-//        final String databaseName = call.arguments['database_name'];
-//        final String collectionName = call.arguments['collection_name'];
-//        final Map data = call.arguments['data'];
-//        _insertDocument(databaseName, collectionName, data);
-//        return true;
+      // Database
+      case 'insertDocument':
+        return await _insertDocument(call);
 
-      case 'signInAnonymously':
-        String result = await promiseToFuture(loginAnonymously());
-        print(result);
-        Map userMap = json.decode(result);
-        return {"id": userMap['id']};
+      case 'insertDocuments':
+        return await _insertDocuments(call);
 
+      case 'deleteDocument':
+        return await _deleteDocument(call);
+
+      case 'deleteDocuments':
+        return await _deleteDocuments(call);
 
       case 'findDocuments':
-        final String databaseName = call.arguments['database_name'];
-        final String collectionName = call.arguments['collection_name'];
-        var list = _findDocuments(databaseName, collectionName);
-        return list;
+        return await _findDocuments(call);
+
+      case 'findDocument':
+        return await _findDocument(call);
+
+      case 'countDocuments':
+        return await _countDocuments(call);
+
+      case 'updateDocument':
+        return await _updateDocument(call);
+
+      case 'updateDocuments':
+        return await _updateDocuments(call);
+
+      case 'aggregate':
+        return await _aggregate(call);
+
+
+      // Auth
+      case 'signInAnonymously':
+        return await _signInAnonymously();
+
+      case 'signInWithUsernamePassword':
+        return await _signInWithUsernamePassword(call);
+
+      case 'signInWithGoogle':
+        return await _signInWithGoogle(call);
+
+      case 'signInWithFacebook':
+        return await _signInWithFacebook(call);
+
+
+      // Stitch Functions
+      case 'callFunction':
+        return await _callFunction(call);
+
 
       default:
         throw PlatformException(
@@ -68,13 +84,114 @@ class FlutterMongoStitchPlugin {
     }
   }
 
-
-  void _insertDocument(String databaseName, String collectionName, data) {
-    //TODO: insertDocument(databaseName, collectionName);
+  _connectMongo(MethodCall call) {
+    final String appId = call.arguments['app_id'];
+    _mongoClient.connectMongo(appId);
+    return true;
   }
 
-  Future<List<dynamic>> _findDocuments(String databaseName, String collectionName) async {
-    var docs =  await promiseToFuture(findDocuments(databaseName, collectionName));
-    return docs;
+  ///==========================================================
+
+  _insertDocument(MethodCall call) async{
+    final String databaseName = call.arguments['database_name'];
+    final String collectionName = call.arguments['collection_name'];
+    final HashMap data = call.arguments["data"];
+
+    await _mongoClient.insertDocument(databaseName, collectionName, data);
+    return true;
   }
+
+  _insertDocuments(MethodCall call) async{
+    final String databaseName = call.arguments['database_name'];
+    final String collectionName = call.arguments['collection_name'];
+    final List list = call.arguments["list"];
+
+    await _mongoClient.insertDocuments(databaseName, collectionName, list);
+    return true;
+  }
+
+  _deleteDocument(MethodCall call) async{
+    final String databaseName = call.arguments['database_name'];
+    final String collectionName = call.arguments['collection_name'];
+    final String filter = call.arguments['filter'];
+
+    String resultString =  await _mongoClient.deleteDocument(databaseName, collectionName, filter);
+    Map<String, dynamic> map = json.decode(resultString);
+
+    return map["deletedCount"];
+  }
+
+  _deleteDocuments(MethodCall call) async{
+    final String databaseName = call.arguments['database_name'];
+    final String collectionName = call.arguments['collection_name'];
+    final String filter = call.arguments['filter'];
+
+    String resultString =  await _mongoClient.deleteDocuments(databaseName, collectionName, filter);
+    Map<String, dynamic> map = json.decode(resultString);
+
+    return map["deletedCount"];
+  }
+
+  _findDocuments(MethodCall call) async {
+    final String databaseName = call.arguments['database_name'];
+    final String collectionName = call.arguments['collection_name'];
+    final String filter = call.arguments['filter'];
+
+    var list = await _mongoClient.findDocuments(databaseName, collectionName, filter);
+    return list;
+  }
+
+  _findDocument(MethodCall call) async{
+    final String databaseName = call.arguments['database_name'];
+    final String collectionName = call.arguments['collection_name'];
+    final String filter = call.arguments['filter'];
+    final String projection = call.arguments['projection'];
+
+
+    var list = await _mongoClient.findDocument(databaseName, collectionName, filter);
+    return list;
+
+  }
+
+  _countDocuments(MethodCall call) async{
+    final String databaseName = call.arguments['database_name'];
+    final String collectionName = call.arguments['collection_name'];
+    final String filter = call.arguments['filter'];
+
+    var size = await _mongoClient.countDocuments(databaseName, collectionName, filter);
+    return size;
+  }
+
+  _updateDocument(MethodCall call) async{}
+
+  _updateDocuments(MethodCall call) async{}
+
+  _aggregate(MethodCall call) async{}
+
+  ///====================================================================
+
+  _signInAnonymously() async {
+    var authResult = await _mongoClient.loginAnonymously();
+    return authResult;
+  }
+
+  _signInWithUsernamePassword(MethodCall call) async{}
+
+  _signInWithGoogle(MethodCall call) async{}
+
+  _signInWithFacebook(MethodCall call) async{}
+
+  _registerWithEmail(MethodCall call) async{}
+
+  _logout(MethodCall call) async{}
+
+  _getUserId(MethodCall call) async{}
+
+  _getUser(MethodCall call) async{}
+
+  _sendResetPasswordEmail(MethodCall call) async{}
+
+  ///====================================================================
+
+  _callFunction(MethodCall call) {}
 }
