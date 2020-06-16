@@ -6,47 +6,138 @@ var stitchAppClient
 //    return 12+20;
 //}
 
-function connectMongo(appId) {
-    stitchAppClient = stitch.Stitch.initializeDefaultAppClient(appId);
 
-    mongoClient = stitchAppClient.getServiceClient(
-        stitch.RemoteMongoClient.factory,
-        "mongodb-atlas"
-    );
+function Mongo() {
+    Mongo.prototype.connectMongo  = function(appId) {
+        stitchAppClient = stitch.Stitch.initializeDefaultAppClient(appId);
 
-}
+        mongoClient = stitchAppClient.getServiceClient(
+            stitch.RemoteMongoClient.factory,
+            "mongodb-atlas"
+        );
+    }
 
-async function loginAnonymously(){
-    var user = await stitchAppClient.auth.loginWithCredential(new stitch.AnonymousCredential())
+    Mongo.prototype.loginAnonymously  = async function(){
+        var user = await stitchAppClient.auth.loginWithCredential(new stitch.AnonymousCredential())
 
-    return new Promise((resolve, reject) => {
-        resolve(JSON.stringify({"id": user.id}));
-    });
-}
-
-function getCollection(databaseName, collectionName){
-   return mongoClient.db(databaseName).collection(collectionName)
-}
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify({"id": user.id}));
+        });
+    }
 
 
-function insertDocument(databaseName, collectionName, doc ){
-    collection.insert(doc)
-}
+    Mongo.prototype.getCollection = function(databaseName, collectionName){
+       return mongoClient.db(databaseName).collection(collectionName)
+    }
 
-async function findDocuments(databaseName, collectionName) {
-    var collection = getCollection(databaseName, collectionName)
 
-    // Find documents and log them to console.
-    var results = await collection.find({}, {}).toArray()
-  //  console.log('Results:', results)
+    Mongo.prototype.insertDocument = async function(databaseName, collectionName, docString){
+        var collection = this.getCollection(databaseName, collectionName)
+        var doc = JSON.parse(docString)
 
-    var strings = [];
-    results.forEach((doc) => {
-        strings.push(JSON.stringify(doc))
-    })
+        await collection.insertOne(doc)
+    }
 
-    console.log('Results:', strings)
-    return new Promise((resolve, reject) => {
-        resolve(strings);
-    });
+
+    Mongo.prototype.insertDocuments = async function(databaseName, collectionName, list){
+        var collection = this.getCollection(databaseName, collectionName)
+
+        var docs = []
+        list.forEach((str) => {
+            docs.push(JSON.parse(str))
+        })
+
+        await collection.insertMany(docs)
+    }
+
+    Mongo.prototype.findDocument = async function (databaseName, collectionName, filter) {
+        var collection = this.getCollection(databaseName, collectionName)
+        var query = JSON.parse(filter);
+
+        var doc = await collection.findOne(query, {})
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(doc));
+        });
+    }
+
+    Mongo.prototype.findDocuments = async function (databaseName, collectionName, filter) {
+        var collection = this.getCollection(databaseName, collectionName)
+        var query = JSON.parse(filter);
+
+        var results = await collection.find(query, {}).toArray()
+
+        var strings = [];
+        results.forEach((doc) => {
+            strings.push(JSON.stringify(doc))
+        })
+
+        return new Promise((resolve, reject) => {
+            resolve(strings);
+        });
+    }
+
+    Mongo.prototype.deleteDocument = async function(databaseName, collectionName, filter){
+        var collection = this.getCollection(databaseName, collectionName)
+        var query = JSON.parse(filter)
+
+        var result = await collection.deleteOne(query)
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(result));
+        });
+    }
+
+    Mongo.prototype.deleteDocuments = async function(databaseName, collectionName, filter){
+        var collection = this.getCollection(databaseName, collectionName)
+        var query = JSON.parse(filter)
+
+        var result = await collection.deleteMany(query)
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(result));
+        });
+    }
+
+    Mongo.prototype.countDocuments = async function(databaseName, collectionName, filter){
+        var collection = this.getCollection(databaseName, collectionName)
+        var query = JSON.parse(filter)
+
+        var docsCount = await collection.count(query);
+
+        return new Promise((resolve, reject) => {
+            resolve(docsCount);
+        });
+    }
+
+
+    Mongo.prototype.updateDocument = async function(databaseName, collectionName, filter, update){
+        var collection = this.getCollection(databaseName, collectionName)
+        var query = JSON.parse(filter)
+        var update = JSON.parse(update)
+        var options = {}
+
+        var results = await collection.updateOne(query, update, options);
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(results));
+        });
+    }
+
+
+    Mongo.prototype.updateDocuments = async function(databaseName, collectionName, filter, update){
+        var collection = this.getCollection(databaseName, collectionName)
+        var query = JSON.parse(filter)
+        var update = JSON.parse(update)
+        var options = {}
+
+        var results = await collection.updateMany(query, update, options);
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(results));
+        });
+    }
+
+
+
 }

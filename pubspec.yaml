@@ -11,6 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_web_plugins:
+    sdk: flutter
+
   bson: ^0.3.2
   extension: ^0.1.1
   streams_channel: ^0.3.0
@@ -48,8 +51,6 @@ flutter:
         fileName: plugin_web.dart
 
   # To add assets to your plugin package, add an assets section, like this:
-  assets:
-    - assets/stitchUtils.js
   #  - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see

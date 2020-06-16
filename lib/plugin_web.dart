@@ -162,9 +162,31 @@ class FlutterMongoStitchPlugin {
     return size;
   }
 
-  _updateDocument(MethodCall call) async{}
+  _updateDocument(MethodCall call) async{
+    final String databaseName = call.arguments['database_name'];
+    final String collectionName = call.arguments['collection_name'];
+    final String filter = call.arguments['filter'];
+    final String update = call.arguments['update'];
 
-  _updateDocuments(MethodCall call) async{}
+    String resultString = await _mongoClient.updateDocument(databaseName, collectionName, filter, update);
+    Map<String, dynamic> map = json.decode(resultString);
+
+    return <int>[map["matchedCount"] , map["modifiedCount"]];
+
+  }
+
+  _updateDocuments(MethodCall call) async{
+    final String databaseName = call.arguments['database_name'];
+    final String collectionName = call.arguments['collection_name'];
+    final String filter = call.arguments['filter'];
+    final String update = call.arguments['update'];
+
+    String resultString = await _mongoClient.updateDocuments(databaseName, collectionName, filter, update);
+    Map<String, dynamic> map = json.decode(resultString);
+    print(186);
+
+    return [map["matchedCount"] , map["modifiedCount"]];
+  }
 
   _aggregate(MethodCall call) async{}
 

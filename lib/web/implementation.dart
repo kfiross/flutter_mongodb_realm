@@ -23,6 +23,9 @@ class Mongo{
   external findDocuments(String databaseName, String collectionName, String filter);
   external countDocuments(String databaseName, String collectionName, String filter);
 
+  external updateDocument(String databaseName, String collectionName, String filter, String update);
+  external updateDocuments(String databaseName, String collectionName, String filter, String update);
+
   external loginAnonymously();
 }
 
@@ -68,8 +71,19 @@ class MyMongoClient{
   }
 
   Future<int> countDocuments(String databaseName, String collectionName, String filter) async {
-    var docs =  await promiseToFuture(_mongo.countDocuments(databaseName, collectionName, filter));
-    return docs;
+    var docsCount =  await promiseToFuture(_mongo.countDocuments(databaseName, collectionName, filter));
+    return docsCount;
+  }
+
+  Future updateDocument(String databaseName, String collectionName, String filter, String update) async {
+    var docsUpdatedCount =  await promiseToFuture(_mongo.updateDocument(databaseName, collectionName, filter, update));
+    return docsUpdatedCount;
+  }
+
+
+  Future updateDocuments(String databaseName, String collectionName, String filter, String update) async {
+    var docsUpdatedCount =  await promiseToFuture(_mongo.updateDocuments(databaseName, collectionName, filter, update));
+    return docsUpdatedCount;
   }
 
 

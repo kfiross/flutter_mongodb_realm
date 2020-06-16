@@ -268,7 +268,7 @@ class MongoCollection {
 
   /// Update all documents in the collection according to the
   /// specified arguments.
-  Future<List<int>> updateMany(
+  Future<List> updateMany(
       {@required filter, @required UpdateOperator update}) async {
     assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
@@ -284,7 +284,7 @@ class MongoCollection {
       filter = filter.values;
     }
 
-    List<int> results = await FlutterMongoStitch.updateDocuments(
+    List results = await FlutterMongoStitch.updateDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),

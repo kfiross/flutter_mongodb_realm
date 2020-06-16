@@ -70,10 +70,12 @@ class _MyAppState extends State<MyApp> {
 
       // after app initialized and user authenticated, show some data
 
-//        insertData(); //TODO: check
-      fetchData();
-//      deleteData(); //TODO: check
-//        updateData(); //TODO: check
+//      countData(); // DONE ON WEB
+//        insertData(); // DONE ON WEB
+//      fetchData();    // DONE ON WEB
+//      deleteData(); // DONE ON WEB
+        updateData(); //TODO: check
+
 //        watchData(); //TODO: check
 //      aggregateCollection(); //TODO: check
 
@@ -87,31 +89,46 @@ class _MyAppState extends State<MyApp> {
     } on Exception {}
   }
 
+  Future<void> countData() async {
+    var collection = client.getDatabase("test").getCollection("my_collection");
+
+    try {
+      var size = await collection.count();
+      print("size=$size");
+    }
+    on PlatformException catch (e) {
+      print("Error! ${e.message}");
+    }
+  }
+
   Future<void> insertData() async {
     var collection = client.getDatabase("test").getCollection("my_collection");
 
     try {
-      var document = MongoDocument({
-        "time": DateTime.now().millisecondsSinceEpoch,
-        "user_id": "abcdefg67",
-        "age": 25,
-        "price": 31.72
-      });
+//      var document = MongoDocument({
+//        "time": DateTime.now().millisecondsSinceEpoch,
+//        "name": "hadar",
+//        "age": 27,
+//        "dogs": [
+//          "shocko",
+//          "nuna"
+//        ]
+//      });
+//
+//      collection.insertOne(document);
 
-      collection.insertOne(document);
-
-//      collection.insertMany([
-//        MongoDocument({
-//          "time": DateTime.now().millisecondsSinceEpoch,
-//          "user_id": "michael",
-//          "age": 28,
-//        }),
-//        MongoDocument({
-//          "time": DateTime.now().millisecondsSinceEpoch,
-//          "name": "adiel",
-//          "age": 23,
-//        }),
-//      ]);
+      collection.insertMany([
+        MongoDocument({
+          "time": DateTime.now().millisecondsSinceEpoch,
+          "username": "moshe",
+          "grades": [90, 98],
+        }),
+        MongoDocument({
+          "time": DateTime.now().millisecondsSinceEpoch,
+          "username": "adiel",
+          "age": [77, 55, 91],
+        }),
+      ]);
     } on PlatformException {
       debugPrint("Error!!!");
     }
@@ -120,7 +137,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> fetchData() async {
     // sample_mflix.comments
     // test.my_collection
-    var collection = client.getDatabase("sample_mflix").getCollection("movies");
+    var collection = client.getDatabase("test").getCollection("my_collection");
 
     try {
 //      var document = MongoDocument.fromMap({
@@ -151,9 +168,9 @@ class _MyAppState extends State<MyApp> {
 
       /// with projection/limit
       var docs = await collection.find(
-//        filter: {
-//          "year": QueryOperator.gt(2010)..lte(2014),
-//        },
+        filter: {
+          "name": "naama",
+        },
 //        options: RemoteFindOptions(
 //            projection: {
 //              "title": ProjectionValue.INCLUDE,
@@ -165,8 +182,12 @@ class _MyAppState extends State<MyApp> {
 //              "year": OrderValue.DESCENDING,
 //            }),
       );
-      print(docs);
-      print(docs.length);
+//      print(doc.get("_id"));
+//      print(docs.length);
+
+    docs.forEach((doc) {
+      print(doc.get("_id"));
+    });
 
 //      /// with projection
 //      var doc = await collection.findOne(
@@ -198,13 +219,13 @@ class _MyAppState extends State<MyApp> {
 //        "price": 31.78432
 //      });
 
-//      var docs = await collection.find();
+//      var docs = await collection.find(filter: {"name": "Olly"});
 //      print(docs.length);
-
-//      var deletedDocs = await collection.deleteOne({"name": "Gilly"});
+//
+//      var deletedDocs = await collection.deleteOne({"name": "Olly"});
 //      print(deletedDocs);
 
-      var deletedDocs = await collection.deleteMany({"name": "Andrea Le"});
+      var deletedDocs = await collection.deleteMany({"name": "Olly"});
       print(deletedDocs);
 
 //      var size = await collection.count();
@@ -218,7 +239,7 @@ class _MyAppState extends State<MyApp> {
     var collection = client.getDatabase("test").getCollection("my_collection");
 
     try {
-      var results = await collection.updateOne(
+      var results = await collection.updateMany(
         filter: {
           "name": "adiel",
         },
@@ -227,16 +248,16 @@ class _MyAppState extends State<MyApp> {
 //            "quantity": 670,
 //          })
 
-        update: UpdateOperator.rename({
-          "count": "quantity",
-        }),
+//        update: UpdateOperator.rename({
+//          "count": "quantity",
+//        }),
 
 //          update: UpdateSelector.unset(["age"]),
 
-//        update: UpdateSelector.inc({
-//            "age": -2,
-//            "quantity": 30,
-//          }),
+        update: UpdateOperator.inc({
+            "age": -2,
+            "quantity": 30,
+          }),
 
 //          update: UpdateSelector.max({
 //            "quantity": 50.5,

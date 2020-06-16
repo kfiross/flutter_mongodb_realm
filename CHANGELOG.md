@@ -1,3 +1,12 @@
+<!--## 0.7.0-dev.3-->
+<!--* Added web support (for using stitch functions)-->
+
+<!--## 0.7.0-dev.2-->
+<!--* Added web support (for auth usage)-->
+
+## 0.7.0-dev.1
+* Added web support (for database usage)
+
 ## 0.6.1
 * Added support of watch collection with specified list of ids
 * Fixed `watchWithFilter()` to work correctly
