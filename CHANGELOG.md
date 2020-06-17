@@ -1,8 +1,8 @@
 <!--## 0.7.0-dev.4-->
 <!--* Added web support (for using stitch functions)-->
 
-<!--## 0.7.0-dev.3-->
-<!--* Added web support (for auth usage)-->
+## 0.7.0-dev.3
+* Added web support (for auth usage, not included Facebook\Google login)
 
 ## 0.7.0-dev.2
 * updated README for using on web
