@@ -22,7 +22,6 @@ class Mongo{
   external findDocument(String databaseName, String collectionName, String filter);
   external findDocuments(String databaseName, String collectionName, String filter);
   external countDocuments(String databaseName, String collectionName, String filter);
-
   external updateDocument(String databaseName, String collectionName, String filter, String update);
   external updateDocuments(String databaseName, String collectionName, String filter, String update);
 
@@ -36,8 +35,10 @@ class Mongo{
   external getUser();
   //
 
+  external callFunction(String name, List args);//, int timeout);
+
   ///WATCH CRAZY SOLUTION
-  external setupWatchCollection(String databaseName, String collectionName);
+  external setupWatchCollection(String databaseName, String collectionName, filter);
 
 }
 
@@ -140,10 +141,15 @@ class MyMongoClient{
     return userMap;
   }
 
-  /// WEB crazzzzy solution
+  Future callFunction(String name, List args/*, int timeout*/) async{
+    var result = await promiseToFuture(_mongo.callFunction(name, args/*, timeout*/));
+    return result;
+  }
 
-  setupWatchCollection(String databaseName, String collectionName) {
-    _mongo.setupWatchCollection(databaseName, collectionName);
+  /// WEB-only solution
+
+  setupWatchCollection(String databaseName, String collectionName, [filter]) {
+    _mongo.setupWatchCollection(databaseName, collectionName, filter);
   }
 
 

@@ -34,10 +34,11 @@ class MongoCollection {
   String get namespace  => "$collectionName.$databaseName";
 
   MongoCollection({@required this.collectionName, @required this.databaseName}){
-    if(kIsWeb){
-      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName);
-    }
+//    if(kIsWeb){
+//      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName);//, filter: BsonDocument(fixFilter).toJson());
+//    }
   }
+
 
   /// Inserts the provided document to the collection
   Future insertOne(MongoDocument document) async {
@@ -304,8 +305,12 @@ class MongoCollection {
   /// configured MongoDB rules.
   /// can optionally watch only specifies documents with the provided ids
   Stream watch({List<String> ids, bool asObjectIds = true}) {
+
     var stream;
     if(kIsWeb) {
+      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName, ids: ids, asObjectIds: asObjectIds);
+
+
       stream = FlutterMongoStitch.watchCollection(
           collectionName: this.collectionName,
           databaseName: this.databaseName,
@@ -339,6 +344,11 @@ class MongoCollection {
       fixFilter["fullDocument.$key"] = value;
     });
 
+
+
+    if(kIsWeb){
+      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName, filter: BsonDocument(fixFilter).toJson());
+    }
 
     var stream = FlutterMongoStitch.watchCollection(
       collectionName: this.collectionName,

@@ -1,14 +1,17 @@
-<!--## 0.7.0-dev.4-->
-<!--* Added web support (for using stitch functions)-->
+## 0.7.0-dev.5
+* Added web support (for using Stitch Functions)
+
+## 0.7.0-dev.4
+* Added web support (for using `watch` on collection)
 
 ## 0.7.0-dev.3
-* Added web support (for auth usage, not included Facebook\Google login)
+* Added web support (for Auth usage, not included Facebook\Google login)
 
 ## 0.7.0-dev.2
 * updated README for using on web
 
 ## 0.7.0-dev.1
-* Added web support (for database usage)
+* Added web support (for Database usage)
 
 ## 0.6.1
 * Added support of watch collection with specified list of ids

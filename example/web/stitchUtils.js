@@ -192,7 +192,7 @@ function Mongo() {
         var emailPassClient = stitch.Stitch.defaultAppClient.auth
             .getProviderClient(stitch.UserPasswordAuthProviderClient.factory);
 
-        console.log(182);
+
         await emailPassClient.registerWithEmail(email, password);
 //        return new Promise((resolve, reject) => {
 //            resolve(JSON.stringify({"id": user.id}));
@@ -218,7 +218,6 @@ function Mongo() {
      Mongo.prototype.getUser  = async function(){
          var user = await stitchAppClient.auth.user;
 
-         console.log(188);
 
          var userObject = {
             "id": user.id,
@@ -232,12 +231,41 @@ function Mongo() {
          });
      }
 
+     Mongo.prototype.callFunction  = async function(name, args/*, timeout*/){
+         var result = await stitchAppClient.callFunction(name, args);
+
+         return new Promise((resolve, reject) => {
+             resolve(result);
+         });
+     }
      // --------------------------
 
-     Mongo.prototype.setupWatchCollection = async function(databaseName, collectionName){
+     Mongo.prototype.setupWatchCollection = async function(databaseName, collectionName, arg){
         var collection = this.getCollection(databaseName, collectionName)
 
-        var changeStream = await collection.watch();
+        console.log(arg)
+        console.log(typeof arg)
+        if (typeof arg === 'string' || arg instanceof String){
+            arg = JSON.parse(arg);
+        }
+        if (typeof arg === 'array' || arg instanceof Array){
+            if(arg[1] == false){
+                arg = arg[0]
+            }
+            else {
+                var lst = [];
+                arg[0].forEach((str) => {
+                    lst.push(new stitch.BSON.ObjectId(str))
+                })
+                arg = lst;
+            }
+
+
+        }
+
+        console.log(arg)
+
+        var changeStream = await collection.watch(arg);//['8','22']);
 
         // Set the change listener. This will be called
         // when the watched documents are updated.
@@ -252,27 +280,13 @@ function Mongo() {
           });
 
           document.dispatchEvent(watchEvent);
-//          // Be sure to close the stream when finished.
+
+//          // Be sure to close the stream when finished(?).
 //          changeStream.close()
         })
      }
 
-//     Mongo.prototype.authListener = function(){
-//
-//        var listener = new MyStitchAuthListener();
-//        listener.onAuthEvent(stitchAppClient.auth)
-//
-//        stitchAppClient.auth.addAuthListener(listener).then(() =>{
-//
-//            console.log(240)
-////           var event = new CustomEvent("authChange", {
-////                detail: "kuku"
-////           });
-////
-////           document.dispatchEvent(event);
-//        })
-////
-//     }
+
 
 }
 

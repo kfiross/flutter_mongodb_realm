@@ -1,21 +1,13 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:bson/bson.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mongo_stitch/web/implementation.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
+
 class FlutterMongoStitchPlugin {
-
-
-
-//  static foo(){
-//
-////    stream.listen((Event event) {
-////      print((event as CustomEvent).detail);
-////    });
-//  }
-
   static void registerWith(Registrar registrar) async {
     final MethodChannel channel = MethodChannel(
       'flutter_mongo_stitch',
@@ -267,8 +259,13 @@ class FlutterMongoStitchPlugin {
 
   ///====================================================================
 
-  _callFunction(MethodCall call) {
+  _callFunction(MethodCall call) async {
+    final String name = call.arguments["name"];
+    final List args = call.arguments["args"] ?? [];
+    //final int timeout = call.arguments["timeout"] ?? 15000;
 
+    var result = _mongoClient.callFunction(name, args);//, timeout);
+    return result;
   }
 
   ///??///?
@@ -276,8 +273,28 @@ class FlutterMongoStitchPlugin {
   _setupWatchCollection(MethodCall call){
     final String databaseName = call.arguments['database_name'];
     final String collectionName = call.arguments['collection_name'];
+    final String filter = call.arguments['filter'];
+    final List ids = call.arguments['ids'];
+    final bool asObjectIds = call.arguments['as_object_ids'] ?? false;
 
-    _mongoClient.setupWatchCollection(databaseName, collectionName);
+    print(call.arguments);
+
+
+
+    if(filter == null) {
+      if (ids == null || ids.isEmpty) {
+        _mongoClient.setupWatchCollection(databaseName, collectionName);
+      }
+      else {
+          _mongoClient.setupWatchCollection(databaseName, collectionName, [ids, asObjectIds]);
+      }
+    }
+    else{
+
+      _mongoClient.setupWatchCollection(databaseName, collectionName, filter);
+
+    }
+
   }
 
 //  foo(){

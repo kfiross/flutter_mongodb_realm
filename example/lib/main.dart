@@ -80,16 +80,16 @@ class _MyAppState extends State<MyApp> {
 
       // after app initialized and user authenticated, show some data
 
-//      countData(); // DONE ON WEB
-//        insertData(); // DONE ON WEB
-//      fetchData();    // DONE ON WEB
-//      deleteData(); // DONE ON WEB
-//        updateData(); // DONE ON WEB
+//      countData(); /// DONE ON WEB
+//        insertData(); /// DONE ON WEB
+//      fetchData();    /// DONE ON WEB
+//      deleteData(); /// DONE ON WEB
+//        updateData(); /// DONE ON WEB
 
-        watchData(); //TODO: check????
+        watchData(); //TODO: check With Filter
 //      aggregateCollection(); //TODO: check
 
-//TODO: check
+    /// DONE ON WEB
 //      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
 //        print(value);
 //      });
@@ -352,18 +352,13 @@ class _MyAppState extends State<MyApp> {
 
     try {
 //      final stream = myCollection.watch(ids: ["22", "8"], asObjectIds: false);
-//      final stream2 = myCollection.watch(ids: ["5eca2d9fff448a4cbf8f6627"]);
-//      final stream3 = myCollection.watchWithFilter({/*"fullDocument.*/"age": 25});
+      final stream2 = myCollection.watch(ids: ["5ee8a50ffaba833f1c6c6a7c"]);
+//      final stream3 =  myCollection.watchWithFilter({"age": 25}); /// WORKS!
 
-      final streamSimple = myCollection.watch();
+//      final streamSimple = myCollection.watch();    /// WORKS!
 
 
-      streamSimple.listen((event) {
-//        if(kIsWeb){
-//          print(event);
-//        }
-//        else {
-
+      stream2.listen((event) {
           var fullDocument = MongoDocument.parse(event);
           print("a document with '${fullDocument.map["_id"]}' is changed");
 

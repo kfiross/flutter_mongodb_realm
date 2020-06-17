@@ -245,7 +245,7 @@ class FlutterMongoStitch {
 
   // WEB-specific helpers
 
-  static setupWatchCollection(String collectionName, String databaseName) async {
+  static Future setupWatchCollection(String collectionName, String databaseName, {List<String> ids, bool asObjectIds, String filter}) async {
     throw Exception('Not Supported');
   }
 

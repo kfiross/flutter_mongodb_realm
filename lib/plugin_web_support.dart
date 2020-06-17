@@ -234,10 +234,14 @@ class FlutterMongoStitch {
   }
 
 
-  static setupWatchCollection(String collectionName, String databaseName) async {
+  static setupWatchCollection(String collectionName, String databaseName, {List<String> ids, bool asObjectIds, String filter}) async {
+    print(238);
     await _channel.invokeMethod('setupWatchCollection', {
       'database_name': databaseName,
       'collection_name': collectionName,
+      'filter': filter,
+      'ids': ids,
+      'as_object_ids': asObjectIds
     });
   }
 
@@ -250,17 +254,21 @@ class FlutterMongoStitch {
     bool asObjectIds = true,
   }) {
     Stream<Event> stream =
-    document.on["watchEvent.$databaseName.$collectionName"];
+      document.on["watchEvent.$databaseName.$collectionName"];
     return stream;
   }
 
   static Map customEventToMap(event) {
     var detail = (event as CustomEvent).detail;
-    print(20);
+
     var map = json.decode(detail);
+    print(map['_id']);
 
-    map['_id'] = ObjectId.parse(map['_id']);
-
+    if(map['_id'] is String == false) {
+      map['_id'] = ObjectId.parse(map['_id']);
+    }
     return map;
+
+
   }
 }
