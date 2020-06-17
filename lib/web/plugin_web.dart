@@ -6,6 +6,16 @@ import 'package:flutter_mongo_stitch/web/implementation.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 class FlutterMongoStitchPlugin {
+
+
+
+//  static foo(){
+//
+////    stream.listen((Event event) {
+////      print((event as CustomEvent).detail);
+////    });
+//  }
+
   static void registerWith(Registrar registrar) async {
     final MethodChannel channel = MethodChannel(
       'flutter_mongo_stitch',
@@ -21,6 +31,11 @@ class FlutterMongoStitchPlugin {
 
   Future<dynamic> handleMethodCall(MethodCall call) async {
     switch (call.method) {
+      /// WEB-specific solutions
+      case "setupWatchCollection":
+        _setupWatchCollection(call);
+        return;
+
       case 'connectMongo':
         return _connectMongo(call);
 
@@ -252,5 +267,29 @@ class FlutterMongoStitchPlugin {
 
   ///====================================================================
 
-  _callFunction(MethodCall call) {}
+  _callFunction(MethodCall call) {
+
+  }
+
+  ///??///?
+
+  _setupWatchCollection(MethodCall call){
+    final String databaseName = call.arguments['database_name'];
+    final String collectionName = call.arguments['collection_name'];
+
+    _mongoClient.setupWatchCollection(databaseName, collectionName);
+  }
+
+//  foo(){
+////      CustomEvent event = CustomEvent("dog", detail: {
+////        "name": "Bowser",
+////        "hazcheeseburger": false
+////      });
+////
+////      document.dispatchEvent(event);
+////
+////      document.dispatchEvent(event);
+//
+//
+//  }
 }

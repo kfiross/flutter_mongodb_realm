@@ -35,6 +35,10 @@ class Mongo{
   external getUserId();
   external getUser();
   //
+
+  ///WATCH CRAZY SOLUTION
+  external setupWatchCollection(String databaseName, String collectionName);
+
 }
 
 class MyMongoClient{
@@ -134,6 +138,12 @@ class MyMongoClient{
     String result = await promiseToFuture(_mongo.getUser());
     Map userMap = json.decode(result);
     return userMap;
+  }
+
+  /// WEB crazzzzy solution
+
+  setupWatchCollection(String databaseName, String collectionName) {
+    _mongo.setupWatchCollection(databaseName, collectionName);
   }
 
 

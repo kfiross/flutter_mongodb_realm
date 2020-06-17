@@ -48,7 +48,7 @@ flutter:
         pluginClass: FlutterMongoStitchPlugin
       web:
         pluginClass: FlutterMongoStitchPlugin
-        fileName: plugin_web.dart
+        fileName: web/plugin_web.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   #  - images/a_dot_ham.jpeg

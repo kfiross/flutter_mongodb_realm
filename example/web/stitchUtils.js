@@ -1,10 +1,20 @@
 
 var mongoClient;
 var stitchAppClient
+
+
 //
-//function Test() {
-//    return 12+20;
+//class MyStitchAuthListener extends stitch.StitchAuthListener {
+////  // Call constructor of superclass to initialize superclass-derived members.
+////  stitch.StitchAuthListener.call(this, auth);
+//    constructor(auth){
+//        super(auth)
+//    }
 //}
+
+/// MyStitchAuthListener derives from 'StitchAuthListener' SDK one
+//MyStitchAuthListener.prototype = Object.create(stitch.StitchAuthListener.prototype);
+//MyStitchAuthListener.prototype.constructor = MyStitchAuthListener;
 
 
 function Mongo() {
@@ -15,6 +25,9 @@ function Mongo() {
             stitch.RemoteMongoClient.factory,
             "mongodb-atlas"
         );
+
+        // add Auth Listenr
+//        this.authListener();
     }
 
     /// -----------------------------------------------------
@@ -219,4 +232,48 @@ function Mongo() {
          });
      }
 
+     // --------------------------
+
+     Mongo.prototype.setupWatchCollection = async function(databaseName, collectionName){
+        var collection = this.getCollection(databaseName, collectionName)
+
+        var changeStream = await collection.watch();
+
+        // Set the change listener. This will be called
+        // when the watched documents are updated.
+        changeStream.onNext((event) => {
+          console.log('Watched document changed:', event)
+
+          var results = {
+            "_id": event.fullDocument['_id']
+          }
+          var watchEvent = new CustomEvent("watchEvent."+databaseName+"."+collectionName, {
+               detail: JSON.stringify(results)
+          });
+
+          document.dispatchEvent(watchEvent);
+//          // Be sure to close the stream when finished.
+//          changeStream.close()
+        })
+     }
+
+//     Mongo.prototype.authListener = function(){
+//
+//        var listener = new MyStitchAuthListener();
+//        listener.onAuthEvent(stitchAppClient.auth)
+//
+//        stitchAppClient.auth.addAuthListener(listener).then(() =>{
+//
+//            console.log(240)
+////           var event = new CustomEvent("authChange", {
+////                detail: "kuku"
+////           });
+////
+////           document.dispatchEvent(event);
+//        })
+////
+//     }
+
 }
+
+

@@ -6,6 +6,7 @@ import 'package:flutter_mongo_stitch/database/pipeline_stage.dart';
 
 import '../bson_document.dart';
 import '../plugin.dart';
+import '../plugin_support.dart';
 import 'mongo_document.dart';
 import 'query_operator.dart';
 import 'update_operator.dart';
@@ -32,7 +33,11 @@ class MongoCollection {
   /// The namespace of this collection, i.e. the database and collection names together.
   String get namespace  => "$collectionName.$databaseName";
 
-  MongoCollection({@required this.collectionName, @required this.databaseName});
+  MongoCollection({@required this.collectionName, @required this.databaseName}){
+    if(kIsWeb){
+      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName);
+    }
+  }
 
   /// Inserts the provided document to the collection
   Future insertOne(MongoDocument document) async {
@@ -299,12 +304,21 @@ class MongoCollection {
   /// configured MongoDB rules.
   /// can optionally watch only specifies documents with the provided ids
   Stream watch({List<String> ids, bool asObjectIds = true}) {
-    var stream = FlutterMongoStitch.watchCollection(
-      collectionName: this.collectionName,
-      databaseName: this.databaseName,
-      ids: ids,
-      asObjectIds: asObjectIds,
-    );
+    var stream;
+    if(kIsWeb) {
+      stream = FlutterMongoStitch.watchCollection(
+          collectionName: this.collectionName,
+          databaseName: this.databaseName,
+      );
+    }
+    else {
+      stream = FlutterMongoStitch.watchCollection(
+        collectionName: this.collectionName,
+        databaseName: this.databaseName,
+        ids: ids,
+        asObjectIds: asObjectIds,
+      );
+    }
 
     return stream;
   }

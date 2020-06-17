@@ -37,8 +37,8 @@ class _MyAppState extends State<MyApp> {
 
 
       // create a user
-        await client.auth
-            .registerWithEmail(email: "naamahasson1@gmail.com", password: "123456");
+//        await client.auth
+//            .registerWithEmail(email: "naamahasson1@gmail.com", password: "123456");
 
       // login Anonymously
 
@@ -72,11 +72,11 @@ class _MyAppState extends State<MyApp> {
 //      client.auth.logout();
 
 
-      var user = await client.auth.user;
-      print("you are user with id: '${user.id ?? '?'}', email: ${user.profile.email ?? '?'}");
-
-      var userId = await client.auth.getUserId();
-      print("you are '${userId ?? '?'}'");
+//      var user = await client.auth.user;
+//      print("you are user with id: '${user.id ?? '?'}', email: ${user.profile.email ?? '?'}");
+//
+//      var userId = await client.auth.getUserId();
+//      print("you are '${userId ?? '?'}'");
 
       // after app initialized and user authenticated, show some data
 
@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> {
 //      deleteData(); // DONE ON WEB
 //        updateData(); // DONE ON WEB
 
-//        watchData(); //TODO: check
+        watchData(); //TODO: check????
 //      aggregateCollection(); //TODO: check
 
 //TODO: check
@@ -351,15 +351,24 @@ class _MyAppState extends State<MyApp> {
         client.getDatabase("test").getCollection("my_collection");
 
     try {
-      final stream = myCollection.watch(ids: ["22", "8"], asObjectIds: false);
-      final stream2 = myCollection.watch(ids: ["5eca2d9fff448a4cbf8f6627"]);
-      final stream3 = myCollection.watchWithFilter({/*"fullDocument.*/"age": 25});
+//      final stream = myCollection.watch(ids: ["22", "8"], asObjectIds: false);
+//      final stream2 = myCollection.watch(ids: ["5eca2d9fff448a4cbf8f6627"]);
+//      final stream3 = myCollection.watchWithFilter({/*"fullDocument.*/"age": 25});
 
-      stream3.listen((data) {
-        //  print(data);
-        var fullDocument = MongoDocument.parse(data);
-        print("a document with '${fullDocument.map["_id"]}' is changed");
-        // do something
+      final streamSimple = myCollection.watch();
+
+
+      streamSimple.listen((event) {
+//        if(kIsWeb){
+//          print(event);
+//        }
+//        else {
+
+          var fullDocument = MongoDocument.parse(event);
+          print("a document with '${fullDocument.map["_id"]}' is changed");
+
+//        }
+       // do something
       });
     } on PlatformException catch (e) {
       debugPrint("Error! ${e.message}");
