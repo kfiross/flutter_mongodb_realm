@@ -42,21 +42,22 @@ Make sure you imported the javascript files:
 * Find
 * Delete
 * Update
-* Watch (also to specified IDs or with Filter) \[X]
+* Watch
+* Watch With Filter (also to specified IDs or with match-Filter)
 * Aggregate \[X]
 
 <b>Auth Providers:</b>
-* Email/Password \[X]
+* Email/Password
 * Anonymously
 * Google \[X]
 * Facebook \[X]
 
 <b>Authentication</b>
 * Reset Password \[X]
-* Login/Sign in/Logout \[X]
+* Login/Sign in/Logout
 
 <b>Functions</b>
-* Calling a Stitch function \[X]
+* Calling a Stitch function
 
 <b>Note:</b> Other more features will come in the future :)
 

@@ -1,8 +1,5 @@
-## 0.7.0-dev.5
-* Added web support (for using Stitch Functions)
-
 ## 0.7.0-dev.4
-* Added web support (for using `watch` on collection)
+* Added web support (for using `watch` on collection and calling Stitch Functions)
 
 ## 0.7.0-dev.3
 * Added web support (for Auth usage, not included Facebook\Google login)

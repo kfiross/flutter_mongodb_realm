@@ -20,8 +20,8 @@ dependencies:
   meta: ^1.0.4
 
 
-  # For supporting web sdk
-  js: ^0.6.0
+  # For supporting web sdk and js-dart interop
+  js: ^0.6.2
 
 
 dev_dependencies:
