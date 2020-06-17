@@ -37,15 +37,18 @@ class _MyAppState extends State<MyApp> {
 
 
       // create a user
-//        await client.auth
-//            .registerWithEmail(email: "cookie2", password: "12345678");
+        await client.auth
+            .registerWithEmail(email: "naamahasson1@gmail.com", password: "123456");
 
       // login Anonymously
 
       CoreStitchUser mongoUser =
           await client.auth.loginWithCredential(
-              AnonymousCredential()
-//          UserPasswordCredential(username: "kfir25816@gmail.com",password: "asdfghj")
+//              AnonymousCredential()
+          UserPasswordCredential(
+              username: 'naamahasson1@gmail.com',//"kfir25816@gmail.com",
+              password: '123456',//"asdfghj"
+          )
               );
 
 //      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
@@ -68,9 +71,16 @@ class _MyAppState extends State<MyApp> {
 
 //      client.auth.logout();
 
+
+      var user = await client.auth.user;
+      print("you are user with id: '${user.id ?? '?'}', email: ${user.profile.email ?? '?'}");
+
+      var userId = await client.auth.getUserId();
+      print("you are '${userId ?? '?'}'");
+
       // after app initialized and user authenticated, show some data
 
-      countData(); // DONE ON WEB
+//      countData(); // DONE ON WEB
 //        insertData(); // DONE ON WEB
 //      fetchData();    // DONE ON WEB
 //      deleteData(); // DONE ON WEB
@@ -79,7 +89,7 @@ class _MyAppState extends State<MyApp> {
 //        watchData(); //TODO: check
 //      aggregateCollection(); //TODO: check
 
-
+//TODO: check
 //      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
 //        print(value);
 //      });

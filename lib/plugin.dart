@@ -64,6 +64,7 @@ class FlutterMongoStitch {
 
   static Future<CoreStitchUser> getUser() async{
     final LinkedHashMap result = await _channel.invokeMethod('getUser');
+    print(result);
     return CoreStitchUser.fromMap(result);
   }
 

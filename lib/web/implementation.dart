@@ -27,6 +27,14 @@ class Mongo{
   external updateDocuments(String databaseName, String collectionName, String filter, String update);
 
   external loginAnonymously();
+  external signInWithUsernamePassword(String username, String password);
+  //
+  //
+  external registerWithEmail(String username, String password);
+  external logout();
+  external getUserId();
+  external getUser();
+  //
 }
 
 class MyMongoClient{
@@ -96,6 +104,39 @@ class MyMongoClient{
     Map userMap = json.decode(result);
     return {"id": userMap['id']};
   }
+
+  Future<Map> signInWithUsernamePassword(String username, String password) async {
+    String result = await promiseToFuture(
+        _mongo.signInWithUsernamePassword(username, password));
+    print(result);
+    Map userMap = json.decode(result);
+    return {"id": userMap['id']};
+  }
+
+  // TODO: add 'signInWithUsernameGoogle()'
+  // TODO: add 'signInWithUsernameGoogle()'
+
+  Future<bool> registerWithEmail(String username, String password) async {
+    /*String result =*/ await promiseToFuture(
+        _mongo.registerWithEmail(username, password));
+    return true;
+  }
+
+  Future<bool> logout() async{
+    await promiseToFuture(_mongo.logout());
+    return true;
+  }
+
+  Future<String> getUserId() async =>
+      await promiseToFuture(_mongo.getUserId());
+
+  Future<Map> getUser() async{
+    String result = await promiseToFuture(_mongo.getUser());
+    Map userMap = json.decode(result);
+    return userMap;
+  }
+
+
 }
 
 

@@ -74,13 +74,13 @@ class FlutterMongoStitchPlugin {
         return await _registerWithEmail(call);
 
       case 'logout':
-        return await _logout(call);
+        return await _logout();
 
       case 'getUserId':
-        return await _getUserId(call);
+        return await _getUserId();
 
       case 'getUser':
-        return await _getUser(call);
+        return await _getUser();
 
       case 'sendResetPasswordEmail':
         return await _sendResetPasswordEmail(call);
@@ -211,19 +211,42 @@ class FlutterMongoStitchPlugin {
     return authResult;
   }
 
-  _signInWithUsernamePassword(MethodCall call) async{}
+  _signInWithUsernamePassword(MethodCall call) async{
+    final String username = call.arguments["username"];
+    final String password = call.arguments["password"];
+
+
+    var authResult =
+      await _mongoClient.signInWithUsernamePassword(username, password);
+    return authResult;
+  }
 
   _signInWithGoogle(MethodCall call) async{}
 
   _signInWithFacebook(MethodCall call) async{}
 
-  _registerWithEmail(MethodCall call) async{}
+  _registerWithEmail(MethodCall call) async{
+    final String email = call.arguments["email"];
+    final String password = call.arguments["password"];
 
-  _logout(MethodCall call) async{}
+    var authResult = await _mongoClient.registerWithEmail(email, password);
+    return authResult;
+  }
 
-  _getUserId(MethodCall call) async{}
+  _logout() async{
+    await _mongoClient.logout();
+    return true;
+  }
 
-  _getUser(MethodCall call) async{}
+  _getUserId() async{
+    var id = await _mongoClient.getUserId();
+    return id;
+  }
+
+  _getUser() async{
+    var authResult = await _mongoClient.getUser();
+    return authResult;
+  }
 
   _sendResetPasswordEmail(MethodCall call) async{}
 

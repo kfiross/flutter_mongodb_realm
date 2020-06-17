@@ -71,7 +71,7 @@ class MongoStitchAuth {
     return result;
   }
 
-  Future<bool> getUserId() async {
+  Future<String> getUserId() async {
     var result = await FlutterMongoStitch.getUserId();
     return result;
   }
