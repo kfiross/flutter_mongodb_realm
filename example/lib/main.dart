@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
     init();
   }
 
-  void init() async {
+  Future<void> init() async {
     // initialized MongoStitch App
 
     try {
@@ -42,14 +42,14 @@ class _MyAppState extends State<MyApp> {
 
       // login Anonymously
 
-      CoreStitchUser mongoUser =
-          await client.auth.loginWithCredential(
-//              AnonymousCredential()
-          UserPasswordCredential(
-              username: 'naamahasson1@gmail.com',//"kfir25816@gmail.com",
-              password: '123456',//"asdfghj"
-          )
-              );
+//      CoreStitchUser mongoUser =
+//          await client.auth.loginWithCredential(
+////              AnonymousCredential()
+//          UserPasswordCredential(
+//              username: 'naamahasson1@gmail.com',//"kfir25816@gmail.com",
+//              password: '123456',//"asdfghj"
+//          )
+//              );
 
 //      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
 //          GoogleCredential(
@@ -59,12 +59,12 @@ class _MyAppState extends State<MyApp> {
 ////          FacebookCredential(permissions: ["email"])
 //          );
 
-      if (mongoUser != null) {
-        print("logged in as ${mongoUser.id ?? '?'}");
-      }
-      else {
-        print("wrong pass or username");
-      }
+//      if (mongoUser != null) {
+//        print("logged in as ${mongoUser.id ?? '?'}");
+//      }
+//      else {
+//        print("wrong pass or username");
+//      }
 
 
       // sign out
@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> {
 //      deleteData(); /// DONE ON WEB
 //        updateData(); /// DONE ON WEB
 
-        watchData(); //TODO: check With Filter
+//        watchData(); /// DONE ON WEB
 //      aggregateCollection(); //TODO: check
 
     /// DONE ON WEB
@@ -424,43 +424,82 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-//      home: _authBuilder(context),
+      home:  _authBuilder(context),
 
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Text('Running on: \n'),
-              RaisedButton(
-                child: Text("Reset Password"),
-                onPressed: () async{
-                  try {
-                    var currUser = await client.auth.user;
-                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
-                    print(success);
-                  }
-                  on PlatformException catch (e){
-                    print(e.message ?? 'Unkown error');
-                  }
-                },
-              )
-            ],
-          ),
-        ),
-      ),
+//      home: Scaffold(
+//        appBar: AppBar(
+//          title: const Text('Plugin example app'),
+//        ),
+//        body: Center(
+//          child: Column(
+//            children: <Widget>[
+//              Text('Running on: \n'),
+//              RaisedButton(
+//                child: Text("Reset Password"),
+//                onPressed: () async{
+//                  try {
+//                    var currUser = await client.auth.user;
+//                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
+//                    print(success);
+//                  }
+//                  on PlatformException catch (e){
+//                    print(e.message ?? 'Unkown error');
+//                  }
+//                },
+//              )
+//            ],
+//          ),
+//        ),
+//      ),
     );
   }
+
+//  FutureBuilder _authFutureBuilder(BuildContext context) {
+//    return FutureBuilder(
+//      future: client.auth.user,
+//      builder: (context, AsyncSnapshot snapshot) {
+//        switch (snapshot.connectionState) {
+//          case ConnectionState.none:
+//          case ConnectionState.waiting:
+//          // show loading indicator
+//            return Scaffold(body: Center(child: CircularProgressIndicator()));
+//
+//          case ConnectionState.done:
+//          // log error to console
+//            if (snapshot.error != null) {
+//              print("error");
+//              return Container(
+//                color: Colors.black,
+//                alignment: Alignment.center,
+//                child: Text(
+//                  snapshot.error.toString(),
+//                  style: TextStyle(
+//                    fontSize: 18,
+//                    color: Colors.white,
+//                    fontFamily: "ariel",
+//                  ),
+//                ),
+//              );
+//            }
+//
+//            // redirect to the proper page
+//            return snapshot.hasData ? HomeScreen() : LoginScreen();
+//
+//
+//          default:
+//            return Container();
+//        }
+//      },
+//    );
+//  }
+
 
   StreamBuilder _authBuilder(BuildContext context) {
     Stream stream = client.auth.authListener();
     return StreamBuilder(
       stream: stream,
       builder: (context, AsyncSnapshot snapshot) {
-
-        switch (snapshot. connectionState) {
+        switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
             // show loading indicator

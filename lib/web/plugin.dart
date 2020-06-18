@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:bson/bson.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mongo_stitch/web/implementation.dart';
+import 'implementation.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 

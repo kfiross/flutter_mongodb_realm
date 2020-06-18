@@ -1,18 +1,22 @@
+"use strict";
 
 var mongoClient;
 var stitchAppClient
 
-
 //
-//class MyStitchAuthListener extends stitch.StitchAuthListener {
-////  // Call constructor of superclass to initialize superclass-derived members.
-////  stitch.StitchAuthListener.call(this, auth);
-//    constructor(auth){
-//        super(auth)
-//    }
-//}
+//  var watchEvent = new CustomEvent("watchEvent."+databaseName+"."+collectionName, {
+//               detail: JSON.stringify(results)
+//          });
+//
+//          document.dispatchEvent(watchEvent);
 
-/// MyStitchAuthListener derives from 'StitchAuthListener' SDK one
+// subclass
+//function MyStitchAuthListener(auth) {
+//  // Call constructor of superclass to initialize superclass-derived members.
+//  MyStitchAuthListener.call(this, auth);
+//}
+//
+//// MyStitchAuthListener derives from 'StitchAuthListener' SDK one
 //MyStitchAuthListener.prototype = Object.create(stitch.StitchAuthListener.prototype);
 //MyStitchAuthListener.prototype.constructor = MyStitchAuthListener;
 
@@ -26,8 +30,13 @@ function Mongo() {
             "mongodb-atlas"
         );
 
+        this.sendAuthListenerEvent(null);
+
+
         // add Auth Listenr
 //        this.authListener();
+
+
     }
 
     /// -----------------------------------------------------
@@ -148,6 +157,12 @@ function Mongo() {
         var user = await stitchAppClient.auth.loginWithCredential(
             new stitch.AnonymousCredential())
 
+        var userObject = {
+            "id": user.id
+        }
+
+        this.sendAuthListenerEvent(userObject);
+
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify({"id": user.id}));
         });
@@ -165,6 +180,8 @@ function Mongo() {
             }
          }
 
+         this.sendAuthListenerEvent(userObject);
+
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify(userObject));
         });
@@ -174,6 +191,8 @@ function Mongo() {
 //        var user = await stitchAppClient.auth.loginWithCredential(
 //            new stitch.UserPasswordCredential(username, password))
 //
+//          this.sendAuthListenerEvent(userObject);
+//
 //        return new Promise((resolve, reject) => {
 //            resolve(JSON.stringify({"id": user.id}));
 //        });
@@ -182,6 +201,8 @@ function Mongo() {
 //    Mongo.prototype.signInWithUsernamePassword  = async function(username, password){
 //        var user = await stitchAppClient.auth.loginWithCredential(
 //            new stitch.UserPasswordCredential(username, password))
+//
+//          this.sendAuthListenerEvent(userObject);
 //
 //        return new Promise((resolve, reject) => {
 //            resolve(JSON.stringify({"id": user.id}));
@@ -203,6 +224,7 @@ function Mongo() {
 
     Mongo.prototype.logout  = async function(){
         await stitchAppClient.auth.logout();
+        this.sendAuthListenerEvent(null);
         console.log('logged out')
     }
 
@@ -239,6 +261,17 @@ function Mongo() {
          });
      }
      // --------------------------
+
+    Mongo.prototype.sendAuthListenerEvent = async function(arg){
+
+         var authEvent = new CustomEvent("authChange", {
+                detail: arg
+         });
+
+         document.dispatchEvent(authEvent);
+
+
+    }
 
      Mongo.prototype.setupWatchCollection = async function(databaseName, collectionName, arg){
         var collection = this.getCollection(databaseName, collectionName)

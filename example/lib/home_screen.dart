@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
@@ -77,12 +78,17 @@ class _HomeScreenState extends State<HomeScreen> {
             FlatButton(
               child: Icon(Icons.exit_to_app, color: Colors.white),
               onPressed: () async {
-                final FacebookLogin fbLogin = FacebookLogin();
+                try {
+                  if(!kIsWeb) {
+                    final FacebookLogin fbLogin = FacebookLogin();
 
-                bool loggedAsFacebook = await fbLogin.isLoggedIn;
-                if (loggedAsFacebook){
-                  await fbLogin.logOut();
+                    bool loggedAsFacebook = await fbLogin.isLoggedIn;
+                    if (loggedAsFacebook) {
+                      await fbLogin.logOut();
+                    }
+                  }
                 }
+                catch(e){}
 
 
 

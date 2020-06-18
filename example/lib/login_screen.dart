@@ -15,8 +15,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
 
-  var _email = "";//""kfir25816@gmail.com";
-  var _password = "";//"12345678";
+  var _email = "kfir25816@gmail.com";
+  var _password = "asdfghj";
 
   var client = MongoStitchClient();
   var _state = LoginState.login;

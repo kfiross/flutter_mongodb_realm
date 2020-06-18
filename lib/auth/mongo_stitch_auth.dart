@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_mongo_stitch/auth/credentials/google_credential.dart';
@@ -91,9 +93,11 @@ class MongoStitchAuth {
 
 
   Stream authListener() {
-    var stream = FlutterMongoStitch.authListener(
-
-    );
+//    if(kIsWeb){
+//      var stream = Stream<CoreStitchUser>.fromFuture(user);
+//      return stream;
+//    }
+    var stream = FlutterMongoStitch.authListener();
 
     return stream;
   }

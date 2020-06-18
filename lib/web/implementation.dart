@@ -37,9 +37,9 @@ class Mongo{
 
   external callFunction(String name, List args);//, int timeout);
 
-  ///WATCH CRAZY SOLUTION
+  ///STREAM CRAZY SOLUTION
   external setupWatchCollection(String databaseName, String collectionName, filter);
-
+  external setupAuthListener();
 }
 
 class MyMongoClient{
@@ -151,6 +151,7 @@ class MyMongoClient{
   setupWatchCollection(String databaseName, String collectionName, [filter]) {
     _mongo.setupWatchCollection(databaseName, collectionName, filter);
   }
+
 
 
 }

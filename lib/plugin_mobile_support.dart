@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -233,11 +234,6 @@ class FlutterMongoStitch {
   }
 
   static Stream authListener() {
-    // continuous stream of events from platform side
-//    if(kIsWeb){
-//      Stream<Event> stream = document.on["authChange"];
-//      return stream;
-//    }
     return _streamsChannel.receiveBroadcastStream({
       "handler": "auth",
     });
@@ -252,4 +248,11 @@ class FlutterMongoStitch {
   static Map customEventToMap(event) {
     throw Exception('Not Supported');
   }
+}
+
+class AuthValueNotifier extends ValueNotifier{
+  AuthValueNotifier(value) : super(value);
+
+
+
 }

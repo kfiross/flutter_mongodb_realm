@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'package:bson/bson.dart';
@@ -225,12 +226,36 @@ class FlutterMongoStitch {
   static Stream authListener() {
     // continuous stream of events from platform side
 //    if(kIsWeb){
-//      Stream<Event> stream = document.on["authChange"];
-//      return stream;
+      Stream<Event> jsStream = document.on["authChange"];
+
+      // ignore: close_sinks
+      var controller = StreamController<Map>();
+
+      controller.onListen = (){
+        controller.add(null);
+      };
+
+      jsStream.listen((event) {
+        print(243);
+        var eventDetail = (event as CustomEvent).detail;
+        print(eventDetail);
+        if (eventDetail == null) {
+          controller.add(null);
+        }
+        else {
+          controller.add(eventDetail);
+        }
+      });
+
+      Stream stream = controller.stream;
+
+      return stream;
+
+
 //    }
-    return _streamsChannel.receiveBroadcastStream({
-      "handler": "auth",
-    });
+//    return _streamsChannel.receiveBroadcastStream({
+//      "handler": "auth",
+//    });
   }
 
 
