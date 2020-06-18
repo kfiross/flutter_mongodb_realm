@@ -53,6 +53,7 @@ Make sure you imported the javascript files:
 * Facebook \[X]
 
 <b>Authentication</b>
+* Auth Listener
 * Reset Password \[X]
 * Login/Sign in/Logout
 

@@ -1,3 +1,6 @@
+## 0.7.0-dev.5
+* Added web support (for using `authListener()` stream)
+
 ## 0.7.0-dev.4
 * Added web support (for using `watch` on collection and calling Stitch Functions)
 
