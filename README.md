@@ -54,7 +54,7 @@ Make sure you imported the javascript files:
 
 <b>Authentication</b>
 * Auth Listener
-* Reset Password \[X]
+* Reset Password
 * Login/Sign in/Logout
 
 <b>Functions</b>

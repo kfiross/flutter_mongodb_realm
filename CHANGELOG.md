@@ -1,3 +1,6 @@
+## 0.7.0-dev.6
+* Added web support (for using `sendResetPassword`)
+
 ## 0.7.0-dev.5
 * Added web support (for using `authListener()` stream)
 
