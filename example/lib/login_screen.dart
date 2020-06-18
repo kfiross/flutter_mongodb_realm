@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_mongo_stitch_example/reset_pass_screen.dart';
 
 import 'home_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -43,28 +44,34 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextFormField(
-              initialValue: _email,
-              decoration: InputDecoration(labelText: 'Email'),
-              autocorrect: false,
-              validator: (val) => val.isEmpty ? "Name can't be empty." : null,
-              onSaved: (val) => _email = val,
+            Container(
+              width: 300,
+              child: TextFormField(
+                initialValue: _email,
+                decoration: InputDecoration(labelText: 'Email'),
+                autocorrect: false,
+                validator: (val) => val.isEmpty ? "Name can't be empty." : null,
+                onSaved: (val) => _email = val,
+              ),
             ),
             SizedBox(height: 12),
-            TextFormField(
-              initialValue: _password,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-              autocorrect: false,
-              validator: (String val) {
-                if (val.isEmpty) return "Password can't be empty.";
+            Container(
+              width: 300,
+              child: TextFormField(
+                initialValue: _password,
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                autocorrect: false,
+                validator: (String val) {
+                  if (val.isEmpty) return "Password can't be empty.";
 
-                if (val.length < 6)
-                  return "Password must be at least 6 charcaters long";
+                  if (val.length < 6)
+                    return "Password must be at least 6 charcaters long";
 
-                return null;
-              },
-              onSaved: (val) => _password = val,
+                  return null;
+                },
+                onSaved: (val) => _password = val,
+              ),
             ),
             SizedBox(height: 36),
             Container(
@@ -113,6 +120,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             )
                 : Container(),
+            SizedBox(height: 12),
+            InkWell(
+              child: Text("Forgot password?"),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_) => ResetPasswordScreen()));
+              },
+            ),
             Container(
               width: 200,
               child: RaisedButton(
