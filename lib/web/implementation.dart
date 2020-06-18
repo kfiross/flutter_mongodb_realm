@@ -33,7 +33,7 @@ class Mongo{
   external logout();
   external getUserId();
   external getUser();
-  //
+  external sendResetPasswordEmail(String email);
 
   external callFunction(String name, List args);//, int timeout);
 
@@ -141,6 +141,11 @@ class MyMongoClient{
     return userMap;
   }
 
+  Future<bool> sendResetPasswordEmail(String email)async {
+    await promiseToFuture(_mongo.sendResetPasswordEmail(email));
+    return true;
+  }
+
   Future callFunction(String name, List args/*, int timeout*/) async{
     var result = await promiseToFuture(_mongo.callFunction(name, args/*, timeout*/));
     return result;
@@ -151,8 +156,6 @@ class MyMongoClient{
   setupWatchCollection(String databaseName, String collectionName, [filter]) {
     _mongo.setupWatchCollection(databaseName, collectionName, filter);
   }
-
-
 
 }
 

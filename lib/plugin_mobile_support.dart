@@ -249,10 +249,3 @@ class FlutterMongoStitch {
     throw Exception('Not Supported');
   }
 }
-
-class AuthValueNotifier extends ValueNotifier{
-  AuthValueNotifier(value) : super(value);
-
-
-
-}

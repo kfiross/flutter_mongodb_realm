@@ -3,24 +3,6 @@
 var mongoClient;
 var stitchAppClient
 
-//
-//  var watchEvent = new CustomEvent("watchEvent."+databaseName+"."+collectionName, {
-//               detail: JSON.stringify(results)
-//          });
-//
-//          document.dispatchEvent(watchEvent);
-
-// subclass
-//function MyStitchAuthListener(auth) {
-//  // Call constructor of superclass to initialize superclass-derived members.
-//  MyStitchAuthListener.call(this, auth);
-//}
-//
-//// MyStitchAuthListener derives from 'StitchAuthListener' SDK one
-//MyStitchAuthListener.prototype = Object.create(stitch.StitchAuthListener.prototype);
-//MyStitchAuthListener.prototype.constructor = MyStitchAuthListener;
-
-
 function Mongo() {
     Mongo.prototype.connectMongo  = function(appId) {
         stitchAppClient = stitch.Stitch.initializeDefaultAppClient(appId);
@@ -31,12 +13,6 @@ function Mongo() {
         );
 
         this.sendAuthListenerEvent(null);
-
-
-        // add Auth Listenr
-//        this.authListener();
-
-
     }
 
     /// -----------------------------------------------------
@@ -215,9 +191,6 @@ function Mongo() {
 
 
         await emailPassClient.registerWithEmail(email, password);
-//        return new Promise((resolve, reject) => {
-//            resolve(JSON.stringify({"id": user.id}));
-//        });
 
         console.log('DONE!');
     }
@@ -253,6 +226,13 @@ function Mongo() {
          });
      }
 
+     Mongo.prototype.sendResetPasswordEmail = async function(email){
+        var emailPassClient = stitch.Stitch.defaultAppClient.auth
+                .getProviderClient(stitch.UserPasswordAuthProviderClient.factory);
+
+        await emailPassClient.sendResetPasswordEmail(email);
+     }
+
      Mongo.prototype.callFunction  = async function(name, args/*, timeout*/){
          var result = await stitchAppClient.callFunction(name, args);
 
@@ -269,8 +249,6 @@ function Mongo() {
          });
 
          document.dispatchEvent(authEvent);
-
-
     }
 
      Mongo.prototype.setupWatchCollection = async function(databaseName, collectionName, arg){
@@ -292,11 +270,8 @@ function Mongo() {
                 })
                 arg = lst;
             }
-
-
         }
 
-        console.log(arg)
 
         var changeStream = await collection.watch(arg);//['8','22']);
 
@@ -318,9 +293,4 @@ function Mongo() {
 //          changeStream.close()
         })
      }
-
-
-
 }
-
-

@@ -255,7 +255,12 @@ class FlutterMongoStitchPlugin {
     return authResult;
   }
 
-  _sendResetPasswordEmail(MethodCall call) async{}
+  _sendResetPasswordEmail(MethodCall call) async{
+    final String email = call.arguments["email"];
+
+    await _mongoClient.sendResetPasswordEmail(email);
+    return true;
+  }
 
   ///====================================================================
 
