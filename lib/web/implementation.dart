@@ -22,8 +22,24 @@ class Mongo{
   external findDocument(String databaseName, String collectionName, String filter);
   external findDocuments(String databaseName, String collectionName, String filter);
   external countDocuments(String databaseName, String collectionName, String filter);
+  external updateDocument(String databaseName, String collectionName, String filter, String update);
+  external updateDocuments(String databaseName, String collectionName, String filter, String update);
 
   external loginAnonymously();
+  external signInWithUsernamePassword(String username, String password);
+  external signInWithGoogle(String authCode);
+  external signInWithFacebook(String token);
+  external registerWithEmail(String username, String password);
+  external logout();
+  external getUserId();
+  external getUser();
+  external sendResetPasswordEmail(String email);
+
+  external callFunction(String name, List args);//, int timeout);
+
+  ///STREAM SOLUTION
+  external setupWatchCollection(String databaseName, String collectionName, filter);
+  external setupAuthListener();
 }
 
 class MyMongoClient{
@@ -68,8 +84,19 @@ class MyMongoClient{
   }
 
   Future<int> countDocuments(String databaseName, String collectionName, String filter) async {
-    var docs =  await promiseToFuture(_mongo.countDocuments(databaseName, collectionName, filter));
-    return docs;
+    var docsCount =  await promiseToFuture(_mongo.countDocuments(databaseName, collectionName, filter));
+    return docsCount;
+  }
+
+  Future updateDocument(String databaseName, String collectionName, String filter, String update) async {
+    var docsUpdatedCount =  await promiseToFuture(_mongo.updateDocument(databaseName, collectionName, filter, update));
+    return docsUpdatedCount;
+  }
+
+
+  Future updateDocuments(String databaseName, String collectionName, String filter, String update) async {
+    var docsUpdatedCount =  await promiseToFuture(_mongo.updateDocuments(databaseName, collectionName, filter, update));
+    return docsUpdatedCount;
   }
 
 
@@ -82,6 +109,68 @@ class MyMongoClient{
     Map userMap = json.decode(result);
     return {"id": userMap['id']};
   }
+
+  Future<Map> signInWithUsernamePassword(String username, String password) async {
+    String result = await promiseToFuture(
+        _mongo.signInWithUsernamePassword(username, password));
+    print(result);
+    Map userMap = json.decode(result);
+    return {"id": userMap['id']};
+  }
+
+  Future<Map> signInWithGoogle(String authCode) async{
+    String result = await promiseToFuture(
+        _mongo.signInWithGoogle(authCode));
+    print(result);
+    Map userMap = json.decode(result);
+    return {"id": userMap['id']};
+  }
+
+  Future<Map> signInWithFacebook(String token) async{
+    String result = await promiseToFuture(
+        _mongo.signInWithFacebook(token));
+    print(result);
+    Map userMap = json.decode(result);
+    return {"id": userMap['id']};
+  }
+
+
+  Future<bool> registerWithEmail(String username, String password) async {
+    /*String result =*/ await promiseToFuture(
+        _mongo.registerWithEmail(username, password));
+    return true;
+  }
+
+  Future<bool> logout() async{
+    await promiseToFuture(_mongo.logout());
+    return true;
+  }
+
+  Future<String> getUserId() async =>
+      await promiseToFuture(_mongo.getUserId());
+
+  Future<Map> getUser() async{
+    String result = await promiseToFuture(_mongo.getUser());
+    Map userMap = json.decode(result);
+    return userMap;
+  }
+
+  Future<bool> sendResetPasswordEmail(String email)async {
+    await promiseToFuture(_mongo.sendResetPasswordEmail(email));
+    return true;
+  }
+
+  Future callFunction(String name, List args/*, int timeout*/) async{
+    var result = await promiseToFuture(_mongo.callFunction(name, args/*, timeout*/));
+    return result;
+  }
+
+  /// WEB-only solution
+
+  setupWatchCollection(String databaseName, String collectionName, [filter]) {
+    _mongo.setupWatchCollection(databaseName, collectionName, filter);
+  }
+
 }
 
 

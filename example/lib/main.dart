@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
     init();
   }
 
-  void init() async {
+  Future<void> init() async {
     // initialized MongoStitch App
 
     try {
@@ -38,46 +38,62 @@ class _MyAppState extends State<MyApp> {
 
       // create a user
 //        await client.auth
-//            .registerWithEmail(email: "cookie2", password: "12345678");
+//            .registerWithEmail(email: "naamahasson1@gmail.com", password: "123456");
 
       // login Anonymously
 
-      CoreStitchUser mongoUser =
-          await client.auth.loginWithCredential(
-              AnonymousCredential()
-//          UserPasswordCredential(username: "kfir25816@gmail.com",password: "asdfghj")
-              );
+//      CoreStitchUser mongoUser =
+//          await client.auth.loginWithCredential(
+////              AnonymousCredential()
+//          UserPasswordCredential(
+//              username: 'naamahasson1@gmail.com',//"kfir25816@gmail.com",
+//              password: '123456',//"asdfghj"
+//          )
+//              );
+
+//    614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv.apps.googleusercontent.com
 
 //      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
 //          GoogleCredential(
-//        serverClientId: "281897935076-dlab9116cid9cmivd6nilofihip552cr",
+//        serverClientId: "614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv",//"281897935076-dlab9116cid9cmivd6nilofihip552cr",
 //        scopes: ["email"],
 //      )
-////          FacebookCredential(permissions: ["email"])
+//          FacebookCredential(permissions: ["email"])
 //          );
 
-      if (mongoUser != null) {
-        print("logged in as ${mongoUser.id ?? '?'}");
-      }
-      else {
-        print("wrong pass or username");
-      }
+//      if (mongoUser != null) {
+//        print("logged in as ${mongoUser.id ?? '?'}");
+//      }
+//      else {
+//        print("wrong pass or username");
+//      }
+
 
 
       // sign out
 
 //      client.auth.logout();
 
+
+//      var user = await client.auth.user;
+//      print("you are user with id: '${user.id ?? '?'}', email: ${user.profile.email ?? '?'}");
+//
+//      var userId = await client.auth.getUserId();
+//      print("you are '${userId ?? '?'}'");
+
       // after app initialized and user authenticated, show some data
 
-//        insertData(); //TODO: check
-      fetchData();
-//      deleteData(); //TODO: check
-//        updateData(); //TODO: check
-//        watchData(); //TODO: check
+//      countData(); /// DONE ON WEB
+//        insertData(); /// DONE ON WEB
+//      fetchData();    /// DONE ON WEB
+//      deleteData(); /// DONE ON WEB
+//        updateData(); /// DONE ON WEB
+
+//        watchData(); /// DONE ON WEB
 //      aggregateCollection(); //TODO: check
 
 
+    /// DONE ON WEB
 //      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
 //        print(value);
 //      });
@@ -87,31 +103,46 @@ class _MyAppState extends State<MyApp> {
     } on Exception {}
   }
 
+  Future<void> countData() async {
+    var collection = client.getDatabase("test").getCollection("my_collection");
+
+    try {
+      var size = await collection.count();
+      print("size=$size");
+    }
+    on PlatformException catch (e) {
+      print("Error! ${e.message}");
+    }
+  }
+
   Future<void> insertData() async {
     var collection = client.getDatabase("test").getCollection("my_collection");
 
     try {
-      var document = MongoDocument({
-        "time": DateTime.now().millisecondsSinceEpoch,
-        "user_id": "abcdefg67",
-        "age": 25,
-        "price": 31.72
-      });
+//      var document = MongoDocument({
+//        "time": DateTime.now().millisecondsSinceEpoch,
+//        "name": "hadar",
+//        "age": 27,
+//        "dogs": [
+//          "shocko",
+//          "nuna"
+//        ]
+//      });
+//
+//      collection.insertOne(document);
 
-      collection.insertOne(document);
-
-//      collection.insertMany([
-//        MongoDocument({
-//          "time": DateTime.now().millisecondsSinceEpoch,
-//          "user_id": "michael",
-//          "age": 28,
-//        }),
-//        MongoDocument({
-//          "time": DateTime.now().millisecondsSinceEpoch,
-//          "name": "adiel",
-//          "age": 23,
-//        }),
-//      ]);
+      collection.insertMany([
+        MongoDocument({
+          "time": DateTime.now().millisecondsSinceEpoch,
+          "username": "moshe",
+          "grades": [90, 98],
+        }),
+        MongoDocument({
+          "time": DateTime.now().millisecondsSinceEpoch,
+          "username": "adiel",
+          "age": [77, 55, 91],
+        }),
+      ]);
     } on PlatformException {
       debugPrint("Error!!!");
     }
@@ -120,7 +151,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> fetchData() async {
     // sample_mflix.comments
     // test.my_collection
-    var collection = client.getDatabase("sample_mflix").getCollection("movies");
+    var collection = client.getDatabase("test").getCollection("my_collection");
 
     try {
 //      var document = MongoDocument.fromMap({
@@ -151,9 +182,9 @@ class _MyAppState extends State<MyApp> {
 
       /// with projection/limit
       var docs = await collection.find(
-//        filter: {
-//          "year": QueryOperator.gt(2010)..lte(2014),
-//        },
+        filter: {
+          "name": "naama",
+        },
 //        options: RemoteFindOptions(
 //            projection: {
 //              "title": ProjectionValue.INCLUDE,
@@ -165,8 +196,12 @@ class _MyAppState extends State<MyApp> {
 //              "year": OrderValue.DESCENDING,
 //            }),
       );
-      print(docs);
-      print(docs.length);
+//      print(doc.get("_id"));
+//      print(docs.length);
+
+    docs.forEach((doc) {
+      print(doc.get("_id"));
+    });
 
 //      /// with projection
 //      var doc = await collection.findOne(
@@ -198,13 +233,13 @@ class _MyAppState extends State<MyApp> {
 //        "price": 31.78432
 //      });
 
-//      var docs = await collection.find();
+//      var docs = await collection.find(filter: {"name": "Olly"});
 //      print(docs.length);
-
-//      var deletedDocs = await collection.deleteOne({"name": "Gilly"});
+//
+//      var deletedDocs = await collection.deleteOne({"name": "Olly"});
 //      print(deletedDocs);
 
-      var deletedDocs = await collection.deleteMany({"name": "Andrea Le"});
+      var deletedDocs = await collection.deleteMany({"name": "Olly"});
       print(deletedDocs);
 
 //      var size = await collection.count();
@@ -218,7 +253,7 @@ class _MyAppState extends State<MyApp> {
     var collection = client.getDatabase("test").getCollection("my_collection");
 
     try {
-      var results = await collection.updateOne(
+      var results = await collection.updateMany(
         filter: {
           "name": "adiel",
         },
@@ -227,16 +262,16 @@ class _MyAppState extends State<MyApp> {
 //            "quantity": 670,
 //          })
 
-        update: UpdateOperator.rename({
-          "count": "quantity",
-        }),
+//        update: UpdateOperator.rename({
+//          "count": "quantity",
+//        }),
 
 //          update: UpdateSelector.unset(["age"]),
 
-//        update: UpdateSelector.inc({
-//            "age": -2,
-//            "quantity": 30,
-//          }),
+        update: UpdateOperator.inc({
+            "age": -2,
+            "quantity": 30,
+          }),
 
 //          update: UpdateSelector.max({
 //            "quantity": 50.5,
@@ -320,15 +355,19 @@ class _MyAppState extends State<MyApp> {
         client.getDatabase("test").getCollection("my_collection");
 
     try {
-      final stream = myCollection.watch(ids: ["22", "8"], asObjectIds: false);
-      final stream2 = myCollection.watch(ids: ["5eca2d9fff448a4cbf8f6627"]);
-      final stream3 = myCollection.watchWithFilter({/*"fullDocument.*/"age": 25});
+//      final stream = myCollection.watch(ids: ["22", "8"], asObjectIds: false);
+      final stream2 = myCollection.watch(ids: ["5ee8a50ffaba833f1c6c6a7c"]);
+//      final stream3 =  myCollection.watchWithFilter({"age": 25}); /// WORKS!
 
-      stream3.listen((data) {
-        //  print(data);
-        var fullDocument = MongoDocument.parse(data);
-        print("a document with '${fullDocument.map["_id"]}' is changed");
-        // do something
+//      final streamSimple = myCollection.watch();    /// WORKS!
+
+
+      stream2.listen((event) {
+          var fullDocument = MongoDocument.parse(event);
+          print("a document with '${fullDocument.map["_id"]}' is changed");
+
+//        }
+       // do something
       });
     } on PlatformException catch (e) {
       debugPrint("Error! ${e.message}");
@@ -389,43 +428,82 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-//      home: _authBuilder(context),
+      home:  _authBuilder(context),
 
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Text('Running on: \n'),
-              RaisedButton(
-                child: Text("Reset Password"),
-                onPressed: () async{
-                  try {
-                    var currUser = await client.auth.user;
-                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
-                    print(success);
-                  }
-                  on PlatformException catch (e){
-                    print(e.message ?? 'Unkown error');
-                  }
-                },
-              )
-            ],
-          ),
-        ),
-      ),
+//      home: Scaffold(
+//        appBar: AppBar(
+//          title: const Text('Plugin example app'),
+//        ),
+//        body: Center(
+//          child: Column(
+//            children: <Widget>[
+//              Text('Running on: \n'),
+//              RaisedButton(
+//                child: Text("Reset Password"),
+//                onPressed: () async{
+//                  try {
+//                    var currUser = await client.auth.user;
+//                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
+//                    print(success);
+//                  }
+//                  on PlatformException catch (e){
+//                    print(e.message ?? 'Unkown error');
+//                  }
+//                },
+//              )
+//            ],
+//          ),
+//        ),
+//      ),
     );
   }
+
+//  FutureBuilder _authFutureBuilder(BuildContext context) {
+//    return FutureBuilder(
+//      future: client.auth.user,
+//      builder: (context, AsyncSnapshot snapshot) {
+//        switch (snapshot.connectionState) {
+//          case ConnectionState.none:
+//          case ConnectionState.waiting:
+//          // show loading indicator
+//            return Scaffold(body: Center(child: CircularProgressIndicator()));
+//
+//          case ConnectionState.done:
+//          // log error to console
+//            if (snapshot.error != null) {
+//              print("error");
+//              return Container(
+//                color: Colors.black,
+//                alignment: Alignment.center,
+//                child: Text(
+//                  snapshot.error.toString(),
+//                  style: TextStyle(
+//                    fontSize: 18,
+//                    color: Colors.white,
+//                    fontFamily: "ariel",
+//                  ),
+//                ),
+//              );
+//            }
+//
+//            // redirect to the proper page
+//            return snapshot.hasData ? HomeScreen() : LoginScreen();
+//
+//
+//          default:
+//            return Container();
+//        }
+//      },
+//    );
+//  }
+
 
   StreamBuilder _authBuilder(BuildContext context) {
     Stream stream = client.auth.authListener();
     return StreamBuilder(
       stream: stream,
       builder: (context, AsyncSnapshot snapshot) {
-
-        switch (snapshot. connectionState) {
+        switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
             // show loading indicator
