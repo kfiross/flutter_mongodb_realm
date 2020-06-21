@@ -27,8 +27,8 @@ class Mongo{
 
   external loginAnonymously();
   external signInWithUsernamePassword(String username, String password);
-  //
-  //
+  external signInWithGoogle(String authCode);
+  external signInWithFacebook(String token);
   external registerWithEmail(String username, String password);
   external logout();
   external getUserId();
@@ -37,7 +37,7 @@ class Mongo{
 
   external callFunction(String name, List args);//, int timeout);
 
-  ///STREAM CRAZY SOLUTION
+  ///STREAM SOLUTION
   external setupWatchCollection(String databaseName, String collectionName, filter);
   external setupAuthListener();
 }
@@ -118,8 +118,22 @@ class MyMongoClient{
     return {"id": userMap['id']};
   }
 
-  // TODO: add 'signInWithUsernameGoogle()'
-  // TODO: add 'signInWithUsernameGoogle()'
+  Future<Map> signInWithGoogle(String authCode) async{
+    String result = await promiseToFuture(
+        _mongo.signInWithGoogle(authCode));
+    print(result);
+    Map userMap = json.decode(result);
+    return {"id": userMap['id']};
+  }
+
+  Future<Map> signInWithFacebook(String token) async{
+    String result = await promiseToFuture(
+        _mongo.signInWithFacebook(token));
+    print(result);
+    Map userMap = json.decode(result);
+    return {"id": userMap['id']};
+  }
+
 
   Future<bool> registerWithEmail(String username, String password) async {
     /*String result =*/ await promiseToFuture(

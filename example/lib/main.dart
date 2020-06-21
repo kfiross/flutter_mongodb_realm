@@ -51,12 +51,14 @@ class _MyAppState extends State<MyApp> {
 //          )
 //              );
 
+//    614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv.apps.googleusercontent.com
+
 //      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
 //          GoogleCredential(
-//        serverClientId: "281897935076-dlab9116cid9cmivd6nilofihip552cr",
+//        serverClientId: "614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv",//"281897935076-dlab9116cid9cmivd6nilofihip552cr",
 //        scopes: ["email"],
 //      )
-////          FacebookCredential(permissions: ["email"])
+//          FacebookCredential(permissions: ["email"])
 //          );
 
 //      if (mongoUser != null) {

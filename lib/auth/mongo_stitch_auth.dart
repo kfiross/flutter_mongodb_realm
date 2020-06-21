@@ -37,9 +37,11 @@ class MongoStitchAuth {
         scopes: credential.scopes,
       );
 
+
       try {
         var authCode = await _googleLoginWrapper
             .handleSignInAndGetAuthServerCode();
+        print(authCode ?? 'nothing');
         result = await FlutterMongoStitch.signInWithGoogle(authCode);
       }
       on Exception catch(e){
@@ -93,59 +95,14 @@ class MongoStitchAuth {
 
 
   Stream authListener() {
-//    if(kIsWeb){
-//      var stream = Stream<CoreStitchUser>.fromFuture(user);
-//      return stream;
-//    }
     var stream = FlutterMongoStitch.authListener();
-
     return stream;
   }
 
 }
 
 /// ////////////////////////////////////////////////////////////////
-//class _FacebookLoginWrapper{
-//  final FacebookLogin _facebookSignIn = FacebookLogin();
-//
-//  Future<bool> get isLogged => _facebookSignIn.isLoggedIn;
-//
-//  Future<String> handleSignInAndGetToken([List<String> permissions]) async {
-//    var x = await _facebookSignIn.isLoggedIn;
-//    print(x);
-//
-//    String token;
-//    _facebookSignIn.loginBehavior = FacebookLoginBehavior.webViewOnly;
-//    final FacebookLoginResult result = await _facebookSignIn.logIn(permissions ?? []);
-//
-//    switch (result.status) {
-//      case FacebookLoginStatus.loggedIn:
-//        final FacebookAccessToken accessToken = result.accessToken;
-//        print('''
-//         Logged in!
-//
-//         Token: ${accessToken.token}
-//         User id: ${accessToken.userId}
-//         Expires: ${accessToken.expires}
-//         Permissions: ${accessToken.permissions}
-//         Declined permissions: ${accessToken.declinedPermissions}
-//         ''');
-//        token = accessToken.token;
-//        break;
-//      case FacebookLoginStatus.cancelledByUser:
-//        print('Login cancelled by the user.');
-//        break;
-//      case FacebookLoginStatus.error:
-//        print('Something went wrong with the login process.\n'
-//            'Here\'s the error Facebook gave us: ${result.errorMessage}');
-//        break;
-//    }
-//
-//    return token;
-//  }
-//
-//  Future<void> handleSignOut() => _facebookSignIn.logOut();
-//}
+
 
 class _GoogleLoginWrapper{
   GoogleSignIn _googleSignIn;
@@ -157,6 +114,7 @@ class _GoogleLoginWrapper{
         serverClientId: serverClientId,
         scopes: scopes
     );
+
   }
 
   Future<String> handleSignInAndGetAuthServerCode() async {
@@ -165,6 +123,7 @@ class _GoogleLoginWrapper{
     String code;
     try {
       var account = await _googleSignIn.signIn();
+
       if (account != null)
         code =  account.serverAuthCode;
 

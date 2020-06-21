@@ -163,27 +163,41 @@ function Mongo() {
         });
     }
 
-//    Mongo.prototype.signInWithUsernamePassword  = async function(username, password){
-//        var user = await stitchAppClient.auth.loginWithCredential(
-//            new stitch.UserPasswordCredential(username, password))
-//
-//          this.sendAuthListenerEvent(userObject);
-//
-//        return new Promise((resolve, reject) => {
-//            resolve(JSON.stringify({"id": user.id}));
-//        });
-//    }
+    Mongo.prototype.signInWithGoogle = async function(authCode){
+        var user = await stitchAppClient.auth.loginWithCredential(
+            new stitch.GoogleCredential(authCode))
 
-//    Mongo.prototype.signInWithUsernamePassword  = async function(username, password){
-//        var user = await stitchAppClient.auth.loginWithCredential(
-//            new stitch.UserPasswordCredential(username, password))
-//
-//          this.sendAuthListenerEvent(userObject);
-//
-//        return new Promise((resolve, reject) => {
-//            resolve(JSON.stringify({"id": user.id}));
-//        });
-//    }
+        var userObject = {
+            "id": user.id,
+            "profile": {
+                'email': user.profile.email
+            }
+        }
+
+        this.sendAuthListenerEvent(userObject);
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(userObject));
+        });
+    }
+
+    Mongo.prototype.signInWithFacebook = async function(token){
+        var user = await stitchAppClient.auth.loginWithCredential(
+            new stitch.FacebookCredential(token))
+
+        var userObject = {
+            "id": user.id,
+            "profile": {
+                'email': user.profile.email
+            }
+        }
+
+        this.sendAuthListenerEvent(userObject);
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(userObject));
+        });
+    }
 
     Mongo.prototype.registerWithEmail  = async function(email, password){
         var emailPassClient = stitch.Stitch.defaultAppClient.auth

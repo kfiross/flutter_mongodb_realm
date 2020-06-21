@@ -171,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
   _loginWithGoogle() async {
     CoreStitchUser mongoUser = await client.auth.loginWithCredential(
         GoogleCredential(
-          serverClientId: "281897935076-dlab9116cid9cmivd6nilofihip552cr",
+          serverClientId: "614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv",
           scopes: ["email"],
         )
     );

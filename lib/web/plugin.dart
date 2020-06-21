@@ -228,9 +228,17 @@ class FlutterMongoStitchPlugin {
     return authResult;
   }
 
-  _signInWithGoogle(MethodCall call) async{}
+  _signInWithGoogle(MethodCall call) async{
+    final String authCode = call.arguments["code"];
 
-  _signInWithFacebook(MethodCall call) async{}
+    var authResult =
+        await _mongoClient.signInWithGoogle(authCode);
+    return authResult;
+  }
+
+  _signInWithFacebook(MethodCall call) async{
+
+  }
 
   _registerWithEmail(MethodCall call) async{
     final String email = call.arguments["email"];
