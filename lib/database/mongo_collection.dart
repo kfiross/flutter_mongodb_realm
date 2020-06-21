@@ -305,7 +305,6 @@ class MongoCollection {
   /// configured MongoDB rules.
   /// can optionally watch only specifies documents with the provided ids
   Stream watch({List<String> ids, bool asObjectIds = true}) {
-
     var stream;
     if(kIsWeb) {
       FlutterMongoStitch.setupWatchCollection(collectionName, databaseName, ids: ids, asObjectIds: asObjectIds);
@@ -325,6 +324,7 @@ class MongoCollection {
       );
     }
 
+
     return stream;
   }
 
@@ -343,7 +343,6 @@ class MongoCollection {
     filter.forEach((key, value) {
       fixFilter["fullDocument.$key"] = value;
     });
-
 
 
     if(kIsWeb){

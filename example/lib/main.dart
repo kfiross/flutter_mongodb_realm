@@ -69,6 +69,7 @@ class _MyAppState extends State<MyApp> {
 //      }
 
 
+
       // sign out
 
 //      client.auth.logout();
@@ -90,6 +91,7 @@ class _MyAppState extends State<MyApp> {
 
 //        watchData(); /// DONE ON WEB
 //      aggregateCollection(); //TODO: check
+
 
     /// DONE ON WEB
 //      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {

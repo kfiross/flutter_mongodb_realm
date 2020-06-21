@@ -42,9 +42,9 @@ Make sure you imported the javascript files:
 * Find
 * Delete
 * Update
-* Watch
-* Watch With Filter (also to specified IDs or with match-Filter)
+* Watch (also to specified IDs or with Filter)
 * Aggregate \[X]
+
 
 <b>Auth Providers:</b>
 * Email/Password

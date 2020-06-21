@@ -91,7 +91,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 catch(e){}
 
 
-
                 await client.auth.logout();
 
 

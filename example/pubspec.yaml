@@ -19,16 +19,16 @@ dependencies:
 
   # for implementing custom login providers
   flutter_facebook_login: ^3.0.0
-
+  
 #  google_sign_in: ^4.5.1
   google_sign_in:
     git:
       url: git://github.com/fbcouch/plugins.git
       path: packages/google_sign_in
       ref: server-auth-code
+
   google_sign_in_web: ^0.9.1
-
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

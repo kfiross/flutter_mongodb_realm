@@ -19,7 +19,6 @@ dependencies:
   streams_channel: ^0.3.0
   meta: ^1.0.4
 
-
   # For supporting web sdk and js-dart interop
   js: ^0.6.2
 
