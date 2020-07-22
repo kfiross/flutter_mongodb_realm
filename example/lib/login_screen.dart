@@ -3,8 +3,6 @@ import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_mongo_stitch_example/reset_pass_screen.dart';
 
-
-import 'home_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 enum LoginState { login, register }
@@ -17,8 +15,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
 
-  var _email = "kfir25816@gmail.com";
-  var _password = "asdfghj";
+  var _email;
+  var _password;
 
   var client = MongoStitchClient();
   var _state = LoginState.login;

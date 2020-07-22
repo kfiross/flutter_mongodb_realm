@@ -1,7 +1,6 @@
 # flutter_mongo_stitch
 
-Unofficial Flutter plugin for using MongoDB Stitch services.
-
+Unofficial Flutter plugin for using MongoDB Stitch services on Android, iOS and web.
 
 ## Getting started
 For using it on your app:
@@ -15,25 +14,8 @@ For API reference [check here](https://pub.dartlang.org/documentation/flutter_mo
 The minimum required it's Android 5.0(API 21) or iOS 11.0
 
 ## Setup
-
-#### Android and iOS
-Doesn't require any step besides adding as a dependency
-
-#### Web
-On your project files, added in `web\index.html`:<br>
-Make sure you imported the javascript files:
-```html
-<head>
-... other configurations
-
-    <!-- Importing the official Javascript CDN SDK-->
-    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.9.0/stitch.js"></script>
-    
-    <!-- Importing the file that connects between dart & js implementations used by the web plugin-->
-    <script src='https://fluttermongostitch.s3.us-east-2.amazonaws.com/stitchUtils.js'></script>
-
-</head>
-```
+Doesn't require any setup besides adding as a dependency
+Web integration automatically!
 
 ## Supported Features
 

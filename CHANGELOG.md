@@ -1,3 +1,12 @@
+## 0.8.0
+* Updated for no-setup at web
+
+## 0.7.1
+* Using the web plugin as endorsed plugin
+
+## 0.7.0
+* Added web support by default
+
 ## 0.7.0-dev.6
 * Added web support (for using `sendResetPassword`)
 

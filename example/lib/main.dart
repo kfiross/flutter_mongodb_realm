@@ -42,14 +42,14 @@ class _MyAppState extends State<MyApp> {
 
       // login Anonymously
 
-//      CoreStitchUser mongoUser =
-//          await client.auth.loginWithCredential(
-////              AnonymousCredential()
+      CoreStitchUser mongoUser =
+          await client.auth.loginWithCredential(
+              AnonymousCredential()
 //          UserPasswordCredential(
 //              username: 'naamahasson1@gmail.com',//"kfir25816@gmail.com",
 //              password: '123456',//"asdfghj"
 //          )
-//              );
+              );
 
 //    614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv.apps.googleusercontent.com
 
@@ -89,7 +89,7 @@ class _MyAppState extends State<MyApp> {
 //      deleteData(); /// DONE ON WEB
 //        updateData(); /// DONE ON WEB
 
-//        watchData(); /// DONE ON WEB
+        watchData(); /// DONE ON WEB
 //      aggregateCollection(); //TODO: check
 
 
@@ -356,13 +356,14 @@ class _MyAppState extends State<MyApp> {
 
     try {
 //      final stream = myCollection.watch(ids: ["22", "8"], asObjectIds: false);
-      final stream2 = myCollection.watch(ids: ["5ee8a50ffaba833f1c6c6a7c"]);
+//      final stream2 = myCollection.watch(ids: ["5ee8a50ffaba833f1c6c6a7c"]);
 //      final stream3 =  myCollection.watchWithFilter({"age": 25}); /// WORKS!
 
-//      final streamSimple = myCollection.watch();    /// WORKS!
+      final streamSimple = myCollection.watch();    /// WORKS!
 
 
-      stream2.listen((event) {
+      streamSimple.listen((event) {
+          print(event);
           var fullDocument = MongoDocument.parse(event);
           print("a document with '${fullDocument.map["_id"]}' is changed");
 
@@ -428,74 +429,39 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:  _authBuilder(context),
+//      home:  _authBuilder(context),
+      home: dummyHomeWidget(),
 
-//      home: Scaffold(
-//        appBar: AppBar(
-//          title: const Text('Plugin example app'),
-//        ),
-//        body: Center(
-//          child: Column(
-//            children: <Widget>[
-//              Text('Running on: \n'),
-//              RaisedButton(
-//                child: Text("Reset Password"),
-//                onPressed: () async{
-//                  try {
-//                    var currUser = await client.auth.user;
-//                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
-//                    print(success);
-//                  }
-//                  on PlatformException catch (e){
-//                    print(e.message ?? 'Unkown error');
-//                  }
-//                },
-//              )
-//            ],
-//          ),
-//        ),
-//      ),
     );
   }
 
-//  FutureBuilder _authFutureBuilder(BuildContext context) {
-//    return FutureBuilder(
-//      future: client.auth.user,
-//      builder: (context, AsyncSnapshot snapshot) {
-//        switch (snapshot.connectionState) {
-//          case ConnectionState.none:
-//          case ConnectionState.waiting:
-//          // show loading indicator
-//            return Scaffold(body: Center(child: CircularProgressIndicator()));
-//
-//          case ConnectionState.done:
-//          // log error to console
-//            if (snapshot.error != null) {
-//              print("error");
-//              return Container(
-//                color: Colors.black,
-//                alignment: Alignment.center,
-//                child: Text(
-//                  snapshot.error.toString(),
-//                  style: TextStyle(
-//                    fontSize: 18,
-//                    color: Colors.white,
-//                    fontFamily: "ariel",
-//                  ),
-//                ),
-//              );
-//            }
-//
-//            // redirect to the proper page
-//            return snapshot.hasData ? HomeScreen() : LoginScreen();
-//
-//
-//          default:
-//            return Container();
-//        }
-//      },
-//    );
-//  }
+  dummyHomeWidget(){
+   return Scaffold(
+        appBar: AppBar(
+          title: const Text('Plugin example app'),
+        ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              Text('Running on: \n'),
+              RaisedButton(
+                child: Text("Reset Password"),
+                onPressed: () async{
+                  try {
+                    var currUser = await client.auth.user;
+                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
+                    print(success);
+                  }
+                  on PlatformException catch (e){
+                    print(e.message ?? 'Unkown error');
+                  }
+                },
+              )
+            ],
+          ),
+        ),
+      );
+  }
 
 
   StreamBuilder _authBuilder(BuildContext context) {

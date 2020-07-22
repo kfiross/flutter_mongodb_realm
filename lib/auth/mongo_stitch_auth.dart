@@ -11,11 +11,9 @@ import 'credentials/credentials.dart';
 
 /// MongoStitchAuth manages authentication for any Stitch based client.
 class MongoStitchAuth {
-
   // embedded Login providers wrappers for better handling
   static var _googleLoginWrapper = _GoogleLoginWrapper();
 //  static var _facebookLoginWrapper = _FacebookLoginWrapper();
-
 
   /// Logs in as a user with the given credentials associated with an
   /// authentication provider.
@@ -30,30 +28,27 @@ class MongoStitchAuth {
         credential.username,
         credential.password,
       );
-    }
-    else if (credential is GoogleCredential){
+    } else if (credential is GoogleCredential) {
       _googleLoginWrapper.init(
-        serverClientId: "${credential.serverClientId}.apps.googleusercontent.com",
+        serverClientId:
+            "${credential.serverClientId}.apps.googleusercontent.com",
         scopes: credential.scopes,
       );
 
-
       try {
-        var authCode = await _googleLoginWrapper
-            .handleSignInAndGetAuthServerCode();
+        var authCode =
+            await _googleLoginWrapper.handleSignInAndGetAuthServerCode();
         print(authCode ?? 'nothing');
         result = await FlutterMongoStitch.signInWithGoogle(authCode);
-      }
-      on Exception catch(e){
+      } on Exception catch (e) {
         print(e);
       }
-    }
-    else if (credential is FacebookCredential){
+    } else if (credential is FacebookCredential) {
 //      var accessToken = await _facebookLoginWrapper.handleSignInAndGetToken(
 //          credential.permissions);
-      result = await FlutterMongoStitch.signInWithFacebook(credential.accessToken);
-    }
-    else {
+      result =
+          await FlutterMongoStitch.signInWithFacebook(credential.accessToken);
+    } else {
       throw UnimplementedError();
     }
 
@@ -66,8 +61,7 @@ class MongoStitchAuth {
     bool loggedWithGoogle = await _googleLoginWrapper.isLogged;
 //    bool loggedWithFacebook = await _facebookLoginWrapper.isLogged;
 //
-    if (loggedWithGoogle)
-      await _googleLoginWrapper.handleSignOut();
+    if (loggedWithGoogle) await _googleLoginWrapper.handleSignOut();
 //
 //    if (loggedWithFacebook)
 //      await _facebookLoginWrapper.handleSignOut();
@@ -86,47 +80,40 @@ class MongoStitchAuth {
     return result;
   }
 
-  Future<bool> sendResetPasswordEmail(String email) async{
+  Future<bool> sendResetPasswordEmail(String email) async {
     var result = await FlutterMongoStitch.sendResetPasswordEmail(email);
     return result;
   }
 
   Future<CoreStitchUser> get user async => await FlutterMongoStitch.getUser();
 
-
   Stream authListener() {
     var stream = FlutterMongoStitch.authListener();
     return stream;
   }
-
 }
 
 /// ////////////////////////////////////////////////////////////////
 
-
-class _GoogleLoginWrapper{
+class _GoogleLoginWrapper {
   GoogleSignIn _googleSignIn;
 
-  Future<bool> get isLogged => _googleSignIn==null? Future.value(false) : _googleSignIn.isSignedIn();
+  Future<bool> get isLogged =>
+      _googleSignIn == null ? Future.value(false) : _googleSignIn.isSignedIn();
 
-  init({@required String serverClientId, List<String> scopes}){
-    _googleSignIn = GoogleSignIn(
-        serverClientId: serverClientId,
-        scopes: scopes
-    );
-
+  init({@required String serverClientId, List<String> scopes}) {
+    _googleSignIn =
+        GoogleSignIn(serverClientId: serverClientId, scopes: scopes);
   }
 
   Future<String> handleSignInAndGetAuthServerCode() async {
-    assert(_googleSignIn!=null);
+    assert(_googleSignIn != null);
 
     String code;
     try {
       var account = await _googleSignIn.signIn();
 
-      if (account != null)
-        code =  account.serverAuthCode;
-
+      if (account != null) code = account.serverAuthCode;
     } on Exception catch (error) {
       print(error);
     }

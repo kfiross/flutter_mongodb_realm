@@ -3,9 +3,6 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:bson/bson.dart';
-import 'package:flutter/foundation.dart';
-
-import '../plugin_support.dart';
 
 /// A representation of a document as a Map
 class MongoDocument {
@@ -71,13 +68,13 @@ class MongoDocument {
 
   /// Parses a string in MongoDB Extended JSON format to a Document
   static MongoDocument parse(data) {
-    Map<String, dynamic> map = {};
-    if(kIsWeb){
-      map = FlutterMongoStitch.customEventToMap(data);
-    }
-    else {
-      map = json.decode(data);
-    }
+    Map<String, dynamic> map = json.decode(data);
+//    if(kIsWeb){
+//      map = FlutterMongoStitch.customEventToMap(data);
+//    }
+//    else {
+//      map = json.decode(data);
+//    }
     // fix MongoDB bullshit
     map.forEach((key, value) {
       if (value is LinkedHashMap) {

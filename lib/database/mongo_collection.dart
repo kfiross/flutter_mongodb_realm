@@ -6,7 +6,7 @@ import 'package:flutter_mongo_stitch/database/pipeline_stage.dart';
 
 import '../bson_document.dart';
 import '../plugin.dart';
-import '../plugin_support.dart';
+//import '../plugin_support.dart';
 import 'mongo_document.dart';
 import 'query_operator.dart';
 import 'update_operator.dart';
@@ -31,14 +31,14 @@ class MongoCollection {
   final String databaseName;
 
   /// The namespace of this collection, i.e. the database and collection names together.
-  String get namespace  => "$collectionName.$databaseName";
+  String get namespace => "$collectionName.$databaseName";
 
-  MongoCollection({@required this.collectionName, @required this.databaseName}){
+  MongoCollection(
+      {@required this.collectionName, @required this.databaseName}) {
 //    if(kIsWeb){
 //      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName);//, filter: BsonDocument(fixFilter).toJson());
 //    }
   }
-
 
   /// Inserts the provided document to the collection
   Future insertOne(MongoDocument document) async {
@@ -122,19 +122,16 @@ class MongoCollection {
 
   ///Finds all documents in the collection according to the given filter
   Future<List<MongoDocument>> find({filter, RemoteFindOptions options}) async {
-
     var filterCopy = <String, dynamic>{};
     if (filter != null) {
       assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
       if (filter is Map<String, dynamic>) {
-
         // convert 'QuerySelector' into map, too
         filter?.forEach((key, value) {
           if (value is QueryOperator) {
             filterCopy[key] = value.values;
-          }
-          else
+          } else
             filterCopy[key] = value;
         });
       }
@@ -144,16 +141,16 @@ class MongoCollection {
     }
 
     var sortMap = options?.sort?.map((k, v) => MapEntry(k, v.value));
-    var projectionMap = options?.projection?.map((k, v) => MapEntry(k, v.value));
-
+    var projectionMap =
+        options?.projection?.map((k, v) => MapEntry(k, v.value));
 
     List<dynamic> resultJson = await FlutterMongoStitch.findDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filterCopy).toJson(),
-      projection: projectionMap==null? null : jsonEncode(projectionMap),
+      projection: projectionMap == null ? null : jsonEncode(projectionMap),
       limit: options?.limit ?? 0,
-      sort: sortMap==null ? null : jsonEncode(sortMap),
+      sort: sortMap == null ? null : jsonEncode(sortMap),
     );
 
     var result = resultJson.map((string) {
@@ -164,19 +161,18 @@ class MongoCollection {
   }
 
   /// Finds a document in the collection according to the given filter
-  Future<MongoDocument> findOne({filter, Map<String, ProjectionValue> projection}) async {
+  Future<MongoDocument> findOne(
+      {filter, Map<String, ProjectionValue> projection}) async {
     var filterCopy = <String, dynamic>{};
     if (filter != null) {
       assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
 
       if (filter is Map<String, dynamic>) {
-
         // convert 'QuerySelector' into map, too
         filter?.forEach((key, value) {
           if (value is QueryOperator) {
             filterCopy[key] = value.values;
-          }
-          else
+          } else
             filterCopy[key] = value;
         });
       }
@@ -191,7 +187,7 @@ class MongoCollection {
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filterCopy).toJson(),
-        projection: projectionMap==null? null : jsonEncode(projectionMap),
+      projection: projectionMap == null ? null : jsonEncode(projectionMap),
     );
 
     var result = MongoDocument.parse(resultJson);
@@ -306,16 +302,15 @@ class MongoCollection {
   /// can optionally watch only specifies documents with the provided ids
   Stream watch({List<String> ids, bool asObjectIds = true}) {
     var stream;
-    if(kIsWeb) {
-      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName, ids: ids, asObjectIds: asObjectIds);
-
+    if (kIsWeb) {
+      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName,
+          ids: ids, asObjectIds: asObjectIds);
 
       stream = FlutterMongoStitch.watchCollection(
-          collectionName: this.collectionName,
-          databaseName: this.databaseName,
+        collectionName: this.collectionName,
+        databaseName: this.databaseName,
       );
-    }
-    else {
+    } else {
       stream = FlutterMongoStitch.watchCollection(
         collectionName: this.collectionName,
         databaseName: this.databaseName,
@@ -324,14 +319,13 @@ class MongoCollection {
       );
     }
 
-
     return stream;
   }
 
   /// Watches a collection. The provided BSON document will be used as a match
   /// expression filter on the change events coming from the stream.
   Stream watchWithFilter(Map<String, dynamic> filter) {
-    assert (filter != null);
+    assert(filter != null);
     // convert 'QuerySelector' into map, too
     filter.forEach((key, value) {
       if (value is QueryOperator) {
@@ -344,9 +338,9 @@ class MongoCollection {
       fixFilter["fullDocument.$key"] = value;
     });
 
-
-    if(kIsWeb){
-      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName, filter: BsonDocument(fixFilter).toJson());
+    if (kIsWeb) {
+      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName,
+          filter: BsonDocument(fixFilter).toJson());
     }
 
     var stream = FlutterMongoStitch.watchCollection(
@@ -358,9 +352,8 @@ class MongoCollection {
     return stream;
   }
 
-
   ///
-  Future<List<MongoDocument>> aggregate(List<PipelineStage> pipeline) async{
+  Future<List<MongoDocument>> aggregate(List<PipelineStage> pipeline) async {
     List<dynamic> resultJson = await FlutterMongoStitch.aggregate(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
@@ -375,7 +368,7 @@ class MongoCollection {
   }
 }
 
-class RemoteFindOptions{
+class RemoteFindOptions {
   final int limit;
   final Map<String, ProjectionValue> projection;
   final Map<String, OrderValue> sort;
