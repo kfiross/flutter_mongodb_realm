@@ -429,8 +429,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-//      home:  _authBuilder(context),
-      home: dummyHomeWidget(),
+      home:  _authBuilder(context),
+//      home: dummyHomeWidget(),
 
     );
   }

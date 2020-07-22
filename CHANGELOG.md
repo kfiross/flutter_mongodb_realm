@@ -1,3 +1,6 @@
+## 0.8.0+2
+* fixed bug ios crashing on build
+
 ## 0.8.0
 * Updated for no-setup at web
 

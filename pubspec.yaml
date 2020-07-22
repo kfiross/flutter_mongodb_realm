@@ -1,6 +1,6 @@
 name: flutter_mongo_stitch
 description: A Flutter plugin for using services of the serverless platform MongoDB Stitch.
-version: 0.8.0+1
+version: 0.8.0+2
 homepage: https://github.com/kfiross/flutter_mongo_stitch
 
 environment:
@@ -15,7 +15,7 @@ dependencies:
   # The design on https://flutter.dev/go/federated-plugins was to leave
   # this constraint as "any". We cannot do it right now as it fails pub publish
   # validation, so we set a ^ constraint.
-  flutter_mongo_stitch_web: ^0.2.0
+  flutter_mongo_stitch_web: ^0.2.1
 
 
   universal_html: ^1.2.3      # instead importing in runtime
