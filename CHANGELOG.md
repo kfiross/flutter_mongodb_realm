@@ -1,3 +1,6 @@
+## 0.8.1
+* fixed issue with default app set
+
 ## 0.8.0
 * Updated for no-setup at web
 
