@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import 'auth/auth.dart';
 import 'database/database.dart';
 import 'plugin.dart';
@@ -8,7 +10,12 @@ class MongoStitchClient {
   final MongoStitchAuth auth = MongoStitchAuth();
 
   static Future initializeApp(String appID) async {
-    await FlutterMongoStitch.connectToMongo(appID);
+    try {
+      await FlutterMongoStitch.connectToMongo(appID);
+    }
+    on PlatformException catch (_){
+      // to ignore re-setting default app can twice
+    }
   }
 
   MongoDatabase getDatabase(String name) {
