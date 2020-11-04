@@ -17,11 +17,15 @@ PODS:
   - flutter_mongo_stitch (0.0.1):
     - Flutter
     - StitchSDK (~> 6.1.0)
+  - flutter_mongo_stitch_web (0.2.1):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
   - google_sign_in (0.0.1):
     - Flutter
     - GoogleSignIn (~> 4.0)
+  - google_sign_in_web (0.8.1):
+    - Flutter
   - GoogleSignIn (4.4.0):
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
@@ -72,8 +76,10 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
   - flutter_mongo_stitch (from `.symlinks/plugins/flutter_mongo_stitch/ios`)
+  - flutter_mongo_stitch_web (from `.symlinks/plugins/flutter_mongo_stitch_web/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
+  - google_sign_in_web (from `.symlinks/plugins/google_sign_in_web/ios`)
   - streams_channel (from `.symlinks/plugins/streams_channel/ios`)
 
 SPEC REPOS:
@@ -102,10 +108,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_facebook_login/ios"
   flutter_mongo_stitch:
     :path: ".symlinks/plugins/flutter_mongo_stitch/ios"
+  flutter_mongo_stitch_web:
+    :path: ".symlinks/plugins/flutter_mongo_stitch_web/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   google_sign_in:
     :path: ".symlinks/plugins/google_sign_in/ios"
+  google_sign_in_web:
+    :path: ".symlinks/plugins/google_sign_in_web/ios"
   streams_channel:
     :path: ".symlinks/plugins/streams_channel/ios"
 
@@ -115,8 +125,10 @@ SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_facebook_login: cfb5659f686b1c575ef205c6b6fd20db9679d3c4
   flutter_mongo_stitch: c4034add09d7ade4dff599f936d1dab7f7ff6c02
+  flutter_mongo_stitch_web: 0ac1d504a6607764c0940ad2d41b2b3787d66cd2
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   google_sign_in: 27e70a98b529f0b076d4b19f231b81da28b1750b
+  google_sign_in_web: 52deb24929ac0992baff65c57956031c44ed44c3
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
   GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
