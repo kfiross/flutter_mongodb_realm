@@ -179,14 +179,14 @@ class FlutterMongoStitch {
     String filter,
     bool asObjectIds = true,
   }) {
-
     Stream nativeStream;
 
     if (kIsWeb) {
 //      Stream<Event> jsStream =
 //          document.on["watchEvent.$databaseName.$collectionName"];
 
-      var jsStream = StreamInterop.getNativeStream("watchEvent.$databaseName.$collectionName");
+      var jsStream = StreamInterop.getNativeStream(
+          "watchEvent.$databaseName.$collectionName");
 
       // ignore: close_sinks
       var controller = StreamController<String>();
@@ -204,8 +204,7 @@ class FlutterMongoStitch {
       });
 
       nativeStream = controller.stream;
-    }
-    else {
+    } else {
       nativeStream = StreamInterop.getNativeStream({
         "handler": "watchCollection",
         "db": databaseName,
@@ -250,7 +249,6 @@ class FlutterMongoStitch {
   }
 
   static Stream authListener() {
-
     Stream nativeStream;
 
     if (kIsWeb) {
@@ -276,13 +274,11 @@ class FlutterMongoStitch {
       });
 
       nativeStream = controller.stream;
-    }
-    else {
+    } else {
       nativeStream = StreamInterop.getNativeStream({
         "handler": "auth",
       });
     }
-
 
     return nativeStream;
 

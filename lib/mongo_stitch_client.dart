@@ -12,8 +12,7 @@ class MongoStitchClient {
   static Future initializeApp(String appID) async {
     try {
       await FlutterMongoStitch.connectToMongo(appID);
-    }
-    on PlatformException catch (_){
+    } on PlatformException catch (_) {
       // to ignore re-setting default app can twice
     }
   }

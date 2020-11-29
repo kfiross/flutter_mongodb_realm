@@ -5,8 +5,7 @@ import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
-
-class HomeScreen extends StatefulWidget{
+class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -54,12 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.didChangeDependencies();
 
     _collection = client.getDatabase("test").getCollection("students");
-    try{
+    try {
       await _fetchStudents();
-    }
-    catch (e){
-
-    }
+    } catch (e) {}
   }
 
   @override
@@ -79,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Icon(Icons.exit_to_app, color: Colors.white),
               onPressed: () async {
                 try {
-                  if(!kIsWeb) {
+                  if (!kIsWeb) {
                     final FacebookLogin fbLogin = FacebookLogin();
 
                     bool loggedAsFacebook = await fbLogin.isLoggedIn;
@@ -87,16 +83,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       await fbLogin.logOut();
                     }
                   }
-                }
-                catch(e){}
-
+                } catch (e) {}
 
                 await client.auth.logout();
-
-
-
-
-             },
+              },
             )
           ],
         ),
@@ -107,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _filterRow(),
               SizedBox(height: 20),
               _header(),
-                Column(children: list),
+              Column(children: list),
             ],
           ),
         ),
@@ -148,13 +138,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 SizedBox(width: 12),
-
                 Expanded(
                   flex: 2,
                   child: RaisedButton(
-                    child: Text("Add"),
-                    onPressed: _insertNewStudent
-                  ),
+                      child: Text("Add"), onPressed: _insertNewStudent),
                 ),
               ],
             ),
@@ -164,16 +151,27 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _header(){
+  Widget _header() {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(flex: 2,child: Text("Name", style: TextStyle(fontWeight: FontWeight.bold),)),
-          Expanded(flex: 1,child: Text("Year", style: TextStyle(fontWeight: FontWeight.bold))),
-          Expanded(flex: 1,child: Text("Grades Avg.", style: TextStyle(fontWeight: FontWeight.bold))),
+          Expanded(
+              flex: 2,
+              child: Text(
+                "Name",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )),
+          Expanded(
+              flex: 1,
+              child:
+                  Text("Year", style: TextStyle(fontWeight: FontWeight.bold))),
+          Expanded(
+              flex: 1,
+              child: Text("Grades Avg.",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
         ],
       ),
     );
@@ -185,28 +183,30 @@ class _HomeScreenState extends State<HomeScreen> {
       children: <Widget>[
         DropdownButton(
           value: _selectedFilter,
-          items: _filterOptions.map(
-                  (name) => DropdownMenuItem<String>(
-                      value: name,
-                      child: Text(name),
-                  )).toList(),
+          items: _filterOptions
+              .map((name) => DropdownMenuItem<String>(
+                    value: name,
+                    child: Text(name),
+                  ))
+              .toList(),
           onChanged: (value) {
             setState(() {
-              _selectedFilter =  value;
+              _selectedFilter = value;
             });
           },
         ),
         SizedBox(width: 20),
         DropdownButton(
           value: _selectedOperator,
-          items: _operatorsOptions.map(
-                  (name) => DropdownMenuItem<String>(
-                value: name,
-                child: Text(name),
-              )).toList(),
+          items: _operatorsOptions
+              .map((name) => DropdownMenuItem<String>(
+                    value: name,
+                    child: Text(name),
+                  ))
+              .toList(),
           onChanged: (value) {
             setState(() {
-              _selectedOperator =  value;
+              _selectedOperator = value;
             });
           },
         ),
@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
           flex: 1,
           child: RaisedButton(
             child: Text("Filter"),
-            onPressed: (){
+            onPressed: () {
               // todo: implemnt this
             },
           ),
@@ -239,21 +239,18 @@ class _HomeScreenState extends State<HomeScreen> {
 //      projection: {
 //        "field": ProjectionValue.INCLUDE,
 //      }
-    );
+        );
     _students.clear();
     documents.forEach((document) {
       _students.add(Student.fromDocument(document));
     });
-    setState(() {
-
-    });
+    setState(() {});
   }
 
-  _insertNewStudent() async{
+  _insertNewStudent() async {
     var form = formKey.currentState;
 
-
-    if(form.validate()){
+    if (form.validate()) {
       form.save();
 
       var newStudent = Student(
@@ -266,13 +263,11 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         form.reset();
       });
-
-
     }
   }
 }
 
-class StudentItem extends StatelessWidget{
+class StudentItem extends StatelessWidget {
   final Student student;
 
   StudentItem(this.student);
@@ -287,24 +282,31 @@ class StudentItem extends StatelessWidget{
         children: <Widget>[
           Expanded(
             flex: 2,
-            child: Text("${student.firstName} ${student.lastName}", style: TextStyle(fontSize: 20),),
+            child: Text(
+              "${student.firstName} ${student.lastName}",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              "${student.year}",
+              style: TextStyle(fontSize: 18),
+            ),
           ),
           Expanded(
               flex: 1,
-              child: Text("${student.year}" ,style: TextStyle(fontSize: 18),),
-          ),
-          Expanded(
-              flex: 1,
-              child: Text(sprintf("%.2f", [student.gradesAvg]), style: TextStyle(fontSize: 18),)
-          ),
+              child: Text(
+                sprintf("%.2f", [student.gradesAvg]),
+                style: TextStyle(fontSize: 18),
+              )),
         ],
       ),
     );
   }
-
 }
 
-class Student{
+class Student {
   final String firstName;
   final String lastName;
   final int year;
@@ -315,20 +317,21 @@ class Student{
   double get gradesAvg {
     var sum = 0;
     grades?.forEach((grade) {
-      sum+= grade;
+      sum += grade;
     });
-    return grades==null || grades.isEmpty ? 0 : sum / grades.length;
+    return grades == null || grades.isEmpty ? 0 : sum / grades.length;
   }
 
-  static fromDocument(MongoDocument document){
+  static fromDocument(MongoDocument document) {
     return Student(
-      firstName: document.get("firstName") ?? "",
-      lastName: document.get("lastName") ?? "",
-      grades: (document.get("grades")==null
-          ?  <int>[]
-          : (document.get("grades") as List).map((e) => int.parse("$e")).toList()),
-      year: document.get("year") ?? 1
-    );
+        firstName: document.get("firstName") ?? "",
+        lastName: document.get("lastName") ?? "",
+        grades: (document.get("grades") == null
+            ? <int>[]
+            : (document.get("grades") as List)
+                .map((e) => int.parse("$e"))
+                .toList()),
+        year: document.get("year") ?? 1);
   }
 
   MongoDocument asDocument() {

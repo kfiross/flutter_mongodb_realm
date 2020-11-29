@@ -49,7 +49,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final form = _formKey.currentState;
     form.save();
 
-    if(form.validate()) {
+    if (form.validate()) {
       try {
         final success = await client.auth
             .sendResetPasswordEmail(_email); //"kfir25812@gmail.com");

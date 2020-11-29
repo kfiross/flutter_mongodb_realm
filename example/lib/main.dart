@@ -34,8 +34,6 @@ class _MyAppState extends State<MyApp> {
     // initialized MongoStitch App
 
     try {
-
-
       // create a user
 //        await client.auth
 //            .registerWithEmail(email: "naamahasson1@gmail.com", password: "123456");
@@ -43,8 +41,7 @@ class _MyAppState extends State<MyApp> {
       // login Anonymously
 
       CoreStitchUser mongoUser =
-          await client.auth.loginWithCredential(
-              AnonymousCredential()
+          await client.auth.loginWithCredential(AnonymousCredential()
 //          UserPasswordCredential(
 //              username: 'naamahasson1@gmail.com',//"kfir25816@gmail.com",
 //              password: '123456',//"asdfghj"
@@ -68,12 +65,9 @@ class _MyAppState extends State<MyApp> {
 //        print("wrong pass or username");
 //      }
 
-
-
       // sign out
 
 //      client.auth.logout();
-
 
 //      var user = await client.auth.user;
 //      print("you are user with id: '${user.id ?? '?'}', email: ${user.profile.email ?? '?'}");
@@ -89,11 +83,12 @@ class _MyAppState extends State<MyApp> {
 //      deleteData(); /// DONE ON WEB
 //        updateData(); /// DONE ON WEB
 
-        watchData(); /// DONE ON WEB
+      watchData();
+
+      /// DONE ON WEB
 //      aggregateCollection(); //TODO: check
 
-
-    /// DONE ON WEB
+      /// DONE ON WEB
 //      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
 //        print(value);
 //      });
@@ -109,8 +104,7 @@ class _MyAppState extends State<MyApp> {
     try {
       var size = await collection.count();
       print("size=$size");
-    }
-    on PlatformException catch (e) {
+    } on PlatformException catch (e) {
       print("Error! ${e.message}");
     }
   }
@@ -179,7 +173,6 @@ class _MyAppState extends State<MyApp> {
 //      });
 //      int ssaa = 232;
 
-
       /// with projection/limit
       var docs = await collection.find(
         filter: {
@@ -199,9 +192,9 @@ class _MyAppState extends State<MyApp> {
 //      print(doc.get("_id"));
 //      print(docs.length);
 
-    docs.forEach((doc) {
-      print(doc.get("_id"));
-    });
+      docs.forEach((doc) {
+        print(doc.get("_id"));
+      });
 
 //      /// with projection
 //      var doc = await collection.findOne(
@@ -269,9 +262,9 @@ class _MyAppState extends State<MyApp> {
 //          update: UpdateSelector.unset(["age"]),
 
         update: UpdateOperator.inc({
-            "age": -2,
-            "quantity": 30,
-          }),
+          "age": -2,
+          "quantity": 30,
+        }),
 
 //          update: UpdateSelector.max({
 //            "quantity": 50.5,
@@ -359,16 +352,17 @@ class _MyAppState extends State<MyApp> {
 //      final stream2 = myCollection.watch(ids: ["5ee8a50ffaba833f1c6c6a7c"]);
 //      final stream3 =  myCollection.watchWithFilter({"age": 25}); /// WORKS!
 
-      final streamSimple = myCollection.watch();    /// WORKS!
+      final streamSimple = myCollection.watch();
 
+      /// WORKS!
 
       streamSimple.listen((event) {
-          print(event);
-          var fullDocument = MongoDocument.parse(event);
-          print("a document with '${fullDocument.map["_id"]}' is changed");
+        print(event);
+        var fullDocument = MongoDocument.parse(event);
+        print("a document with '${fullDocument.map["_id"]}' is changed");
 
 //        }
-       // do something
+        // do something
       });
     } on PlatformException catch (e) {
       debugPrint("Error! ${e.message}");
@@ -429,40 +423,38 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:  _authBuilder(context),
+      home: _authBuilder(context),
 //      home: dummyHomeWidget(),
-
     );
   }
 
-  dummyHomeWidget(){
-   return Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
+  dummyHomeWidget() {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Plugin example app'),
+      ),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            Text('Running on: \n'),
+            RaisedButton(
+              child: Text("Reset Password"),
+              onPressed: () async {
+                try {
+                  var currUser = await client.auth.user;
+                  final success = await client.auth.sendResetPasswordEmail(
+                      currUser.profile.email); //"kfir25812@gmail.com");
+                  print(success);
+                } on PlatformException catch (e) {
+                  print(e.message ?? 'Unkown error');
+                }
+              },
+            )
+          ],
         ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Text('Running on: \n'),
-              RaisedButton(
-                child: Text("Reset Password"),
-                onPressed: () async{
-                  try {
-                    var currUser = await client.auth.user;
-                    final success = await client.auth.sendResetPasswordEmail(currUser.profile.email); //"kfir25812@gmail.com");
-                    print(success);
-                  }
-                  on PlatformException catch (e){
-                    print(e.message ?? 'Unkown error');
-                  }
-                },
-              )
-            ],
-          ),
-        ),
-      );
+      ),
+    );
   }
-
 
   StreamBuilder _authBuilder(BuildContext context) {
     Stream stream = client.auth.authListener();
@@ -495,9 +487,8 @@ class _MyAppState extends State<MyApp> {
             // redirect to the proper page
             return snapshot.hasData ? HomeScreen() : LoginScreen();
 
-
           default:
-              return Container();
+            return Container();
         }
       },
     );
