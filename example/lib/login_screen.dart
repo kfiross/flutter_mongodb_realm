@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
+import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_mongo_stitch_example/reset_pass_screen.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'reset_pass_screen.dart';
 
 enum LoginState { login, register }
 
@@ -18,14 +19,14 @@ class _LoginScreenState extends State<LoginScreen> {
   var _email;
   var _password;
 
-  var client = MongoStitchClient();
+  var client = MongoRealmClient();
   var _state = LoginState.login;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Welcome To MongoStitch"),
+        title: Text("Welcome To MongoRealm"),
       ),
       body: Center(
         child: Form(
@@ -150,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _loginAnonymously() async {
-    CoreStitchUser mongoUser =
+    CoreRealmUser mongoUser =
         await client.auth.loginWithCredential(AnonymousCredential());
 
     if (mongoUser != null) {
@@ -167,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _loginWithGoogle() async {
-    CoreStitchUser mongoUser =
+    CoreRealmUser mongoUser =
         await client.auth.loginWithCredential(GoogleCredential(
       serverClientId: "614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv",
       scopes: ["email"],
@@ -202,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
         var facebookToken = await fbLogin.currentAccessToken;
         String accessToken = facebookToken.token;
 
-        CoreStitchUser mongoUser = await client.auth
+        CoreRealmUser mongoUser = await client.auth
             .loginWithCredential(FacebookCredential(accessToken));
 
         if (mongoUser != null) {
@@ -238,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (_state == LoginState.login) {
         try {
-          CoreStitchUser mongoUser = await client.auth.loginWithCredential(
+          CoreRealmUser mongoUser = await client.auth.loginWithCredential(
               UserPasswordCredential(username: _email, password: _password)
 //            AnonymousCredential()
               );

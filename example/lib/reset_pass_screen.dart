@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
+import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   @override
@@ -8,7 +8,7 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  final client = MongoStitchClient();
+  final client = MongoRealmClient();
   String _email;
   final _formKey = GlobalKey<FormState>();
 

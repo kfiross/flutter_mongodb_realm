@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
+import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 
 /// /////////////////////////////////////////////////////
 import 'dart:async';
@@ -12,7 +12,7 @@ import 'login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MongoStitchClient.initializeApp("mystitchapp-fjpmn");
+  await MongoRealmClient.initializeApp("mystitchapp-fjpmn");
   runApp(MyApp());
 }
 
@@ -22,7 +22,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  MongoStitchClient client = MongoStitchClient();
+  MongoRealmClient client = MongoRealmClient();
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> init() async {
-    // initialized MongoStitch App
+    // initialized MongoRealm App
 
     try {
       // create a user
@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
 
       // login Anonymously
 
-      CoreStitchUser mongoUser =
+   ///   CoreRealmUser mongoUser =
           await client.auth.loginWithCredential(AnonymousCredential()
 //          UserPasswordCredential(
 //              username: 'naamahasson1@gmail.com',//"kfir25816@gmail.com",
@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
 
 //    614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv.apps.googleusercontent.com
 
-//      CoreStitchUser mongoUser = await client.auth.loginWithCredential(
+//      CoreRealmUser mongoUser = await client.auth.loginWithCredential(
 //          GoogleCredential(
 //        serverClientId: "614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv",//"281897935076-dlab9116cid9cmivd6nilofihip552cr",
 //        scopes: ["email"],
@@ -329,7 +329,7 @@ class _MyAppState extends State<MyApp> {
 //    String platformVersion;
 //    // Platform messages may fail, so we use a try/catch PlatformException.
 //    try {
-//      platformVersion = await FlutterMongoStitch.platformVersion;
+//      platformVersion = await FlutterMongoRealm.platformVersion;
 //    } on PlatformException {
 //      platformVersion = 'Failed to get platform version.';
 //    }

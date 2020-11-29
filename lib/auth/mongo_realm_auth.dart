@@ -2,29 +2,29 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_mongo_stitch/auth/credentials/google_credential.dart';
-import 'package:flutter_mongo_stitch/google_sign_in_git_mock/google_sign_in.dart';
+import 'package:flutter_mongodb_realm/auth/credentials/google_credential.dart';
+import 'package:flutter_mongodb_realm/google_sign_in_git_mock/google_sign_in.dart';
 
 import '../plugin.dart';
 import 'core_stitch_user.dart';
 import 'credentials/credentials.dart';
 
-/// MongoStitchAuth manages authentication for any Stitch based client.
-class MongoStitchAuth {
+/// MongoRealmAuth manages authentication for any Stitch based client.
+class MongoRealmAuth {
   // embedded Login providers wrappers for better handling
   static var _googleLoginWrapper = _GoogleLoginWrapper();
 //  static var _facebookLoginWrapper = _FacebookLoginWrapper();
 
   /// Logs in as a user with the given credentials associated with an
   /// authentication provider.
-  Future<CoreStitchUser> loginWithCredential(
+  Future<CoreRealmUser> loginWithCredential(
       StitchCredential credential) async {
     var result;
 
     if (credential is AnonymousCredential) {
-      result = await FlutterMongoStitch.signInAnonymously();
+      result = await FlutterMongoRealm.signInAnonymously();
     } else if (credential is UserPasswordCredential) {
-      result = await FlutterMongoStitch.signInWithUsernamePassword(
+      result = await FlutterMongoRealm.signInWithUsernamePassword(
         credential.username,
         credential.password,
       );
@@ -39,7 +39,7 @@ class MongoStitchAuth {
         var authCode =
             await _googleLoginWrapper.handleSignInAndGetAuthServerCode();
         print(authCode ?? 'nothing');
-        result = await FlutterMongoStitch.signInWithGoogle(authCode);
+        result = await FlutterMongoRealm.signInWithGoogle(authCode);
       } on Exception catch (e) {
         print(e);
       }
@@ -47,7 +47,7 @@ class MongoStitchAuth {
 //      var accessToken = await _facebookLoginWrapper.handleSignInAndGetToken(
 //          credential.permissions);
       result =
-          await FlutterMongoStitch.signInWithFacebook(credential.accessToken);
+          await FlutterMongoRealm.signInWithFacebook(credential.accessToken);
     } else {
       throw UnimplementedError();
     }
@@ -56,7 +56,7 @@ class MongoStitchAuth {
   }
 
   Future<bool> logout() async {
-    var result = await FlutterMongoStitch.logout();
+    var result = await FlutterMongoRealm.logout();
 
     bool loggedWithGoogle = await _googleLoginWrapper.isLogged;
 //    bool loggedWithFacebook = await _facebookLoginWrapper.isLogged;
@@ -70,25 +70,25 @@ class MongoStitchAuth {
   }
 
   Future<String> getUserId() async {
-    var result = await FlutterMongoStitch.getUserId();
+    var result = await FlutterMongoRealm.getUserId();
     return result;
   }
 
   Future<bool> registerWithEmail(
       {@required String email, @required String password}) async {
-    var result = await FlutterMongoStitch.registerWithEmail(email, password);
+    var result = await FlutterMongoRealm.registerWithEmail(email, password);
     return result;
   }
 
   Future<bool> sendResetPasswordEmail(String email) async {
-    var result = await FlutterMongoStitch.sendResetPasswordEmail(email);
+    var result = await FlutterMongoRealm.sendResetPasswordEmail(email);
     return result;
   }
 
-  Future<CoreStitchUser> get user async => await FlutterMongoStitch.getUser();
+  Future<CoreRealmUser> get user async => await FlutterMongoRealm.getUser();
 
   Stream authListener() {
-    var stream = FlutterMongoStitch.authListener();
+    var stream = FlutterMongoRealm.authListener();
     return stream;
   }
 }

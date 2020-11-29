@@ -1,5 +1,5 @@
-name: flutter_mongo_stitch_example
-description: Demonstrates how to use the flutter_mongo_stitch plugin.
+name: flutter_mongodb_realm_example
+description: Demonstrates how to use the flutter_mongodb_realm plugin.
 publish_to: 'none'
 
 environment:
@@ -35,7 +35,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_mongo_stitch:
+  flutter_mongodb_realm:
     path: ../
 
 

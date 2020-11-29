@@ -3,40 +3,40 @@ import 'dart:convert';
 
 import 'package:bson/bson.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_mongo_stitch/stream_interop/stream_interop.dart';
+import 'package:flutter_mongodb_realm/stream_interop/stream_interop.dart';
 import 'package:flutter_mongo_stitch_platform_interface/flutter_mongo_stitch_platform_interface.dart';
 import 'package:meta/meta.dart';
 import 'package:universal_html/html.dart';
 
 import 'auth/core_stitch_user.dart';
 
-class FlutterMongoStitch {
+class FlutterMongoRealm {
   static Future connectToMongo(String appId) async {
     return await FlutterMongoStitchPlatform.instance.connectToMongo(appId);
   }
 
   static Future signInAnonymously() async {
     var details = await FlutterMongoStitchPlatform.instance.signInAnonymously();
-    return CoreStitchUser.fromMap(details);
+    return CoreRealmUser.fromMap(details);
   }
 
-  static Future<CoreStitchUser> signInWithUsernamePassword(
+  static Future<CoreRealmUser> signInWithUsernamePassword(
       String username, String password) async {
     var details = await FlutterMongoStitchPlatform.instance
         .signInWithUsernamePassword(username, password);
-    return CoreStitchUser.fromMap(details);
+    return CoreRealmUser.fromMap(details);
   }
 
-  static Future<CoreStitchUser> signInWithGoogle(String authCode) async {
+  static Future<CoreRealmUser> signInWithGoogle(String authCode) async {
     var details =
         await FlutterMongoStitchPlatform.instance.signInWithGoogle(authCode);
-    return CoreStitchUser.fromMap(details);
+    return CoreRealmUser.fromMap(details);
   }
 
-  static Future<CoreStitchUser> signInWithFacebook(String accessToken) async {
+  static Future<CoreRealmUser> signInWithFacebook(String accessToken) async {
     var details = await FlutterMongoStitchPlatform.instance
         .signInWithFacebook(accessToken);
-    return CoreStitchUser.fromMap(details);
+    return CoreRealmUser.fromMap(details);
   }
 
   static Future logout() async {
@@ -52,9 +52,9 @@ class FlutterMongoStitch {
         .registerWithEmail(email, password);
   }
 
-  static Future<CoreStitchUser> getUser() async {
+  static Future<CoreRealmUser> getUser() async {
     var details = await FlutterMongoStitchPlatform.instance.getUser();
-    return CoreStitchUser.fromMap(details);
+    return CoreRealmUser.fromMap(details);
   }
 
   static Future<bool> sendResetPasswordEmail(String email) async {

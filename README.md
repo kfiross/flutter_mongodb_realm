@@ -1,15 +1,19 @@
-# flutter_mongo_stitch
+# flutter_mongodb_realm
 
-Unofficial Flutter plugin for using MongoDB Stitch services on Android, iOS and web.
+Unofficial Flutter plugin for using MongoDB Realm services on Android, iOS and web.
+
+<b>
+	Still Uses the deprecated Mongo Stitch SDK!!
+</b>
 
 ## Getting started
 For using it on your app:
 
 ```dart
-import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
+import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 ```
 
-For API reference [check here](https://pub.dartlang.org/documentation/flutter_mongo_stitch/latest/)
+For API reference [check here](https://pub.dartlang.org/documentation/flutter_mongodb_realm/latest/)
 
 The minimum required it's Android 5.0(API 21) or iOS 11.0
 
@@ -40,7 +44,7 @@ Web integration automatically!
 * Login/Sign in/Logout
 
 <b>Functions</b>
-* Calling a Stitch function
+* Calling a Realm function
 
 <b>Note:</b> Other more features will come in the future :)
 
@@ -53,7 +57,7 @@ Inorder to connect a StitchApp to flutter add your main function:
 main() async{
   // ADD THESE 2 LINES
   WidgetsFlutterBinding.ensureInitialized();
-  await MongoStitchClient.initializeApp(<your_app_id>);
+  await MongoRealmClient.initializeApp(<your_app_id>);
   
   // other configurations..
   
@@ -63,7 +67,7 @@ main() async{
 
 Inorder to use the client define:
 ```dart
-  final client = MongoStitchClient();
+  final client = MongoRealmClient();
 ```
 
 ### Authentication
@@ -85,12 +89,12 @@ final userEmail = user.profile.email;
 #### Login
 Login a user with Anonymous provider:
 ```dart
-CoreStitchUser mongoUser = await auth.loginWithCredential(AnonymousCredential());
+CoreRealmUser mongoUser = await auth.loginWithCredential(AnonymousCredential());
 ```
 
 Login a user with Email\Password provider:
 ```dart
-CoreStitchUser mongoUser = await auth.loginWithCredential(
+CoreRealmUser mongoUser = await auth.loginWithCredential(
   UserPasswordCredential(username: <email_address>, password: <password>));
 ```
 
@@ -109,7 +113,7 @@ Login a user using Google provider:
 
 calling on flutter:
 ```dart
-CoreStitchUser mongoUser = await auth.loginWithCredential(
+CoreRealmUser mongoUser = await auth.loginWithCredential(
   GoogleCredential(
     serverClientId: <Google Server Client Id>, // just the start from "<ID>.apps.googleusercontent.com"   
     scopes: <list of scopes>,
@@ -127,7 +131,7 @@ google_sign_in:
 
 
 ```dart
-CoreStitchUser mongoUser = await auth.loginWithCredential(
+CoreRealmUser mongoUser = await auth.loginWithCredential(
   GoogleCredential(
     serverClientId: <Google Server Client Id>, // just the start from "<ID>.apps.googleusercontent.com"   
     scopes: <list of scopes>,
@@ -136,7 +140,7 @@ CoreStitchUser mongoUser = await auth.loginWithCredential(
 
 Login a user using Facebook provider:
 ```dart
-CoreStitchUser mongoUser = await auth.loginWithCredential(
+CoreRealmUser mongoUser = await auth.loginWithCredential(
   FacebookCredential(<access_token>));
 ```
 
@@ -145,7 +149,7 @@ CoreStitchUser mongoUser = await auth.loginWithCredential(
 #### Register
 ```dart
 // Login a user with Email\Password
-CoreStitchUser mongoUser = await auth.registerWithEmail(
+CoreRealmUser mongoUser = await auth.registerWithEmail(
     email: <email_address>, password: <password>);
 ```
 
@@ -381,7 +385,7 @@ List<PipelineStage> pipeline = [
 
 
 ### Functions
-for calling a defined stitch function "sum" with argument 3&4
+for calling a defined Realm function "sum" with argument 3&4
 ```dart
 var result = await client.callFunction("sum", args: [3, 4])
 ```
@@ -398,4 +402,4 @@ var result = await client.callFunction("sum", args: [3, 4], requestTimeout: 6000
 
 
 
-### Note: flutter_mongo_stitch is not directly and/or indirectly associated/affiliated with MongoDB<sup>TM</sup> , Flutter or Google LLC.
+### Note: flutter_mongo_realm is not directly and/or indirectly associated/affiliated with MongoDB<sup>TM</sup> , Flutter or Google LLC.

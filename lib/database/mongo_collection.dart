@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:extension/enum.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_mongo_stitch/database/pipeline_stage.dart';
+import 'package:flutter_mongodb_realm/database/pipeline_stage.dart';
 
 import '../bson_document.dart';
 import '../plugin.dart';
@@ -36,13 +36,13 @@ class MongoCollection {
   MongoCollection(
       {@required this.collectionName, @required this.databaseName}) {
 //    if(kIsWeb){
-//      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName);//, filter: BsonDocument(fixFilter).toJson());
+//      FlutterMongoRealm.setupWatchCollection(collectionName, databaseName);//, filter: BsonDocument(fixFilter).toJson());
 //    }
   }
 
   /// Inserts the provided document to the collection
   Future insertOne(MongoDocument document) async {
-    await FlutterMongoStitch.insertDocument(
+    await FlutterMongoRealm.insertDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       data: document.map,
@@ -51,7 +51,7 @@ class MongoCollection {
 
   /// Inserts one or more documents to the collection
   Future insertMany(List<MongoDocument> documents) async {
-    await FlutterMongoStitch.insertDocuments(
+    await FlutterMongoRealm.insertDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       list: documents.map((doc) => jsonEncode(doc.map)).toList(),
@@ -80,7 +80,7 @@ class MongoCollection {
       }
     }
 
-    var result = await FlutterMongoStitch.deleteDocument(
+    var result = await FlutterMongoRealm.deleteDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -111,7 +111,7 @@ class MongoCollection {
       }
     }
 
-    var result = await FlutterMongoStitch.deleteDocuments(
+    var result = await FlutterMongoRealm.deleteDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -144,7 +144,7 @@ class MongoCollection {
     var projectionMap =
         options?.projection?.map((k, v) => MapEntry(k, v.value));
 
-    List<dynamic> resultJson = await FlutterMongoStitch.findDocuments(
+    List<dynamic> resultJson = await FlutterMongoRealm.findDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filterCopy).toJson(),
@@ -183,7 +183,7 @@ class MongoCollection {
 
     var projectionMap = projection?.map((k, v) => MapEntry(k, v.value));
 
-    String resultJson = await FlutterMongoStitch.findFirstDocument(
+    String resultJson = await FlutterMongoRealm.findFirstDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filterCopy).toJson(),
@@ -213,7 +213,7 @@ class MongoCollection {
       }
     }
 
-    int size = await FlutterMongoStitch.countDocuments(
+    int size = await FlutterMongoRealm.countDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -258,7 +258,7 @@ class MongoCollection {
       return MapEntry<String, dynamic>(key, value);
     });
 
-    List results = await FlutterMongoStitch.updateDocument(
+    List results = await FlutterMongoRealm.updateDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -286,7 +286,7 @@ class MongoCollection {
       filter = filter.values;
     }
 
-    List results = await FlutterMongoStitch.updateDocuments(
+    List results = await FlutterMongoRealm.updateDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(filter).toJson(),
@@ -303,15 +303,15 @@ class MongoCollection {
   Stream watch({List<String> ids, bool asObjectIds = true}) {
     var stream;
     if (kIsWeb) {
-      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName,
+      FlutterMongoRealm.setupWatchCollection(collectionName, databaseName,
           ids: ids, asObjectIds: asObjectIds);
 
-      stream = FlutterMongoStitch.watchCollection(
+      stream = FlutterMongoRealm.watchCollection(
         collectionName: this.collectionName,
         databaseName: this.databaseName,
       );
     } else {
-      stream = FlutterMongoStitch.watchCollection(
+      stream = FlutterMongoRealm.watchCollection(
         collectionName: this.collectionName,
         databaseName: this.databaseName,
         ids: ids,
@@ -339,11 +339,11 @@ class MongoCollection {
     });
 
     if (kIsWeb) {
-      FlutterMongoStitch.setupWatchCollection(collectionName, databaseName,
+      FlutterMongoRealm.setupWatchCollection(collectionName, databaseName,
           filter: BsonDocument(fixFilter).toJson());
     }
 
-    var stream = FlutterMongoStitch.watchCollection(
+    var stream = FlutterMongoRealm.watchCollection(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       filter: BsonDocument(fixFilter).toJson(),
@@ -354,7 +354,7 @@ class MongoCollection {
 
   ///
   Future<List<MongoDocument>> aggregate(List<PipelineStage> pipeline) async {
-    List<dynamic> resultJson = await FlutterMongoStitch.aggregate(
+    List<dynamic> resultJson = await FlutterMongoRealm.aggregate(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       pipeline: pipeline.map((doc) => jsonEncode(doc.values)).toList(),

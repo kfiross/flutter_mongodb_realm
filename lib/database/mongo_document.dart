@@ -70,7 +70,7 @@ class MongoDocument {
   static MongoDocument parse(data) {
     Map<String, dynamic> map = json.decode(data);
 //    if(kIsWeb){
-//      map = FlutterMongoStitch.customEventToMap(data);
+//      map = FlutterMongoRealm.customEventToMap(data);
 //    }
 //    else {
 //      map = json.decode(data);

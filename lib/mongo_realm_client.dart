@@ -4,14 +4,14 @@ import 'auth/auth.dart';
 import 'database/database.dart';
 import 'plugin.dart';
 
-/// The MongoStitchClient is the entry point for working with data in MongoDB
+/// The MongoRealmClient is the entry point for working with data in MongoDB
 /// remotely via Stitch.
-class MongoStitchClient {
-  final MongoStitchAuth auth = MongoStitchAuth();
+class MongoRealmClient {
+  final MongoRealmAuth auth = MongoRealmAuth();
 
   static Future initializeApp(String appID) async {
     try {
-      await FlutterMongoStitch.connectToMongo(appID);
+      await FlutterMongoRealm.connectToMongo(appID);
     } on PlatformException catch (_) {
       // to ignore re-setting default app can twice
     }
@@ -23,7 +23,7 @@ class MongoStitchClient {
 
   /// Calls the specified Stitch function
   Future callFunction(String name, {List args, int requestTimeout}) async {
-    var result = await FlutterMongoStitch.callFunction(
+    var result = await FlutterMongoRealm.callFunction(
       name,
       args: args,
       requestTimeout: requestTimeout,

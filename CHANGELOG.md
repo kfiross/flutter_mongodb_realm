@@ -1,3 +1,6 @@
+## 1.0.0
+* BREAKING CHANGES: Renamed package to `flutter_mongodb_realm` and every `xxStitch` object to `xxRealm` object 
+
 ## 0.8.1
 * fixed issue with default app set
 

@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_mongodb_realm/mongo_realm_client.dart';
+import 'package:flutter_mongodb_realm/database/database.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final client = MongoStitchClient();
+  final client = MongoRealmClient();
   var _students = <Student>[];
 
   MongoCollection _collection;
