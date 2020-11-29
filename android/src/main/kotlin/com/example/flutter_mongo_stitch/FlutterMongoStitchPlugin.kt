@@ -115,15 +115,24 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             result.error("ERROR", "Not provided a MongoStitch App ID", "")
         }
 
-        Stitch.initializeDefaultAppClient(clientAppId!!)
+
+        try {
+            Stitch.initializeDefaultAppClient(clientAppId!!)
+        }
+        catch (ignored: Exception){
+            
+        }
 
         stitchAppClient = Stitch.getDefaultAppClient()
+
+
 
         val mongoClient = stitchAppClient.getServiceClient(
                 RemoteMongoClient.factory,
                 "mongodb-atlas"
         )
 
+        
         client = MyMongoStitchClient(mongoClient, stitchAppClient)
         result.success(true)
     }

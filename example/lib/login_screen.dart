@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mongo_stitch/flutter_mongo_stitch.dart';
+import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
-import 'home_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'reset_pass_screen.dart';
 
 enum LoginState { login, register }
 
@@ -15,17 +16,17 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
 
-  var _email = "";//""kfir25816@gmail.com";
-  var _password = "";//"12345678";
+  var _email;
+  var _password;
 
-  var client = MongoStitchClient();
+  var client = MongoRealmClient();
   var _state = LoginState.login;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Welcome To MongoStitch"),
+        title: Text("Welcome To MongoRealm"),
       ),
       body: Center(
         child: Form(
@@ -43,28 +44,34 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextFormField(
-              initialValue: _email,
-              decoration: InputDecoration(labelText: 'Email'),
-              autocorrect: false,
-              validator: (val) => val.isEmpty ? "Name can't be empty." : null,
-              onSaved: (val) => _email = val,
+            Container(
+              width: 300,
+              child: TextFormField(
+                initialValue: _email,
+                decoration: InputDecoration(labelText: 'Email'),
+                autocorrect: false,
+                validator: (val) => val.isEmpty ? "Name can't be empty." : null,
+                onSaved: (val) => _email = val,
+              ),
             ),
             SizedBox(height: 12),
-            TextFormField(
-              initialValue: _password,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-              autocorrect: false,
-              validator: (String val) {
-                if (val.isEmpty) return "Password can't be empty.";
+            Container(
+              width: 300,
+              child: TextFormField(
+                initialValue: _password,
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                autocorrect: false,
+                validator: (String val) {
+                  if (val.isEmpty) return "Password can't be empty.";
 
-                if (val.length < 6)
-                  return "Password must be at least 6 charcaters long";
+                  if (val.length < 6)
+                    return "Password must be at least 6 charcaters long";
 
-                return null;
-              },
-              onSaved: (val) => _password = val,
+                  return null;
+                },
+                onSaved: (val) => _password = val,
+              ),
             ),
             SizedBox(height: 36),
             Container(
@@ -79,40 +86,48 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 12),
             (_state == LoginState.login)
                 ? Column(
-              children: <Widget>[
-                Container(
-                  width: 200,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: RaisedButton(
-                    color: Colors.red,
-                    child: Text("Login as Anonymous",
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: _loginAnonymously,
-                  ),
-                ),
-                Container(
-                  width: 200,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: RaisedButton(
-                    color: Colors.red,
-                    child: Text("Login with Facebook",
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: _loginWithFacebook,
-                  ),
-                ),
-                Container(
-                  width: 200,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: RaisedButton(
-                    color: Colors.red,
-                    child: Text("Login with Google",
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: _loginWithGoogle,
-                  ),
-                ),
-              ],
-            )
+                    children: <Widget>[
+                      Container(
+                        width: 200,
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: RaisedButton(
+                          color: Colors.red,
+                          child: Text("Login as Anonymous",
+                              style: TextStyle(color: Colors.white)),
+                          onPressed: _loginAnonymously,
+                        ),
+                      ),
+                      Container(
+                        width: 200,
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: RaisedButton(
+                          color: Colors.red,
+                          child: Text("Login with Facebook",
+                              style: TextStyle(color: Colors.white)),
+                          onPressed: _loginWithFacebook,
+                        ),
+                      ),
+                      Container(
+                        width: 200,
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: RaisedButton(
+                          color: Colors.red,
+                          child: Text("Login with Google",
+                              style: TextStyle(color: Colors.white)),
+                          onPressed: _loginWithGoogle,
+                        ),
+                      ),
+                    ],
+                  )
                 : Container(),
+            SizedBox(height: 12),
+            InkWell(
+              child: Text("Forgot password?"),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => ResetPasswordScreen()));
+              },
+            ),
             Container(
               width: 200,
               child: RaisedButton(
@@ -135,16 +150,14 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _loginAnonymously() async{
-    CoreStitchUser mongoUser = await client.auth.loginWithCredential(
-        AnonymousCredential()
-    );
+  void _loginAnonymously() async {
+    CoreRealmUser mongoUser =
+        await client.auth.loginWithCredential(AnonymousCredential());
 
     if (mongoUser != null) {
       // String userId = mongoUser.id;
 //      Navigator.pushReplacement(
 //          context, MaterialPageRoute(builder: (_) => HomeScreen()));
-
 
       Fluttertoast.showToast(
           msg: "Welcome Geust!",
@@ -155,12 +168,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _loginWithGoogle() async {
-    CoreStitchUser mongoUser = await client.auth.loginWithCredential(
-        GoogleCredential(
-          serverClientId: "281897935076-dlab9116cid9cmivd6nilofihip552cr",
-          scopes: ["email"],
-        )
-    );
+    CoreRealmUser mongoUser =
+        await client.auth.loginWithCredential(GoogleCredential(
+      serverClientId: "614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv",
+      scopes: ["email"],
+    ));
 
     if (mongoUser != null) {
       print("logged in as ${mongoUser.id}");
@@ -171,8 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
       );
-    }
-    else {
+    } else {
       print("wrong pass or username");
     }
   }
@@ -192,21 +203,19 @@ class _LoginScreenState extends State<LoginScreen> {
         var facebookToken = await fbLogin.currentAccessToken;
         String accessToken = facebookToken.token;
 
-        CoreStitchUser mongoUser = await client.auth.loginWithCredential(
-            FacebookCredential(accessToken)
-        );
+        CoreRealmUser mongoUser = await client.auth
+            .loginWithCredential(FacebookCredential(accessToken));
 
         if (mongoUser != null) {
           print("logged in as ${mongoUser.id}");
 
           Fluttertoast.showToast(
-              msg: "Welcome Facebook user!",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
+            msg: "Welcome Facebook user!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
           );
-        }
-        else {
+        } else {
           print("wrong pass or username");
         }
 
@@ -218,8 +227,8 @@ class _LoginScreenState extends State<LoginScreen> {
       case FacebookLoginStatus.error:
         break;
     }
-
   }
+
   void _submitForm() async {
     final form = formKey.currentState;
     if (form.validate()) {
@@ -230,10 +239,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (_state == LoginState.login) {
         try {
-          CoreStitchUser mongoUser = await client.auth.loginWithCredential(
+          CoreRealmUser mongoUser = await client.auth.loginWithCredential(
               UserPasswordCredential(username: _email, password: _password)
 //            AnonymousCredential()
-          );
+              );
 
           if (mongoUser != null) {
             // String userId = mongoUser.id;

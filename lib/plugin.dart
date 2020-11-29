@@ -1,93 +1,79 @@
-import 'dart:collection';
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:bson/bson.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:streams_channel/streams_channel.dart';
+import 'package:flutter_mongodb_realm/stream_interop/stream_interop.dart';
+import 'package:flutter_mongo_stitch_platform_interface/flutter_mongo_stitch_platform_interface.dart';
+import 'package:meta/meta.dart';
+import 'package:universal_html/html.dart';
 
-import 'auth/auth.dart';
+import 'auth/core_stitch_user.dart';
 
-class FlutterMongoStitch {
-  static const MethodChannel _channel =
-      const MethodChannel('flutter_mongo_stitch');
-
-  static StreamsChannel _streamsChannel =
-      StreamsChannel('streams_channel_test');
-
+class FlutterMongoRealm {
   static Future connectToMongo(String appId) async {
-    await _channel.invokeMethod('connectMongo', {'app_id': appId});
+    return await FlutterMongoStitchPlatform.instance.connectToMongo(appId);
   }
 
   static Future signInAnonymously() async {
-    final result = await _channel.invokeMethod('signInAnonymously');
-    return CoreStitchUser.fromMap(result);
+    var details = await FlutterMongoStitchPlatform.instance.signInAnonymously();
+    return CoreRealmUser.fromMap(details);
   }
 
-  static Future<CoreStitchUser> signInWithUsernamePassword(
+  static Future<CoreRealmUser> signInWithUsernamePassword(
       String username, String password) async {
-    final result = await _channel.invokeMethod(
-        'signInWithUsernamePassword',
-        {'username': username, 'password': password});
-
-    return CoreStitchUser.fromMap(result);
+    var details = await FlutterMongoStitchPlatform.instance
+        .signInWithUsernamePassword(username, password);
+    return CoreRealmUser.fromMap(details);
   }
 
-  static Future<CoreStitchUser> signInWithGoogle(String authCode) async{
-    final LinkedHashMap result = await _channel.invokeMethod(
-        'signInWithGoogle', {'code': authCode});
-    return CoreStitchUser.fromMap(result);
+  static Future<CoreRealmUser> signInWithGoogle(String authCode) async {
+    var details =
+        await FlutterMongoStitchPlatform.instance.signInWithGoogle(authCode);
+    return CoreRealmUser.fromMap(details);
   }
 
-  static Future<CoreStitchUser> signInWithFacebook(String accessToken) async{
-    final LinkedHashMap result = await _channel.invokeMethod(
-        'signInWithFacebook', {'token': accessToken});
-
-    return CoreStitchUser.fromMap(result);
+  static Future<CoreRealmUser> signInWithFacebook(String accessToken) async {
+    var details = await FlutterMongoStitchPlatform.instance
+        .signInWithFacebook(accessToken);
+    return CoreRealmUser.fromMap(details);
   }
 
   static Future logout() async {
-    final result = await _channel.invokeMethod('logout');
-
-    return result;
+    return await FlutterMongoStitchPlatform.instance.logout();
   }
 
   static Future getUserId() async {
-    final result = await _channel.invokeMethod('getUserId');
-
-    return result;
+    return await FlutterMongoStitchPlatform.instance.getUserId();
   }
 
   static Future<bool> registerWithEmail(String email, String password) async {
-    final result = await _channel.invokeMethod(
-        'registerWithEmail', {'email': email, 'password': password});
-
-    return result;
+    return await FlutterMongoStitchPlatform.instance
+        .registerWithEmail(email, password);
   }
 
-  static Future<CoreStitchUser> getUser() async{
-    final LinkedHashMap result = await _channel.invokeMethod('getUser');
-    return CoreStitchUser.fromMap(result);
+  static Future<CoreRealmUser> getUser() async {
+    var details = await FlutterMongoStitchPlatform.instance.getUser();
+    return CoreRealmUser.fromMap(details);
   }
 
   static Future<bool> sendResetPasswordEmail(String email) async {
-    final result = await _channel.invokeMethod(
-        'sendResetPasswordEmail', {'email': email});
-
-    return result;
+    return await FlutterMongoStitchPlatform.instance
+        .sendResetPasswordEmail(email);
   }
 
-
-
-  /// /////////////////////////////////////////////////////////////////
+  ///
 
   static Future insertDocument({
     @required String collectionName,
     @required String databaseName,
     @required Map<String, Object> data,
   }) async {
-    await _channel.invokeMethod('insertDocument', {
-      'database_name': databaseName,
-      'collection_name': collectionName,
-      'data': data
-    });
+    return await FlutterMongoStitchPlatform.instance.insertDocument(
+      collectionName: collectionName,
+      databaseName: databaseName,
+      data: data,
+    );
   }
 
   static Future insertDocuments({
@@ -95,71 +81,68 @@ class FlutterMongoStitch {
     @required String databaseName,
     @required List<String> list,
   }) async {
-    await _channel.invokeMethod('insertDocuments', {
-      'database_name': databaseName,
-      'collection_name': collectionName,
-      'list': list
-    });
+    return await FlutterMongoStitchPlatform.instance.insertDocuments(
+      collectionName: collectionName,
+      databaseName: databaseName,
+      list: list,
+    );
   }
 
   static Future findDocuments(
-      {String collectionName, String databaseName, dynamic filter,
-        String projection, int limit, String sort}) async {
-    final result = await _channel.invokeMethod('findDocuments', {
-      'database_name': databaseName,
-      'collection_name': collectionName,
-      'filter': filter,
-      'projection': projection,
-      'limit': limit,
-      'sort': sort
-    });
-
-    return result;
+      {String collectionName,
+      String databaseName,
+      dynamic filter,
+      String projection,
+      int limit,
+      String sort}) async {
+    return await FlutterMongoStitchPlatform.instance.findDocuments(
+      collectionName: collectionName,
+      databaseName: databaseName,
+      filter: filter,
+      limit: limit,
+      sort: sort,
+      projection: projection,
+    );
   }
 
   static Future findFirstDocument(
-      {String collectionName, String databaseName, dynamic filter, String projection}) async {
-    final result = await _channel.invokeMethod('findDocument', {
-      'database_name': databaseName,
-      'collection_name': collectionName,
-      'filter': filter,
-      'projection': projection,
-    });
-
-    return result;
+      {String collectionName,
+      String databaseName,
+      dynamic filter,
+      String projection}) async {
+    return await FlutterMongoStitchPlatform.instance.findFirstDocument(
+      collectionName: collectionName,
+      databaseName: databaseName,
+      filter: filter,
+      projection: projection,
+    );
   }
 
   static Future deleteDocument(
       {String collectionName, String databaseName, dynamic filter}) async {
-    final result = await _channel.invokeMethod('deleteDocument', {
-      'database_name': databaseName,
-      'collection_name': collectionName,
-      'filter': filter
-    });
-
-    return result;
+    return await FlutterMongoStitchPlatform.instance.deleteDocument(
+      collectionName: collectionName,
+      databaseName: databaseName,
+      filter: filter,
+    );
   }
 
   static Future deleteDocuments(
       {String collectionName, String databaseName, dynamic filter}) async {
-    final result = await _channel.invokeMethod('deleteDocuments', {
-      'database_name': databaseName,
-      'collection_name': collectionName,
-      'filter': filter
-    });
-
-    return result;
+    return await FlutterMongoStitchPlatform.instance.deleteDocuments(
+      collectionName: collectionName,
+      databaseName: databaseName,
+      filter: filter,
+    );
   }
 
   static Future countDocuments(
       {String collectionName, String databaseName, dynamic filter}) async {
-    final size = await _channel.invokeMethod('countDocuments', {
-      'database_name': databaseName,
-      'collection_name': collectionName,
-      'filter': filter
-    });
-
-    return size;
+    return await FlutterMongoStitchPlatform.instance.countDocuments(
+      collectionName: collectionName,
+      databaseName: databaseName,
+      filter: filter,
+    );
   }
 
   ///
@@ -168,14 +151,12 @@ class FlutterMongoStitch {
       String databaseName,
       String filter,
       String update}) async {
-    final results = await _channel.invokeMethod('updateDocument', {
-      'database_name': databaseName,
-      'collection_name': collectionName,
-      'filter': filter,
-      'update': update
-    });
-
-    return results;
+    return await FlutterMongoStitchPlatform.instance.updateDocument(
+      collectionName: collectionName,
+      databaseName: databaseName,
+      filter: filter,
+      update: update,
+    );
   }
 
   static Future updateDocuments(
@@ -183,60 +164,139 @@ class FlutterMongoStitch {
       String databaseName,
       String filter,
       String update}) async {
-    final results = await _channel.invokeMethod('updateDocuments', {
-      'database_name': databaseName,
-      'collection_name': collectionName,
-      'filter': filter,
-      'update': update
-    });
-
-    return results;
+    return await FlutterMongoStitchPlatform.instance.updateDocuments(
+      collectionName: collectionName,
+      databaseName: databaseName,
+      filter: filter,
+      update: update,
+    );
   }
 
   static Stream watchCollection({
     @required String collectionName,
     @required String databaseName,
     List<String> ids,
-    String filter, bool asObjectIds = true,
+    String filter,
+    bool asObjectIds = true,
   }) {
+    Stream nativeStream;
+
+    if (kIsWeb) {
+//      Stream<Event> jsStream =
+//          document.on["watchEvent.$databaseName.$collectionName"];
+
+      var jsStream = StreamInterop.getNativeStream(
+          "watchEvent.$databaseName.$collectionName");
+
+      // ignore: close_sinks
+      var controller = StreamController<String>();
+
+      // migrating events from the js-event to a dart event
+      jsStream.listen((event) {
+        var eventDetail = (event as CustomEvent).detail;
+
+        var map = json.decode(eventDetail ?? "{}");
+
+        if (map['_id'] is String == false) {
+          map['_id'] = ObjectId.parse(map['_id']);
+        }
+        controller.add(jsonEncode(map));
+      });
+
+      nativeStream = controller.stream;
+    } else {
+      nativeStream = StreamInterop.getNativeStream({
+        "handler": "watchCollection",
+        "db": databaseName,
+        "collection": collectionName,
+        "filter": filter,
+        "ids": ids,
+        "as_object_ids": asObjectIds,
+      });
+    }
+
+    return nativeStream;
+
     // continuous stream of events from platform side
-    return _streamsChannel.receiveBroadcastStream({
-      "handler": "watchCollection",
-      "db": databaseName,
-      "collection": collectionName,
-      "filter": filter,
-      "ids": ids,
-      "as_object_ids": asObjectIds,
-    });
+//    return _streamsChannel.receiveBroadcastStream({
+//      "handler": "watchCollection",
+//      "db": databaseName,
+//      "collection": collectionName,
+//      "filter": filter,
+//      "ids": ids,
+//      "as_object_ids": asObjectIds,
+//    });
   }
 
-  static aggregate({ @required String collectionName,  @required String databaseName,
-    List<String> pipeline}) async {
-    final results = await _channel.invokeMethod('aggregate', {
-      'database_name': databaseName,
-      'collection_name': collectionName,
-      'pipeline': pipeline,
-    });
-
-    return results;
+  static aggregate(
+      {@required String collectionName,
+      @required String databaseName,
+      List<String> pipeline}) async {
+    return await FlutterMongoStitchPlatform.instance.aggregate(
+      collectionName: collectionName,
+      databaseName: databaseName,
+      pipeline: pipeline,
+    );
   }
 
-  static Future callFunction(String name, {List args, int requestTimeout}) async{
-    final result = _channel.invokeMethod('callFunction', {
-      "name": name,
-      "args": args,
-      "timeout": requestTimeout
-    });
-
-    return result;
+  static Future callFunction(String name,
+      {List args, int requestTimeout}) async {
+    return await FlutterMongoStitchPlatform.instance.callFunction(
+      name,
+      args: args,
+      requestTimeout: requestTimeout,
+    );
   }
 
   static Stream authListener() {
-    // continuous stream of events from platform side
-    return _streamsChannel.receiveBroadcastStream({
-      "handler": "auth",
-    });
+    Stream nativeStream;
+
+    if (kIsWeb) {
+      //Stream<Event> jsStream = document.on["authChange"];
+      var jsStream = StreamInterop.getNativeStream("authChange");
+
+      // ignore: close_sinks
+      var controller = StreamController<Map>();
+
+      controller.onListen = () {
+        controller.add(null);
+      };
+
+      // migrating events from the js-event to a dart event
+      jsStream.listen((event) {
+        var eventDetail = (event as CustomEvent).detail;
+        print(eventDetail);
+        if (eventDetail == null) {
+          controller.add(null);
+        } else {
+          controller.add(eventDetail);
+        }
+      });
+
+      nativeStream = controller.stream;
+    } else {
+      nativeStream = StreamInterop.getNativeStream({
+        "handler": "auth",
+      });
+    }
+
+    return nativeStream;
+
+//    return _streamsChannel.receiveBroadcastStream({
+//      "handler": "auth",
+//    });
   }
 
+  // WEB-specific helpers
 
+  static Future setupWatchCollection(String collectionName, String databaseName,
+      {List<String> ids, bool asObjectIds, String filter}) async {
+    await FlutterMongoStitchPlatform.instance.setupWatchCollection(
+      collectionName,
+      databaseName,
+      ids: ids,
+      asObjectIds: asObjectIds,
+      filter: filter,
+    );
+  }
 }

@@ -1,3 +1,36 @@
+## 1.0.0
+* BREAKING CHANGES: Renamed package to `flutter_mongodb_realm` and every `xxStitch` object to `xxRealm` object 
+
+## 0.8.1
+* fixed issue with default app set
+
+## 0.8.0
+* Updated for no-setup at web
+
+## 0.7.1
+* Using the web plugin as endorsed plugin
+
+## 0.7.0
+* Added web support by default
+
+## 0.7.0-dev.6
+* Added web support (for using `sendResetPassword`)
+
+## 0.7.0-dev.5
+* Added web support (for using `authListener()` stream)
+
+## 0.7.0-dev.4
+* Added web support (for using `watch` on collection and calling Stitch Functions)
+
+## 0.7.0-dev.3
+* Added web support (for Auth usage, not included Facebook\Google login)
+
+## 0.7.0-dev.2
+* updated README for using on web
+
+## 0.7.0-dev.1
+* Added web support (for Database usage)
+
 ## 0.6.1
 * Added support of watch collection with specified list of ids
 * Fixed `watchWithFilter()` to work correctly

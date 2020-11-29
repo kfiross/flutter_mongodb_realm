@@ -67,9 +67,14 @@ class MongoDocument {
   }
 
   /// Parses a string in MongoDB Extended JSON format to a Document
-  static MongoDocument parse(String jsonString) {
-    Map<String, dynamic> map = json.decode(jsonString);
-
+  static MongoDocument parse(data) {
+    Map<String, dynamic> map = json.decode(data);
+//    if(kIsWeb){
+//      map = FlutterMongoRealm.customEventToMap(data);
+//    }
+//    else {
+//      map = json.decode(data);
+//    }
     // fix MongoDB bullshit
     map.forEach((key, value) {
       if (value is LinkedHashMap) {
