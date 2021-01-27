@@ -20,6 +20,7 @@ import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodCodec;
 import io.flutter.plugin.common.StandardMethodCodec;
+import io.realm.BuildConfig;
 
 /**
  * Inspired from https://github.com/flutter/engine/blob/master/shell/platform/android/io/flutter/plugin/common/EventChannel.java

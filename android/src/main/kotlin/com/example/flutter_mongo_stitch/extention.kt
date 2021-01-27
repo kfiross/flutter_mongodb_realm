@@ -1,6 +1,7 @@
 package com.example.flutter_mongo_stitch
 
-import com.mongodb.stitch.android.core.auth.StitchUser
+//import com.mongodb.stitch.android.core.auth.StitchUser
+import io.realm.mongodb.User
 import org.bson.BsonType
 import org.bson.BsonValue
 
@@ -33,7 +34,25 @@ fun BsonValue.toJavaValue(): Any {
     }
 }
 
-fun StitchUser.toMap(): Map<String, Any> {
+//fun StitchUser.toMap(): Map<String, Any> {
+//    return mapOf(
+//            "id" to id,
+//            "device_id" to deviceId,
+//            "profile" to mapOf(
+//                    "name" to profile?.name,
+//                    "email" to profile?.email,
+//                    "pictureUrl" to profile?.pictureUrl,
+//                    "firstName" to profile?.firstName,
+//                    "lastName" to profile?.lastName,
+//                    "gender" to profile?.gender,
+//                    "birthday" to profile?.birthday,
+//                    "minAge" to profile?.minAge,
+//                    "maxAge" to profile?.maxAge
+//            )
+//    )
+//}
+
+fun User.toMap(): Map<String, Any> {
     return mapOf(
             "id" to id,
             "device_id" to deviceId,

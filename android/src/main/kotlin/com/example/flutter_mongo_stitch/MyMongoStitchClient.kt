@@ -1,30 +1,41 @@
 package com.example.flutter_mongo_stitch
 
-import com.google.android.gms.tasks.Task
-import com.mongodb.stitch.android.core.StitchAppClient
-import com.mongodb.stitch.android.core.auth.StitchAuth
-import com.mongodb.stitch.android.core.auth.StitchUser
-import com.mongodb.stitch.core.auth.providers.anonymous.AnonymousCredential
-import com.mongodb.stitch.core.auth.providers.userpassword.UserPasswordCredential
+
+//import com.mongodb.stitch.android.core.StitchAppClient
+//import com.mongodb.stitch.android.core.auth.StitchAuth
+//import com.mongodb.stitch.android.core.auth.StitchUser
+//import com.mongodb.stitch.core.auth.providers.anonymous.AnonymousCredential
+//import com.mongodb.stitch.core.auth.providers.userpassword.UserPasswordCredential
 import java.lang.Exception
 import kotlin.collections.HashMap
-import com.mongodb.stitch.android.core.auth.providers.userpassword.UserPasswordAuthProviderClient
-import com.mongodb.stitch.android.services.mongodb.remote.*
-import com.mongodb.stitch.core.auth.providers.facebook.FacebookCredential
-import com.mongodb.stitch.core.auth.providers.google.GoogleCredential
-import com.mongodb.stitch.core.services.mongodb.remote.*
+//import com.mongodb.stitch.android.core.auth.providers.userpassword.UserPasswordAuthProviderClient
+//import com.mongodb.stitch.android.services.mongodb.remote.*
+//import com.mongodb.stitch.core.auth.providers.facebook.FacebookCredential
+//import com.mongodb.stitch.core.auth.providers.google.GoogleCredential
+//import com.mongodb.stitch.core.services.mongodb.remote.*
+import io.realm.RealmAsyncTask
+import io.realm.mongodb.*
+import io.realm.mongodb.functions.Functions
 import org.bson.*
-import org.bson.codecs.BsonValueCodec
 import org.bson.types.ObjectId
 
+import io.realm.mongodb.mongo.MongoClient
+import io.realm.mongodb.mongo.MongoCollection
+import io.realm.mongodb.mongo.iterable.AggregateIterable
+import io.realm.mongodb.mongo.iterable.FindIterable
+import io.realm.mongodb.mongo.options.FindOptions
+import io.realm.mongodb.mongo.options.InsertManyResult
+import io.realm.mongodb.mongo.result.DeleteResult
+import io.realm.mongodb.mongo.result.InsertOneResult
+import io.realm.mongodb.mongo.result.UpdateResult
 
 // Basic CRUD..
 
 class MyMongoStitchClient(
-    private var client: RemoteMongoClient,
-    private var appClient: StitchAppClient
+        private var client: MongoClient?,
+        private var app: App
 ) {
-    private var auth: StitchAuth = appClient.auth
+ //   private var auth: StitchAuth = app.currentUser()
 
     /** ========================== Auth-related function  ========================= **/
 //    fun signInWithCustomJWT(jwtString: String): Task<StitchUser>? {
@@ -32,8 +43,8 @@ class MyMongoStitchClient(
 //    }
 //
 
-    fun getUser(): StitchUser? {
-        return auth.user
+    fun getUser(): User? {
+        return app.currentUser();
     }
 
 //    fun confirmUser() {
@@ -55,57 +66,62 @@ class MyMongoStitchClient(
 //                }
 //    }
 
-    fun sendResetPasswordEmail(email: String): Task<Void>? {
-        val emailPassClient = auth.getProviderClient(UserPasswordAuthProviderClient.factory)
-        return emailPassClient.sendResetPasswordEmail(email)
+    fun sendResetPasswordEmail(email: String) {
+
+//        val emailPassClient = auth.getProviderClient(UserPasswordAuthProviderClient.factory)
+        return app.emailPassword.sendResetPasswordEmail(email);
     }
 
 
     fun getUserId(): String?{
-        return auth.user?.id
+        return app.currentUser()?.id
     }
 
     fun isUserLoggedIn(): Boolean{
-        return auth.user?.isLoggedIn ?: false
+        return app.currentUser()?.isLoggedIn ?: false
     }
 
-    fun signInAnonymously(): Task<StitchUser>
-            = auth.loginWithCredential(AnonymousCredential())
 
-    fun signInWithUsernamePassword(username: String, password: String ): Task<StitchUser> {
-        return auth.loginWithCredential(UserPasswordCredential(username, password))
+    fun signInAnonymously(callback: App.Callback<User>): RealmAsyncTask?
+            = app.loginAsync(Credentials.anonymous(), callback)
+
+    fun signInWithUsernamePassword(username: String, password: String, callback: App.Callback<User>)
+                : RealmAsyncTask? {
+        return app.loginAsync(Credentials.emailPassword(username, password), callback)
     }
 
-    fun signInWithGoogle(authCode: String): Task<StitchUser> {
-        return auth.loginWithCredential(GoogleCredential(authCode))
+    fun signInWithGoogle(authCode: String, callback: App.Callback<User>): RealmAsyncTask? {
+        return app.loginAsync(Credentials.google(authCode), callback)
     }
 
-    fun signInWithFacebook(accessToken: String): Task<StitchUser> {
-        return auth.loginWithCredential(FacebookCredential(accessToken))
+    fun signInWithFacebook(accessToken: String, callback: App.Callback<User>): RealmAsyncTask? {
+        return app.loginAsync(Credentials.facebook(accessToken), callback)
     }
 
-    fun logout(): Task<Void> = auth.logout()
+    fun logout(callback: App.Callback<User>): RealmAsyncTask?
+            = app.currentUser()?.logOutAsync(callback);
 
-    fun registerWithEmail(email: String, password: String): Task<Void>? {
-        val emailPassClient = auth.getProviderClient(
-                UserPasswordAuthProviderClient.factory
-        )
-        return emailPassClient.registerWithEmail(email, password)
+    fun registerWithEmail(email: String, password: String, callback: App.Callback<Void>)
+                : RealmAsyncTask? {
+//        val emailPassClient = auth.getProviderClient(
+//                UserPasswordAuthProviderClient.factory
+//        )
+//        return emailPassClient.registerWithEmail(email, password)
+        return app.emailPassword.registerUserAsync(email, password, callback);
     }
 
 
     /** ========================== Database-related function  ========================= **/
-    private fun getCollection(databaseName: String?, collectionName: String?): RemoteMongoCollection<Document>? {
+    private fun getCollection(databaseName: String?, collectionName: String?): MongoCollection<Document>? {
         if(databaseName == null || collectionName == null)
             throw Exception()
 
-        return client.getDatabase(databaseName).getCollection(collectionName)
+        return client?.getDatabase(databaseName)?.getCollection(collectionName)
     }
 
     fun insertDocument(databaseName: String?, collectionName: String?, data: HashMap<String, Any>?)
-            : Task<RemoteInsertOneResult>? {
+            : RealmResultTask<InsertOneResult>? {
         val collection = getCollection(databaseName, collectionName)
-
 
         
         //Document.parse(json)
@@ -122,7 +138,7 @@ class MyMongoStitchClient(
     }
 
     fun insertDocuments(databaseName: String?, collectionName: String?, list: List<String>?)
-            : Task<RemoteInsertManyResult>? {
+            : RealmResultTask<InsertManyResult>? {
         val collection = getCollection(databaseName, collectionName)
 
         if (list == null)
@@ -132,12 +148,12 @@ class MyMongoStitchClient(
             Document.parse(it)
         }
 
-        return collection?.insertMany(documents)
+        return collection?.insertMany(documents);
     }
 
 
     fun deleteDocument(databaseName: String?, collectionName: String?, filterJson: String?)
-            : Task<RemoteDeleteResult>? {
+            : RealmResultTask<DeleteResult>? {
         val collection = getCollection(databaseName, collectionName)
 
         if (filterJson == null)
@@ -149,7 +165,7 @@ class MyMongoStitchClient(
 
     // TODO:  check this implementation
     fun deleteDocuments(databaseName: String?, collectionName: String?, filterJson: String?)
-            : Task<RemoteDeleteResult>? {
+            : RealmResultTask<DeleteResult>? {
         val collection = getCollection(databaseName, collectionName)
         
         if (filterJson == null)
@@ -168,7 +184,7 @@ class MyMongoStitchClient(
             projectionJson: String?,
             limit: Int?,
             sortJson: String?
-    ): RemoteFindIterable<Document>? {
+    ): FindIterable<Document>? {
         val collection = getCollection(databaseName, collectionName)
 
 
@@ -203,7 +219,7 @@ class MyMongoStitchClient(
 
 
     fun findDocument(databaseName: String?, collectionName: String?, filterJson: String?, projectionJson: String?)
-            : Task<Document>? {
+            : RealmResultTask<Document>? {
         val collection = getCollection(databaseName, collectionName)
 
 
@@ -215,7 +231,7 @@ class MyMongoStitchClient(
 //        return collection?.findOne(filter)
 
         var filter = BsonDocument()
-        val options = RemoteFindOptions()
+        val options = FindOptions()
 
         if (filterJson != null)
             filter = BsonDocument.parse(filterJson)
@@ -228,7 +244,7 @@ class MyMongoStitchClient(
 
 
     fun countDocuments(databaseName: String?, collectionName: String?, filterJson: String?)
-            : Task<Long>? {
+            : RealmResultTask<Long>? {
         val collection = getCollection(databaseName, collectionName)
 
         if (filterJson == null)
@@ -239,7 +255,7 @@ class MyMongoStitchClient(
     }
 
     fun updateDocument(databaseName: String?, collectionName: String?, filterJson: String?, updateJson: String)
-            : Task<RemoteUpdateResult>? {
+            : RealmResultTask<UpdateResult>? {
         val collection = getCollection(databaseName, collectionName)
 
         val update = BsonDocument.parse(updateJson)
@@ -251,7 +267,7 @@ class MyMongoStitchClient(
     }
 
     fun updateDocuments(databaseName: String?, collectionName: String?, filterJson: String?, updateJson: String)
-            : Task<RemoteUpdateResult>? {
+            : RealmResultTask<UpdateResult>? {
         val collection = getCollection(databaseName, collectionName)
 
         val update = BsonDocument.parse(updateJson)
@@ -266,30 +282,31 @@ class MyMongoStitchClient(
     //?
     fun watchCollection(
             databaseName: String?, collectionName: String?, filterJson: String?, ids: List<String>?, asObjectIds: Boolean
-    ): Task<AsyncChangeStream<Document, ChangeEvent<Document>>>? {
+    ): RealmEventStreamAsyncTask<Document>? {
         val collection = getCollection(databaseName, collectionName)
 
 
         if (filterJson == null) {
             if (ids == null) {
-                return collection?.watch()
+                return collection?.watchAsync()
             }
 
             return if(asObjectIds) {
                 val idsVars = ids.map { ObjectId(it) }.toTypedArray()
-                collection?.watch(*idsVars)
+                collection?.watchAsync(*idsVars)
             } else {
                 val idsVars = ids.map { BsonString(it) }.toTypedArray()
-                collection?.watch(*idsVars)
+                collection?.watchAsync(*idsVars)
             }
         }
 
         val matchFilter = BsonDocument.parse(filterJson)
-        return collection?.watchWithFilter(matchFilter)
+        return collection?.watchWithFilterAsync(matchFilter)
     }
 
 
-    fun aggregate(databaseName: String?, collectionName: String?, pipelineStrings: List<String>?): RemoteAggregateIterable<Document>? {
+    fun aggregate(databaseName: String?, collectionName: String?, pipelineStrings: List<String>?)
+                : AggregateIterable<Document>? {
         val collection = getCollection(databaseName, collectionName)
 
         val pipeline = pipelineStrings?.map {
@@ -300,12 +317,14 @@ class MyMongoStitchClient(
     }
 
     fun callFunction(name: String, args: List<Any>?, requestTimeout: Long?)
-            : Task<BsonValue>? {
+            : BsonValue? {
 
-        return appClient.callFunction(
+        val functionsManager: Functions = app.getFunctions(app.currentUser());
+
+        return functionsManager.callFunction(
                 name,
                 args ?: emptyList<Any>(),
-                requestTimeout ?: 15*1000,
+//                requestTimeout ?: 15*1000,
                 BsonValue::class.java
         )
     }
