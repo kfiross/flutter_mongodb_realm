@@ -37,6 +37,7 @@ Web integration automatically!
 * Anonymously
 * Google \[X]
 * Facebook \[X]
+* Custom JWT \[X]
 
 <b>Authentication</b>
 * Auth Listener
@@ -87,20 +88,30 @@ final userEmail = user.profile.email;
 ```
 
 #### Login
-Login a user with Anonymous provider:
+You can log in using the following providers:
+* Anonymous:
 ```dart
 CoreRealmUser mongoUser = await auth.loginWithCredential(AnonymousCredential());
 ```
 
-Login a user with Email\Password provider:
+* Email\Password:
 ```dart
-CoreRealmUser mongoUser = await auth.loginWithCredential(
-  UserPasswordCredential(username: <email_address>, password: <password>));
+CoreRealmUser mongoUser = await auth.login(
+  Credentials.emailPassword(username: <email_address>, password: <password>));
 ```
+
+* Facebook:
 
 For login with Facebook import the required flutter's package and configure in the native side as their instructions.
 
-Login a user using Google provider:
+usage:
+```dart
+CoreRealmUser mongoUser = await auth.login(
+  Credentials.facebook(<access_token>));
+```
+
+
+* Google:
 
 <b>
     Inorder to make Google login works, please follow the follwing instructions use the following:<br><br>
@@ -113,8 +124,8 @@ Login a user using Google provider:
 
 calling on flutter:
 ```dart
-CoreRealmUser mongoUser = await auth.loginWithCredential(
-  GoogleCredential(
+CoreRealmUser mongoUser = await auth.login(
+  Credentials.google(
     serverClientId: <Google Server Client Id>, // just the start from "<ID>.apps.googleusercontent.com"   
     scopes: <list of scopes>,
 ));
@@ -128,27 +139,26 @@ google_sign_in:
     path: packages/google_sign_in
     ref: server-auth-code
 ```
-
-
 ```dart
-CoreRealmUser mongoUser = await auth.loginWithCredential(
-  GoogleCredential(
+CoreRealmUser mongoUser = await auth.login(
+  Credentials.google(
     serverClientId: <Google Server Client Id>, // just the start from "<ID>.apps.googleusercontent.com"   
     scopes: <list of scopes>,
 ));
 ```
 
-Login a user using Facebook provider:
+
+* Custom JWT:
 ```dart
-CoreRealmUser mongoUser = await auth.loginWithCredential(
-  FacebookCredential(<access_token>));
+CoreRealmUser mongoUser = await auth.login(
+  Credentials.jwt(<token>);
 ```
 
 <b>NOTE: In any case , if mongoUser != null the login was successful.</b>
 
 #### Register
 ```dart
-// Login a user with Email\Password
+// Register a user with Email\Password
 CoreRealmUser mongoUser = await auth.registerWithEmail(
     email: <email_address>, password: <password>);
 ```
@@ -398,7 +408,7 @@ var result = await client.callFunction("sum", args: [3, 4], requestTimeout: 6000
 
 > If you found this project helpful or you learned something from the source code and want to thank me, consider buying me a cup of :coffee:
 >
-> - [PayPal](https://www.paypal.me/naama24198/)
+> - [PayPal](https://www.paypal.me/kfiross/)
 
 
 

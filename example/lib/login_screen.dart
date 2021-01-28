@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _loginAnonymously() async {
     CoreRealmUser mongoUser =
-        await client.auth.loginWithCredential(AnonymousCredential());
+        await client.auth.login(Credentials.anonymous());
 
     if (mongoUser != null) {
       // String userId = mongoUser.id;
@@ -169,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _loginWithGoogle() async {
     CoreRealmUser mongoUser =
-        await client.auth.loginWithCredential(GoogleCredential(
+        await client.auth.login(Credentials.google(
       serverClientId: "614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv",
       scopes: ["email"],
     ));
@@ -204,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
         String accessToken = facebookToken.token;
 
         CoreRealmUser mongoUser = await client.auth
-            .loginWithCredential(FacebookCredential(accessToken));
+            .login(Credentials.facebook(accessToken));
 
         if (mongoUser != null) {
           print("logged in as ${mongoUser.id}");
@@ -239,8 +239,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (_state == LoginState.login) {
         try {
-          CoreRealmUser mongoUser = await client.auth.loginWithCredential(
-              UserPasswordCredential(username: _email, password: _password)
+          CoreRealmUser mongoUser = await client.auth.login(
+              Credentials.emailPassword(_email, _password)
 //            AnonymousCredential()
               );
 

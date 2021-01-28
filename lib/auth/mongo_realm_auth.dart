@@ -17,6 +17,7 @@ class MongoRealmAuth {
 
   /// Logs in as a user with the given credentials associated with an
   /// authentication provider.
+  @deprecated
   Future<CoreRealmUser> loginWithCredential(
       StitchCredential credential) async {
     var result;
@@ -61,6 +62,13 @@ class MongoRealmAuth {
     }
 
     return result;
+  }
+
+
+  Future<CoreRealmUser> login(
+      StitchCredential credential) async{
+    // ignore: deprecated_member_use_from_same_package
+    return loginWithCredential(credential);
   }
 
   Future<bool> logout() async {

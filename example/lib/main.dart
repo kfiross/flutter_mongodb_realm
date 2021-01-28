@@ -41,8 +41,8 @@ class _MyAppState extends State<MyApp> {
       // login Anonymously
 
 
-      var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteXN0aXRjaGFwcC1manBtbiIsImV4cCI6MTYyMTc5MzQyMSwiaWF0IjoxNjExODMwNjU1LCJzdWIiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIiLCJ1c2VySWQiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIifQ.kNowkTYV5J_xoR_aVowuattEcazesM09RmTfzpqJM2M";
-      var mongoUser = await client.auth.loginWithCredential(CustomJwtCredential(token));
+      // var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteXN0aXRjaGFwcC1manBtbiIsImV4cCI6MTYyMTc5MzQyMSwiaWF0IjoxNjExODMwNjU1LCJzdWIiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIiLCJ1c2VySWQiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIifQ.kNowkTYV5J_xoR_aVowuattEcazesM09RmTfzpqJM2M";
+      // var mongoUser = await client.auth.login(Credentials.jwt(token));
 
    ///   CoreRealmUser mongoUser =
    //        await client.auth.loginWithCredential(AnonymousCredential()
@@ -63,12 +63,12 @@ class _MyAppState extends State<MyApp> {
 //          FacebookCredential(permissions: ["email"])
 //          );
 
-     if (mongoUser != null) {
-       print("logged in as ${mongoUser.id ?? '?'}");
-     }
-     else {
-       print("wrong pass or username");
-     }
+     // if (mongoUser != null) {
+     //   print("logged in as ${mongoUser.id ?? '?'}");
+     // }
+     // else {
+     //   print("wrong pass or username");
+     // }
 
       // sign out
 
