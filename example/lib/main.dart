@@ -40,13 +40,18 @@ class _MyAppState extends State<MyApp> {
 
       // login Anonymously
 
+
+      var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteXN0aXRjaGFwcC1manBtbiIsImV4cCI6MTYyMTc5MzQyMSwiaWF0IjoxNjExODMwNjU1LCJzdWIiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIiLCJ1c2VySWQiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIifQ.kNowkTYV5J_xoR_aVowuattEcazesM09RmTfzpqJM2M";
+      var mongoUser = await client.auth.loginWithCredential(CustomJwtCredential(token));
+
    ///   CoreRealmUser mongoUser =
-          await client.auth.loginWithCredential(AnonymousCredential()
+   //        await client.auth.loginWithCredential(AnonymousCredential()
+
 //          UserPasswordCredential(
 //              username: 'naamahasson1@gmail.com',//"kfir25816@gmail.com",
 //              password: '123456',//"asdfghj"
 //          )
-              );
+//               );
 
 //    614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv.apps.googleusercontent.com
 
@@ -58,12 +63,12 @@ class _MyAppState extends State<MyApp> {
 //          FacebookCredential(permissions: ["email"])
 //          );
 
-//      if (mongoUser != null) {
-//        print("logged in as ${mongoUser.id ?? '?'}");
-//      }
-//      else {
-//        print("wrong pass or username");
-//      }
+     if (mongoUser != null) {
+       print("logged in as ${mongoUser.id ?? '?'}");
+     }
+     else {
+       print("wrong pass or username");
+     }
 
       // sign out
 

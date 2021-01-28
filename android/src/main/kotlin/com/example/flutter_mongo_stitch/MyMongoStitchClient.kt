@@ -98,6 +98,10 @@ class MyMongoStitchClient(
         return app.loginAsync(Credentials.facebook(accessToken), callback)
     }
 
+    fun signInWithCustomJwt(jwtToken: String, callback: App.Callback<User>): RealmAsyncTask? {
+        return app.loginAsync(Credentials.jwt(jwtToken), callback)
+    }
+
     fun logout(callback: App.Callback<User>): RealmAsyncTask?
             = app.currentUser()?.logOutAsync(callback);
 

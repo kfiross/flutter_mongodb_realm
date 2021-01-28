@@ -99,6 +99,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             "signInWithUsernamePassword" -> signInWithUsernamePassword(call, result)
             "signInWithGoogle" -> signInWithGoogle(call, result)
             "signInWithFacebook" -> signInWithFacebook(call, result)
+            "signInWithCustomJwt" -> signInWithCustomJwt(call, result)
 
             "registerWithEmail" -> registerWithEmail(call, result)
             "logout" -> logout(result)
@@ -226,7 +227,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccess) {
                 result.success(it.get().toMap())
             } else {
-                result.error("ERROR", "Facebook Provider Login failed: ", null)            }
+                result.error("ERROR", "Facebook Provider Login failed: ${it.error.message}", null)            }
         })
 //        val task = client.signInWithFacebook(token)
 //
@@ -238,6 +239,20 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 //                result.error("ERROR", "Facebook Provider Login failed: ", null)//${it.exception?.message}", "")
 //            }
 //        }
+    }
+
+    private fun signInWithCustomJwt(@NonNull call: MethodCall, @NonNull result: Result){
+        val token = call.argument<String>("token") ?: ""
+
+      //  val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteXN0aXRjaGFwcC1manBtbiIsImV4cCI6MTYyMTc5MzQyMSwiaWF0IjoxNjExODMwNjU1LCJzdWIiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIiLCJ1c2VySWQiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIifQ.kNowkTYV5J_xoR_aVowuattEcazesM09RmTfzpqJM2M"
+
+        client.signInWithCustomJwt(token, App.Callback {
+            if (it.isSuccess) {
+                result.success(it.get().toMap())
+            } else {
+                result.error("ERROR", "Custom JWT Provider Login failed: ${it.error.message}", null)            }
+        })
+// 601204a6a80d3fbab2e3a73f
     }
 
     private fun registerWithEmail(@NonNull call: MethodCall, @NonNull result: Result) {

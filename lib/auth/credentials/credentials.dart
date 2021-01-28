@@ -3,3 +3,4 @@ export 'anonymous_credential.dart';
 export 'user_password_credentinal.dart';
 export 'google_credential.dart';
 export 'facebook_credential.dart';
+export 'custom_jwt_credential.dart';
