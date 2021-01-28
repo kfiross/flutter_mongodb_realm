@@ -33,18 +33,22 @@ class StreamHandler(val client: MyMongoStitchClient, val arguments: Any?)
         task?.get {
             val event = it.get()
 
+            if (event != null) {
+
+
 //            changeStream?.addChangeEventListener { documentId: BsonValue, event: ChangeEvent<Document> ->
 //                // handle change event
 
                 handler = Handler(Looper.getMainLooper())
                 handler.post {
-//                  eventSink.success(mapOf(
-//                      "id" to event.fullDocument?.get("_id"),
-//                      "fullDocumentJson" to event.fullDocument?.toJson()
-//                  ))
-                    eventSink.success(event.fullDocument?.toJson())
+//                      eventSink.success(mapOf(
+//                          "id" to event.fullDocument?.get("_id"),
+//                          "fullDocumentJson" to event.fullDocument?.toJson()
+//                      ))
+                      eventSink.success(event.fullDocument?.toJson())
 
                 }
+            }
 
 //            }
         }

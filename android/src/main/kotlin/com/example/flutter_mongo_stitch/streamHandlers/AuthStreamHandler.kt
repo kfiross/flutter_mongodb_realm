@@ -17,12 +17,13 @@ import io.realm.mongodb.App
 import io.realm.mongodb.AuthenticationListener
 import io.realm.mongodb.User
 
-class AuthStreamHandler(private val app: App, val arguments: Any?)
+class AuthStreamHandler(private val client: MyMongoStitchClient, private val app: App, val arguments: Any?)
     : EventChannel.StreamHandler {
 
     private var eventSink: EventChannel.EventSink? = null
 
     private val listener = object : AuthenticationListener {
+
 //        override fun onActiveUserChanged(auth: StitchAuth?, currentActiveUser: StitchUser?, previousActiveUser: StitchUser?) {
 //            //super.onActiveUserChanged(auth, currentActiveUser, previousActiveUser)
 //            Handler(Looper.getMainLooper()).post {
@@ -52,6 +53,7 @@ class AuthStreamHandler(private val app: App, val arguments: Any?)
                     eventSink!!.success(null)
                 }
                 else {
+                    client.updateClient(user)
                     eventSink!!.success(user.toMap())
                 }
             }
@@ -59,12 +61,7 @@ class AuthStreamHandler(private val app: App, val arguments: Any?)
 
         override fun loggedOut(user: User?) {
             Handler(Looper.getMainLooper()).post {
-                if (user == null){
-                    eventSink!!.success(null)
-                }
-                else {
-                    eventSink!!.success(user.toMap())
-                }
+                eventSink!!.success(null)
             }
         }
     }
@@ -76,6 +73,14 @@ class AuthStreamHandler(private val app: App, val arguments: Any?)
         val args = arguments as Map<*, *>
 
         this.app.addAuthenticationListener(listener)
+
+        val user = this.app.currentUser()
+        if (user == null){
+            eventSink.success(null)
+        }
+        else {
+            eventSink.success(user.toMap())
+        }
 
 //        task?.addOnCompleteListener{
 //            val changeStream = it.result

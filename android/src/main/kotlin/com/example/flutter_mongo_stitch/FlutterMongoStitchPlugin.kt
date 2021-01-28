@@ -54,7 +54,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
                 return when(arguments["handler"]){
                     "watchCollection" -> StreamHandler(client, arguments)
-                    "auth" -> AuthStreamHandler(app, arguments)
+                    "auth" -> AuthStreamHandler(client, app, arguments)
                     else -> null
                 }
             }
@@ -164,6 +164,18 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
 
     private fun signInAnonymously(@NonNull result: Result) {
+
+//        try {
+//            //     Stitch.initializeDefaultAppClient(clientAppId!!)
+//            app = App(AppConfiguration.Builder(clientAppId).build())
+//        }
+//        catch (e: Exception){
+//            Log.d("MongoRealm", e.message);
+//        }
+
+
+
+
 
         client.signInAnonymously(App.Callback {
             if (it.isSuccess) {
@@ -489,17 +501,20 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         )
 
         if (task == null)
-            result.error("Error", "Failed to insert a document", "")
+            result.error("Error", "Failed to find documents", "")
 
 
         val queryResults = ArrayList<String>()
 
         task!!.iterator().getAsync { it ->
-            if (!it.isSuccess)
-                result.error("Error", "Failed to insert a document: ${it.error?.message ?: '?'}", "")
-
-            it.get().forEach {
-                queryResults.add(it.toJson())
+            if (!it.isSuccess) {
+                result.error("Error", "Failed to find documents: ${it.error?.message ?: '?'}", "")
+                return@getAsync;
+            }
+            if(it.get() != null) {
+                it.get().forEach {
+                    queryResults.add(it.toJson())
+                }
             }
             result.success(queryResults)
         }

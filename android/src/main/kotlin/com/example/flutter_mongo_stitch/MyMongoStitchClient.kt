@@ -323,7 +323,7 @@ class MyMongoStitchClient(
     fun callFunction(name: String, args: List<Any>?, requestTimeout: Long?)
             : BsonValue? {
 
-        val functionsManager: Functions = app.getFunctions(app.currentUser());
+        val functionsManager: Functions = app.getFunctions(app.currentUser())
 
         return functionsManager.callFunction(
                 name,
@@ -333,7 +333,11 @@ class MyMongoStitchClient(
         )
     }
 
-
+    fun updateClient(user: User?) {
+        if(user != null){
+            this.client = user.getMongoClient("mongodb-atlas")
+        }
+    }
 
 
 }
