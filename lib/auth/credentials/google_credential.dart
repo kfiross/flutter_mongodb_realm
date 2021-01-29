@@ -9,3 +9,9 @@ class GoogleCredential extends StitchCredential {
 
   GoogleCredential({@required this.serverClientId, this.scopes});
 }
+
+class GoogleCredential2 extends StitchCredential {
+  final String accessToken;
+
+  GoogleCredential2(this.accessToken);
+}

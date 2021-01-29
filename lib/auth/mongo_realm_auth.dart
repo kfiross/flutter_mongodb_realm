@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_mongodb_realm/auth/credentials/google_credential.dart';
 import 'package:flutter_mongodb_realm/google_sign_in_git_mock/google_sign_in.dart';
+// import 'package:flutter_mongodb_realm/google_sign_in_git_mock/google_sign_in.dart';
 
 import '../plugin.dart';
 import 'core_stitch_user.dart';
@@ -30,6 +31,14 @@ class MongoRealmAuth {
         credential.username,
         credential.password,
       );
+    }
+    else if (credential is GoogleCredential2){
+      try {
+        var accessToken = credential.accessToken;
+        result = await FlutterMongoRealm.signInWithGoogle(accessToken);
+      } on Exception catch (e) {
+        print(e);
+      }
     }
     else if (credential is GoogleCredential) {
       _googleLoginWrapper.init(

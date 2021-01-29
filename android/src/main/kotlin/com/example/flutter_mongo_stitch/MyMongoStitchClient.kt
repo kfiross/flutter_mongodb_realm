@@ -15,6 +15,7 @@ import kotlin.collections.HashMap
 //import com.mongodb.stitch.core.services.mongodb.remote.*
 import io.realm.RealmAsyncTask
 import io.realm.mongodb.*
+import io.realm.mongodb.auth.GoogleAuthType
 import io.realm.mongodb.functions.Functions
 import org.bson.*
 import org.bson.types.ObjectId
@@ -90,8 +91,8 @@ class MyMongoStitchClient(
         return app.loginAsync(Credentials.emailPassword(username, password), callback)
     }
 
-    fun signInWithGoogle(authCode: String, callback: App.Callback<User>): RealmAsyncTask? {
-        return app.loginAsync(Credentials.google(authCode), callback)
+    fun signInWithGoogle(token: String, callback: App.Callback<User>): RealmAsyncTask? {
+        return app.loginAsync(Credentials.google(token), callback)
     }
 
     fun signInWithFacebook(accessToken: String, callback: App.Callback<User>): RealmAsyncTask? {

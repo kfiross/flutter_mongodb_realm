@@ -3,6 +3,7 @@ import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'reset_pass_screen.dart';
 
@@ -168,11 +169,29 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _loginWithGoogle() async {
+
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      scopes: [
+        'email',
+      ],
+    );
+
+    var s = await _googleSignIn.signIn();
+    var a = await s.authentication;
+
+
     CoreRealmUser mongoUser =
-        await client.auth.login(Credentials.google(
-      serverClientId: "614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv",
-      scopes: ["email"],
-    ));
+        await client.auth.login(
+
+            GoogleCredential2(a.serverAuthCode)
+
+
+
+    //       Credentials.google(
+    //   serverClientId: "281897935076-lurbr7dm4e7pclh34v4b1bgbnbn8btlm",
+    //   scopes: ["email"],
+    // ),
+        );
 
     if (mongoUser != null) {
       print("logged in as ${mongoUser.id}");
