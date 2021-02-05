@@ -210,7 +210,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     }
 
     private fun signInWithGoogle(@NonNull call: MethodCall, @NonNull result: Result){
-        val authCode = call.argument<String>("code") ?: ""
+         val authCode = call.argument<String>("code") ?: ""
 
         client.signInWithGoogle(authCode, App.Callback {
             if (it.isSuccess) {

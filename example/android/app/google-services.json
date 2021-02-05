@@ -1,57 +1,20 @@
 {
   "project_info": {
-    "project_number": "281897935076",
-    "firebase_url": "https://alien-span-276221.firebaseio.com",
-    "project_id": "alien-span-276221",
-    "storage_bucket": "alien-span-276221.appspot.com"
+    "project_number": "762586994135",
+    "project_id": "pacific-hybrid-303711",
+    "storage_bucket": "pacific-hybrid-303711.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:281897935076:android:0d9d46ad8931753d8a8cf1",
-        "android_client_info": {
-          "package_name": "com.example.flutter_mongo_stitch"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "281897935076-lurbr7dm4e7pclh34v4b1bgbnbn8btlm.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCx2D6P1ZaRcs3tWssEmB1g0no8oGtFB8s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "281897935076-lurbr7dm4e7pclh34v4b1bgbnbn8btlm.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "281897935076-a3qmu5ou3b72mtlnseq9g57ntj6codfo.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.flutterMongoStitchExample"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:281897935076:android:a3a5fa86a58f03be8a8cf1",
+        "mobilesdk_app_id": "1:762586994135:android:049390768443b7a146e792",
         "android_client_info": {
           "package_name": "com.example.flutter_mongo_stitch_example"
         }
       },
       "oauth_client": [
         {
-          "client_id": "281897935076-n6jkit3vo800atfni6kamghg2ta6s22l.apps.googleusercontent.com",
+          "client_id": "762586994135-bmasaohktp92orgakbsklmgpslui0avh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.flutter_mongo_stitch_example",
@@ -59,28 +22,21 @@
           }
         },
         {
-          "client_id": "281897935076-lurbr7dm4e7pclh34v4b1bgbnbn8btlm.apps.googleusercontent.com",
+          "client_id": "762586994135-je9l46njk4hf63fb1k2jjmh6ep7nk9bv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCx2D6P1ZaRcs3tWssEmB1g0no8oGtFB8s"
+          "current_key": "AIzaSyBTf6uNouHYdg8yEIBHgA7HQjg--iKhe-A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "281897935076-lurbr7dm4e7pclh34v4b1bgbnbn8btlm.apps.googleusercontent.com",
+              "client_id": "762586994135-je9l46njk4hf63fb1k2jjmh6ep7nk9bv.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "281897935076-a3qmu5ou3b72mtlnseq9g57ntj6codfo.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.flutterMongoStitchExample"
-              }
             }
           ]
         }

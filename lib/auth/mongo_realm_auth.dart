@@ -135,13 +135,13 @@ class _GoogleLoginWrapper {
     assert(_googleSignIn != null);
 
     String code;
-    try {
+    // try {
       var account = await _googleSignIn.signIn();
 
       if (account != null) code = account.serverAuthCode;
-    } on Exception catch (error) {
-      print(error);
-    }
+    // } on Exception catch (error) {
+    //   print(error);
+    // }
 
     return code;
   }

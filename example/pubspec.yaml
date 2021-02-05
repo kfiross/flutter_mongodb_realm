@@ -30,13 +30,15 @@ dependencies:
   google_sign_in_web: ^0.9.1
 
 #  flutter_mongo_stitch: ^0.8.0+1
-  
+
+  flutter_mongodb_realm:
+    path: ../
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_mongodb_realm:
-    path: ../
+
 
 
 # For information on the generic Dart part of this file, see the

@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
 //      deleteData(); /// DONE ON WEB
 //        updateData(); /// DONE ON WEB
 
-      watchData();
+ //     watchData();
 
       /// DONE ON WEB
 //      aggregateCollection(); //TODO: check

@@ -91,8 +91,8 @@ class MyMongoStitchClient(
         return app.loginAsync(Credentials.emailPassword(username, password), callback)
     }
 
-    fun signInWithGoogle(token: String, callback: App.Callback<User>): RealmAsyncTask? {
-        return app.loginAsync(Credentials.google(token), callback)
+    fun signInWithGoogle(idToken: String, callback: App.Callback<User>): RealmAsyncTask? {
+        return app.loginAsync(Credentials.google(idToken ,GoogleAuthType.ID_TOKEN), callback)
     }
 
     fun signInWithFacebook(accessToken: String, callback: App.Callback<User>): RealmAsyncTask? {
