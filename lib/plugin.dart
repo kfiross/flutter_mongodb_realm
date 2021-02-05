@@ -8,7 +8,7 @@ import 'package:flutter_mongo_stitch_platform_interface/flutter_mongo_stitch_pla
 import 'package:meta/meta.dart';
 import 'package:universal_html/html.dart';
 
-import 'auth/core_stitch_user.dart';
+import 'auth/core_realm_user.dart';
 
 class FlutterMongoRealm {
   static Future connectToMongo(String appId) async {

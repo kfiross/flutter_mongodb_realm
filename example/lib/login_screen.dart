@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var _password;
 
   var client = MongoRealmClient();
+  var app = RealmApp();
   var _state = LoginState.login;
 
   @override
@@ -153,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _loginAnonymously() async {
     CoreRealmUser mongoUser =
-        await client.auth.login(Credentials.anonymous());
+        await app.login(Credentials.anonymous());
 
 
     if (mongoUser != null) {
@@ -186,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
     CoreRealmUser mongoUser =
-        await client.auth.login(//WithCredential(
+        await app.login(//WithCredential(
 
             GoogleCredential(
                 serverClientId: "762586994135-je9l46njk4hf63fb1k2jjmh6ep7nk9bv",
@@ -234,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
         String accessToken = facebookToken.token;
 
         CoreRealmUser mongoUser =
-            await client.auth.login(Credentials.facebook(accessToken));
+            await app.login(Credentials.facebook(accessToken));
 
 
         if (mongoUser != null) {
@@ -270,7 +271,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (_state == LoginState.login) {
         try {
-          CoreRealmUser mongoUser = await client.auth.login(//(WithCredential(
+          CoreRealmUser mongoUser = await app.login(//WithCredential(
               Credentials.emailPassword(_email, _password)
 //            AnonymousCredential()
               );

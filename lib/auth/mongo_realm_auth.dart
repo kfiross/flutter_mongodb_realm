@@ -7,11 +7,19 @@ import 'package:flutter_mongodb_realm/google_sign_in_git_mock/google_sign_in.dar
 // import 'package:flutter_mongodb_realm/google_sign_in_git_mock/google_sign_in.dart';
 
 import '../plugin.dart';
-import 'core_stitch_user.dart';
+import 'core_realm_user.dart';
 import 'credentials/credentials.dart';
 
 /// MongoRealmAuth manages authentication for any Stitch based client.
+
 class MongoRealmAuth {
+
+  MongoRealmAuth._();
+
+  static final MongoRealmAuth _instance = MongoRealmAuth._();
+
+  factory MongoRealmAuth() => _instance;
+
   // embedded Login providers wrappers for better handling
   static var _googleLoginWrapper = _GoogleLoginWrapper();
 //  static var _facebookLoginWrapper = _FacebookLoginWrapper();
@@ -73,12 +81,6 @@ class MongoRealmAuth {
     return result;
   }
 
-
-  Future<CoreRealmUser> login(
-      StitchCredential credential) async{
-    // ignore: deprecated_member_use_from_same_package
-    return loginWithCredential(credential);
-  }
 
   Future<bool> logout() async {
     var result = await FlutterMongoRealm.logout();

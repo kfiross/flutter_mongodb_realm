@@ -138,7 +138,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
                 "mongodb-atlas"
         )
 
-        
+
         client = MyMongoStitchClient(mongoClient, app)
 
 

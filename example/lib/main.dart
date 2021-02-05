@@ -7,12 +7,15 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+import 'config_reader.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MongoRealmClient.initializeApp("mystitchapp-fjpmn");
+  await ConfigReader.initialize();
+
+  await RealmApp.init(ConfigReader.appID);
   runApp(MyApp());
 }
 
@@ -22,7 +25,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  MongoRealmClient client = MongoRealmClient();
+  final MongoRealmClient client = MongoRealmClient();
+  final RealmApp app = RealmApp();
 
   @override
   void initState() {
@@ -446,8 +450,8 @@ class _MyAppState extends State<MyApp> {
               child: Text("Reset Password"),
               onPressed: () async {
                 try {
-                  var currUser = await client.auth.user;
-                  final success = await client.auth.sendResetPasswordEmail(
+                  var currUser = await app.currentUser;
+                  final success = await app.sendResetPasswordEmail(
                       currUser.profile.email); //"kfir25812@gmail.com");
                   print(success);
                 } on PlatformException catch (e) {

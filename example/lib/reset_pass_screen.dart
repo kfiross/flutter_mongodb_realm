@@ -8,7 +8,8 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  final client = MongoRealmClient();
+  //final client = MongoRealmClient();
+  final app = RealmApp();
   String _email;
   final _formKey = GlobalKey<FormState>();
 
@@ -51,7 +52,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
     if (form.validate()) {
       try {
-        final success = await client.auth
+        final success = await app
             .sendResetPasswordEmail(_email); //"kfir25812@gmail.com");
         print(success);
       } on PlatformException catch (e) {
