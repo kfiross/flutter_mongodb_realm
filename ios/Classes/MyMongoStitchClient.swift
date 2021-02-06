@@ -10,6 +10,10 @@ import MongoSwift
 import StitchCore
 import StitchRemoteMongoDBService
 
+import RealmSwift
+
+
+
 extension AnyBSONValue{
     func toSimpleType() -> Any{
         
@@ -109,19 +113,21 @@ enum MyError : Error {
 class MyMongoStitchClient {
     var client: RemoteMongoClient
     var appClient: StitchAppClient
+    var app: App
     lazy var auth = appClient.auth
     
-    init(client: RemoteMongoClient, appClient: StitchAppClient) {
+    init(client: RemoteMongoClient, appClient: StitchAppClient, app: App) {
         self.client = client
         self.appClient = appClient
+        self.app = app
     }
     
     
     func signInAnonymously(
-        onCompleted: @escaping (StitchUser)->Void,
+        onCompleted: @escaping (User)->Void,
         onError: @escaping (String?)->Void
     ) {
-        self.auth.login(withCredential: AnonymousCredential()) { authResult in
+        self.app.login(credentials: Credentials.anonymous) { authResult in
             switch authResult {
             case .success(let user):
                 onCompleted(user)
@@ -137,12 +143,12 @@ class MyMongoStitchClient {
     func signInWithUsernamePassword(
         username: String,
         password: String,
-        onCompleted: @escaping (StitchUser)->Void,
+        onCompleted: @escaping (User)->Void,
         onError: @escaping (String?)->Void
     ) {
 
-        self.auth.login(
-            withCredential: UserPasswordCredential(withUsername: username, withPassword: password)
+        self.app.login(
+            credentials: Credentials.emailPassword(email: username, password: password)
         ) { authResult in
             switch authResult {
             case .success(let user):
@@ -158,12 +164,12 @@ class MyMongoStitchClient {
     
     func signInWithGoogle(
         authCode: String,
-        onCompleted: @escaping (StitchUser)->Void,
+        onCompleted: @escaping (User)->Void,
         onError: @escaping (String?)->Void
         ) {
         
-        self.auth.login(
-            withCredential: GoogleCredential(withAuthCode: authCode)
+        self.app.login(
+            credentials: Credentials.google(serverAuthCode: authCode)
         ) { authResult in
             switch authResult {
             case .success(let user):
@@ -180,12 +186,12 @@ class MyMongoStitchClient {
     
     func signInWithFacebook(
         accessToken: String,
-        onCompleted: @escaping (StitchUser)->Void,
+        onCompleted: @escaping (User)->Void,
         onError: @escaping (String?)->Void
         ) {
         
-        self.auth.login(
-            withCredential: FacebookCredential(withAccessToken: accessToken)
+        self.app.login(
+            credentials: Credentials.facebook(accessToken: accessToken)
         ) { authResult in
             switch authResult {
             case .success(let user):
@@ -199,6 +205,29 @@ class MyMongoStitchClient {
         }
     }
     
+    // todo: check this
+    func signInWithJWT(
+        accessToken: String,
+        onCompleted: @escaping (User)->Void,
+        onError: @escaping (String?)->Void
+        ){
+        
+        self.app.login(
+            credentials: Credentials.jwt(token: accessToken)
+        ) { authResult in
+            switch(authResult){
+            case .success(let user):
+                onCompleted(user)
+                break
+                
+            case .failure(let error):
+                onError("JWT Provider Login failed \(error)")
+                break
+            
+            }
+        }
+    }
+    
     func registerWithEmail(
         email: String,
         password: String,
@@ -206,39 +235,37 @@ class MyMongoStitchClient {
         onError: @escaping (String?)->Void
     ) {
         
-        let emailPassClient = self.auth.providerClient(
-            fromFactory: userPasswordClientFactory
-        )
+//        let emailPassClient = self.auth.providerClient(
+//            fromFactory: userPasswordClientFactory
+//        )
         
-        emailPassClient.register(withEmail: email, withPassword: password) { result in
-            switch result {
-            case .success( _):
-                onCompleted(true)
-                break
-                
-            case .failure(let error):
-                onError("Error registering new user: \(error)")
-                break
+        let emailPassClient = app.emailPasswordAuth
+        
+        emailPassClient.registerUser(email: email, password: password) { error in
+            guard error == nil else {
+                onError("Error registering new user: \(error!.localizedDescription)")
+                return
             }
+            
+            onCompleted(true)
         }
     }
+
     
     func logout(
         onCompleted: @escaping (Bool)->Void,
         onError: @escaping (String?)->Void
     ) {
-        self.auth.logout { result in
-            switch result {
-            case .success(_):
-                onCompleted(true)
-                break
+        self.app.currentUser?.logOut(
+            completion: { error in
+                guard error == nil else {
+                    onError("Cannot logout user: \(error!.localizedDescription)")
+                    return
+                }
                 
-            case .failure(let error):
-                onError("Cannot logout user: \(error)")
-                break
+                onCompleted(true)
             }
-        }
-        
+        )
     }
     
     func sendResetPasswordEmail(
@@ -246,24 +273,34 @@ class MyMongoStitchClient {
         onCompleted: @escaping ()->Void,
         onError: @escaping (String?)->Void
     ) {
-        let emailPassClient = self.auth.providerClient(fromFactory: userPasswordClientFactory)
+        let emailPassClient = app.emailPasswordAuth
         
-        return emailPassClient.sendResetPasswordEmail(toEmail: email) { result in
-        switch result {
-        case .success(let _):
-            onCompleted()
-        case .failure(let error):
-            onError("Failed to send a reset password email: \(error)")
+        emailPassClient.sendResetPasswordEmail(email, completion: {(error) in
+            guard error == nil else {
+                onError("Reset password email not sent: \(error!.localizedDescription)")
+                return
             }
-        }
+            onCompleted()
+        })
+        
+//        let emailPassClient = self.auth.providerClient(fromFactory: userPasswordClientFactory)
+//
+//        return emailPassClient.sendResetPasswordEmail(toEmail: email) { result in
+//        switch result {
+//        case .success(let _):
+//            onCompleted()
+//        case .failure(let error):
+//            onError("Failed to send a reset password email: \(error)")
+//            }
+//        }
     }
     
-    func getUser() -> StitchUser? {
-        return self.auth.currentUser
+    func getUser() -> User? {
+        return self.app.currentUser
     }
     
     func getUserId() -> String? {
-        return self.auth.currentUser?.id
+        return self.app.currentUser?.id
     }
     
     /// ========================== Database related ========================================== ///

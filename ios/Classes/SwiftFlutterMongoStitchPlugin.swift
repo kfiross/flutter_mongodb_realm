@@ -5,7 +5,7 @@ import Foundation
 import MongoSwift
 import StitchCore
 import StitchRemoteMongoDBService
-
+import RealmSwift
 
 
 public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
@@ -30,7 +30,12 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
                         return StreamHandler(client: instance.client!) // StreamHandler is an instance FlutterStreamHandler
                     
                     case "auth":
-                        return AuthStreamHandler(appClient: instance.client!.appClient)
+                        if #available(iOS 13.0, *) {
+                            return AuthStreamHandlerRLM(realmApp: instance.client!.app)
+                        } else {
+                            // Fallback on earlier versions
+                            return AuthStreamHandler(appClient: instance.client!.appClient)
+                        }
                     
                     default:
                         return nil
@@ -157,15 +162,18 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
                                 details: nil))
         }
         
-        let stitchAppClient = try! Stitch.initializeDefaultAppClient(withClientAppID: clientAppId!)
-        //
-        //
+        let app = App(id: clientAppId!)
+        let mongoClientRLM = app.currentUser?.mongoClient("mongodb-atlas")
         
+        // todo: remove when removing StitchSDK dependency
+        let stitchAppClient = try! Stitch.initializeDefaultAppClient(withClientAppID: clientAppId!)
+        
+        // todo: remove when removing StitchSDK dependency
         let mongoClient = try? stitchAppClient.serviceClient(
             fromFactory: remoteMongoClientFactory, withName: "mongodb-atlas"
         )
                 
-        self.client = MyMongoStitchClient(client: mongoClient!, appClient: stitchAppClient)
+        self.client = MyMongoStitchClient(client: mongoClient!, appClient: stitchAppClient, app: app)
         result(true)
     }
     

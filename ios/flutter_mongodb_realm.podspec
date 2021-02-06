@@ -21,4 +21,5 @@ A new Flutter plugin.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
   s.swift_version = '5.0'
   s.dependency 'StitchSDK', '~> 6.1.0'
+  s.dependency 'RealmSwift', '=10.1.4'
 end
