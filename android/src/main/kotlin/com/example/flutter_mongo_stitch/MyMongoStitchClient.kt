@@ -39,10 +39,6 @@ class MyMongoStitchClient(
  //   private var auth: StitchAuth = app.currentUser()
 
     /** ========================== Auth-related function  ========================= **/
-//    fun signInWithCustomJWT(jwtString: String): Task<StitchUser>? {
-//        return auth.loginWithCredential(CustomCredential(jwtString))
-//    }
-//
 
     fun getUser(): User? {
         return app.currentUser();
@@ -101,6 +97,12 @@ class MyMongoStitchClient(
 
     fun signInWithCustomJwt(jwtToken: String, callback: App.Callback<User>): RealmAsyncTask? {
         return app.loginAsync(Credentials.jwt(jwtToken), callback)
+    }
+
+    fun signInWithCustomAuthFunction(json: String, callback: App.Callback<User>): RealmAsyncTask? {
+        val args = Document.parse(json)
+
+        return app.loginAsync(Credentials.customFunction(args), callback)
     }
 
     fun logout(callback: App.Callback<User>): RealmAsyncTask?

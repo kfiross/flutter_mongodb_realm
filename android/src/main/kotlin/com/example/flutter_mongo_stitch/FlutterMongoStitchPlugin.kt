@@ -100,6 +100,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             "signInWithGoogle" -> signInWithGoogle(call, result)
             "signInWithFacebook" -> signInWithFacebook(call, result)
             "signInWithCustomJwt" -> signInWithCustomJwt(call, result)
+            "signInWithCustomFunction" -> signInWithCustomAuthFunction(call, result)
 
             "registerWithEmail" -> registerWithEmail(call, result)
             "logout" -> logout(result)
@@ -265,6 +266,18 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
                 result.error("ERROR", "Custom JWT Provider Login failed: ${it.error.message}", null)            }
         })
 // 601204a6a80d3fbab2e3a73f
+    }
+
+
+    private fun signInWithCustomAuthFunction(@NonNull call: MethodCall, @NonNull result: Result){
+        val json = call.argument<String>("json") ?: ""
+
+        client.signInWithCustomAuthFunction(json, App.Callback {
+            if (it.isSuccess) {
+                result.success(it.get().toMap())
+            } else {
+                result.error("ERROR", "Custom Auth Function Provider Login failed: ${it.error.message}", null)            }
+        })
     }
 
     private fun registerWithEmail(@NonNull call: MethodCall, @NonNull result: Result) {
