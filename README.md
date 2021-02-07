@@ -2,10 +2,6 @@
 
 Unofficial Flutter plugin for using MongoDB Realm services on Android, iOS and web.
 
-<b>
-	Still Uses the deprecated Mongo Stitch SDK!!
-</b>
-
 ## Getting started
 For using it on your app:
 
@@ -37,6 +33,8 @@ Web integration automatically!
 * Anonymously
 * Google \[X]
 * Facebook \[X]
+* JWT - **Soon**
+* Auth Function - **Soon**
 
 <b>Authentication</b>
 * Auth Listener
@@ -52,12 +50,12 @@ Web integration automatically!
 
 ## Usage
 ### Initialization
-Inorder to connect a StitchApp to flutter add your main function:
+Inorder to connect a RealmApp to flutter add your main function:
 ```dart
 main() async{
   // ADD THESE 2 LINES
   WidgetsFlutterBinding.ensureInitialized();
-  await MongoRealmClient.initializeApp(<your_app_id>);
+  await RealmApp.init(<your_app_id>);
   
   // other configurations..
   
@@ -65,21 +63,21 @@ main() async{
 }
 ```
 
-Inorder to use the client define:
+In order to use the client define:
 ```dart
   final client = MongoRealmClient();
 ```
 
 ### Authentication
 
- Inorder to use the auth part define:
+In order to use authentication-related operations you have to use `RealmApp` object:
 ```dart
-final auth = client.auth;
+final Realm app = RealmApp();
 ```
 
 You can retrieve the current logged user by:
 ```dart
-final user = client.auth.user;
+final user = app.currentUser;
 
 // for more details (like email,birthday) use his 'profile' attribute
 // For example:
@@ -87,20 +85,30 @@ final userEmail = user.profile.email;
 ```
 
 #### Login
-Login a user with Anonymous provider:
+You can log in using the following providers:
+* Anonymous:
 ```dart
-CoreRealmUser mongoUser = await auth.loginWithCredential(AnonymousCredential());
+CoreRealmUser mongoUser = await app.login(Credentials.anonymous());
 ```
 
-Login a user with Email\Password provider:
+* Email\Password:
 ```dart
-CoreRealmUser mongoUser = await auth.loginWithCredential(
-  UserPasswordCredential(username: <email_address>, password: <password>));
+CoreRealmUser mongoUser = await app.login(
+  Credentials.emailPassword(username: <email_address>, password: <password>));
 ```
+
+* Facebook:
 
 For login with Facebook import the required flutter's package and configure in the native side as their instructions.
 
-Login a user using Google provider:
+usage:
+```dart
+CoreRealmUser mongoUser = await app.login(
+  Credentials.facebook(<access_token>));
+```
+
+
+* Google:
 
 <b>
     Inorder to make Google login works, please follow the follwing instructions use the following:<br><br>
@@ -113,8 +121,8 @@ Login a user using Google provider:
 
 calling on flutter:
 ```dart
-CoreRealmUser mongoUser = await auth.loginWithCredential(
-  GoogleCredential(
+CoreRealmUser mongoUser = await app.login(
+  Credentials.google(
     serverClientId: <Google Server Client Id>, // just the start from "<ID>.apps.googleusercontent.com"   
     scopes: <list of scopes>,
 ));
@@ -128,42 +136,40 @@ google_sign_in:
     path: packages/google_sign_in
     ref: server-auth-code
 ```
-
-
 ```dart
-CoreRealmUser mongoUser = await auth.loginWithCredential(
-  GoogleCredential(
+CoreRealmUser mongoUser = await app.login(
+  Credentials.google(
     serverClientId: <Google Server Client Id>, // just the start from "<ID>.apps.googleusercontent.com"   
     scopes: <list of scopes>,
 ));
 ```
 
-Login a user using Facebook provider:
+
+* Custom JWT:
 ```dart
-CoreRealmUser mongoUser = await auth.loginWithCredential(
-  FacebookCredential(<access_token>));
+CoreRealmUser mongoUser = await app.login(Credentials.jwt(<token>);
 ```
 
 <b>NOTE: In any case , if mongoUser != null the login was successful.</b>
 
 #### Register
 ```dart
-// Login a user with Email\Password
-CoreRealmUser mongoUser = await auth.registerWithEmail(
+// Register a user with Email\Password
+CoreRealmUser mongoUser = await app.registerWithEmail(
     email: <email_address>, password: <password>);
 ```
 
 #### Logout
 ```dart
-// Logout the current user:
-await auth.logout()
+// Logout the current user
+await app.logout()
 ```
 
 #### Reset Password
 You can send an email to reset user password:
 (email must be linked to an existing account)
 ```dart
-await client.auth.sendResetPasswordEmail(<YOUR_DESIRED_EMAIL>);
+await app.sendResetPasswordEmail(<YOUR_DESIRED_EMAIL>);
 ```
 
 #### Auth Listener
@@ -172,10 +178,11 @@ You can be notified when the auth state changes, such as login/logout..
 /// for using as smart navigation according to user logged in or not
 StreamBuilder _authBuilder(BuildContext context) {
   return StreamBuilder(
-    stream: client.auth.authListener(),
+    stream: app.authListener(),
     builder: (context, AsyncSnapshot snapshot) {
       switch (snapshot.connectionState) {
-        case ConnectionState.none:case ConnectionState.waiting:
+        case ConnectionState.none:
+        case ConnectionState.waiting:
           // show loading indicator
           return Scaffold(body: Center(child: CircularProgressIndicator()));
         case ConnectionState.active:
@@ -398,7 +405,7 @@ var result = await client.callFunction("sum", args: [3, 4], requestTimeout: 6000
 
 > If you found this project helpful or you learned something from the source code and want to thank me, consider buying me a cup of :coffee:
 >
-> - [PayPal](https://www.paypal.me/naama24198/)
+> - [PayPal](https://www.paypal.me/kfiross/)
 
 
 

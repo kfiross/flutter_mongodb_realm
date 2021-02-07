@@ -1,13 +1,14 @@
 package com.example.flutter_mongo_stitch.streamHandlers
 
 import android.os.Handler
-import com.mongodb.stitch.core.services.mongodb.remote.ChangeEvent
+//import com.mongodb.stitch.core.services.mongodb.remote.ChangeEvent
 
 import io.flutter.plugin.common.EventChannel
 import org.bson.BsonValue
 import org.bson.Document
 import android.os.Looper
 import com.example.flutter_mongo_stitch.MyMongoStitchClient
+import io.realm.internal.events.ChangeEvent
 
 
 class StreamHandler(val client: MyMongoStitchClient, val arguments: Any?)
@@ -29,22 +30,27 @@ class StreamHandler(val client: MyMongoStitchClient, val arguments: Any?)
 
         val task = this.client.watchCollection(dbName,collectionName, filter, ids, asObjectIds ?: true)
 
-        task?.addOnCompleteListener{
-            val changeStream = it.result
-            changeStream?.addChangeEventListener { documentId: BsonValue, event: ChangeEvent<Document> ->
-                // handle change event
+        task?.get {
+            val event = it.get()
+
+            if (event != null) {
+
+
+//            changeStream?.addChangeEventListener { documentId: BsonValue, event: ChangeEvent<Document> ->
+//                // handle change event
 
                 handler = Handler(Looper.getMainLooper())
                 handler.post {
-//                  eventSink.success(mapOf(
-//                      "id" to event.fullDocument?.get("_id"),
-//                      "fullDocumentJson" to event.fullDocument?.toJson()
-//                  ))
-                    eventSink.success(event.fullDocument?.toJson())
+//                      eventSink.success(mapOf(
+//                          "id" to event.fullDocument?.get("_id"),
+//                          "fullDocumentJson" to event.fullDocument?.toJson()
+//                      ))
+                      eventSink.success(event.fullDocument?.toJson())
 
                 }
-
             }
+
+//            }
         }
     }
 

@@ -7,12 +7,15 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+import 'config_reader.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MongoRealmClient.initializeApp("mystitchapp-fjpmn");
+  await ConfigReader.initialize();
+
+  await RealmApp.init(ConfigReader.appID);
   runApp(MyApp());
 }
 
@@ -22,7 +25,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  MongoRealmClient client = MongoRealmClient();
+  final MongoRealmClient client = MongoRealmClient();
+  final RealmApp app = RealmApp();
 
   @override
   void initState() {
@@ -40,13 +44,18 @@ class _MyAppState extends State<MyApp> {
 
       // login Anonymously
 
+
+      // var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteXN0aXRjaGFwcC1manBtbiIsImV4cCI6MTYyMTc5MzQyMSwiaWF0IjoxNjExODMwNjU1LCJzdWIiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIiLCJ1c2VySWQiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIifQ.kNowkTYV5J_xoR_aVowuattEcazesM09RmTfzpqJM2M";
+      // var mongoUser = await client.auth.login(Credentials.jwt(token));
+
    ///   CoreRealmUser mongoUser =
-          await client.auth.loginWithCredential(AnonymousCredential()
+   //        await client.auth.loginWithCredential(AnonymousCredential()
+
 //          UserPasswordCredential(
 //              username: 'naamahasson1@gmail.com',//"kfir25816@gmail.com",
 //              password: '123456',//"asdfghj"
 //          )
-              );
+//               );
 
 //    614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv.apps.googleusercontent.com
 
@@ -58,12 +67,12 @@ class _MyAppState extends State<MyApp> {
 //          FacebookCredential(permissions: ["email"])
 //          );
 
-//      if (mongoUser != null) {
-//        print("logged in as ${mongoUser.id ?? '?'}");
-//      }
-//      else {
-//        print("wrong pass or username");
-//      }
+     // if (mongoUser != null) {
+     //   print("logged in as ${mongoUser.id ?? '?'}");
+     // }
+     // else {
+     //   print("wrong pass or username");
+     // }
 
       // sign out
 
@@ -83,7 +92,7 @@ class _MyAppState extends State<MyApp> {
 //      deleteData(); /// DONE ON WEB
 //        updateData(); /// DONE ON WEB
 
-      watchData();
+ //     watchData();
 
       /// DONE ON WEB
 //      aggregateCollection(); //TODO: check
@@ -441,8 +450,8 @@ class _MyAppState extends State<MyApp> {
               child: Text("Reset Password"),
               onPressed: () async {
                 try {
-                  var currUser = await client.auth.user;
-                  final success = await client.auth.sendResetPasswordEmail(
+                  var currUser = await app.currentUser;
+                  final success = await app.sendResetPasswordEmail(
                       currUser.profile.email); //"kfir25812@gmail.com");
                   print(success);
                 } on PlatformException catch (e) {

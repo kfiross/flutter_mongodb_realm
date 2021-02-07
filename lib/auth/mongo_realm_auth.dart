@@ -4,31 +4,51 @@ import 'package:flutter/foundation.dart';
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_mongodb_realm/auth/credentials/google_credential.dart';
 import 'package:flutter_mongodb_realm/google_sign_in_git_mock/google_sign_in.dart';
+// import 'package:flutter_mongodb_realm/google_sign_in_git_mock/google_sign_in.dart';
 
 import '../plugin.dart';
-import 'core_stitch_user.dart';
+import 'core_realm_user.dart';
 import 'credentials/credentials.dart';
 
 /// MongoRealmAuth manages authentication for any Stitch based client.
+
 class MongoRealmAuth {
+
+  MongoRealmAuth._();
+
+  static final MongoRealmAuth _instance = MongoRealmAuth._();
+
+  factory MongoRealmAuth() => _instance;
+
   // embedded Login providers wrappers for better handling
   static var _googleLoginWrapper = _GoogleLoginWrapper();
 //  static var _facebookLoginWrapper = _FacebookLoginWrapper();
 
   /// Logs in as a user with the given credentials associated with an
   /// authentication provider.
+  @deprecated
   Future<CoreRealmUser> loginWithCredential(
       StitchCredential credential) async {
     var result;
 
     if (credential is AnonymousCredential) {
       result = await FlutterMongoRealm.signInAnonymously();
-    } else if (credential is UserPasswordCredential) {
+    }
+    else if (credential is UserPasswordCredential) {
       result = await FlutterMongoRealm.signInWithUsernamePassword(
         credential.username,
         credential.password,
       );
-    } else if (credential is GoogleCredential) {
+    }
+    else if (credential is GoogleCredential2){
+      try {
+        var accessToken = credential.accessToken;
+        result = await FlutterMongoRealm.signInWithGoogle(accessToken);
+      } on Exception catch (e) {
+        print(e);
+      }
+    }
+    else if (credential is GoogleCredential) {
       _googleLoginWrapper.init(
         serverClientId:
             "${credential.serverClientId}.apps.googleusercontent.com",
@@ -43,17 +63,24 @@ class MongoRealmAuth {
       } on Exception catch (e) {
         print(e);
       }
-    } else if (credential is FacebookCredential) {
+    }
+    else if (credential is FacebookCredential) {
 //      var accessToken = await _facebookLoginWrapper.handleSignInAndGetToken(
 //          credential.permissions);
       result =
           await FlutterMongoRealm.signInWithFacebook(credential.accessToken);
-    } else {
+    }
+    else if (credential is CustomJwtCredential){
+      result =
+        await FlutterMongoRealm.signInWithCustomJwt(credential.token);
+    }
+    else {
       throw UnimplementedError();
     }
 
     return result;
   }
+
 
   Future<bool> logout() async {
     var result = await FlutterMongoRealm.logout();
@@ -110,13 +137,13 @@ class _GoogleLoginWrapper {
     assert(_googleSignIn != null);
 
     String code;
-    try {
+    // try {
       var account = await _googleSignIn.signIn();
 
       if (account != null) code = account.serverAuthCode;
-    } on Exception catch (error) {
-      print(error);
-    }
+    // } on Exception catch (error) {
+    //   print(error);
+    // }
 
     return code;
   }
