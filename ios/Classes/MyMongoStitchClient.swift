@@ -122,15 +122,20 @@ class MyMongoStitchClient {
         self.app = app
     }
     
-    
+    //MARK: Auth
     func signInAnonymously(
-        onCompleted: @escaping (User)->Void,
+        onCompleted: @escaping ([String:Any])->Void,
         onError: @escaping (String?)->Void
     ) {
+        guard false/*#available(iOS 13.0, *)*/ else{
+            self.signInAnonymously_s(onCompleted: onCompleted, onError: onError)
+            return
+        }
+        
         self.app.login(credentials: Credentials.anonymous) { authResult in
             switch authResult {
             case .success(let user):
-                onCompleted(user)
+                onCompleted(user.toMap())
                 break
                 
             case .failure(let error):
@@ -143,16 +148,21 @@ class MyMongoStitchClient {
     func signInWithUsernamePassword(
         username: String,
         password: String,
-        onCompleted: @escaping (User)->Void,
+        onCompleted: @escaping ([String:Any])->Void,
         onError: @escaping (String?)->Void
     ) {
 
+        guard false/*#available(iOS 13.0, *)*/ else{
+            self.signInWithUsernamePassword_s(username: username, password: password, onCompleted: onCompleted, onError: onError)
+            return
+        }
+        
         self.app.login(
             credentials: Credentials.emailPassword(email: username, password: password)
         ) { authResult in
             switch authResult {
             case .success(let user):
-                onCompleted(user)
+                onCompleted(user.toMap())
                 break
                 
             case .failure(let error):
@@ -164,16 +174,21 @@ class MyMongoStitchClient {
     
     func signInWithGoogle(
         authCode: String,
-        onCompleted: @escaping (User)->Void,
+        onCompleted: @escaping ([String:Any])->Void,
         onError: @escaping (String?)->Void
         ) {
+        
+        guard false/*#available(iOS 13.0, *)*/ else{
+            self.signInWithGoogle_s(authCode: authCode, onCompleted: onCompleted, onError: onError)
+            return
+        }
         
         self.app.login(
             credentials: Credentials.google(serverAuthCode: authCode)
         ) { authResult in
             switch authResult {
             case .success(let user):
-                onCompleted(user)
+                onCompleted(user.toMap())
                 break
                 
             case .failure(let error):
@@ -186,16 +201,21 @@ class MyMongoStitchClient {
     
     func signInWithFacebook(
         accessToken: String,
-        onCompleted: @escaping (User)->Void,
+        onCompleted: @escaping ([String:Any])->Void,
         onError: @escaping (String?)->Void
         ) {
+        
+        guard false/*#available(iOS 13.0, *)*/ else{
+            self.signInWithFacebook_s(accessToken: accessToken, onCompleted: onCompleted, onError: onError)
+            return
+        }
         
         self.app.login(
             credentials: Credentials.facebook(accessToken: accessToken)
         ) { authResult in
             switch authResult {
             case .success(let user):
-                onCompleted(user)
+                onCompleted(user.toMap())
                 break
                 
             case .failure(let error):
@@ -256,6 +276,11 @@ class MyMongoStitchClient {
         onCompleted: @escaping (Bool)->Void,
         onError: @escaping (String?)->Void
     ) {
+        guard false/*#available(iOS 13.0, *)*/ else{
+            self.logout_s(onCompleted: onCompleted, onError: onError)
+            return
+        }
+        
         self.app.currentUser?.logOut(
             completion: { error in
                 guard error == nil else {
@@ -295,15 +320,15 @@ class MyMongoStitchClient {
 //        }
     }
     
-    func getUser() -> User? {
-        return self.app.currentUser
+    func getUser() -> StitchUser? {
+        return self.auth.currentUser //self.app.currentUser
     }
     
     func getUserId() -> String? {
-        return self.app.currentUser?.id
+        return self.auth.currentUser?.id // self.app.currentUser?.id
     }
     
-    /// ========================== Database related ========================================== ///
+    // MARK: Database (MongoDB Atlas)
     /*private*/ func getCollection(databaseName: String?, collectionName: String?) throws
         -> RemoteMongoCollection<Document>? {
         if(databaseName == nil || collectionName == nil) {
@@ -707,6 +732,108 @@ class MyMongoStitchClient {
                     onError("Failed to call function: \(error)")
             }
         }
+    }
+    
+    //MARK: - Legacy Stitch SDK Auth -
+
+    private func signInAnonymously_s(
+        onCompleted: @escaping ([String:Any])->Void,
+        onError: @escaping (String?)->Void
+    ) {
+        self.auth.login(withCredential: AnonymousCredential()) { authResult in
+            switch authResult {
+            case .success(let user):
+                onCompleted(user.toMap())
+                break
+                
+            case .failure(let error):
+                onError("\(error)")
+                break
+            }
+        }
+    }
+
+    private func signInWithUsernamePassword_s(
+        username: String,
+        password: String,
+        onCompleted: @escaping ([String:Any])->Void,
+        onError: @escaping (String?)->Void
+    ) {
+
+        self.auth.login(
+            withCredential: UserPasswordCredential(withUsername: username, withPassword: password)
+        ) { authResult in
+            switch authResult {
+            case .success(let user):
+                onCompleted(user.toMap())
+                break
+                
+            case .failure(let error):
+                onError("UsernamePassword Provider Login failed \(error)")
+                break
+            }
+        }
+    }
+
+    private func signInWithGoogle_s(
+        authCode: String,
+        onCompleted: @escaping ([String:Any])->Void,
+        onError: @escaping (String?)->Void
+        ) {
+        
+        self.auth.login(
+            withCredential: GoogleCredential(withAuthCode: authCode)
+        ) { authResult in
+            switch authResult {
+            case .success(let user):
+                onCompleted(user.toMap())
+                break
+                
+            case .failure(let error):
+                onError("Google Provider Login failed \(error)")
+                break
+            }
+        }
+    }
+
+
+    func signInWithFacebook_s(
+        accessToken: String,
+        onCompleted: @escaping ([String:Any])->Void,
+        onError: @escaping (String?)->Void
+        ) {
+        
+        self.auth.login(
+            withCredential: FacebookCredential(withAccessToken: accessToken)
+        ) { authResult in
+            switch authResult {
+            case .success(let user):
+                onCompleted(user.toMap())
+                break
+                
+            case .failure(let error):
+                onError("Facebook Provider Login failed \(error)")
+                break
+            }
+        }
+    }
+
+    private func logout_s(
+        onCompleted: @escaping (Bool)->Void,
+        onError: @escaping (String?)->Void
+    ) {
+        self.auth.logout { result in
+            switch result {
+            case .success(_):
+                onCompleted(true)
+                break
+                
+            case .failure(let error):
+                onError("Cannot logout user: \(error)")
+                break
+            }
+        }
+        
     }
 }
 

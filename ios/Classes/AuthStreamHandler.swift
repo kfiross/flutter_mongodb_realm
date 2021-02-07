@@ -87,7 +87,19 @@ class AuthStreamHandlerRLM : FlutterStreamHandler{
                   eventSink events: @escaping FlutterEventSink) -> FlutterError? {
 
         loginDelegate = MyRLMAuthDelegate(eventSink: events)
-        self.realmApp.authorizationDelegate = loginDelegate
+        self.realmApp.authorizationDelegate = loginDelegate!
+
+        if let user = self.realmApp.currentUser {
+            if(user.isLoggedIn){
+                events(user.toMap())
+            }
+            else {
+                events(nil)
+            }
+        }
+        else{
+            events(nil)
+        }
         
         
         return nil;
@@ -98,6 +110,7 @@ class AuthStreamHandlerRLM : FlutterStreamHandler{
     }
 
 }
+
 class AuthStreamHandler : FlutterStreamHandler{
     var appClient: StitchAppClient
      var authDelegate:MyStitchAuthDelegate?
