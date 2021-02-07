@@ -114,6 +114,15 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         case "signInWithFacebook":
             self.signInWithFacebook(call: call, result: result)
             break
+           //////
+        case "signInWithCustomJwt":
+            self.signInWithCustomJwt(call: call, result: result)
+            break
+        
+        case "signInWithCustomFunction":
+            self.signInWithCustomFunction(call: call, result: result)
+            break
+        
             
         case "registerWithEmail":
             self.registerWithEmail(call: call, result: result)
@@ -238,6 +247,39 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             }
         )
     }
+    
+    func signInWithCustomJwt(call: FlutterMethodCall, result: @escaping FlutterResult){
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let accessToken = args["token"] as! String?
+        
+        self.client?.signInWithJWT(
+            accessToken: accessToken ?? "",
+            onCompleted: { map in
+                 result(map)
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message, details: nil))
+            }
+        )
+    }
+    
+    func signInWithCustomFunction(call: FlutterMethodCall, result: @escaping FlutterResult){
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let json = args["json"] as! String?
+        
+        self.client?.signInWithCustomFunction(
+            json: json ?? "",
+            onCompleted: { map in
+                 result(map)
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message, details: nil))
+            }
+        )
+    }
+    
     
     func registerWithEmail(call: FlutterMethodCall, result: @escaping FlutterResult){
         let args = call.arguments as! Dictionary<String, Any>
