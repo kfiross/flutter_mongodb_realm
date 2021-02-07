@@ -1,3 +1,20 @@
+## 1.1.0
+**Major Update:**<br>
+Package now uses names close to the native one introduced in Realm SDK:
+* `client.auth` now deprecated in favor of `app`:
+    * `auth.loginWithCredential` now deprecated in favor of `app.login`<br>
+    for example:
+      - `AnonymusCredential()` => `Credentails.anonymus()`
+      - `UserPasswordCredential(..)` => `Credentails.emailPassword(..)`
+      - `FacebookCredential(..)` => `Credentails.facebook(..)`
+      <br>
+      and so on..
+      
+    * `auth.logout()` now deprecated in favor of `app.currentUser.logout()`
+    * `auth.user` now deprecated in favor of `app.currentUser`
+* Initialization app: use `Realm.init(<APP_ID>)` instead `MongoClient.initializeApp(<APP_ID>)`
+
+
 ## 1.0.0
 * BREAKING CHANGES: Renamed package to `flutter_mongodb_realm` and every `xxStitch` object to `xxRealm` object 
 

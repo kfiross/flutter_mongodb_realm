@@ -11,7 +11,9 @@ import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 
 For API reference [check here](https://pub.dartlang.org/documentation/flutter_mongodb_realm/latest/)
 
-The minimum required it's Android 5.0(API 21) or iOS 11.0
+The minimum requirements are:
+ - Android 5.0 (API 21)
+ - iOS 11.0
 
 ## Setup
 Doesn't require any setup besides adding as a dependency
@@ -34,7 +36,7 @@ Web integration automatically!
 * Google \[X]
 * Facebook \[X]
 * JWT - **Soon**
-* Auth Function - **Soon**
+* Custom Authentication Function - **Soon**
 
 <b>Authentication</b>
 * Auth Listener
