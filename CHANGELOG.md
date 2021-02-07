@@ -1,3 +1,7 @@
+## 1.2.0
+* Added `Custom JWT` auth provider.
+* Added `Custom Function` auth provider.
+
 ## 1.1.0
 **Major Update:**<br>
 Package now uses names close to the native one introduced in Realm SDK:

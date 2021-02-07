@@ -43,25 +43,6 @@ class _CustomLoginScreenState extends State<CustomLoginScreen> {
                 onSaved: (val) => _username = val,
               ),
             ),
-            SizedBox(height: 12),
-            // Container(
-            //   width: 300,
-            //   child: TextFormField(
-            //     initialValue: _password,
-            //     decoration: InputDecoration(labelText: 'Password'),
-            //     obscureText: true,
-            //     autocorrect: false,
-            //     validator: (String val) {
-            //       if (val.isEmpty) return "Password can't be empty.";
-            //
-            //       if (val.length < 6)
-            //         return "Password must be at least 6 charcaters long";
-            //
-            //       return null;
-            //     },
-            //     onSaved: (val) => _password = val,
-            //   ),
-            // ),
             SizedBox(height: 36),
             Container(
               width: 200,

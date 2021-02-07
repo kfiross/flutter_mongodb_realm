@@ -21,7 +21,7 @@ Web integration automatically!
 
 ## Supported Features
 
-<b>Database support:</b>
+**Database support (MongoDB Atlas):**
 * Insert
 * Find
 * Delete
@@ -30,15 +30,15 @@ Web integration automatically!
 * Aggregate \[X]
 
 
-<b>Auth Providers:</b>
+**Auth Providers:**
 * Email/Password
 * Anonymously
 * Google \[X]
 * Facebook \[X]
-* JWT - **Soon**
-* Custom Authentication Function - **Soon**
+* JWT \[X]
+* Custom Authentication Function \[X]
 
-<b>Authentication</b>
+**Authentication:**
 * Auth Listener
 * Reset Password
 * Login/Sign in/Logout
@@ -152,19 +152,27 @@ CoreRealmUser mongoUser = await app.login(
 CoreRealmUser mongoUser = await app.login(Credentials.jwt(<token>);
 ```
 
+* Custom (Auth) Function:
+```dart
+MongoDocument payload = MongoDocument({
+  "username": "bob"
+})
+CoreRealmUser mongoUser = await app.login(Credentials.function(payload);
+```
+
 <b>NOTE: In any case , if mongoUser != null the login was successful.</b>
 
 #### Register
+Register a user with Email\Password
+
 ```dart
-// Register a user with Email\Password
 CoreRealmUser mongoUser = await app.registerWithEmail(
     email: <email_address>, password: <password>);
 ```
 
 #### Logout
 ```dart
-// Logout the current user
-await app.logout()
+await app.currentUser.logout();   // Logout the current user
 ```
 
 #### Reset Password
