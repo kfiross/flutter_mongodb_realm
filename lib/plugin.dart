@@ -40,8 +40,8 @@ class FlutterMongoRealm {
   }
 
   static Future<CoreRealmUser> signInWithCustomJwt(String token) async {
-    var details = await FlutterMongoStitchPlatform.instance
-        .signInWithCustomJwt(token);
+    var details =
+        await FlutterMongoStitchPlatform.instance.signInWithCustomJwt(token);
     return CoreRealmUser.fromMap(details);
   }
 
