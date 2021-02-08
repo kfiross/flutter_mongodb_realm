@@ -35,8 +35,8 @@ Web integration automatically!
 * Anonymously
 * Google \[X]
 * Facebook \[X]
-* JWT \[X]
-* Custom Authentication Function \[X]
+* JWT
+* Custom Authentication Function
 
 **Authentication:**
 * Auth Listener

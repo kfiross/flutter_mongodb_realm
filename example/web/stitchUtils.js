@@ -1,7 +1,7 @@
 "use strict";
 
 var mongoClient;
-var stitchAppClient
+var stitchAppClient;
 
 function Mongo() {
     Mongo.prototype.connectMongo  = function(appId) {
@@ -199,6 +199,44 @@ function Mongo() {
         });
     }
 
+    Mongo.prototype.signInWithCustomJwt = async function(jwtString){
+        var user = await stitchAppClient.auth.loginWithCredential(
+            new stitch.CustomCredential(jwtString));
+
+        var userObject = {
+            "id": user.id,
+            "profile": {
+                'email': user.profile.email
+            }
+        };
+
+        this.sendAuthListenerEvent(userObject);
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(userObject));
+        });
+    };
+
+    Mongo.prototype.signInWithCustomFunction = async function(jsonData){
+        var json = JSON.parse(jsonData);
+
+        var user = await stitchAppClient.auth.loginWithCredential(
+            new stitch.FunctionCredential(json));
+
+        var userObject = {
+            "id": user.id,
+            "profile": {
+                'email': user.profile.email
+            }
+        };
+
+        this.sendAuthListenerEvent(userObject);
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(userObject));
+        });
+    };
+
     Mongo.prototype.registerWithEmail  = async function(email, password){
         var emailPassClient = stitch.Stitch.defaultAppClient.auth
             .getProviderClient(stitch.UserPasswordAuthProviderClient.factory);
@@ -207,13 +245,13 @@ function Mongo() {
         await emailPassClient.registerWithEmail(email, password);
 
         console.log('DONE!');
-    }
+    };
 
     Mongo.prototype.logout  = async function(){
         await stitchAppClient.auth.logout();
         this.sendAuthListenerEvent(null);
         console.log('logged out')
-    }
+    };
 
      Mongo.prototype.getUserId  = async function(){
          var user = await stitchAppClient.auth.user;
@@ -221,7 +259,7 @@ function Mongo() {
          return new Promise((resolve, reject) => {
             resolve(user.id);
          });
-     }
+     };
 
 
      Mongo.prototype.getUser  = async function(){
@@ -233,19 +271,19 @@ function Mongo() {
             "profile": {
                 'email': user.profile.email
             }
-         }
+         };
 
          return new Promise((resolve, reject) => {
              resolve(JSON.stringify(userObject));
          });
-     }
+     };
 
      Mongo.prototype.sendResetPasswordEmail = async function(email){
         var emailPassClient = stitch.Stitch.defaultAppClient.auth
                 .getProviderClient(stitch.UserPasswordAuthProviderClient.factory);
 
         await emailPassClient.sendResetPasswordEmail(email);
-     }
+     };
 
      Mongo.prototype.callFunction  = async function(name, args/*, timeout*/){
          var result = await stitchAppClient.callFunction(name, args);
@@ -253,7 +291,7 @@ function Mongo() {
          return new Promise((resolve, reject) => {
              resolve(result);
          });
-     }
+     };
      // --------------------------
 
     Mongo.prototype.sendAuthListenerEvent = async function(arg){
@@ -263,7 +301,7 @@ function Mongo() {
          });
 
          document.dispatchEvent(authEvent);
-    }
+    };
 
      Mongo.prototype.setupWatchCollection = async function(databaseName, collectionName, arg){
         var collection = this.getCollection(databaseName, collectionName)
