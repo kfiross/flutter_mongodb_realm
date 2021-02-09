@@ -1,3 +1,6 @@
+## 1.2.2
+* `ObjectId` can be used (Also fixing issue `#18`). 
+
 ## 1.2.1+1
 * Updated README.
 

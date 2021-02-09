@@ -298,9 +298,24 @@ var deletedDocs =
 ```
 
 #### Update
+Updating the only first matched document:
 ```dart
+await collection.updateOne(
+  // adding a filter (optional)
+  filter:{
+    "_id": ObjectId('601204a6a80d3fbab2e3a73f'),
+  },
 
-await collection.updateMany(
+  // adding an update operation (as matched the MongoDB SDK ones)
+  update: UpdateSelector.set({
+    "age": 26,
+  });
+
+);
+```
+Updating the only all matched documents:
+
+```dartawait collection.updateMany(
   // adding a filter (optional)
   filter:{
     "name": "adam",
@@ -309,13 +324,18 @@ await collection.updateMany(
   // adding an update operation (as matched the MongoDB SDK ones)
   update: UpdateSelector.set({
     "quantity": 670,
-  })
-);
+  });
 
-// OR
-await collection.updateOne(
-  // the same as above, just it's updated the only first matched one
-)
+  // removing 'apples' from 'favs' array
+  update: UpdateOperator.pull({
+     "favs": QueryOperator.in$(['apples'])
+  });
+  
+  // adding 'tomatoes' & 'onions into 'favs' array
+  update: UpdateOperator.push({
+     "favs": ArrayModifier.each(['tomatoes','onions'])
+  });
+);
 ```
 
 #### Watch
