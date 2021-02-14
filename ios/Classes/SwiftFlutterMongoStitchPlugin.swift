@@ -370,9 +370,9 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             databaseName: databaseName,
             collectionName: collectionName,
             data: data,
-            onCompleted: {
-                result(true)
-        },
+            onCompleted: { value in
+                result((value as! ObjectId).hex)
+            },
             onError: { message in
                 result(FlutterError(
                     code: "ERROR",
@@ -395,8 +395,12 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             databaseName: databaseName,
             collectionName: collectionName,
             list: list,
-            onCompleted: {
-                result(true)
+            onCompleted: { ids in
+                var map:[Int32:String] = [:]
+                for (key,value) in ids! {
+                    map[Int32(key)] = (value as! ObjectId).hex
+                }
+                result(map)
         },
             onError: { message in
                 result(FlutterError(

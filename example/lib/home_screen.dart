@@ -265,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
         lastName: _newStudLastName,
         year: _newStudYear,
       );
-      // var id = await _collection.insertOne(newStudent.asDocument());
+     // var id = await _collection.insertOne(newStudent.asDocument());
 
       var results = await _collection.insertMany([
         newStudent.asDocument(),

@@ -15,7 +15,6 @@ import RealmSwift
 
 
 
-
 extension AnyBSONValue{
     func toSimpleType() -> Any{
         
@@ -376,7 +375,7 @@ class MyMongoStitchClient {
         databaseName: String?,
         collectionName: String?,
         data: Dictionary<String, Any>?,
-        onCompleted: @escaping ()->Void,
+        onCompleted: @escaping (BSONValue?)->Void,
         onError: @escaping (String?)->Void
      ) {
         do {
@@ -396,7 +395,7 @@ class MyMongoStitchClient {
                 switch result {
                 case .success(let result):
                     print("Successfully inserted item with _id: \(result.insertedId))");
-                    onCompleted()
+                    onCompleted(result.insertedId)
                 case .failure(let error):
                     onError("Failed to insert a document: \(error)")
                 }
@@ -411,7 +410,7 @@ class MyMongoStitchClient {
         databaseName: String?,
         collectionName: String?,
         list: Array<String>?,
-        onCompleted: @escaping ()->Void,
+        onCompleted: @escaping ([Int64: BSONValue]?)->Void,
         onError: @escaping (String?)->Void
     ) {
         do {
@@ -427,7 +426,7 @@ class MyMongoStitchClient {
                 switch result {
                 case .success(let result):
                     print("Successfully inserted docs with the ids: \(result.insertedIds))");
-                    onCompleted()
+                    onCompleted(result.insertedIds)
                 case .failure(let error):
                     onError("Failed to insert documents: \(error)")
                 }
