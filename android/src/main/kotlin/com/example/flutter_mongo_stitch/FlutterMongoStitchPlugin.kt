@@ -413,12 +413,14 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             result.error("Error", "Failed to insert a document", "")
 
 
-        task!!.getAsync {
-            if (it.isSuccess)
-                result.success(true)
-            else
-                result.error("Error", "Failed to insert a document: ${it.error?.message ?: '?'}", null)
 
+        task!!.getAsync {
+            if (it.isSuccess) {
+                result.success(it.get().insertedId.toJavaValue())
+            }
+            else {
+                result.error("Error", "Failed to insert a document: ${it.error?.message ?: '?'}", null)
+            }
         }
     }
 
@@ -437,9 +439,18 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         if (task == null)
             result.error("Error", "Failed to insert a document", "")
 
-        task!!.getAsync {
-            if(it.isSuccess)
-                result.success(true)
+        task!!.getAsync { it ->
+            if(it.isSuccess) {
+                //result.success(it.get().insertedIds.map { (k, v) -> Pair(k, v.toJavaValue()) })
+
+                val results = emptyMap<Int, String>().toMutableMap()
+                val insertedIds = it.get().insertedIds
+                insertedIds.forEach {
+                    results[it.key.toInt()] = it.value.asObjectId().value.toHexString()
+                }
+
+                result.success(results)
+            }
             else
                 result.error("Error", "Failed to insert a document ${it.error?.message}", null)
 

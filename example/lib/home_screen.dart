@@ -100,7 +100,11 @@ class _HomeScreenState extends State<HomeScreen> {
               _filterRow(),
               SizedBox(height: 20),
               _header(),
-              Column(children: list),
+              if(list.isNotEmpty)
+                Expanded(child: ListView.builder(
+                  itemBuilder: (context, index) => list[index],
+                  itemCount: list.length,
+                )),
             ],
           ),
         ),
@@ -261,7 +265,12 @@ class _HomeScreenState extends State<HomeScreen> {
         lastName: _newStudLastName,
         year: _newStudYear,
       );
-      await _collection.insertOne(newStudent.asDocument());
+      // var id = await _collection.insertOne(newStudent.asDocument());
+
+      var results = await _collection.insertMany([
+        newStudent.asDocument(),
+        newStudent.asDocument(),
+      ]);
 
       setState(() {
         form.reset();
