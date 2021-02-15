@@ -266,11 +266,16 @@ class _HomeScreenState extends State<HomeScreen> {
         year: _newStudYear,
       );
      // var id = await _collection.insertOne(newStudent.asDocument());
+     // print("inserted_id=$id");
 
-      var results = await _collection.insertMany([
+      var docsIds = await _collection.insertMany([
         newStudent.asDocument(),
         newStudent.asDocument(),
       ]);
+
+      for(var id in docsIds.values){
+        print("inserted_id=$id");
+      }
 
       setState(() {
         form.reset();

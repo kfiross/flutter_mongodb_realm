@@ -3,6 +3,11 @@
 var mongoClient;
 var stitchAppClient;
 
+function uint8ArrayToHex(uint8Array) {
+    return Array.prototype.map.call(new Uint8Array(uint8Array.buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+}
+
+
 function Mongo() {
     Mongo.prototype.connectMongo  = function(appId) {
         stitchAppClient = stitch.Stitch.initializeDefaultAppClient(appId);
@@ -22,23 +27,41 @@ function Mongo() {
 
 
     Mongo.prototype.insertDocument = async function(databaseName, collectionName, docString){
-        var collection = this.getCollection(databaseName, collectionName)
-        var doc = JSON.parse(docString)
+        var collection = this.getCollection(databaseName, collectionName);
+        var doc = JSON.parse(docString);
 
-        await collection.insertOne(doc)
-    }
+        var doc = await collection.insertOne(doc);
+        var id = uint8ArrayToHex(doc['insertedId']['id']);
+        console.log(id);
+        return new Promise((resolve, reject) => {
+            resolve(id);
+        });
+    };
 
 
     Mongo.prototype.insertDocuments = async function(databaseName, collectionName, list){
         var collection = this.getCollection(databaseName, collectionName)
 
-        var docs = []
+        var docs = [];
         list.forEach((str) => {
             docs.push(JSON.parse(str))
-        })
+        });
 
-        await collection.insertMany(docs)
-    }
+        var result = await collection.insertMany(docs);
+        var ids = result['insertedIds'];
+        console.log(ids);
+
+        var map = {};
+        var keys = Object.keys(ids);
+
+        for(var i=0; i<keys.length; i++){
+            map[`${keys[i]}`] = uint8ArrayToHex(ids[keys[i]]['id'])
+        }
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(map));
+        });
+    };
 
     Mongo.prototype.findDocument = async function (databaseName, collectionName, filter) {
         var collection = this.getCollection(databaseName, collectionName)
@@ -325,12 +348,11 @@ function Mongo() {
         }
 
 
-        var changeStream = await collection.watch(arg);//['8','22']);
+        var changeStream = await collection.watch(arg);
 
         // Set the change listener. This will be called
         // when the watched documents are updated.
         changeStream.onNext((event) => {
-          console.log('Watched document changed:', event)
 
           var results = {
             "_id": event.fullDocument['_id']
