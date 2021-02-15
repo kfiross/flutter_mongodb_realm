@@ -1,3 +1,6 @@
+## [1.2.4]
+* Return null for empty `findOne` Query. (issue #23)
+
 ## [1.2.3]
 * Updated `insertOne` and `insertMany` to return results of inserted ids. (issue #22)
 

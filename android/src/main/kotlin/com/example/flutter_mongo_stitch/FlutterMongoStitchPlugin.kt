@@ -26,7 +26,6 @@ import io.realm.mongodb.User
 /** FlutterMongoStitchPlugin */
 public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
-//    private lateinit var stitchAppClient: StitchAppClient
     private lateinit var app: App;
     private lateinit var client: MyMongoStitchClient
     private lateinit var appContext: Context
@@ -127,7 +126,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         Realm.init(appContext);
         try {
-       //     Stitch.initializeDefaultAppClient(clientAppId!!)
             app = App(AppConfiguration.Builder(clientAppId).build())
         }
         catch (e: Exception){
@@ -146,37 +144,8 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         result.success(true)
     }
 
-//    private fun signInWithCustomJWT(@NonNull call: MethodCall, @NonNull result: Result) {
-////        val username = call.argument<String>("username") ?: ""
-//        val token = call.argument<String>("token") ?: ""
-//
-//        val task = client.signInWithCustomJWT(token)
-//
-//        if (task == null)
-//            result.error("Error", "Failed to Login", "")
-//
-//
-//        task.addOnSuccessListener {
-//            result.success(true)
-//        }.addOnFailureListener {
-//            result.error("ERROR", "UserEmailPassword Provider Not Deployed", "")
-//        }
-//    }
-
 
     private fun signInAnonymously(@NonNull result: Result) {
-
-//        try {
-//            //     Stitch.initializeDefaultAppClient(clientAppId!!)
-//            app = App(AppConfiguration.Builder(clientAppId).build())
-//        }
-//        catch (e: Exception){
-//            Log.d("MongoRealm", e.message);
-//        }
-
-
-
-
 
         client.signInAnonymously(App.Callback {
             if (it.isSuccess) {
@@ -201,13 +170,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             }
         })
 
-//        val task = client.signInWithUsernamePassword(username, password)
-//
-//        task.addOnSuccessListener {
-//            result.success(it.toMap())
-//        }.addOnFailureListener {
-//            result.error("ERROR", "UserEmailPassword Provider Login failed: ${it.message}", "")
-//        }
     }
 
     private fun signInWithGoogle(@NonNull call: MethodCall, @NonNull result: Result){
@@ -220,16 +182,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
                 result.error("ERROR", "Google Provider Login failed: ${it.error?.message ?: '?'}", null)//${it.exception?.message}", "")
             }
         })
-//        val task = client.signInWithGoogle(authCode)
-//
-//        task.addOnCompleteListener {
-//            if(it.isSuccessful){
-//                result.success(it.result!!.toMap())
-//            }
-//            else{
-//                result.error("ERROR", "Google Provider Login failed: ${it.exception?.message ?: '?'}", null)//${it.exception?.message}", "")
-//            }
-//        }
     }
 
     private fun signInWithFacebook(@NonNull call: MethodCall, @NonNull result: Result){
@@ -242,22 +194,10 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             } else {
                 result.error("ERROR", "Facebook Provider Login failed: ${it.error.message}", null)            }
         })
-//        val task = client.signInWithFacebook(token)
-//
-//        task.addOnCompleteListener {
-//            if(it.isSuccessful){
-//                result.success(it.result!!.toMap())
-//            }
-//            else{
-//                result.error("ERROR", "Facebook Provider Login failed: ", null)//${it.exception?.message}", "")
-//            }
-//        }
     }
 
     private fun signInWithCustomJwt(@NonNull call: MethodCall, @NonNull result: Result){
         val token = call.argument<String>("token") ?: ""
-
-      //  val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteXN0aXRjaGFwcC1manBtbiIsImV4cCI6MTYyMTc5MzQyMSwiaWF0IjoxNjExODMwNjU1LCJzdWIiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIiLCJ1c2VySWQiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIifQ.kNowkTYV5J_xoR_aVowuattEcazesM09RmTfzpqJM2M"
 
         client.signInWithCustomJwt(token, App.Callback {
             if (it.isSuccess) {
@@ -265,7 +205,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             } else {
                 result.error("ERROR", "Custom JWT Provider Login failed: ${it.error.message}", null)            }
         })
-// 601204a6a80d3fbab2e3a73f
     }
 
 
@@ -291,19 +230,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
                 result.error("ERROR", "Error registering new user: ${it.error?.message}", "")
             }
         })
-
-//        val task = client.registerWithEmail(email, password)
-//
-//        if (task == null)
-//            result.error("Error", "Failed to register a user", "")
-//
-//        task!!.addOnCompleteListener {
-//            if (it.isSuccessful) {
-//                result.success(true)
-//            } else {
-//                result.error("ERROR", "Error registering new user: ${it.exception?.message}", "")
-//            }
-//        }
     }
 
 
@@ -316,13 +242,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
                 result.error("ERROR", "Cannot logout user", "")
             }
         })
-
-//        val task = client.logout()
-//        task.addOnSuccessListener {
-//            result.success(true)
-//        }.addOnFailureListener {
-//            result.error("ERROR", "Cannot logout user", "")
-//        }
     }
 
     private fun getUserId(@NonNull result: Result) {
@@ -333,20 +252,12 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
                 result.error("ERROR", "", null)
             }
             else {
-                result.success(true)
+                result.success(id)
             }
         }
         catch (e: AppException){
             result.error("ERROR", "", null)
         }
-
-//        val id = client.getUserId()
-//
-//        if (id == null) {
-//            result.error("ERROR", "", null)
-//        } else {
-//            result.success(id)
-//        }
     }
 
     private fun getUser(@NonNull result: Result) {
@@ -358,10 +269,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         catch (e: AppException){
             result.error("ERROR", "Cannot get user", "")
         }
-
-//        val user = client.getUser()
-//
-//        result.success(user?.toMap())
     }
 
     private fun sendResetPasswordEmail(@NonNull call: MethodCall, @NonNull result: Result){
@@ -378,19 +285,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         catch (e: AppException){
            result.error("Error", "Failed to send a reset password email: ${e.message}", null)
         }
-
-//        val task = client.sendResetPasswordEmail(email!!)
-//
-//        if (task == null)
-//            result.error("Error", "Failed to send a reset password email", "")
-//
-//        task!!.addOnCompleteListener {
-//            if (it.isSuccessful)
-//                result.success(true)
-//            else
-//                result.error("Error", "Failed to send a reset password email: ${it.exception?.message}", null)
-//
-//        }
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -441,8 +335,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         task!!.getAsync { it ->
             if(it.isSuccess) {
-                //result.success(it.get().insertedIds.map { (k, v) -> Pair(k, v.toJavaValue()) })
-
                 val results = emptyMap<Int, String>().toMutableMap()
                 val insertedIds = it.get().insertedIds
                 insertedIds.forEach {
@@ -504,8 +396,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         }
     }
 
-    /** ============================================================== */
-    // filter option added
+
     private fun findDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
@@ -542,17 +433,8 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             }
             result.success(queryResults)
         }
-//        task!!.forEach {
-//            queryResults.add(it.toJson())
-//        }.continueWith {
-//            if (it.isSuccessful)
-//                result.success(queryResults)
-//            else
-//                result.error("Error", "Failed to insert a document: ${it.exception?.message ?: '?'}", "")
-//        }
     }
 
-    // filter option added
     private fun findDocument(@NonNull call: MethodCall, @NonNull result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")

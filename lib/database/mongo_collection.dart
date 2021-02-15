@@ -7,6 +7,7 @@ import 'package:flutter_mongodb_realm/database/pipeline_stage.dart';
 
 import '../bson_document.dart';
 import '../plugin.dart';
+
 //import '../plugin_support.dart';
 import 'mongo_document.dart';
 import 'query_operator.dart';
@@ -59,7 +60,8 @@ class MongoCollection {
       list: documents.map((doc) => jsonEncode(doc.map)).toList(),
     );
 
-    return results.map<int, ObjectId>((key, value) => MapEntry<int, ObjectId>(key, ObjectId.parse(value)));
+    return results.map<int, ObjectId>(
+        (key, value) => MapEntry<int, ObjectId>(key, ObjectId.parse(value)));
   }
 
   /// Removes at most one document from the collection that matches the given
@@ -157,6 +159,10 @@ class MongoCollection {
       sort: sortMap == null ? null : jsonEncode(sortMap),
     );
 
+    if (resultJson == null) {
+      return [];
+    }
+
     var result = resultJson.map((string) {
       return MongoDocument.parse(string);
     }).toList();
@@ -194,8 +200,12 @@ class MongoCollection {
       projection: projectionMap == null ? null : jsonEncode(projectionMap),
     );
 
-    var result = MongoDocument.parse(resultJson);
-    return result;
+    // return null document for empty query
+    if (resultJson == null) {
+      return null;
+    }
+
+    return MongoDocument.parse(resultJson);
   }
 
   /// Counts the number of all documents in the collection.
