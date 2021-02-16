@@ -14,6 +14,7 @@ import RealmSwift
 
 
 
+
 extension AnyBSONValue{
     func toSimpleType() -> Any{
         
@@ -228,24 +229,56 @@ class MyMongoStitchClient {
     // todo: check this
     func signInWithJWT(
         accessToken: String,
-        onCompleted: @escaping (User)->Void,
+        onCompleted: @escaping ([String:Any])->Void,
         onError: @escaping (String?)->Void
         ){
         
-        self.app.login(
-            credentials: Credentials.jwt(token: accessToken)
-        ) { authResult in
-            switch(authResult){
-            case .success(let user):
-                onCompleted(user)
-                break
-                
-            case .failure(let error):
-                onError("JWT Provider Login failed \(error)")
-                break
-            
-            }
+        guard false else {
+            self.signInWithJWT_s(accessToken: accessToken, onCompleted: onCompleted, onError: onError)
+            return
         }
+        
+//        self.app.login(
+//            credentials: Credentials.jwt(token: accessToken)
+//        ) { authResult in
+//            switch(authResult){
+//            case .success(let user):
+//                onCompleted(user)
+//                break
+//
+//            case .failure(let error):
+//                onError("JWT Provider Login failed \(error)")
+//                break
+//
+//            }
+//        }
+    }
+    
+    func signInWithCustomFunction(
+        json: String,
+        onCompleted: @escaping ([String:Any])->Void,
+        onError: @escaping (String?)->Void
+        ){
+        
+        guard false else {
+            self.signInWithCustomFunction_s(json: json, onCompleted: onCompleted, onError: onError)
+            return
+        }
+        
+//        self.app.login(
+//            credentials: Credentials.function(payload: payload)
+//        ) { authResult in
+//            switch(authResult){
+//            case .success(let user):
+//                onCompleted(user)
+//                break
+//
+//            case .failure(let error):
+//                onError("Custom Function Provider Login failed: \(error)")
+//                break
+//
+//            }
+//        }
     }
     
     func registerWithEmail(
@@ -342,7 +375,7 @@ class MyMongoStitchClient {
         databaseName: String?,
         collectionName: String?,
         data: Dictionary<String, Any>?,
-        onCompleted: @escaping ()->Void,
+        onCompleted: @escaping (BSONValue?)->Void,
         onError: @escaping (String?)->Void
      ) {
         do {
@@ -362,7 +395,7 @@ class MyMongoStitchClient {
                 switch result {
                 case .success(let result):
                     print("Successfully inserted item with _id: \(result.insertedId))");
-                    onCompleted()
+                    onCompleted(result.insertedId)
                 case .failure(let error):
                     onError("Failed to insert a document: \(error)")
                 }
@@ -377,7 +410,7 @@ class MyMongoStitchClient {
         databaseName: String?,
         collectionName: String?,
         list: Array<String>?,
-        onCompleted: @escaping ()->Void,
+        onCompleted: @escaping ([Int64: BSONValue]?)->Void,
         onError: @escaping (String?)->Void
     ) {
         do {
@@ -393,7 +426,7 @@ class MyMongoStitchClient {
                 switch result {
                 case .success(let result):
                     print("Successfully inserted docs with the ids: \(result.insertedIds))");
-                    onCompleted()
+                    onCompleted(result.insertedIds)
                 case .failure(let error):
                     onError("Failed to insert documents: \(error)")
                 }
@@ -816,6 +849,95 @@ class MyMongoStitchClient {
                 break
             }
         }
+    }
+    
+    func signInWithJWT_s(
+        accessToken: String,
+        onCompleted: @escaping ([String:Any])->Void,
+        onError: @escaping (String?)->Void
+        ) {
+        
+        self.auth.login(
+            withCredential: CustomCredential(withToken: accessToken)
+        ) { authResult in
+            switch authResult {
+            case .success(let user):
+                onCompleted(user.toMap())
+                break
+                
+            case .failure(let error):
+                onError("Facebook Provider Login failed \(error)")
+                break
+            }
+        }
+    }
+
+    private func signInWithCustomFunction_s(
+        json: String,
+        onCompleted: @escaping ([String:Any])->Void,
+        onError: @escaping (String?)->Void
+    ){
+//        var payload = RealmSwift.Document()
+//        var map = [String:AnyObject]()
+//      //  do{
+//            if let data = json.data(using: .utf8) {
+//                    do {
+//                        map = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String:AnyObject]
+//                    } catch {
+//                        print("Something went wrong")
+//                    }
+//                for (key,value) in map{
+//                    payload[key] = value as? AnyBSON
+//                }
+//        }
+//            catch{
+//            onError("Failed to send Payload")
+//        }
+        
+//        CustomCredential(withToken: accessToken)
+        
+         var payload = Document()
+        
+        do{
+            payload = try Document.init(fromJSON: json)
+        }
+        catch{
+            
+        }
+
+        let credential = FunctionCredential.init(payload: payload)
+        
+     
+//            FunctionCredential(payload: payload)
+        
+//        self.app.login(credentials: Credentials.function(payload: payload)
+//        ) { authResult in
+//            switch authResult {
+//               case .success(let user):
+//                   onCompleted(user.toMap())
+//                   break
+//
+//               case .failure(let error):
+//                   onError("Custom Function Provider Login failed \(error)")
+//                   break
+//               }
+//        }
+
+
+        self.auth.login(
+            withCredential: credential
+        ) { authResult in
+            switch authResult {
+            case .success(let user):
+                onCompleted(user.toMap())
+                break
+
+            case .failure(let error):
+                onError("Custom Function Provider Login failed \(error)")
+                break
+            }
+        }
+            
     }
 
     private func logout_s(

@@ -1,7 +1,12 @@
 "use strict";
 
 var mongoClient;
-var stitchAppClient
+var stitchAppClient;
+
+function uint8ArrayToHex(uint8Array) {
+    return Array.prototype.map.call(new Uint8Array(uint8Array.buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+}
+
 
 function Mongo() {
     Mongo.prototype.connectMongo  = function(appId) {
@@ -22,23 +27,41 @@ function Mongo() {
 
 
     Mongo.prototype.insertDocument = async function(databaseName, collectionName, docString){
-        var collection = this.getCollection(databaseName, collectionName)
-        var doc = JSON.parse(docString)
+        var collection = this.getCollection(databaseName, collectionName);
+        var doc = JSON.parse(docString);
 
-        await collection.insertOne(doc)
-    }
+        var doc = await collection.insertOne(doc);
+        var id = uint8ArrayToHex(doc['insertedId']['id']);
+        console.log(id);
+        return new Promise((resolve, reject) => {
+            resolve(id);
+        });
+    };
 
 
     Mongo.prototype.insertDocuments = async function(databaseName, collectionName, list){
         var collection = this.getCollection(databaseName, collectionName)
 
-        var docs = []
+        var docs = [];
         list.forEach((str) => {
             docs.push(JSON.parse(str))
-        })
+        });
 
-        await collection.insertMany(docs)
-    }
+        var result = await collection.insertMany(docs);
+        var ids = result['insertedIds'];
+        console.log(ids);
+
+        var map = {};
+        var keys = Object.keys(ids);
+
+        for(var i=0; i<keys.length; i++){
+            map[`${keys[i]}`] = uint8ArrayToHex(ids[keys[i]]['id'])
+        }
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(map));
+        });
+    };
 
     Mongo.prototype.findDocument = async function (databaseName, collectionName, filter) {
         var collection = this.getCollection(databaseName, collectionName)
@@ -199,6 +222,44 @@ function Mongo() {
         });
     }
 
+    Mongo.prototype.signInWithCustomJwt = async function(jwtString){
+        var user = await stitchAppClient.auth.loginWithCredential(
+            new stitch.CustomCredential(jwtString));
+
+        var userObject = {
+            "id": user.id,
+            "profile": {
+                'email': user.profile.email
+            }
+        };
+
+        this.sendAuthListenerEvent(userObject);
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(userObject));
+        });
+    };
+
+    Mongo.prototype.signInWithCustomFunction = async function(jsonData){
+        var json = JSON.parse(jsonData);
+
+        var user = await stitchAppClient.auth.loginWithCredential(
+            new stitch.FunctionCredential(json));
+
+        var userObject = {
+            "id": user.id,
+            "profile": {
+                'email': user.profile.email
+            }
+        };
+
+        this.sendAuthListenerEvent(userObject);
+
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(userObject));
+        });
+    };
+
     Mongo.prototype.registerWithEmail  = async function(email, password){
         var emailPassClient = stitch.Stitch.defaultAppClient.auth
             .getProviderClient(stitch.UserPasswordAuthProviderClient.factory);
@@ -207,13 +268,13 @@ function Mongo() {
         await emailPassClient.registerWithEmail(email, password);
 
         console.log('DONE!');
-    }
+    };
 
     Mongo.prototype.logout  = async function(){
         await stitchAppClient.auth.logout();
         this.sendAuthListenerEvent(null);
         console.log('logged out')
-    }
+    };
 
      Mongo.prototype.getUserId  = async function(){
          var user = await stitchAppClient.auth.user;
@@ -221,7 +282,7 @@ function Mongo() {
          return new Promise((resolve, reject) => {
             resolve(user.id);
          });
-     }
+     };
 
 
      Mongo.prototype.getUser  = async function(){
@@ -233,19 +294,19 @@ function Mongo() {
             "profile": {
                 'email': user.profile.email
             }
-         }
+         };
 
          return new Promise((resolve, reject) => {
              resolve(JSON.stringify(userObject));
          });
-     }
+     };
 
      Mongo.prototype.sendResetPasswordEmail = async function(email){
         var emailPassClient = stitch.Stitch.defaultAppClient.auth
                 .getProviderClient(stitch.UserPasswordAuthProviderClient.factory);
 
         await emailPassClient.sendResetPasswordEmail(email);
-     }
+     };
 
      Mongo.prototype.callFunction  = async function(name, args/*, timeout*/){
          var result = await stitchAppClient.callFunction(name, args);
@@ -253,7 +314,7 @@ function Mongo() {
          return new Promise((resolve, reject) => {
              resolve(result);
          });
-     }
+     };
      // --------------------------
 
     Mongo.prototype.sendAuthListenerEvent = async function(arg){
@@ -263,7 +324,7 @@ function Mongo() {
          });
 
          document.dispatchEvent(authEvent);
-    }
+    };
 
      Mongo.prototype.setupWatchCollection = async function(databaseName, collectionName, arg){
         var collection = this.getCollection(databaseName, collectionName)
@@ -287,12 +348,11 @@ function Mongo() {
         }
 
 
-        var changeStream = await collection.watch(arg);//['8','22']);
+        var changeStream = await collection.watch(arg);
 
         // Set the change listener. This will be called
         // when the watched documents are updated.
         changeStream.onNext((event) => {
-          console.log('Watched document changed:', event)
 
           var results = {
             "_id": event.fullDocument['_id']

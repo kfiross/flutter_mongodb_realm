@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:bson/bson.dart';
 import 'package:extension/enum.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_mongodb_realm/database/pipeline_stage.dart';
 
 import '../bson_document.dart';
 import '../plugin.dart';
+
 //import '../plugin_support.dart';
 import 'mongo_document.dart';
 import 'query_operator.dart';
@@ -41,21 +43,25 @@ class MongoCollection {
   }
 
   /// Inserts the provided document to the collection
-  Future insertOne(MongoDocument document) async {
-    await FlutterMongoRealm.insertDocument(
+  Future<ObjectId> insertOne(MongoDocument document) async {
+    var result = await FlutterMongoRealm.insertDocument(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       data: document.map,
     );
+    return ObjectId.fromHexString(result);
   }
 
   /// Inserts one or more documents to the collection
-  Future insertMany(List<MongoDocument> documents) async {
-    await FlutterMongoRealm.insertDocuments(
+  Future<Map<int, ObjectId>> insertMany(List<MongoDocument> documents) async {
+    Map results = await FlutterMongoRealm.insertDocuments(
       collectionName: this.collectionName,
       databaseName: this.databaseName,
       list: documents.map((doc) => jsonEncode(doc.map)).toList(),
     );
+
+    return results.map<int, ObjectId>(
+        (key, value) => MapEntry<int, ObjectId>(key, ObjectId.parse(value)));
   }
 
   /// Removes at most one document from the collection that matches the given
@@ -153,6 +159,10 @@ class MongoCollection {
       sort: sortMap == null ? null : jsonEncode(sortMap),
     );
 
+    if (resultJson == null) {
+      return [];
+    }
+
     var result = resultJson.map((string) {
       return MongoDocument.parse(string);
     }).toList();
@@ -190,8 +200,12 @@ class MongoCollection {
       projection: projectionMap == null ? null : jsonEncode(projectionMap),
     );
 
-    var result = MongoDocument.parse(resultJson);
-    return result;
+    // return null document for empty query
+    if (resultJson == null) {
+      return null;
+    }
+
+    return MongoDocument.parse(resultJson);
   }
 
   /// Counts the number of all documents in the collection.

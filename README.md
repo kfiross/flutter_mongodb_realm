@@ -11,7 +11,9 @@ import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 
 For API reference [check here](https://pub.dartlang.org/documentation/flutter_mongodb_realm/latest/)
 
-The minimum required it's Android 5.0(API 21) or iOS 11.0
+The minimum requirements are:
+ - Android 5.0 (API 21)
+ - iOS 11.0
 
 ## Setup
 Doesn't require any setup besides adding as a dependency
@@ -19,7 +21,7 @@ Web integration automatically!
 
 ## Supported Features
 
-<b>Database support:</b>
+**Database support (MongoDB Atlas):**
 * Insert
 * Find
 * Delete
@@ -28,15 +30,15 @@ Web integration automatically!
 * Aggregate \[X]
 
 
-<b>Auth Providers:</b>
+**Auth Providers:**
 * Email/Password
 * Anonymously
 * Google \[X]
 * Facebook \[X]
-* JWT - **Soon**
-* Auth Function - **Soon**
+* JWT
+* Custom Authentication Function
 
-<b>Authentication</b>
+**Authentication:**
 * Auth Listener
 * Reset Password
 * Login/Sign in/Logout
@@ -150,19 +152,27 @@ CoreRealmUser mongoUser = await app.login(
 CoreRealmUser mongoUser = await app.login(Credentials.jwt(<token>);
 ```
 
+* Custom (Auth) Function:
+```dart
+MongoDocument payload = MongoDocument({
+  "username": "bob"
+})
+CoreRealmUser mongoUser = await app.login(Credentials.function(payload);
+```
+
 <b>NOTE: In any case , if mongoUser != null the login was successful.</b>
 
 #### Register
+Register a user with Email\Password
+
 ```dart
-// Register a user with Email\Password
 CoreRealmUser mongoUser = await app.registerWithEmail(
     email: <email_address>, password: <password>);
 ```
 
 #### Logout
 ```dart
-// Logout the current user
-await app.logout()
+await app.currentUser.logout();   // Logout the current user
 ```
 
 #### Reset Password
@@ -288,9 +298,24 @@ var deletedDocs =
 ```
 
 #### Update
+Updating the only first matched document:
 ```dart
+await collection.updateOne(
+  // adding a filter (optional)
+  filter:{
+    "_id": ObjectId('601204a6a80d3fbab2e3a73f'),
+  },
 
-await collection.updateMany(
+  // adding an update operation (as matched the MongoDB SDK ones)
+  update: UpdateSelector.set({
+    "age": 26,
+  });
+
+);
+```
+Updating the only all matched documents:
+
+```dartawait collection.updateMany(
   // adding a filter (optional)
   filter:{
     "name": "adam",
@@ -299,13 +324,18 @@ await collection.updateMany(
   // adding an update operation (as matched the MongoDB SDK ones)
   update: UpdateSelector.set({
     "quantity": 670,
-  })
-);
+  });
 
-// OR
-await collection.updateOne(
-  // the same as above, just it's updated the only first matched one
-)
+  // removing 'apples' from 'favs' array
+  update: UpdateOperator.pull({
+     "favs": QueryOperator.in$(['apples'])
+  });
+  
+  // adding 'tomatoes' & 'onions into 'favs' array
+  update: UpdateOperator.push({
+     "favs": ArrayModifier.each(['tomatoes','onions'])
+  });
+);
 ```
 
 #### Watch

@@ -5,6 +5,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'login_custom.dart';
 import 'reset_pass_screen.dart';
 
 enum LoginState { login, register }
@@ -117,6 +118,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text("Login with Google",
                               style: TextStyle(color: Colors.white)),
                           onPressed: _loginWithGoogle,
+                        ),
+                      ),
+                      Container(
+                        width: 200,
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: RaisedButton(
+                          color: Colors.red,
+                          child: Text("Login with Custom Function",
+                              style: TextStyle(color: Colors.white)),
+                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CustomLoginScreen())),
                         ),
                       ),
                     ],
