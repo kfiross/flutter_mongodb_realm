@@ -24,6 +24,9 @@ dependencies:
   streams_channel: ^0.3.0
   meta: ^1.0.4
 
+  reflectable: ^2.2.9
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

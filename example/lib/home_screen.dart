@@ -7,6 +7,9 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_mongodb_realm/mongo_realm_client.dart';
 import 'package:flutter_mongodb_realm/database/database.dart';
 
+import 'model/task.dart';
+import 'package:bson/bson.dart';
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -97,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: <Widget>[
+              RaisedButton(child: Text("Name"), onPressed: () => _syncTest()),
               _filterRow(),
               SizedBox(height: 20),
               _header(),
@@ -281,6 +285,21 @@ class _HomeScreenState extends State<HomeScreen> {
         form.reset();
       });
     }
+  }
+
+  _syncTest() async {
+    var user = await app.currentUser;
+    var config = SyncConfiguration("user", user);
+    var realm = Realm.getInstance(config);
+
+    await realm.addOne(User2(id: ObjectId(), name: "Kfir", age: 26));
+
+    var syncedUsers = realm.where<User2>() ;
+
+    // await realm.deleteOne<User2>();
+    // await realm.deleteAll<User2>();
+
+    await syncedUsers.findAll();
   }
 }
 

@@ -1,6 +1,10 @@
 package com.example.flutter_mongo_stitch
 
 //import com.mongodb.stitch.android.core.auth.StitchUser
+import com.example.flutter_mongo_stitch.realm.CustomRealmObject
+import io.realm.Realm
+import io.realm.RealmQuery
+import io.realm.kotlin.*
 import io.realm.mongodb.User
 import org.bson.BsonType
 import org.bson.BsonValue
@@ -69,3 +73,15 @@ fun User.toMap(): Map<String, Any> {
             )
     )
 }
+
+
+fun Realm.whereTyped (typeName: String): RealmQuery<CustomRealmObject> =
+        this.where<CustomRealmObject>().contains("type", typeName)
+
+
+fun Realm.deleteAllTyped (typeName: String): Boolean =
+        this.whereTyped(typeName).findAll().deleteAllFromRealm()
+
+fun Realm.deleteFirstTyped (typeName: String) =
+        this.whereTyped(typeName).findFirst()?.deleteFromRealm()
+

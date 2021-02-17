@@ -1,3 +1,5 @@
+import 'main.reflectable.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
@@ -13,6 +15,7 @@ import 'login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  initializeReflectable();
   await ConfigReader.initialize();
 
   await RealmApp.init(ConfigReader.appID);

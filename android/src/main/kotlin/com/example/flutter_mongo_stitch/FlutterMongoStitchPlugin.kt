@@ -1,23 +1,23 @@
 package com.example.flutter_mongo_stitch
 
-import androidx.annotation.NonNull;
+//import com.mongodb.stitch.android.core.Stitch
+//import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
+//import com.mongodb.stitch.android.core.StitchAppClient
+
+import android.content.Context
+import android.util.Log
+import androidx.annotation.NonNull
+import com.example.flutter_mongo_stitch.realm.RealmClient
+import com.example.flutter_mongo_stitch.streamHandlers.AuthStreamHandler
+import com.example.flutter_mongo_stitch.streamHandlers.StreamHandler
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-
-//import com.mongodb.stitch.android.core.Stitch
-//import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
-import io.flutter.plugin.common.EventChannel
-import android.content.Context
-import android.util.Log
-import com.example.flutter_mongo_stitch.streamHandlers.AuthStreamHandler
-import com.example.flutter_mongo_stitch.streamHandlers.StreamHandler
-import io.realm.Realm
-//import com.mongodb.stitch.android.core.StitchAppClient
-
+import io.realm.*
 import io.realm.mongodb.App
 import io.realm.mongodb.AppConfiguration
 import io.realm.mongodb.AppException
@@ -29,6 +29,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     private lateinit var app: App;
     private lateinit var client: MyMongoStitchClient
     private lateinit var appContext: Context
+    private lateinit var realmClient: RealmClient
 
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
@@ -46,12 +47,12 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         appContext = flutterPluginBinding.applicationContext
 
         streamsChannel = StreamsChannel(flutterPluginBinding.binaryMessenger, "streams_channel_test")
-        streamsChannel.setStreamHandlerFactory(object: StreamsChannel.StreamHandlerFactory{
+        streamsChannel.setStreamHandlerFactory(object : StreamsChannel.StreamHandlerFactory {
             override fun create(arguments: Any?): EventChannel.StreamHandler? {
                 if (arguments == null || arguments !is Map<*, *> || arguments["handler"] == null)
                     return null
 
-                return when(arguments["handler"]){
+                return when (arguments["handler"]) {
                     "watchCollection" -> StreamHandler(client, arguments)
                     "auth" -> AuthStreamHandler(client, app, arguments)
                     else -> null
@@ -89,8 +90,8 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             "findDocuments" -> findDocuments(call, result)
             "findDocument" -> findDocument(call, result)
             "countDocuments" -> countDocuments(call, result)
-            "updateDocument" -> updateDocument(call , result)
-            "updateDocuments" -> updateDocuments(call , result)
+            "updateDocument" -> updateDocument(call, result)
+            "updateDocuments" -> updateDocuments(call, result)
             "aggregate" -> aggregate(call, result)
 
             // Auth
@@ -109,6 +110,12 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
             // Stitch Functions
             "callFunction" -> callFunction(call, result)
+
+            // Realm Sync?
+            "testInsertRealm" -> realmInsertOne(call, result)
+            "testDeleteRealm" -> realmDelete(call, result)
+            "testFindFirstRealm" -> realmFindFirst(call, result)
+            "testFindAllRealm" -> realmFindAll(call, result)
 
             else -> result.notImplemented()
         }
@@ -140,6 +147,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         client = MyMongoStitchClient(mongoClient, app)
 
+        realmClient = RealmClient(app)
 
         result.success(true)
     }
@@ -192,7 +200,8 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccess) {
                 result.success(it.get().toMap())
             } else {
-                result.error("ERROR", "Facebook Provider Login failed: ${it.error.message}", null)            }
+                result.error("ERROR", "Facebook Provider Login failed: ${it.error.message}", null)
+            }
         })
     }
 
@@ -203,7 +212,8 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccess) {
                 result.success(it.get().toMap())
             } else {
-                result.error("ERROR", "Custom JWT Provider Login failed: ${it.error.message}", null)            }
+                result.error("ERROR", "Custom JWT Provider Login failed: ${it.error.message}", null)
+            }
         })
     }
 
@@ -215,7 +225,8 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccess) {
                 result.success(it.get().toMap())
             } else {
-                result.error("ERROR", "Custom Auth Function Provider Login failed: ${it.error.message}", null)            }
+                result.error("ERROR", "Custom Auth Function Provider Login failed: ${it.error.message}", null)
+            }
         })
     }
 
@@ -503,7 +514,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         task!!.getAsync {
             if (it.isSuccess)
-                result.success(listOf(it.get()?.matchedCount,it.get()?.modifiedCount))
+                result.success(listOf(it.get()?.matchedCount, it.get()?.modifiedCount))
             else
                 result.error("Error", "Failed to update the collection: ${it.error?.message ?: '?'}", "")
 
@@ -528,7 +539,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         task!!.getAsync {
             if (it.isSuccess)
-                result.success(listOf(it.get()?.matchedCount,it.get()?.modifiedCount))
+                result.success(listOf(it.get()?.matchedCount, it.get()?.modifiedCount))
             else
                 result.error("Error", "Failed to update the collection: : ${it.error?.message ?: '?'}", "")
 
@@ -605,7 +616,52 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 //        }
     }
 
+    ///====================================================================
+    private fun realmInsertOne(@NonNull call: MethodCall, @NonNull result: Result){
+        val partitionValue = call.argument<String>("partition") ?: ""
+        val typeName = call.argument<String>("type") ?: ""
+        val dataStr = call.argument<String>("data") ?: ""
+        val upsert = call.argument<Boolean>("upsert") ?: false
+
+        realmClient.insertOne(partitionValue, typeName, dataStr, upsert, null, result);
+
+    }
+
+    private fun realmInsert(@NonNull call: MethodCall, @NonNull result: Result){
+        val partitionValue = call.argument<String>("partition") ?: ""
+        val typeName = call.argument<String>("type") ?: ""
+        val dataListStr = call.argument<String>("dataList") ?: ""
+        val upsert = call.argument<Boolean>("upsert") ?: false
+
+        realmClient.insert(partitionValue, typeName, dataListStr, upsert, null, result);
+    }
+    
+    private fun realmDelete(@NonNull call: MethodCall, @NonNull result: Result){
+        val partitionValue = call.argument<String>("partition") ?: ""
+        val typeName = call.argument<String>("type") ?: ""
+        val actionType = call.argument<Boolean>("actionType") ?: false      // actionType == true ? ALL : FIRST
+
+        realmClient.delete(partitionValue, typeName, actionType, result);
+    }
+
+    private fun realmFindFirst(@NonNull call: MethodCall, @NonNull result: Result){
+        val partitionValue = call.argument<String>("partition") ?: ""
+        val typeName = call.argument<String>("type") ?: ""
+
+        val json = realmClient.findFirst(partitionValue, "user");
+        result.success(json)
+    }
+
+    private fun realmFindAll(@NonNull call: MethodCall, @NonNull result: Result){
+        val partitionValue = call.argument<String>("partition") ?: ""
+        val typeName = call.argument<String>("type") ?: ""
+
+        val json = realmClient.findAll(partitionValue, typeName);
+        result.success(json)
+    }
+
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
     }
 }
+

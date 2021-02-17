@@ -3,12 +3,15 @@ import 'dart:convert';
 
 import 'package:bson/bson.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_mongodb_realm/realm_sync/realm_objects.dart';
 import 'package:flutter_mongodb_realm/stream_interop/stream_interop.dart';
 import 'package:flutter_mongo_stitch_platform_interface/flutter_mongo_stitch_platform_interface.dart';
 import 'package:meta/meta.dart';
 import 'package:universal_html/html.dart';
 
 import 'auth/core_realm_user.dart';
+import 'realm_sync/realm.dart';
 
 class FlutterMongoRealm {
   static Future connectToMongo(String appId) async {
@@ -310,5 +313,40 @@ class FlutterMongoRealm {
       asObjectIds: asObjectIds,
       filter: filter,
     );
+  }
+}
+
+class FlutterRealm{
+  static MethodChannel _methodChannel = MethodChannel('flutter_mongo_stitch');
+
+  static Future findFirst(String typeName) async{
+    var results = await _methodChannel.invokeMethod('testFindFirstRealm', {
+      "type": typeName,
+    });
+    return results;
+  }
+
+  static Future findAll(String typeName) async{
+    var results = await _methodChannel.invokeMethod('testFindAllRealm', {
+      "type": typeName,
+    });
+    return results;
+  }
+
+  static Future addOne(RealmObject object, String partitionName, [bool update]) {
+    return _methodChannel.invokeMethod('testInsertRealm', {
+      "partition": partitionName,
+      "type": object.runtimeType.toString(),
+      "data": jsonEncode(Realm.toJson(object)),
+      "upsert": update ?? false
+    });
+  }
+
+  static Future delete(Type objectType, String partitionName, bool actionType) {
+    return _methodChannel.invokeMethod('testDeleteRealm', {
+      "partition": partitionName,
+      "type": objectType.toString(),
+      "actionType": actionType
+    });
   }
 }
