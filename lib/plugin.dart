@@ -45,6 +45,12 @@ class FlutterMongoRealm {
     return CoreRealmUser.fromMap(details);
   }
 
+  static Future<CoreRealmUser> signInWithApple(String idToken) async {
+    var details =
+        await FlutterMongoStitchPlatform.instance.signInWithApple(idToken);
+    return CoreRealmUser.fromMap(details);
+  }
+
   static Future<CoreRealmUser> signInWithCustomFunction(String json) async {
     var details = await FlutterMongoStitchPlatform.instance
         .signInWithCustomFunction(json);

@@ -6,6 +6,7 @@ export 'facebook_credential.dart';
 export 'custom_jwt_credential.dart';
 export 'custom_function_credential.dart';
 
+import 'package:flutter_mongodb_realm/auth/credentials/apple_credential.dart';
 import 'package:flutter_mongodb_realm/database/mongo_document.dart';
 
 import '../auth.dart';
@@ -39,4 +40,7 @@ class Credentials {
   static StitchCredential customFunction(MongoDocument arguments) =>
       // ignore: deprecated_member_use_from_same_package
       FunctionCredential(arguments);
+
+  // ignore: deprecated_member_use_from_same_package
+  static StitchCredential apple(String idToken) => AppleCredential(idToken);
 }

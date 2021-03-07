@@ -105,6 +105,10 @@ class MyMongoStitchClient(
         return app.loginAsync(Credentials.customFunction(args), callback)
     }
 
+    fun signInWithApple(idToken: String, callback: App.Callback<User>) : RealmAsyncTask? {
+        return app.loginAsync(Credentials.apple(idToken), callback);
+    }
+
     fun logout(callback: App.Callback<User>): RealmAsyncTask?
             = app.currentUser()?.logOutAsync(callback);
 

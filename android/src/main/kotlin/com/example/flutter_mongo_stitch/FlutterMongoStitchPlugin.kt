@@ -100,6 +100,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             "signInWithFacebook" -> signInWithFacebook(call, result)
             "signInWithCustomJwt" -> signInWithCustomJwt(call, result)
             "signInWithCustomFunction" -> signInWithCustomAuthFunction(call, result)
+            "signInWithApple" -> signInWithApple(call, result)
 
             "registerWithEmail" -> registerWithEmail(call, result)
             "logout" -> logout(result)
@@ -216,6 +217,17 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
                 result.success(it.get().toMap())
             } else {
                 result.error("ERROR", "Custom Auth Function Provider Login failed: ${it.error.message}", null)            }
+        })
+    }
+
+    private fun signInWithApple(@NonNull call: MethodCall, @NonNull result: Result){
+        val idToken = call.argument<String>("token") ?: ""
+
+        client.signInWithApple(idToken, App.Callback {
+            if (it.isSuccess) {
+                result.success(it.get().toMap())
+            } else {
+                result.error("ERROR", "Sign in with Apple Login failed: ${it.error.message}", null)            }
         })
     }
 
