@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="524ecbba-39bb-48dd-a8df-52110eca8638" name="Default Changelist" comment="added sendResetPasswordEmail function on Android channel + added support for full StitchUser details">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+    <list default="true" id="524ecbba-39bb-48dd-a8df-52110eca8638" name="Default Changelist" comment="updated syntax to be close to the native one">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/example_lib_main_dart.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mongoatlasflutter.iml" beforeDir="false" afterPath="$PROJECT_DIR$/mongoatlasflutter.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
-    <ignored path="$PROJECT_DIR$/.dart_tool/" />
-    <ignored path="$PROJECT_DIR$/.idea/" />
-    <ignored path="$PROJECT_DIR$/.pub/" />
-    <ignored path="$PROJECT_DIR$/build/" />
-    <ignored path="$PROJECT_DIR$/example/.pub/" />
-    <ignored path="$PROJECT_DIR$/example/build/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,384 +17,77 @@
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="9c1cbdb5" />
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/database/mongo_collection.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11271">
-              <caret line="299" column="10" selection-start-line="299" selection-start-column="10" selection-end-line="299" selection-end-column="10" />
-              <folding>
-                <element signature="e#0#22#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ios/Classes/SwiftFlutterMongoStitchPlugin.swift">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="20280">
-              <caret line="538" column="4" selection-start-line="538" selection-start-column="4" selection-end-line="538" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ios/Classes/FlutterStreamsChannel.swift">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ios/Classes/StreamHandler.swift">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1755">
-              <caret line="45" column="29" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/example/lib/home_screen.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1599">
-              <caret line="44" column="17" selection-start-line="44" selection-start-column="17" selection-end-line="44" selection-end-column="17" />
-              <folding>
-                <element signature="e#0#39#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="8" column="26" lean-forward="true" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pubspec.yaml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="78">
-              <caret line="2" column="14" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/CHANGELOG.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="234">
-                <caret line="6" selection-start-line="6" selection-end-line="6" />
-              </first_editor>
-              <second_editor>
-                <markdownNavigatorState />
-              </second_editor>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="5343">
-                <caret line="137" column="11" selection-start-line="137" selection-start-column="11" selection-end-line="137" selection-end-column="11" />
-              </first_editor>
-              <second_editor>
-                <markdownNavigatorState />
-              </second_editor>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/widgets/async.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9633">
-              <caret line="257" column="11" selection-start-line="257" selection-start-column="11" selection-end-line="257" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
-  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_3a_API_30_x86" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="stateless_widget" />
         <option value="Dart File" />
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>mongoatlasflutter</find>
-      <find>Mongoatlasflutter</find>
-      <find>jsonEncode</find>
-      <find>loginWithCredential</find>
-      <find>signInWithUsernamePassword</find>
-      <find>CoreStitchUser</find>
-      <find>MongoStitchC</find>
-      <find>Anony</find>
-      <find>FlutterMongoStitch._</find>
-      <find>flutter_mongo_stitch</find>
-      <find>UpdateSelector</find>
-      <find>QuerySelector</find>
-      <find>serverClientId</find>
-      <find>MethodC</find>
-      <find>watchCollection</find>
-      <find>updateMany</find>
-      <find>CoreStitchUser.fromMap</find>
-      <find>listen</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>mongoatlasflutter</replace>
-      <replace>mongostitchflutter</replace>
-      <replace>Mongostitchflutter</replace>
-      <replace>FlutterMongoStitch.</replace>
-      <replace>FacebookLogin</replace>
-    </replaceStrings>
-  </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="native_google_sign" />
+        <entry key="$PROJECT_DIR$" value="feature/sync" />
       </map>
     </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/lib/query_operator.dart" />
-        <option value="$PROJECT_DIR$/lib/update_operator.dart" />
-        <option value="$PROJECT_DIR$/lib/db/db.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/credentials/a.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/credentials/credential.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/credentials/abc_credential.dart" />
-        <option value="$PROJECT_DIR$/lib/client.dart" />
-        <option value="$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/StreamHandler.kt" />
-        <option value="$PROJECT_DIR$/lib/database/mongo_databsase.dart" />
-        <option value="$PROJECT_DIR$/lib/database/query_operator.dart" />
-        <option value="$PROJECT_DIR$/lib/database/update_operator.dart" />
-        <option value="$PROJECT_DIR$/lib/bson_document.dart" />
-        <option value="$PROJECT_DIR$/lib/database/mongo_document.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/auth.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/credentials/user_password_credentinal.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/credentials/stitch_credential.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/credentials/anonymous_credential.dart" />
-        <option value="$PROJECT_DIR$/test/all_tests.dart" />
-        <option value="$PROJECT_DIR$/test/authentication_test.dart" />
-        <option value="$PROJECT_DIR$/test/database_test.dart" />
-        <option value="$PROJECT_DIR$/test/flutter_mongo_stitch_test.dart" />
-        <option value="$PROJECT_DIR$/test_driver/app_test.dart" />
-        <option value="$PROJECT_DIR$/test_driver/app.dart" />
-        <option value="$PROJECT_DIR$/lib/main.dart" />
-        <option value="$PROJECT_DIR$/lib/src/flutter_mongo_stitch.dart" />
-        <option value="$PROJECT_DIR$/lib/flutter_mongo_stitch.dart" />
-        <option value="$PROJECT_DIR$/example/lib/tester.dart" />
-        <option value="$PROJECT_DIR$/example/android/build.gradle" />
-        <option value="$PROJECT_DIR$/example/android/app/build.gradle" />
-        <option value="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/lib/google_login_support.dart" />
-        <option value="$PROJECT_DIR$/lib/facebook_login_support.dart" />
-        <option value="$PROJECT_DIR$/lib/mongo_stitch_client.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/credentials/facebook_credential.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/credentials/credentials.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/credentials/google_credential.dart" />
-        <option value="$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/FlutterMongoStitchPlugin.kt" />
-        <option value="$PROJECT_DIR$/lib/google_sign_in_git_mock/google_sign_in.dart" />
-        <option value="$PROJECT_DIR$/lib/database/database.dart" />
-        <option value="$PROJECT_DIR$/lib/database/pipeline_stage.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/mongo_stitch_auth.dart" />
-        <option value="$PROJECT_DIR$/lib/database/mongo_collection.dart" />
-        <option value="$PROJECT_DIR$/example/lib/home_screen.dart" />
-        <option value="$PROJECT_DIR$/lib/auth/core_stitch_user.dart" />
-        <option value="$PROJECT_DIR$/example/lib/login_screen.dart" />
-        <option value="$PROJECT_DIR$/example/lib/auth.dart" />
-        <option value="$PROJECT_DIR$/example/lib/main.dart" />
-        <option value="$PROJECT_DIR$/lib/plugin.dart" />
-        <option value="$PROJECT_DIR$/pubspec.yaml" />
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/CHANGELOG.md" />
-      </list>
-    </option>
+  <component name="KonanWorkspace">
+    <executables />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="68" />
-    <option name="width" value="1978" />
-    <option name="height" value="1850" />
-  </component>
+  <component name="ProjectId" id="1nejq4pVMgaQK2VTEbzvCej21jI" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="database" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="ios" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="ios" type="462c0819:PsiDirectoryNode" />
-              <item name="Classes" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="database" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="ios" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flutter_mongo_stitch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flutter_mongo_stitch" type="462c0819:PsiDirectoryNode" />
-              <item name="ios" type="462c0819:PsiDirectoryNode" />
-              <item name="Classes" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
-    </panes>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="1" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="adb_path" value="$USER_HOME$/Android/Sdk/platform-tools/adb" />
+    <property name="aspect.path.notification.shown" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="editor.config.ad.shown" value="true" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/example/lib" />
-    <property name="settings.editor.selected.configurable" value="MarkdownNavigator.Settings.Preview" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/auth/credentials" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/auth/credentials" />
+      <recent name="$PROJECT_DIR$/example/lib" />
+      <recent name="$PROJECT_DIR$/example/android/app" />
+      <recent name="$PROJECT_DIR$/example/android" />
+      <recent name="$PROJECT_DIR$/lib/external" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/realm_sync" />
+      <recent name="$PROJECT_DIR$/example/android/app" />
       <recent name="$PROJECT_DIR$/lib" />
       <recent name="$PROJECT_DIR$/lib/src" />
       <recent name="$PROJECT_DIR$/example/lib" />
-      <recent name="$PROJECT_DIR$/lib/database" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/example/lib" />
-      <recent name="$PROJECT_DIR$/lib/external" />
-      <recent name="$PROJECT_DIR$/lib/auth/credentials" />
-      <recent name="$PROJECT_DIR$/lib" />
-      <recent name="$PROJECT_DIR$/example/android" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="Flutter.tester">
+  <component name="RunManager" selected="Flutter.example">
     <configuration name="tester" type="FlutterRunConfigurationType" factoryName="Flutter">
       <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Flutter.example/lib/main.dart" />
+      <item itemvalue="Flutter.example" />
       <item itemvalue="Flutter.tester" />
     </list>
   </component>
@@ -416,132 +101,32 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1586679797589</updated>
-    </task>
-    <task id="LOCAL-00001" summary="added support for a collection's functions &quot;count&quot; , &quot;findOne&quot;, &quot;find&quot;, &quot;deleteOne&quot; , but without filtering on iOS Channel">
-      <created>1587073905385</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1587073905385</updated>
-    </task>
-    <task id="LOCAL-00002" summary="added starting support for collection function &quot;updateOne&quot;, &quot;updateMany&quot;, with filtering on Android Channel + added most of the Update Operators">
-      <created>1587653588826</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1587653588826</updated>
-    </task>
-    <task id="LOCAL-00003" summary="added support for collection function &quot;watch&quot; on Android Channel">
-      <created>1587740482896</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1587740482897</updated>
-    </task>
-    <task id="LOCAL-00004" summary="fixed little bugs in android channel">
-      <created>1587911322196</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1587911322196</updated>
-    </task>
-    <task id="LOCAL-00005" summary="added &quot;or&quot;, &quot;and&quot; logical querying operators + make more modular code">
-      <created>1587986342517</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1587986342517</updated>
-    </task>
-    <task id="LOCAL-00006" summary="updated exmaple project">
-      <created>1587986376229</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1587986376229</updated>
-    </task>
-    <task id="LOCAL-00007" summary="fixed no-filter bug">
-      <created>1587986926621</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1587986926621</updated>
-    </task>
-    <task id="LOCAL-00008" summary="updated example">
-      <created>1587993598068</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1587993598069</updated>
-    </task>
-    <task id="LOCAL-00009" summary="example updated">
-      <created>1588018628705</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1588018628705</updated>
-    </task>
-    <task id="LOCAL-00010" summary="updated to new flutter&gt;=1.12 structure">
-      <created>1588018666886</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1588018666886</updated>
-    </task>
-    <task id="LOCAL-00011" summary="updated to new flutter&gt;=1.12 structure">
-      <created>1588059030853</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1588059030853</updated>
-    </task>
-    <task id="LOCAL-00012" summary="re-structured codebase + cleaned code">
-      <created>1588063224563</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1588063224563</updated>
-    </task>
-    <task id="LOCAL-00013" summary="reformatted code">
-      <created>1588063829724</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1588063829724</updated>
-    </task>
-    <task id="LOCAL-00014" summary="added test support files">
-      <created>1588069362733</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1588069362734</updated>
-    </task>
-    <task id="LOCAL-00015" summary="added starting support for collection function &quot;watchWithFilter&quot;">
-      <created>1588069390125</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1588069390125</updated>
-    </task>
-    <task id="LOCAL-00016" summary="updated README">
-      <created>1588069408564</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1588069408564</updated>
-    </task>
-    <task id="LOCAL-00017" summary="updated README">
-      <created>1588070795271</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1588070795271</updated>
-    </task>
-    <task id="LOCAL-00018" summary="cleaned code + added Namespace getter for a collection">
-      <created>1588160386864</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1588160386865</updated>
+      <workItem from="1611757662771" duration="2000" />
+      <workItem from="1611757672465" duration="332000" />
+      <workItem from="1611758054859" duration="338000" />
+      <workItem from="1611758421443" duration="4445000" />
+      <workItem from="1611783322131" duration="5612000" />
+      <workItem from="1611828464786" duration="10978000" />
+      <workItem from="1611913795435" duration="1770000" />
+      <workItem from="1611915589112" duration="7161000" />
+      <workItem from="1612349904615" duration="7796000" />
+      <workItem from="1612358255341" duration="1780000" />
+      <workItem from="1612518691400" duration="5985000" />
+      <workItem from="1612528530520" duration="785000" />
+      <workItem from="1612699263435" duration="6602000" />
+      <workItem from="1612726571445" duration="6125000" />
+      <workItem from="1612782877408" duration="6142000" />
+      <workItem from="1612793260484" duration="742000" />
+      <workItem from="1612869010943" duration="668000" />
+      <workItem from="1612881814254" duration="3080000" />
+      <workItem from="1613297982612" duration="4397000" />
+      <workItem from="1613330400530" duration="7086000" />
+      <workItem from="1613382134740" duration="2334000" />
+      <workItem from="1613466089520" duration="21907000" />
+      <workItem from="1613555439891" duration="2881000" />
+      <workItem from="1615053537494" duration="2405000" />
+      <workItem from="1615151314524" duration="884000" />
+      <workItem from="1615152293638" duration="116000" />
     </task>
     <task id="LOCAL-00019" summary="updated dependencies">
       <created>1588160436055</created>
@@ -739,102 +324,283 @@
       <option name="project" value="LOCAL" />
       <updated>1590409763964</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="updated Android code to work with the Realm SDK">
+      <created>1611771907373</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1611771907373</updated>
+    </task>
+    <task id="LOCAL-00048" summary="updated dev version">
+      <created>1611772015738</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1611772015738</updated>
+    </task>
+    <task id="LOCAL-00049" summary="added support to log in using a custom JWT on + implemented on android platform">
+      <created>1611831447818</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1611831447818</updated>
+    </task>
+    <task id="LOCAL-00050" summary="renamed auth part to match native-side SDK names">
+      <created>1611854170960</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1611854170966</updated>
+    </task>
+    <task id="LOCAL-00051" summary="fixed bugs with auth stream implementation">
+      <created>1611854265351</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1611854265351</updated>
+    </task>
+    <task id="LOCAL-00052" summary="using google_sign_in plugin instead mocked">
+      <created>1611924667454</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1611924667454</updated>
+    </task>
+    <task id="LOCAL-00053" summary="cleaned code">
+      <created>1612518906698</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1612518906698</updated>
+    </task>
+    <task id="LOCAL-00054" summary="updated syntax to be close to the native one">
+      <created>1612524290842</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1612524290842</updated>
+    </task>
+    <task id="LOCAL-00055" summary="updated README">
+      <created>1612528696499</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1612528696500</updated>
+    </task>
+    <task id="LOCAL-00056" summary="updated README &amp; CHANGELOG">
+      <created>1612707517994</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1612707517995</updated>
+    </task>
+    <task id="LOCAL-00057" summary="added support for using custom auth function on Android platform">
+      <created>1612707795681</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1612707795681</updated>
+    </task>
+    <task id="LOCAL-00058" summary="updated to version 1.2.0">
+      <created>1612728591752</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1612728591753</updated>
+    </task>
+    <task id="LOCAL-00059" summary="reformatted code">
+      <created>1612786587242</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1612786587243</updated>
+    </task>
+    <task id="LOCAL-00060" summary="updated to version 1.2.1">
+      <created>1612787923866</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1612787923866</updated>
+    </task>
+    <task id="LOCAL-00061" summary="ObjectId can be used (Also fixing issue #18)">
+      <created>1612886437546</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1612886437546</updated>
+    </task>
+    <task id="LOCAL-00062" summary="updated version">
+      <created>1612886462413</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1612886462413</updated>
+    </task>
+    <task id="LOCAL-00063" summary="upadted InsertOne and InsertMany to return id(s) as a result">
+      <created>1613302579271</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1613302579272</updated>
+    </task>
+    <task id="LOCAL-00064" summary="fixed #22">
+      <created>1613383198473</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1613383198475</updated>
+    </task>
+    <task id="LOCAL-00065" summary="fixed returning null for empty findOne Query (#23)">
+      <created>1613385390049</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1613385390049</updated>
+    </task>
+    <task id="LOCAL-00066" summary="added initial experimental support for Realm on android only">
+      <created>1613558199718</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1613558199719</updated>
+    </task>
+    <task id="LOCAL-00067" summary="added support to sign in with apple on Android">
+      <created>1615152392001</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1615152392002</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
-  <component name="TestHistory">
-    <history-entry file="all_test - 2020.05.03 at 15h 15m 47s.xml">
-      <configuration name="all_test" configurationId="FlutterTestConfigType" />
-    </history-entry>
-    <history-entry file="all_test - 2020.05.03 at 15h 16m 36s.xml">
-      <configuration name="all_test" configurationId="FlutterTestConfigType" />
-    </history-entry>
-    <history-entry file="all_test - 2020.05.03 at 15h 18m 14s.xml">
-      <configuration name="all_test" configurationId="FlutterTestConfigType" />
-    </history-entry>
-    <history-entry file="all_test - 2020.05.03 at 15h 18m 42s.xml">
-      <configuration name="all_test" configurationId="FlutterTestConfigType" />
-    </history-entry>
-    <history-entry file="all_test - 2020.05.03 at 15h 22m 26s.xml">
-      <configuration name="all_test" configurationId="FlutterTestConfigType" />
-    </history-entry>
-    <history-entry file="a - 2020.05.03 at 15h 24m 21s.xml">
-      <configuration name="a" configurationId="FlutterTestConfigType" />
-    </history-entry>
-    <history-entry file="a - 2020.05.03 at 15h 25m 29s.xml">
-      <configuration name="a" configurationId="FlutterTestConfigType" />
-    </history-entry>
-    <history-entry file="all_test - 2020.05.03 at 15h 26m 42s.xml">
-      <configuration name="all_test" configurationId="FlutterTestConfigType" />
-    </history-entry>
-    <history-entry file="all_test - 2020.05.03 at 15h 27m 42s.xml">
-      <configuration name="all_test" configurationId="FlutterTestConfigType" />
-    </history-entry>
-    <history-entry file="all_test - 2020.05.03 at 15h 28m 49s.xml">
-      <configuration name="all_test" configurationId="FlutterTestConfigType" />
-    </history-entry>
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="0" y="68" width="2880" height="1852" extended-state="6" />
-    <editor active="true" />
-    <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24302076" />
-      <window_info id="Captures" order="1" side_tool="true" />
-      <window_info id="Structure" order="2" side_tool="true" />
-      <window_info id="Image Layers" order="3" />
-      <window_info id="Designer" order="4" />
-      <window_info id="Build Variants" order="5" side_tool="true" />
-      <window_info id="Resources Explorer" order="6" />
-      <window_info id="Capture Tool" order="7" />
-      <window_info id="Favorites" order="8" side_tool="true" />
-      <window_info anchor="bottom" id="Dart Analysis" order="0" sideWeight="0.4996421" weight="0.32831916" />
-      <window_info anchor="bottom" id="Run" order="1" sideWeight="0.49928418" weight="0.32831916" />
-      <window_info anchor="bottom" id="TODO" order="2" />
-      <window_info anchor="bottom" id="Android Profiler" order="3" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Logcat" order="4" />
-      <window_info anchor="bottom" id="Debug" order="5" sideWeight="0.4996421" weight="0.3381295" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="6" visible="true" weight="0.32374102" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5003579" side_tool="true" weight="0.3381295" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49892628" weight="0.32766515" />
-      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49928418" weight="0.32831916" />
-      <window_info anchor="bottom" id="Find" order="10" weight="0.32962722" />
-      <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
-      <window_info anchor="right" id="Capture Analysis" order="1" />
-      <window_info anchor="right" id="Theme Preview" order="2" />
-      <window_info anchor="right" id="WIFI ADB ULTIMATE" order="3" weight="0.32963493" />
-      <window_info anchor="right" id="Flutter Inspector" order="4" />
-      <window_info anchor="right" id="Flutter Outline" order="5" />
-      <window_info anchor="right" id="Palette&#9;" order="6" />
-      <window_info anchor="right" id="Flutter Performance" order="7" />
-    </layout>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed missing find/insert results" />
-    <MESSAGE value="fixed bug" />
-    <MESSAGE value="Added support for using projection and limit a collection find  function results on Android channel" />
-    <MESSAGE value="updated to version 0.2.0+3" />
-    <MESSAGE value=" Added support for using sort on a collection find function results on Android channel" />
-    <MESSAGE value="updated to version 0.3.0" />
-    <MESSAGE value="using tester instead example" />
-    <MESSAGE value=" added support for authentication using Google/Facebook on Android Channel" />
-    <MESSAGE value="added Google/Facebook configuration for example app" />
-    <MESSAGE value="updated to version 0.4.0" />
-    <MESSAGE value="example updated" />
-    <MESSAGE value="bug fixes" />
-    <MESSAGE value="mocked fixed for using google_sign_in plugin" />
-    <MESSAGE value="using id-part only for auth code instead full string" />
-    <MESSAGE value="added support for collection function &quot;aggregate&quot; on Android Channel" />
-    <MESSAGE value="updated to version 0.4.1" />
-    <MESSAGE value="updated dependencies" />
-    <MESSAGE value="fixed bug on android channel of mismatch type when using request time on Cloud Function" />
-    <MESSAGE value="updated to version 0.4.1+2" />
-    <MESSAGE value="added sendResetPasswordEmail function on Android channel + added support for full StitchUser details" />
-    <MESSAGE value="updated to version 0.4.2" />
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/example/ios/.symlinks/plugins/mongoatlasflutter" />
+    </ignored-roots>
     <MESSAGE value="fixed collection watch functions + null exception on filter function" />
     <MESSAGE value="added AuthListener in order to listen to auth state changes in the app" />
     <MESSAGE value="fixed toMap()" />
     <MESSAGE value="updated example for using authListener" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated example for using authListener" />
+    <MESSAGE value="updated Android code to work with the Realm SDK" />
+    <MESSAGE value="updated dev version" />
+    <MESSAGE value="added support to log in using a custom JWT on + implemented on android platform" />
+    <MESSAGE value="renamed auth part to match native-side SDK names" />
+    <MESSAGE value="fixed bugs with auth stream implementation" />
+    <MESSAGE value="using google_sign_in plugin instead mocked" />
+    <MESSAGE value="cleaned code" />
+    <MESSAGE value="updated syntax to be close to the native one" />
+    <MESSAGE value="updated README" />
+    <MESSAGE value="updated README &amp; CHANGELOG" />
+    <MESSAGE value="added support for using custom auth function on Android platform" />
+    <MESSAGE value="updated to version 1.2.0" />
+    <MESSAGE value="reformatted code" />
+    <MESSAGE value="updated to version 1.2.1" />
+    <MESSAGE value="ObjectId can be used (Also fixing issue #18)" />
+    <MESSAGE value="updated version" />
+    <MESSAGE value="upadted InsertOne and InsertMany to return id(s) as a result" />
+    <MESSAGE value="fixed #22" />
+    <MESSAGE value="fixed returning null for empty findOne Query (#23)" />
+    <MESSAGE value="added initial experimental support for Realm on android only" />
+    <MESSAGE value="added support to sign in with apple on Android" />
+    <option name="LAST_COMMIT_MESSAGE" value="added support to sign in with apple on Android" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="224" y="328" width="1110" height="291" key="#com.intellij.debugger.actions.ViewTextAction" timestamp="1611916336481">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="224" y="328" width="1110" height="291" key="#com.intellij.debugger.actions.ViewTextAction/0.41.1600.859@0.41.1600.859" timestamp="1611916336481" />
+    <state x="258" y="128" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1615053606804">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="258" y="128" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.41.1600.859@0.41.1600.859" timestamp="1615053606804" />
+    <state x="515" y="275" width="560" height="397" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1613466530708">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="515" y="275" width="560" height="397" key="#com.intellij.fileTypes.FileTypeChooser/0.41.1600.859@0.41.1600.859" timestamp="1613466530708" />
+    <state x="608" y="189" width="374" height="569" key="#com.intellij.ide.util.MemberChooser" timestamp="1613516804095">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="608" y="189" width="374" height="569" key="#com.intellij.ide.util.MemberChooser/0.41.1600.859@0.41.1600.859" timestamp="1613516804095" />
+    <state x="533" y="219" width="524" height="509" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1613556053687">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="533" y="219" width="524" height="509" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.41.1600.859@0.41.1600.859" timestamp="1613556053687" />
+    <state x="105" y="73" width="1442" height="790" key="CommitChangelistDialog2" timestamp="1615152391875">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="105" y="73" width="1442" height="790" key="CommitChangelistDialog2/0.41.1600.859@0.41.1600.859" timestamp="1615152391875" />
+    <state x="583" y="228" width="424" height="491" key="FileChooserDialogImpl" timestamp="1611788555622">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="583" y="228" width="424" height="491" key="FileChooserDialogImpl/0.41.1600.859@0.41.1600.859" timestamp="1611788555622" />
+    <state width="1554" height="234" key="GridCell.Tab.0.bottom" timestamp="1615070828208">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state width="1554" height="234" key="GridCell.Tab.0.bottom/0.41.1600.859@0.41.1600.859" timestamp="1615070828208" />
+    <state width="1554" height="234" key="GridCell.Tab.0.center" timestamp="1615070828207">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state width="1554" height="234" key="GridCell.Tab.0.center/0.41.1600.859@0.41.1600.859" timestamp="1615070828207" />
+    <state width="1554" height="234" key="GridCell.Tab.0.left" timestamp="1615070828207">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state width="1554" height="234" key="GridCell.Tab.0.left/0.41.1600.859@0.41.1600.859" timestamp="1615070828207" />
+    <state width="1554" height="234" key="GridCell.Tab.0.right" timestamp="1615070828207">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state width="1554" height="234" key="GridCell.Tab.0.right/0.41.1600.859@0.41.1600.859" timestamp="1615070828207" />
+    <state width="1554" height="234" key="GridCell.Tab.1.bottom" timestamp="1615070828208">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state width="1554" height="234" key="GridCell.Tab.1.bottom/0.41.1600.859@0.41.1600.859" timestamp="1615070828208" />
+    <state width="1554" height="234" key="GridCell.Tab.1.center" timestamp="1615070828208">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state width="1554" height="234" key="GridCell.Tab.1.center/0.41.1600.859@0.41.1600.859" timestamp="1615070828208" />
+    <state width="1554" height="234" key="GridCell.Tab.1.left" timestamp="1615070828208">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state width="1554" height="234" key="GridCell.Tab.1.left/0.41.1600.859@0.41.1600.859" timestamp="1615070828208" />
+    <state width="1554" height="234" key="GridCell.Tab.1.right" timestamp="1615070828208">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state width="1554" height="234" key="GridCell.Tab.1.right/0.41.1600.859@0.41.1600.859" timestamp="1615070828208" />
+    <state x="191" y="163" width="1022" height="737" key="SettingsEditor" timestamp="1615152316046">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="191" y="163" width="1022" height="737" key="SettingsEditor/0.41.1600.859@0.41.1600.859" timestamp="1615152316046" />
+    <state x="395" y="195" width="800" height="558" key="Vcs.Push.Dialog.v2" timestamp="1615152398395">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="395" y="195" width="800" height="558" key="Vcs.Push.Dialog.v2/0.41.1600.859@0.41.1600.859" timestamp="1615152398395" />
+    <state x="456" y="298" key="com.intellij.ide.util.TipDialog" timestamp="1613466232162">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="456" y="298" key="com.intellij.ide.util.TipDialog/0.41.1600.859@0.41.1600.859" timestamp="1613466232162" />
+    <state x="568" y="390" width="464" height="167" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1613466387090">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="568" y="390" width="464" height="167" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.41.1600.859@0.41.1600.859" timestamp="1613466387090" />
+    <state x="444" y="209" width="711" height="522" key="find.popup" timestamp="1613557563180">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="444" y="209" width="711" height="522" key="find.popup/0.41.1600.859@0.41.1600.859" timestamp="1613557563180" />
+    <state x="121" y="194" width="1372" height="671" key="new project wizard" timestamp="1612788199404">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="121" y="194" width="1372" height="671" key="new project wizard/0.41.1600.859@0.41.1600.859" timestamp="1612788199404" />
+    <state x="464" y="210" key="run.anything.popup" timestamp="1613298857669">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="464" y="210" key="run.anything.popup/0.41.1600.859@0.41.1600.859" timestamp="1613298857669" />
+    <state x="463" y="221" key="search.everywhere.popup" timestamp="1612885999842">
+      <screen x="0" y="41" width="1600" height="859" />
+    </state>
+    <state x="463" y="221" key="search.everywhere.popup/0.41.1600.859@0.41.1600.859" timestamp="1612885999842" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -843,26 +609,6 @@
           <url>file://$PROJECT_DIR$/lib/database/update_operator.dart</url>
           <line>116</line>
           <option name="timeStamp" value="25" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/home_screen.dart</url>
-          <line>228</line>
-          <option name="timeStamp" value="61" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/home_screen.dart</url>
-          <line>231</line>
-          <option name="timeStamp" value="62" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/home_screen.dart</url>
-          <line>232</line>
-          <option name="timeStamp" value="63" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/home_screen.dart</url>
-          <line>239</line>
-          <option name="timeStamp" value="64" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/auth/mongo_stitch_auth.dart</url>
@@ -896,53 +642,43 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/database/mongo_collection.dart</url>
-          <line>330</line>
+          <line>344</line>
           <option name="timeStamp" value="144" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/database/mongo_collection.dart</url>
-          <line>336</line>
+          <line>350</line>
           <option name="timeStamp" value="146" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>45</line>
-          <option name="timeStamp" value="147" />
+          <url>file://$USER_HOME$/development/flutter/.pub-cache/git/flutter_mongo_stitch_web-0064f219358420f6ed5bb8045271b43bd8c070d1/lib/src/interop.dart</url>
+          <line>81</line>
+          <option name="timeStamp" value="193" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>353</line>
-          <option name="timeStamp" value="153" />
+          <line>468</line>
+          <option name="timeStamp" value="205" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>411</line>
-          <option name="timeStamp" value="158" />
+          <url>file://$PROJECT_DIR$/lib/auth/mongo_realm_auth.dart</url>
+          <line>115</line>
+          <option name="timeStamp" value="206" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>415</line>
-          <option name="timeStamp" value="161" />
+          <url>file://$PROJECT_DIR$/lib/stream_interop/mobile.dart</url>
+          <line>3</line>
+          <option name="timeStamp" value="207" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>425</line>
-          <option name="timeStamp" value="163" />
+          <url>file://$PROJECT_DIR$/lib/stream_interop/mobile.dart</url>
+          <line>7</line>
+          <option name="timeStamp" value="208" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>320</line>
-          <option name="timeStamp" value="168" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>317</line>
-          <option name="timeStamp" value="169" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>57</line>
-          <option name="timeStamp" value="171" />
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/example/web/stitchUtils.js</url>
+          <line>29</line>
+          <option name="timeStamp" value="192" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -951,438 +687,10 @@
         <watch expression="pipeline.map((doc) =&gt; jsonEncode(doc.values)).toList()" language="Dart" />
         <watch expression="map['profile'] is Map" language="Dart" />
         <watch expression="currUser.profile" language="Dart" />
+        <watch expression="_students" language="Dart" />
+        <watch expression="results.runtimeType" language="Dart" />
+        <watch expression="(results.map&lt;int, String&gt;((key, value) =&gt; MapEntry&lt;int, String&gt;(key, value)) is Map&lt;int, String&gt;" language="Dart" />
       </configuration>
     </watches-manager>
-  </component>
-  <component name="debuggerHistoryManager">
-    <expressions id="watch">
-      <expression>
-        <expression-string>currUser.profile</expression-string>
-        <language-id>Dart</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>currUser.profile.email</expression-string>
-        <language-id>Dart</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>map['profile'] is Map</expression-string>
-        <language-id>Dart</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>map['profile']</expression-string>
-        <language-id>Dart</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>pipeline.map((doc) =&gt; jsonEncode(doc.values)).toList()</expression-string>
-        <language-id>Dart</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>account.toString()</expression-string>
-        <language-id>Dart</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>account.serverAuthCode</expression-string>
-        <language-id>Dart</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>serverAuthCode</expression-string>
-        <language-id>Dart</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>auth</expression-string>
-        <language-id>Dart</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>accessToken.token</expression-string>
-        <language-id>Dart</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.12.1/lib/http.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#7237#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_facebook_login-3.0.0/lib/flutter_facebook_login.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="126" column="15" selection-start-line="126" selection-start-column="15" selection-end-line="126" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/facebook_login_support.dart" />
-    <entry file="file://$PROJECT_DIR$/lib/google_login_support.dart" />
-    <entry file="file://$PROJECT_DIR$/lib/auth/credentials/credentials.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="4" column="34" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/android/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="53" column="9" lean-forward="true" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/auth/credentials/facebook_credential.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="5" column="1" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/example/flutter_mongo_stitch/FlutterMongoStitchPlugin.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
-          <folding>
-            <element signature="e#42#1039#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/bson_document.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="12" column="31" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-4.4.4/lib/google_sign_in.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="353" column="18" selection-start-line="353" selection-start-column="18" selection-end-line="353" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-4.0.1+1/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/google_sign_in_git_mock/src/common.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-767" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/google_sign_in_git_mock/widgets.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#5385#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/google_sign_in_git_mock/testing.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-117">
-          <folding>
-            <element signature="e#0#2366#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/bin/cache/pkg/sky_engine/lib/async/future.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="793" column="10" selection-start-line="793" selection-start-column="10" selection-end-line="793" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/git/plugins-82ffca664c6db9d6864e3b24649d855f9a6e049f/packages/google_sign_in/android/src/main/java/io/flutter/plugins/googlesignin/Executors.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="16" column="19" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/services/message_codecs.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21879">
-          <caret line="568" column="6" selection-start-line="568" selection-start-column="6" selection-end-line="568" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/git/plugins-82ffca664c6db9d6864e3b24649d855f9a6e049f/packages/google_sign_in/lib/google_sign_in.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5226">
-          <caret line="145" column="19" selection-start-line="145" selection-start-column="19" selection-end-line="145" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/flutter_mongo_stitch.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-          <folding>
-            <element signature="e#0#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/git/plugins-82ffca664c6db9d6864e3b24649d855f9a6e049f/packages/google_sign_in/android/src/main/java/io/flutter/plugins/googlesignin/GoogleSignInPlugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="814">
-          <caret line="540" column="16" selection-start-line="540" selection-start-column="16" selection-end-line="540" selection-end-column="16" />
-          <folding>
-            <element signature="method#getTokens#0;class#Delegate#0;class#GoogleSignInPlugin#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/.pub-cache/git/plugins-82ffca664c6db9d6864e3b24649d855f9a6e049f/packages/google_sign_in/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="10" column="18" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/bin/cache/pkg/sky_engine/lib/core/string.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3783">
-          <caret line="101" column="15" selection-start-line="101" selection-start-column="15" selection-end-line="101" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/auth/credentials/google_credential.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="8" column="2" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/google_sign_in_git_mock/google_sign_in.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7332">
-          <caret line="199" column="49" selection-start-line="199" selection-start-column="49" selection-end-line="199" selection-end-column="49" />
-          <folding>
-            <element signature="e#216#236#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/services/platform_channel.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5577">
-          <caret line="153" column="6" selection-start-line="153" selection-start-column="6" selection-end-line="153" selection-end-column="6" />
-          <folding>
-            <element signature="e#165#185#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/database/mongo_databsase.dart">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/database/database.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/database/mongo_document.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/database/query_operator.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5772">
-          <caret line="148" column="9" selection-start-line="148" selection-start-column="9" selection-end-line="148" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mongoatlasflutter.iml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/database/pipeline_stage.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="975">
-          <caret line="25" column="19" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ios/.gitignore">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/auth/auth.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
-          <caret line="2" column="31" selection-start-line="2" selection-start-column="31" selection-end-line="2" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/mongo_stitch_client.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="19" column="48" selection-start-line="19" selection-start-column="48" selection-end-line="19" selection-end-column="48" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ios/Classes/MyMongoStitchClient.swift">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/auth/core_stitch_user.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="832">
-          <caret line="49" column="16" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/lib/login_screen.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="546">
-          <caret line="144" column="16" selection-start-line="144" selection-start-column="16" selection-end-line="144" selection-end-column="16" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/lib/auth.dart" />
-    <entry file="file://$PROJECT_DIR$/lib/auth/mongo_stitch_auth.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3198">
-          <caret line="89" column="29" selection-start-line="89" selection-start-column="29" selection-end-line="89" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/plugin.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7410">
-          <caret line="195" column="23" selection-start-line="195" selection-start-column="23" selection-end-line="195" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/database/mongo_collection.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11271">
-          <caret line="299" column="10" selection-start-line="299" selection-start-column="10" selection-end-line="299" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ios/Classes/SwiftFlutterMongoStitchPlugin.swift">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20280">
-          <caret line="538" column="4" selection-start-line="538" selection-start-column="4" selection-end-line="538" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ios/Classes/FlutterStreamsChannel.swift">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ios/Classes/StreamHandler.swift">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1755">
-          <caret line="45" column="29" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/lib/home_screen.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1599">
-          <caret line="44" column="17" selection-start-line="44" selection-start-column="17" selection-end-line="44" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/devlopment/flutter/packages/flutter/lib/src/widgets/async.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9633">
-          <caret line="257" column="11" selection-start-line="257" selection-start-column="11" selection-end-line="257" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="5343">
-            <caret line="137" column="11" selection-start-line="137" selection-start-column="11" selection-end-line="137" selection-end-column="11" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
-          <caret line="2" column="14" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CHANGELOG.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="234">
-            <caret line="6" selection-start-line="6" selection-end-line="6" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="8" column="26" lean-forward="true" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
   </component>
 </project>
