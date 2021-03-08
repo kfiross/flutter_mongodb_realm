@@ -888,8 +888,8 @@ class MyMongoStitchClient {
         onCompleted: @escaping ([String:Any])->Void,
         onError: @escaping (String?)->Void
     ){
-        let data = idToken.data(using: .utf8)!
-        let appleCredential = AppleCredential.init(identityToken: data)
+//        let data = idToken.data(using: .utf8)!
+        let appleCredential = AppleCredential.init(identityTokenString: idToken)
 
         self.auth.login(withCredential: appleCredential
         ) { authResult in

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_mongodb_realm/auth/credentials/apple_credential.dart';
 
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_mongodb_realm/auth/credentials/google_credential.dart';
@@ -73,6 +74,9 @@ class MongoRealmAuth {
       final MongoDocument doc = credential.arguments;
       var args = json.encode(doc.map);
       result = await FlutterMongoRealm.signInWithCustomFunction(args);
+    } else if (credential is AppleCredential){
+      result =
+          await FlutterMongoRealm.signInWithApple(credential.idToken);
     } else {
       throw UnimplementedError();
     }

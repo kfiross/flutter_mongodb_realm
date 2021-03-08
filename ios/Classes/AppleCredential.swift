@@ -26,6 +26,12 @@ public struct AppleCredential: StitchCredential {
         self.providerName = providerName
         self.identityToken = String(data: identityToken, encoding: .utf8)!
     }
+    
+    public init(withProviderName providerName: String = providerType.name,
+                identityTokenString: String) {
+        self.providerName = providerName
+        self.identityToken = identityTokenString
+    }
 
     // MARK: Properties
 
