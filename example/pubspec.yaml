@@ -29,6 +29,7 @@ dependencies:
 
   google_sign_in_web: ^0.9.1
 
+  apple_sign_in: ^0.1.0
 #  flutter_mongo_stitch: ^0.8.0+1
 
   flutter_mongodb_realm:

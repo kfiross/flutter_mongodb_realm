@@ -281,6 +281,18 @@ class MyMongoStitchClient {
 //        }
     }
     
+    func signInWithApple(
+        idToken: String,
+        onCompleted: @escaping ([String:Any])->Void,
+        onError: @escaping (String?)->Void
+        ){
+        
+        guard false else {
+            self.signInWithApple_s(idToken: idToken, onCompleted: onCompleted, onError: onError)
+            return
+        }
+    }
+    
     func registerWithEmail(
         email: String,
         password: String,
@@ -867,6 +879,27 @@ class MyMongoStitchClient {
                 
             case .failure(let error):
                 onError("Facebook Provider Login failed \(error)")
+                break
+            }
+        }
+    }
+    private func signInWithApple_s(
+        idToken: String,
+        onCompleted: @escaping ([String:Any])->Void,
+        onError: @escaping (String?)->Void
+    ){
+        let data = idToken.data(using: .utf8)!
+        let appleCredential = AppleCredential.init(identityToken: data)
+
+        self.auth.login(withCredential: appleCredential
+        ) { authResult in
+            switch authResult {
+            case .success(let user):
+                onCompleted(user.toMap())
+                break
+                
+            case .failure(let error):
+                onError("AppleID Provider Login failed \(error)")
                 break
             }
         }

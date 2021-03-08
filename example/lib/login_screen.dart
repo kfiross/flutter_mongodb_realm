@@ -4,6 +4,10 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:apple_sign_in/apple_sign_in.dart';
+
+
 
 import 'login_custom.dart';
 import 'reset_pass_screen.dart';
@@ -128,6 +132,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text("Login with Custom Function",
                               style: TextStyle(color: Colors.white)),
                           onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CustomLoginScreen())),
+                        ),
+                      ),
+                      Container(
+                        width: 200,
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: AppleSignInButton(
+                          onPressed: _loginWithApple,
                         ),
                       ),
                     ],
@@ -269,6 +280,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
       case FacebookLoginStatus.error:
         break;
+    }
+  }
+
+  void _loginWithApple() async{
+    final appleResult = await AppleSignIn.performRequests([
+      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+
+    if (appleResult.error != null) {
+      // handle errors from Apple here
+    }
+
+    var idToken =  String.fromCharCodes(appleResult.credential.identityToken);
+
+    CoreRealmUser mongoUser = await app.login(Credentials.apple(idToken));
+
+    if (mongoUser != null) {
+      print("logged in as ${mongoUser.id}");
+
+      Fluttertoast.showToast(
+        msg: "Welcome AppleID user!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+      );
+    } else {
+      print("wrong pass or username");
     }
   }
 

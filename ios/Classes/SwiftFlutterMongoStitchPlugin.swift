@@ -114,13 +114,17 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         case "signInWithFacebook":
             self.signInWithFacebook(call: call, result: result)
             break
-           //////
+         
         case "signInWithCustomJwt":
             self.signInWithCustomJwt(call: call, result: result)
             break
         
         case "signInWithCustomFunction":
             self.signInWithCustomFunction(call: call, result: result)
+            break
+            
+        case "signInWithApple":
+            self.signInWithApple(call: call, result: result)
             break
         
             
@@ -271,6 +275,22 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         
         self.client?.signInWithCustomFunction(
             json: json ?? "",
+            onCompleted: { map in
+                 result(map)
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message, details: nil))
+            }
+        )
+    }
+    
+    func signInWithApple(call: FlutterMethodCall, result: @escaping FlutterResult){
+        let args = call.arguments as! Dictionary<String, Any>
+        
+        let idToken = args["token"] as! String?
+        
+        self.client?.signInWithApple(
+            idToken: idToken ?? "",
             onCompleted: { map in
                  result(map)
             },
