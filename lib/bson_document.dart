@@ -41,7 +41,8 @@ class BsonDocument {
               }
               if (entry3.value is List) {
                 final list = (entry3.value as List);
-                __map[entry.key][entry2.key][entry3.key] = List(list.length);
+                __map[entry.key][entry2.key][entry3.key] =
+                    List.filled(list.length, Object());
                 for (int index = 0; index < list.length; index++) {
                   if (list[index] is ObjectId) {
                     __map[entry.key][entry2.key][entry3.key][index] =

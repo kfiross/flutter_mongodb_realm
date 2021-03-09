@@ -3,7 +3,7 @@ import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 
@@ -211,6 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
     CoreRealmUser mongoUser =
         await app.login(//WithCredential(
 
+            // ignore: deprecated_member_use
             GoogleCredential(
                 serverClientId: "762586994135-je9l46njk4hf63fb1k2jjmh6ep7nk9bv",
                 scopes: ["email"],

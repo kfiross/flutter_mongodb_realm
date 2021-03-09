@@ -64,8 +64,6 @@ class MongoRealmAuth {
         print(e);
       }
     } else if (credential is FacebookCredential) {
-//      var accessToken = await _facebookLoginWrapper.handleSignInAndGetToken(
-//          credential.permissions);
       result =
           await FlutterMongoRealm.signInWithFacebook(credential.accessToken);
     } else if (credential is CustomJwtCredential) {
@@ -74,9 +72,8 @@ class MongoRealmAuth {
       final MongoDocument doc = credential.arguments;
       var args = json.encode(doc.map);
       result = await FlutterMongoRealm.signInWithCustomFunction(args);
-    } else if (credential is AppleCredential){
-      result =
-          await FlutterMongoRealm.signInWithApple(credential.idToken);
+    } else if (credential is AppleCredential) {
+      result = await FlutterMongoRealm.signInWithApple(credential.idToken);
     } else {
       throw UnimplementedError();
     }

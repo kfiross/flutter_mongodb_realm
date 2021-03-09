@@ -37,6 +37,7 @@ Web integration automatically!
 * Facebook \[X]
 * JWT
 * Custom Authentication Function
+* Apple ID \[X]
 
 **Authentication:**
 * Auth Listener
@@ -88,20 +89,20 @@ final userEmail = user.profile.email;
 
 #### Login
 You can log in using the following providers:
-* Anonymous:
+* __Anonymous__
 ```dart
 CoreRealmUser mongoUser = await app.login(Credentials.anonymous());
 ```
 
-* Email\Password:
+* __Email\Password__
 ```dart
 CoreRealmUser mongoUser = await app.login(
   Credentials.emailPassword(username: <email_address>, password: <password>));
 ```
 
-* Facebook:
+* __Facebook__
 
-For login with Facebook import the required flutter's package and configure in the native side as their instructions.
+In order to login with Facebook import the required flutter's package and configure in the native side as their instructions.
 
 usage:
 ```dart
@@ -110,18 +111,17 @@ CoreRealmUser mongoUser = await app.login(
 ```
 
 
-* Google:
+* __Google__
 
-<b>
-    Inorder to make Google login works, please follow the follwing instructions use the following:<br><br>
-    1. Remove (if used) the version used from pubspec.yaml (ex. google_sign_in: ^4.5.1) <br>
-    2. Use git repo version instead (copy from below)<br>
-    3. In dart code use also serverClientId parmeter
-    <br><br>
-    This has to be done in order to get the auth code need by the Mongo Stitch SDK
-</b>
+Inorder to make Google login works, please follow the following instructions use the following:<br><br>
+1. Remove (if used) the version used from pubspec.yaml (ex. google_sign_in: ^4.5.1) <br>
+2. Use git repo version instead (copy from below)<br>
+3. In dart code use also serverClientId parameter
+<br><br>
+This has to be done in order to get the auth code need by the Mongo Stitch SDK
 
-calling on flutter:
+
+Calling on Flutter:
 ```dart
 CoreRealmUser mongoUser = await app.login(
   Credentials.google(
@@ -147,17 +147,39 @@ CoreRealmUser mongoUser = await app.login(
 ```
 
 
-* Custom JWT:
+* __Custom JWT__
 ```dart
 CoreRealmUser mongoUser = await app.login(Credentials.jwt(<token>);
 ```
 
-* Custom (Auth) Function:
+* __Custom (Auth) Function__
 ```dart
 MongoDocument payload = MongoDocument({
   "username": "bob"
 })
 CoreRealmUser mongoUser = await app.login(Credentials.function(payload);
+```
+
+
+* __Apple ID__
+1. Add a dependency that implementing signing in with apple, such as [apple_sign_in](https://pub.dev/packages/apple_sign_in), or [sign_in_with_apple](https://pub.dev/packages/sign_in_with_apple) 
+
+2. In your Flutter app, retrieve Identify token from the login results
+```dart
+// taken from the example project using the apple_sign_in plugin
+final appleResult = await AppleSignIn.performRequests([
+      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+
+    if (appleResult.error != null) {
+      // handle errors from Apple here
+    }
+
+    var idToken =  String.fromCharCodes(appleResult.credential.identityToken);
+```
+3. Use the token in the `login` function with the `Credentials.apple` auth provider
+```dart
+CoreRealmUser mongoUser = app.login(Credentials.apple(idToken));
 ```
 
 <b>NOTE: In any case , if mongoUser != null the login was successful.</b>

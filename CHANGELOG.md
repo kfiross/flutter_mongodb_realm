@@ -1,3 +1,12 @@
+## [1.2.5+2]
+* README updated.
+
+## [1.2.5+1]
+* Fixed `pub.dev` score.
+
+## [1.2.5]
+* Added `Sign With Apple ID` auth provider.
+
 ## [1.2.4]
 * Return null for empty `findOne` Query. (issue #23)
 
@@ -8,10 +17,10 @@
 * `ObjectId` can be used (Also fixing issue #18). 
 
 ## [1.2.1+1]
-* Updated README.
+* README updated.
 
 ## [1.2.1]
-* Using latest web plugin version.
+* Using the latest web plugin version.
 
 ## [1.2.0]
 * Added `Custom JWT` auth provider.

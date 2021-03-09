@@ -466,7 +466,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   StreamBuilder _authBuilder(BuildContext context) {
-    Stream stream = client.auth.authListener();
+    Stream stream = app.authListener();
     return StreamBuilder(
       stream: stream,
       builder: (context, AsyncSnapshot snapshot) {
