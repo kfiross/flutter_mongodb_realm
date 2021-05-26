@@ -32,7 +32,7 @@ class FakeSignInBackend {
   /// This does not represent the signed-in user, but rather an object that will
   /// be returned when [GoogleSignIn.signIn] or [GoogleSignIn.signInSilently] is
   /// called.
-  FakeUser user;
+  late FakeUser user;
 
   /// Handles method calls that would normally be sent to the native backend.
   /// Returns with the expected values based on the current [user].
@@ -42,7 +42,7 @@ class FakeSignInBackend {
         // do nothing
         return null;
       case 'getTokens':
-        return <String, String>{
+        return <String, String?>{
           'idToken': user.idToken,
           'accessToken': user.accessToken,
         };
@@ -71,14 +71,14 @@ class FakeUser {
     this.accessToken,
   });
 
-  final String id;
-  final String email;
-  final String displayName;
-  final String photoUrl;
-  final String idToken;
-  final String accessToken;
+  final String? id;
+  final String? email;
+  final String? displayName;
+  final String? photoUrl;
+  final String? idToken;
+  final String? accessToken;
 
-  Map<String, String> get _asMap => <String, String>{
+  Map<String, String?> get _asMap => <String, String?>{
         'id': id,
         'email': email,
         'displayName': displayName,

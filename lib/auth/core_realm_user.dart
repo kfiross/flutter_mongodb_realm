@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart';
 
 /// A user that belongs to a MongoDB Stitch application.
 class CoreRealmUser {
-  final String id;
-  final String deviceId;
-  final StitchUserProfile profile;
+  final String? id;
+  final String? deviceId;
+  final StitchUserProfile? profile;
 
   CoreRealmUser({
-    @required this.id,
+    required this.id,
     this.deviceId,
     this.profile,
   });
@@ -18,7 +18,7 @@ class CoreRealmUser {
 //  final bool isLoggedIn;
 //  final DateTime lastAuthActivity;
 
-  static fromMap(Map map) {
+  static fromMap(Map? map) {
     return (map == null)
         ? null
         : CoreRealmUser(
@@ -29,15 +29,15 @@ class CoreRealmUser {
 }
 
 class StitchUserProfile {
-  final String name;
-  final String email;
-  final String pictureUrl;
-  final String firstName;
-  final String lastName;
-  final String gender;
-  final String birthday;
-  final String minAge;
-  final String maxAge;
+  final String? name;
+  final String? email;
+  final String? pictureUrl;
+  final String? firstName;
+  final String? lastName;
+  final String? gender;
+  final String? birthday;
+  final String? minAge;
+  final String? maxAge;
 
   StitchUserProfile({
     this.name,

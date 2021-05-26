@@ -8,7 +8,7 @@ class UserPasswordCredential extends StitchCredential {
   final String password;
 
   UserPasswordCredential({
-    @required this.username,
-    @required this.password,
+    required this.username,
+    required this.password,
   });
 }

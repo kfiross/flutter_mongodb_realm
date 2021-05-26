@@ -21,10 +21,10 @@ class GoogleSignInAuthentication {
   final Map<dynamic, dynamic> _data;
 
   /// An OpenID Connect ID token that identifies the user.
-  String get idToken => _data['idToken'];
+  String? get idToken => _data['idToken'];
 
   /// The OAuth2 access token to access Google services.
-  String get accessToken => _data['accessToken'];
+  String? get accessToken => _data['accessToken'];
 
   @override
   String toString() => 'GoogleSignInAuthentication:$_data';
@@ -50,20 +50,20 @@ class GoogleSignInAccount implements GoogleIdentity {
   static const String kUserRecoverableAuthError = 'user_recoverable_auth';
 
   @override
-  final String displayName;
+  final String? displayName;
 
   @override
-  final String email;
+  final String? email;
 
   @override
-  final String id;
+  final String? id;
 
   @override
-  final String photoUrl;
+  final String? photoUrl;
 
-  final String _idToken;
+  final String? _idToken;
   final GoogleSignIn _googleSignIn;
-  final String serverAuthCode;
+  final String? serverAuthCode;
 
   /// Retrieve [GoogleSignInAuthentication] for this account.
   ///
@@ -84,13 +84,13 @@ class GoogleSignInAccount implements GoogleIdentity {
         // TODO(amirh): remove this on when the invokeMethod update makes it to stable Flutter.
         // https://github.com/flutter/flutter/issues/26431
         // ignore: strong_mode_implicit_dynamic_method
-        await GoogleSignIn.channel.invokeMethod(
+        await (GoogleSignIn.channel.invokeMethod(
       'getTokens',
       <String, dynamic>{
         'email': email,
         'shouldRecoverAuth': true,
       },
-    );
+    ) as FutureOr<Map<dynamic, dynamic>>);
     // On Android, there isn't an API for refreshing the idToken, so re-use
     // the one we obtained on login.
     if (response['idToken'] == null) {
@@ -100,7 +100,7 @@ class GoogleSignInAccount implements GoogleIdentity {
   }
 
   Future<Map<String, String>> get authHeaders async {
-    final String token = (await authentication).accessToken;
+    final String? token = (await authentication).accessToken;
     return <String, String>{
       "Authorization": "Bearer $token",
       "X-Goog-AuthUser": "0",
@@ -112,7 +112,7 @@ class GoogleSignInAccount implements GoogleIdentity {
   /// If client runs into 401 errors using a token, it is expected to call
   /// this method and grab `authHeaders` once again.
   Future<void> clearAuthCache() async {
-    final String token = (await authentication).accessToken;
+    final String? token = (await authentication).accessToken;
     // TODO(amirh): remove this on when the invokeMethod update makes it to stable Flutter.
     // https://github.com/flutter/flutter/issues/26431
     // ignore: strong_mode_implicit_dynamic_method
@@ -170,7 +170,7 @@ class GoogleSignIn {
 
   /// Factory for creating default sign in user experience.
   factory GoogleSignIn.standard(
-      {List<String> scopes, String hostedDomain, String serverClientId}) {
+      {List<String>? scopes, String? hostedDomain, String? serverClientId}) {
     return GoogleSignIn(
         signInOption: SignInOption.standard,
         scopes: scopes,
@@ -204,39 +204,39 @@ class GoogleSignIn {
 
   /// Option to determine the sign in user experience. [SignInOption.games] must
   /// not be used on iOS.
-  final SignInOption signInOption;
+  final SignInOption? signInOption;
 
   /// The list of [scopes] are OAuth scope codes requested when signing in.
-  final List<String> scopes;
+  final List<String>? scopes;
 
   /// Domain to restrict sign-in to.
-  final String hostedDomain;
+  final String? hostedDomain;
 
-  final String serverClientId;
+  final String? serverClientId;
 
-  StreamController<GoogleSignInAccount> _currentUserController =
-      StreamController<GoogleSignInAccount>.broadcast();
+  StreamController<GoogleSignInAccount?> _currentUserController =
+      StreamController<GoogleSignInAccount?>.broadcast();
 
   /// Subscribe to this stream to be notified when the current user changes.
-  Stream<GoogleSignInAccount> get onCurrentUserChanged =>
+  Stream<GoogleSignInAccount?> get onCurrentUserChanged =>
       _currentUserController.stream;
 
   // Future that completes when we've finished calling `init` on the native side
-  Future<void> _initialization;
+  Future<void>? _initialization;
 
-  Future<GoogleSignInAccount> _callMethod(String method) async {
+  Future<GoogleSignInAccount?> _callMethod(String method) async {
     await _ensureInitialized();
 
     // TODO(amirh): remove this on when the invokeMethod update makes it to stable Flutter.
     // https://github.com/flutter/flutter/issues/26431
     // ignore: strong_mode_implicit_dynamic_method
-    final Map<dynamic, dynamic> response = await channel.invokeMethod(method);
+    final Map<dynamic, dynamic>? response = await channel.invokeMethod(method);
     return _setCurrentUser(response != null && response.isNotEmpty
         ? GoogleSignInAccount._(this, response)
         : null);
   }
 
-  GoogleSignInAccount _setCurrentUser(GoogleSignInAccount currentUser) {
+  GoogleSignInAccount? _setCurrentUser(GoogleSignInAccount? currentUser) {
     if (currentUser != _currentUser) {
       _currentUser = currentUser;
       _currentUserController.add(_currentUser);
@@ -244,7 +244,7 @@ class GoogleSignIn {
     return _currentUser;
   }
 
-  Future<void> _ensureInitialized() {
+  Future<void>? _ensureInitialized() {
     if (_initialization == null) {
       // TODO(amirh): remove this on when the invokeMethod update makes it to stable Flutter.
       // https://github.com/flutter/flutter/issues/26431
@@ -264,21 +264,21 @@ class GoogleSignIn {
   }
 
   /// Keeps track of the most recently scheduled method call.
-  _MethodCompleter _lastMethodCompleter;
+  _MethodCompleter? _lastMethodCompleter;
 
   /// Adds call to [method] in a queue for execution.
   ///
   /// At most one in flight call is allowed to prevent concurrent (out of order)
   /// updates to [currentUser] and [onCurrentUserChanged].
-  Future<GoogleSignInAccount> _addMethodCall(String method) {
+  Future<GoogleSignInAccount?> _addMethodCall(String method) {
     if (_lastMethodCompleter == null) {
       _lastMethodCompleter = _MethodCompleter(method)
         ..complete(_callMethod(method));
-      return _lastMethodCompleter.future;
+      return _lastMethodCompleter!.future;
     }
 
     final _MethodCompleter completer = _MethodCompleter(method);
-    _lastMethodCompleter.future.whenComplete(() {
+    _lastMethodCompleter!.future.whenComplete(() {
       // If after the last completed call currentUser is not null and requested
       // method is a sign in method, re-use the same authenticated user
       // instead of making extra call to the native side.
@@ -292,12 +292,12 @@ class GoogleSignIn {
       // Ignore if previous call completed with an error.
     });
     _lastMethodCompleter = completer;
-    return _lastMethodCompleter.future;
+    return _lastMethodCompleter!.future;
   }
 
   /// The currently signed in account, or null if the user is signed out.
-  GoogleSignInAccount get currentUser => _currentUser;
-  GoogleSignInAccount _currentUser;
+  GoogleSignInAccount? get currentUser => _currentUser;
+  GoogleSignInAccount? _currentUser;
 
   /// Attempts to sign in a previously authenticated user without interaction.
   ///
@@ -315,8 +315,8 @@ class GoogleSignIn {
   /// returned Future completes with [PlatformException] whose `code` can be
   /// either [kSignInRequiredError] (when there is no authenticated user) or
   /// [kSignInFailedError] (when an unknown error occurred).
-  Future<GoogleSignInAccount> signInSilently({bool suppressErrors = true}) {
-    final Future<GoogleSignInAccount> result = _addMethodCall('signInSilently');
+  Future<GoogleSignInAccount?> signInSilently({bool suppressErrors = true}) {
+    final Future<GoogleSignInAccount?> result = _addMethodCall('signInSilently');
     if (suppressErrors) {
       return result.catchError((dynamic _) => null);
     }
@@ -324,12 +324,12 @@ class GoogleSignIn {
   }
 
   /// Returns a future that resolves to whether a user is currently signed in.
-  Future<bool> isSignedIn() async {
+  Future<bool?> isSignedIn() async {
     await _ensureInitialized();
     // TODO(amirh): remove this on when the invokeMethod update makes it to stable Flutter.
     // https://github.com/flutter/flutter/issues/26431
     // ignore: strong_mode_implicit_dynamic_method
-    final bool result = await channel.invokeMethod('isSignedIn');
+    final bool? result = await channel.invokeMethod('isSignedIn');
     return result;
   }
 
@@ -343,29 +343,29 @@ class GoogleSignIn {
   /// a Future which resolves to the same user instance.
   ///
   /// Re-authentication can be triggered only after [signOut] or [disconnect].
-  Future<GoogleSignInAccount> signIn() {
-    final Future<GoogleSignInAccount> result = _addMethodCall('signIn');
+  Future<GoogleSignInAccount?> signIn() {
+    final Future<GoogleSignInAccount?> result = _addMethodCall('signIn');
     bool isCanceled(dynamic error) =>
         error is PlatformException && error.code == kSignInCanceledError;
     return result.catchError((dynamic _) => null, test: isCanceled);
   }
 
   /// Marks current user as being in the signed out state.
-  Future<GoogleSignInAccount> signOut() => _addMethodCall('signOut');
+  Future<GoogleSignInAccount?> signOut() => _addMethodCall('signOut');
 
   /// Disconnects the current user from the app and revokes previous
   /// authentication.
-  Future<GoogleSignInAccount> disconnect() => _addMethodCall('disconnect');
+  Future<GoogleSignInAccount?> disconnect() => _addMethodCall('disconnect');
 }
 
 class _MethodCompleter {
   _MethodCompleter(this.method);
 
   final String method;
-  final Completer<GoogleSignInAccount> _completer =
-      Completer<GoogleSignInAccount>();
+  final Completer<GoogleSignInAccount?> _completer =
+      Completer<GoogleSignInAccount?>();
 
-  void complete(FutureOr<GoogleSignInAccount> value) {
+  void complete(FutureOr<GoogleSignInAccount?> value) {
     if (value is Future<GoogleSignInAccount>) {
       value.then(_completer.complete, onError: _completer.completeError);
     } else {
@@ -374,5 +374,5 @@ class _MethodCompleter {
   }
 
   bool get isCompleted => _completer.isCompleted;
-  Future<GoogleSignInAccount> get future => _completer.future;
+  Future<GoogleSignInAccount?> get future => _completer.future;
 }

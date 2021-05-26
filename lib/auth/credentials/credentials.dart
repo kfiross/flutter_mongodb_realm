@@ -26,7 +26,7 @@ class Credentials {
       UserPasswordCredential(username: username, password: password);
 
   static StitchCredential google(
-          {String serverClientId, List<String> scopes}) =>
+          {String? serverClientId, List<String>? scopes}) =>
       // ignore: deprecated_member_use_from_same_package
       GoogleCredential(serverClientId: serverClientId, scopes: scopes);
 

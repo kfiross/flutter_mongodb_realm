@@ -6,7 +6,7 @@ import 'package:bson/bson.dart';
 
 /// A representation of a document as a Map
 class MongoDocument {
-  final Map<String, dynamic> _map = LinkedHashMap<String, dynamic>();
+  final Map<String, Object> _map = LinkedHashMap<String, Object>();
 
   Map<String, Object> get map => _map;
 
@@ -17,7 +17,7 @@ class MongoDocument {
 
   /// Creates a Document instance initialized with the given map.
   /// or an empty Document instance if not provided.
-  MongoDocument(Map<String, dynamic> map) {
+  MongoDocument(Map<String, Object>? map) {
     if (map != null) {
       _map.addAll(map);
     }
@@ -68,7 +68,7 @@ class MongoDocument {
 
   /// Parses a string in MongoDB Extended JSON format to a Document
   static MongoDocument parse(data) {
-    Map<String, dynamic> map = json.decode(data);
+    Map<String, Object> map = json.decode(data);
 //    if(kIsWeb){
 //      map = FlutterMongoRealm.customEventToMap(data);
 //    }

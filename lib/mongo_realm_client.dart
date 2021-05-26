@@ -24,7 +24,7 @@ class MongoRealmClient {
   }
 
   /// Calls the specified Stitch function
-  Future callFunction(String name, {List args, int requestTimeout}) async {
+  Future callFunction(String name, {List? args, int? requestTimeout}) async {
     var result = await FlutterMongoRealm.callFunction(
       name,
       args: args,

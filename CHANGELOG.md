@@ -1,3 +1,9 @@
+## [2.0.0-nullsafety.0]
+* Migrate into Null-Safety
+
+## [1.2.6]
+* a list of objects turned into one object (issue #31)
+
 ## [1.2.5+2]
 * README updated.
 

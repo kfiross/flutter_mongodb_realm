@@ -18,16 +18,16 @@ class RealmApp {
     _auth = MongoRealmAuth();
   }
 
-  static MongoRealmAuth _auth;
+  static late MongoRealmAuth _auth;
 
-  Future<CoreRealmUser> login(StitchCredential credential) async {
+  Future<CoreRealmUser?> login(StitchCredential credential) async {
     // ignore: deprecated_member_use_from_same_package
     return _auth.loginWithCredential(credential);
   }
 
-  Future<bool> logout() => _auth.logout();
+  Future<bool?> logout() => _auth.logout();
 
-  Future<String> getUserId() => _auth.getUserId();
+  Future<String?> getUserId() => _auth.getUserId();
 
   Future<bool> registerUser(String email, String password) =>
       _auth.registerWithEmail(email: email, password: password);
@@ -35,7 +35,7 @@ class RealmApp {
   Future<bool> sendResetPasswordEmail(String email) =>
       _auth.sendResetPasswordEmail(email);
 
-  Future<CoreRealmUser> get currentUser => _auth.user;
+  Future<CoreRealmUser?> get currentUser => _auth.user;
 
   Stream authListener() => _auth.authListener();
 }

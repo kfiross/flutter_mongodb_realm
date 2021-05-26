@@ -31,7 +31,7 @@ class MongoRealmAuth {
   /// Logs in as a user with the given credentials associated with an
   /// authentication provider.
   @deprecated
-  Future<CoreRealmUser> loginWithCredential(StitchCredential credential) async {
+  Future<CoreRealmUser?> loginWithCredential(StitchCredential credential) async {
     var result;
 
     if (credential is AnonymousCredential) {
@@ -57,7 +57,7 @@ class MongoRealmAuth {
 
       try {
         var authCode =
-            await _googleLoginWrapper.handleSignInAndGetAuthServerCode();
+            await (_googleLoginWrapper.handleSignInAndGetAuthServerCode() as FutureOr<String>);
         print(authCode ?? 'nothing');
         result = await FlutterMongoRealm.signInWithGoogle(authCode);
       } on Exception catch (e) {
@@ -81,10 +81,10 @@ class MongoRealmAuth {
     return result;
   }
 
-  Future<bool> logout() async {
+  Future<bool?> logout() async {
     var result = await FlutterMongoRealm.logout();
 
-    bool loggedWithGoogle = await _googleLoginWrapper.isLogged;
+    bool loggedWithGoogle = await (_googleLoginWrapper.isLogged as FutureOr<bool>);
 //    bool loggedWithFacebook = await _facebookLoginWrapper.isLogged;
 //
     if (loggedWithGoogle) await _googleLoginWrapper.handleSignOut();
@@ -95,13 +95,13 @@ class MongoRealmAuth {
     return result;
   }
 
-  Future<String> getUserId() async {
+  Future<String?> getUserId() async {
     var result = await FlutterMongoRealm.getUserId();
     return result;
   }
 
   Future<bool> registerWithEmail(
-      {@required String email, @required String password}) async {
+      {required String email, required String password}) async {
     var result = await FlutterMongoRealm.registerWithEmail(email, password);
     return result;
   }
@@ -111,7 +111,7 @@ class MongoRealmAuth {
     return result;
   }
 
-  Future<CoreRealmUser> get user async => await FlutterMongoRealm.getUser();
+  Future<CoreRealmUser?> get user async => await FlutterMongoRealm.getUser();
 
   Stream authListener() {
     var stream = FlutterMongoRealm.authListener();
@@ -122,22 +122,22 @@ class MongoRealmAuth {
 /// ////////////////////////////////////////////////////////////////
 
 class _GoogleLoginWrapper {
-  GoogleSignIn _googleSignIn;
+  GoogleSignIn? _googleSignIn;
 
-  Future<bool> get isLogged =>
-      _googleSignIn == null ? Future.value(false) : _googleSignIn.isSignedIn();
+  Future<bool?> get isLogged =>
+      _googleSignIn == null ? Future.value(false) : _googleSignIn!.isSignedIn();
 
-  init({@required String serverClientId, List<String> scopes}) {
+  init({required String serverClientId, List<String>? scopes}) {
     _googleSignIn =
         GoogleSignIn(serverClientId: serverClientId, scopes: scopes);
   }
 
-  Future<String> handleSignInAndGetAuthServerCode() async {
+  Future<String?> handleSignInAndGetAuthServerCode() async {
     assert(_googleSignIn != null);
 
-    String code;
+    String? code;
     // try {
-    var account = await _googleSignIn.signIn();
+    var account = await _googleSignIn!.signIn();
 
     if (account != null) code = account.serverAuthCode;
     // } on Exception catch (error) {
@@ -147,5 +147,5 @@ class _GoogleLoginWrapper {
     return code;
   }
 
-  Future<void> handleSignOut() => _googleSignIn.disconnect();
+  Future<void> handleSignOut() => _googleSignIn!.disconnect();
 }
