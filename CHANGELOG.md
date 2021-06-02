@@ -1,5 +1,5 @@
 ## [2.0.0-nullsafety.0]
-* Migrate into Null-Safety
+* Migrated into Null-Safety
 
 ## [1.2.6]
 * a list of objects turned into one object (issue #31)
