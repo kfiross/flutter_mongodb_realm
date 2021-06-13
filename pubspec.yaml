@@ -1,6 +1,6 @@
 name: flutter_mongodb_realm
 description: Unofficial plugin for using services of the serverless platform MongoDB Realm (previously MongoDB Stitch).
-version: 1.2.5+3
+version: 1.2.6
 homepage: https://github.com/kfiross/flutter_mongo_stitch
 
 environment:

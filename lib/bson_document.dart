@@ -48,7 +48,8 @@ class BsonDocument {
                     __map[entry.key][entry2.key][entry3.key][index] =
                         (list[index].value as ObjectId).toJsonOid();
                   } else {
-                    __map[entry.key][entry2.key][entry3.key][index] = list[index];
+                    __map[entry.key][entry2.key][entry3.key][index] =
+                        list[index];
                   }
                 }
               } else {
