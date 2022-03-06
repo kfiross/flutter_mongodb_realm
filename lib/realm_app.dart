@@ -32,7 +32,7 @@ class RealmApp {
   Future<bool> registerUser(String email, String password) =>
       _auth.registerWithEmail(email: email, password: password);
 
-  Future<bool> sendResetPasswordEmail(String email) =>
+  Future<bool> sendResetPasswordEmail(String? email) =>
       _auth.sendResetPasswordEmail(email);
 
   Future<CoreRealmUser?> get currentUser => _auth.user;

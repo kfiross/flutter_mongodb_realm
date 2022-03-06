@@ -10,12 +10,6 @@ import 'package:flutter_mongodb_realm/auth/credentials/apple_credential.dart';
 import 'package:flutter_mongodb_realm/database/mongo_document.dart';
 
 import '../auth.dart';
-import 'anonymous_credential.dart';
-import 'custom_function_credential.dart';
-import 'user_password_credentinal.dart';
-import 'google_credential.dart';
-import 'facebook_credential.dart';
-import 'custom_jwt_credential.dart';
 
 class Credentials {
   // ignore: deprecated_member_use_from_same_package

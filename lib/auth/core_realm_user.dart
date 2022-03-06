@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 /// A user that belongs to a MongoDB Stitch application.
 class CoreRealmUser {

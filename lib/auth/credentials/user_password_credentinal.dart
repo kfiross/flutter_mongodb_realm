@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import 'stitch_credential.dart';
 
 @deprecated

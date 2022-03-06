@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_mongodb_realm/auth/credentials/apple_credential.dart';
 
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_mongodb_realm/auth/credentials/google_credential.dart';
 import 'package:flutter_mongodb_realm/database/mongo_document.dart';
 import 'package:flutter_mongodb_realm/google_sign_in_git_mock/google_sign_in.dart';
 // import 'package:flutter_mongodb_realm/google_sign_in_git_mock/google_sign_in.dart';
@@ -56,10 +54,8 @@ class MongoRealmAuth {
       );
 
       try {
-        var authCode =
-            await (_googleLoginWrapper.handleSignInAndGetAuthServerCode() as FutureOr<String>);
-        print(authCode ?? 'nothing');
-        result = await FlutterMongoRealm.signInWithGoogle(authCode);
+        var authCode = await _googleLoginWrapper.handleSignInAndGetAuthServerCode();
+        result = await FlutterMongoRealm.signInWithGoogle(authCode ?? '');
       } on Exception catch (e) {
         print(e);
       }
@@ -106,7 +102,7 @@ class MongoRealmAuth {
     return result;
   }
 
-  Future<bool> sendResetPasswordEmail(String email) async {
+  Future<bool> sendResetPasswordEmail(String? email) async {
     var result = await FlutterMongoRealm.sendResetPasswordEmail(email);
     return result;
   }

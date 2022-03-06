@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 import 'stitch_credential.dart';
 
 @deprecated

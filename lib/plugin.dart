@@ -5,7 +5,6 @@ import 'package:bson/bson.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_mongodb_realm/stream_interop/stream_interop.dart';
 import 'package:flutter_mongo_stitch_platform_interface/flutter_mongo_stitch_platform_interface.dart';
-import 'package:meta/meta.dart';
 import 'package:universal_html/html.dart';
 
 import 'auth/core_realm_user.dart';
@@ -75,7 +74,10 @@ class FlutterMongoRealm {
     return CoreRealmUser.fromMap(details);
   }
 
-  static Future<bool> sendResetPasswordEmail(String email) async {
+  static Future<bool> sendResetPasswordEmail(String? email) async {
+    if(email == null)
+      return false;
+
     return await FlutterMongoStitchPlatform.instance
         .sendResetPasswordEmail(email) ?? false;
   }
@@ -85,7 +87,7 @@ class FlutterMongoRealm {
   static Future insertDocument({
     required String collectionName,
     required String databaseName,
-    required Map<String, Object> data,
+    required Map<String, Object?> data,
   }) async {
     return await FlutterMongoStitchPlatform.instance.insertDocument(
       collectionName: collectionName,
@@ -211,9 +213,9 @@ class FlutterMongoRealm {
 
       // migrating events from the js-event to a dart event
       jsStream.listen((event) {
-        var eventDetail = (event as CustomEvent).detail;
+        Object? eventDetail = (event as CustomEvent).detail;
 
-        var map = json.decode(eventDetail ?? "{}");
+        var map = json.decode("${eventDetail ?? '{}'}");
 
         if (map['_id'] is String == false) {
           map['_id'] = ObjectId.parse(map['_id']);
@@ -274,20 +276,21 @@ class FlutterMongoRealm {
       var jsStream = StreamInterop.getNativeStream("authChange");
 
       // ignore: close_sinks
-      var controller = StreamController<Map>();
+      var controller = StreamController<Map?>();
 
       controller.onListen = () {
-        controller.add(null!);
+        controller.add(null);
       };
 
       // migrating events from the js-event to a dart event
       jsStream.listen((event) {
-        var eventDetail = (event as CustomEvent).detail;
+        Object? eventDetail = (event as CustomEvent).detail;
         print(eventDetail);
         if (eventDetail == null) {
-          controller.add(null!);
+          controller.add(null);
         } else {
-          controller.add(eventDetail);
+          var encode = json.encode(eventDetail);
+          controller.add(json.decode(encode));
         }
       });
 

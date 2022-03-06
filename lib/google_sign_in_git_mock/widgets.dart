@@ -4,7 +4,6 @@
 
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'src/common.dart';
@@ -26,7 +25,7 @@ class GoogleUserCircleAvatar extends StatelessWidget {
     this.placeholderPhotoUrl,
     this.foregroundColor,
     this.backgroundColor,
-  }) : assert(identity != null);
+  });
 
   /// A regular expression that matches against the "size directive" path
   /// segment of Google profile image URLs.
@@ -71,7 +70,7 @@ class GoogleUserCircleAvatar extends StatelessWidget {
   /// before the image filename. The format is described in [sizeDirective].
   ///
   /// Falls back to the default profile photo if [photoUrl] is [null].
-  static String _sizedProfileImageUrl(String photoUrl, double size) {
+  static String _sizedProfileImageUrl(String? photoUrl, double size) {
     if (photoUrl == null) {
       // If the user has no profile photo and no display name, fall back to
       // the default profile photo as a last resort.
