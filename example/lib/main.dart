@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 
@@ -452,7 +451,7 @@ class _MyAppState extends State<MyApp> {
                 try {
                   var currUser = await app.currentUser;
                   final success = await app.sendResetPasswordEmail(
-                      currUser.profile.email); //"kfir25812@gmail.com");
+                      currUser?.profile?.email); //"kfir25812@gmail.com");
                   print(success);
                 } on PlatformException catch (e) {
                   print(e.message ?? 'Unkown error');

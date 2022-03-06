@@ -1,11 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 import 'package:sprintf/sprintf.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_mongodb_realm/mongo_realm_client.dart';
-import 'package:flutter_mongodb_realm/database/database.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final app = RealmApp();
   var _students = <Student>[];
 
-  MongoCollection _collection;
+  MongoCollection? _collection;
 
   final _filterOptions = <String>[
     "name",
@@ -33,14 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
 //    "between"
   ];
 
-  String _selectedFilter;
-  String _selectedOperator;
+  String? _selectedFilter;
+  String? _selectedOperator;
 
   //
   final formKey = GlobalKey<FormState>();
-  String _newStudFirstName;
-  String _newStudLastName;
-  int _newStudYear;
+  String? _newStudFirstName;
+  String? _newStudLastName;
+  int? _newStudYear;
 
   @override
   void initState() {
@@ -55,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    _collection = client.getDatabase("test").getCollection("students");
+    _collection ??= client.getDatabase("test").getCollection("students");
     try {
       await _fetchStudents();
     } catch (e) {}
@@ -79,9 +76,10 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () async {
                 try {
                   if (!kIsWeb) {
-                    final FacebookLogin fbLogin = FacebookLogin();
+                    final fbLogin = FacebookAuth.i;
+                    final fbToken = await fbLogin.accessToken;
 
-                    bool loggedAsFacebook = await fbLogin.isLoggedIn;
+                    bool loggedAsFacebook = fbToken != null;
                     if (loggedAsFacebook) {
                       await fbLogin.logOut();
                     }
@@ -120,8 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextFormField(
                     decoration: InputDecoration(labelText: 'First Name'),
                     autocorrect: false,
-                    validator: (val) => val.isEmpty ? "can't be empty." : null,
-                    onSaved: (val) => _newStudFirstName = val,
+                    validator: (val) =>val!=null && val.isEmpty ? "can't be empty." : null,
+                    onSaved: (val) => _newStudFirstName = val ?? "",
                   ),
                 ),
                 SizedBox(width: 12),
@@ -130,8 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextFormField(
                     decoration: InputDecoration(labelText: 'Last Name'),
                     autocorrect: false,
-                    validator: (val) => val.isEmpty ? "can't be empty." : null,
-                    onSaved: (val) => _newStudLastName = val,
+                    validator: (val) => val!=null && val.isEmpty ? "can't be empty." : null,
+                    onSaved: (val) => _newStudLastName = val ?? "",
                   ),
                 ),
                 SizedBox(width: 12),
@@ -140,8 +138,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextFormField(
                     decoration: InputDecoration(labelText: 'Year'),
                     autocorrect: false,
-                    validator: (val) => val.isEmpty ? "can't be empty." : null,
-                    onSaved: (val) => _newStudYear = int.parse(val),
+                    validator: (val) => val !=null && val.isEmpty ? "can't be empty." : null,
+                    onSaved: (val) {
+                      if(val !=null) {
+                        _newStudYear = int.parse(val);
+                      }
+                    },
                   ),
                 ),
                 SizedBox(width: 12),
@@ -188,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        DropdownButton(
+        DropdownButton<String>(
           value: _selectedFilter,
           items: _filterOptions
               .map((name) => DropdownMenuItem<String>(
@@ -203,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         SizedBox(width: 20),
-        DropdownButton(
+        DropdownButton<String>(
           value: _selectedOperator,
           items: _operatorsOptions
               .map((name) => DropdownMenuItem<String>(
@@ -241,14 +243,14 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Functions ///
 
   _fetchStudents() async {
-    List documents = await _collection.find(
+    List? documents = await _collection?.find(
 
 //      projection: {
 //        "field": ProjectionValue.INCLUDE,
 //      }
         );
     _students.clear();
-    documents.forEach((document) {
+    documents?.forEach((document) {
       _students.add(Student.fromDocument(document));
     });
     setState(() {});
@@ -257,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
   _insertNewStudent() async {
     var form = formKey.currentState;
 
-    if (form.validate()) {
+    if (form!.validate()) {
       form.save();
 
       var newStudent = Student(
@@ -268,12 +270,12 @@ class _HomeScreenState extends State<HomeScreen> {
      // var id = await _collection.insertOne(newStudent.asDocument());
      // print("inserted_id=$id");
 
-      var docsIds = await _collection.insertMany([
+      var docsIds = await _collection?.insertMany([
         newStudent.asDocument(),
         newStudent.asDocument(),
       ]);
 
-      for(var id in docsIds.values){
+      for(var id in (docsIds ?? {}).values){
         print("inserted_id=$id");
       }
 
@@ -324,10 +326,10 @@ class StudentItem extends StatelessWidget {
 }
 
 class Student {
-  final String firstName;
-  final String lastName;
-  final int year;
-  final List<int> grades;
+  final String? firstName;
+  final String? lastName;
+  final int? year;
+  final List<int>? grades;
 
   Student({this.lastName, this.firstName, this.grades, this.year});
 
@@ -336,7 +338,7 @@ class Student {
     grades?.forEach((grade) {
       sum += grade;
     });
-    return grades == null || grades.isEmpty ? 0 : sum / grades.length;
+    return grades == null || grades!.isEmpty ? 0 : sum / grades!.length;
   }
 
   static fromDocument(MongoDocument document) {

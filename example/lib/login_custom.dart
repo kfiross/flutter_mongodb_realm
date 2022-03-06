@@ -9,7 +9,7 @@ class CustomLoginScreen extends StatefulWidget {
 class _CustomLoginScreenState extends State<CustomLoginScreen> {
   final formKey = GlobalKey<FormState>();
   final app = RealmApp();
-  String _username;
+  String? _username;
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +39,8 @@ class _CustomLoginScreenState extends State<CustomLoginScreen> {
                 initialValue: _username,
                 decoration: InputDecoration(labelText: 'Username'),
                 autocorrect: false,
-                validator: (val) => val.isEmpty ? "Name can't be empty." : null,
-                onSaved: (val) => _username = val,
+                validator: (val) => val!=null && val.isEmpty ? "Name can't be empty." : null,
+                onSaved: (val) => _username = val ?? "",
               ),
             ),
             SizedBox(height: 36),
@@ -62,13 +62,13 @@ class _CustomLoginScreenState extends State<CustomLoginScreen> {
 
   void _submitForm() async {
     final form = formKey.currentState;
-    if (form.validate()) {
+    if (form!.validate()) {
       form.save();
 
       //hides keyboard
       FocusScope.of(context).requestFocus(FocusNode());
 
-      CoreRealmUser mongoUser = await app.login(
+      CoreRealmUser? mongoUser = await app.login(
           Credentials.customFunction(MongoDocument.single('username', _username)),
       );
       

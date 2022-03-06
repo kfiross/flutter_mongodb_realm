@@ -3,7 +3,7 @@ description: Demonstrates how to use the flutter_mongodb_realm plugin.
 publish_to: 'none'
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -12,25 +12,23 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons: ^1.0.4
 
-  fluttertoast: ^7.1.6
-  sprintf: ^4.0.2
+  fluttertoast: 8.0.8
+  sprintf: ^6.0.0
 
   # for implementing custom login providers
-  flutter_facebook_login: ^3.0.0
-  
-  google_sign_in: ^4.5.9
+  sign_in_with_apple: ^3.3.0
+  flutter_facebook_auth: ^4.0.1
+
+  google_sign_in: ^5.2.3 #WAS: ^4.5.9
 #  google_sign_in:
 #    git:
 #      url: git://github.com/fbcouch/plugins.git
 #      path: packages/google_sign_in
 #      ref: server-auth-code
 
-  google_sign_in_web: ^0.9.1
-
-  apple_sign_in: ^0.1.0
-#  flutter_mongo_stitch: ^0.8.0+1
+  google_sign_in_web: ^0.10.0+5
 
   flutter_mongodb_realm:
     path: ../
