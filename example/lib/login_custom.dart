@@ -39,7 +39,8 @@ class _CustomLoginScreenState extends State<CustomLoginScreen> {
                 initialValue: _username,
                 decoration: InputDecoration(labelText: 'Username'),
                 autocorrect: false,
-                validator: (val) => val!=null && val.isEmpty ? "Name can't be empty." : null,
+                validator: (val) =>
+                    val != null && val.isEmpty ? "Name can't be empty." : null,
                 onSaved: (val) => _username = val ?? "",
               ),
             ),
@@ -48,8 +49,7 @@ class _CustomLoginScreenState extends State<CustomLoginScreen> {
               width: 200,
               child: RaisedButton(
                 color: Colors.red,
-                child: Text('Login',
-                    style: TextStyle(color: Colors.white)),
+                child: Text('Login', style: TextStyle(color: Colors.white)),
                 onPressed: _submitForm,
               ),
             ),
@@ -69,10 +69,10 @@ class _CustomLoginScreenState extends State<CustomLoginScreen> {
       FocusScope.of(context).requestFocus(FocusNode());
 
       CoreRealmUser? mongoUser = await app.login(
-          Credentials.customFunction(MongoDocument.single('username', _username)),
+        Credentials.customFunction(MongoDocument.single('username', _username)),
       );
-      
-      if(mongoUser != null){
+
+      if (mongoUser != null) {
         Navigator.pop(context);
       }
     }

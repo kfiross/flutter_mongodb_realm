@@ -125,7 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextFormField(
                     decoration: InputDecoration(labelText: 'First Name'),
                     autocorrect: false,
-                    validator: (val) =>val!=null && val.isEmpty ? "can't be empty." : null,
+                    validator: (val) =>
+                        val != null && val.isEmpty ? "can't be empty." : null,
                     onSaved: (val) => _newStudFirstName = val ?? "",
                   ),
                 ),
@@ -135,7 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextFormField(
                     decoration: InputDecoration(labelText: 'Last Name'),
                     autocorrect: false,
-                    validator: (val) => val!=null && val.isEmpty ? "can't be empty." : null,
+                    validator: (val) =>
+                        val != null && val.isEmpty ? "can't be empty." : null,
                     onSaved: (val) => _newStudLastName = val ?? "",
                   ),
                 ),
@@ -145,9 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextFormField(
                     decoration: InputDecoration(labelText: 'Year'),
                     autocorrect: false,
-                    validator: (val) => val !=null && val.isEmpty ? "can't be empty." : null,
+                    validator: (val) =>
+                        val != null && val.isEmpty ? "can't be empty." : null,
                     onSaved: (val) {
-                      if(val !=null) {
+                      if (val != null) {
                         _newStudYear = int.parse(val);
                       }
                     },
@@ -193,11 +196,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _studentsListStreamBuilder(){
+  Widget _studentsListStreamBuilder() {
     return StreamBuilder(
       stream: _collection?.watch(),
-      builder: (context, snapshot){
-        if(snapshot.data == null){
+      builder: (context, snapshot) {
+        if (snapshot.data == null) {
           return const SizedBox.shrink();
         }
         // print(snapshot.data);
@@ -205,19 +208,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return FutureBuilder<List<MongoDocument>>(
           future: _collection?.find(),
-          builder: (BuildContext _, AsyncSnapshot<List<MongoDocument>> snapshot2) {
+          builder:
+              (BuildContext _, AsyncSnapshot<List<MongoDocument>> snapshot2) {
+            if (snapshot.data == null) return const SizedBox.shrink();
 
-            if(snapshot.data == null)
-              return const SizedBox.shrink();
+            _students.clear();
+            var documents = snapshot2.data;
+            documents?.forEach((document) {
+              _students.add(Student.fromDocument(document));
+            });
 
-          _students.clear();
-          var documents = snapshot2.data;
-          documents?.forEach((document) {
-            _students.add(Student.fromDocument(document));
-          });
-
-          return _studentsList();
-        },);
+            return _studentsList();
+          },
+        );
       },
     );
     // final list = _students.map((s) {
@@ -239,9 +242,9 @@ class _HomeScreenState extends State<HomeScreen> {
     // ));
   }
 
-  Widget _studentsList(){
+  Widget _studentsList() {
     final list = _students.map((s) {
-      return StudentItem(s, () async{
+      return StudentItem(s, () async {
         var docDeleted = await _collection?.deleteOne({
           "_id": s.id,
         });
@@ -249,11 +252,12 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }).toList();
 
-    if(list.isEmpty){
+    if (list.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    return Expanded(child: ListView.builder(
+    return Expanded(
+        child: ListView.builder(
       itemBuilder: (context, index) => list[index],
       itemCount: list.length,
     ));
@@ -306,21 +310,18 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ElevatedButton(
             child: Text("Filter"),
             onPressed: () async {
-
               var operator;
               var checkValue = _selectedValueForFilterCtrler.text;
               var value;
               String selectedFilter = _selectedFilter ?? "";
 
-              if(_selectedFilter == "year"){
+              if (_selectedFilter == "year") {
                 value = int.parse(checkValue);
-              }
-              else{
+              } else {
                 value = checkValue;
               }
 
-
-              switch(_selectedOperator){
+              switch (_selectedOperator) {
                 case ">":
                   operator = QueryOperator.gt(value);
                   break;
@@ -346,11 +347,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   break;
               }
 
-              var docs = await _collection?.find(
-                  filter: {
-                    selectedFilter: operator
-                  }
-              );
+              var docs =
+                  await _collection?.find(filter: {selectedFilter: operator});
 
               print("docs found = ${docs!.length}");
             },
@@ -388,8 +386,8 @@ class _HomeScreenState extends State<HomeScreen> {
         year: _newStudYear,
       );
 
-     var id = await _collection?.insertOne(newStudent.asDocument());
-     print("inserted_id=$id");
+      var id = await _collection?.insertOne(newStudent.asDocument());
+      print("inserted_id=$id");
 
       // var docsIds = await _collection?.insertMany([
       //   newStudent.asDocument(),
@@ -418,7 +416,7 @@ class StudentItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
-        onTap: (){
+        onTap: () {
           onPress.call();
         },
         child: Row(

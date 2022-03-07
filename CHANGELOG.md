@@ -1,3 +1,6 @@
+## [2.0.0-nullsafety.2]
+* Fixed `pub.dev` score. 
+
 ## [2.0.0-nullsafety.1]
 * Fixed many null-safety related fixes
 * Upgraded dependencies

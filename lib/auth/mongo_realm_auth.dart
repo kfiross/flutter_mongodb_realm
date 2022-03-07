@@ -29,7 +29,8 @@ class MongoRealmAuth {
   /// Logs in as a user with the given credentials associated with an
   /// authentication provider.
   @deprecated
-  Future<CoreRealmUser?> loginWithCredential(StitchCredential credential) async {
+  Future<CoreRealmUser?> loginWithCredential(
+      StitchCredential credential) async {
     var result;
 
     if (credential is AnonymousCredential) {
@@ -54,7 +55,8 @@ class MongoRealmAuth {
       );
 
       try {
-        var authCode = await _googleLoginWrapper.handleSignInAndGetAuthServerCode();
+        var authCode =
+            await _googleLoginWrapper.handleSignInAndGetAuthServerCode();
         result = await FlutterMongoRealm.signInWithGoogle(authCode ?? '');
       } on Exception catch (e) {
         print(e);
@@ -80,7 +82,8 @@ class MongoRealmAuth {
   Future<bool?> logout() async {
     var result = await FlutterMongoRealm.logout();
 
-    bool loggedWithGoogle = await (_googleLoginWrapper.isLogged as FutureOr<bool>);
+    bool loggedWithGoogle =
+        await (_googleLoginWrapper.isLogged as FutureOr<bool>);
 //    bool loggedWithFacebook = await _facebookLoginWrapper.isLogged;
 //
     if (loggedWithGoogle) await _googleLoginWrapper.handleSignOut();

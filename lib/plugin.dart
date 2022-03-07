@@ -66,7 +66,8 @@ class FlutterMongoRealm {
 
   static Future<bool> registerWithEmail(String email, String password) async {
     return await FlutterMongoStitchPlatform.instance
-        .registerWithEmail(email, password) ?? false;
+            .registerWithEmail(email, password) ??
+        false;
   }
 
   static Future<CoreRealmUser?> getUser() async {
@@ -75,11 +76,11 @@ class FlutterMongoRealm {
   }
 
   static Future<bool> sendResetPasswordEmail(String? email) async {
-    if(email == null)
-      return false;
+    if (email == null) return false;
 
     return await FlutterMongoStitchPlatform.instance
-        .sendResetPasswordEmail(email) ?? false;
+            .sendResetPasswordEmail(email) ??
+        false;
   }
 
   ///
@@ -139,7 +140,9 @@ class FlutterMongoRealm {
   }
 
   static Future deleteDocument(
-      {required String collectionName, required String databaseName, required dynamic filter}) async {
+      {required String collectionName,
+      required String databaseName,
+      required dynamic filter}) async {
     return await FlutterMongoStitchPlatform.instance.deleteDocument(
       collectionName: collectionName,
       databaseName: databaseName,
@@ -148,7 +151,9 @@ class FlutterMongoRealm {
   }
 
   static Future deleteDocuments(
-      {required String collectionName, required String databaseName, required dynamic filter}) async {
+      {required String collectionName,
+      required String databaseName,
+      required dynamic filter}) async {
     return await FlutterMongoStitchPlatform.instance.deleteDocuments(
       collectionName: collectionName,
       databaseName: databaseName,
@@ -157,7 +162,9 @@ class FlutterMongoRealm {
   }
 
   static Future countDocuments(
-      {required String collectionName, required String databaseName, required dynamic filter}) async {
+      {required String collectionName,
+      required String databaseName,
+      required dynamic filter}) async {
     return await FlutterMongoStitchPlatform.instance.countDocuments(
       collectionName: collectionName,
       databaseName: databaseName,

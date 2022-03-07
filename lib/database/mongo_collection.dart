@@ -36,8 +36,7 @@ class MongoCollection {
   /// The namespace of this collection, i.e. the database and collection names together.
   String get namespace => "$collectionName.$databaseName";
 
-  MongoCollection(
-      {required this.collectionName, required this.databaseName}) {
+  MongoCollection({required this.collectionName, required this.databaseName}) {
 //    if(kIsWeb){
 //      FlutterMongoRealm.setupWatchCollection(collectionName, databaseName);//, filter: BsonDocument(fixFilter).toJson());
 //    }
@@ -131,7 +130,8 @@ class MongoCollection {
   Future<List<MongoDocument>> find({filter, RemoteFindOptions? options}) async {
     var filterCopy = <String, dynamic>{};
     if (filter != null) {
-      assert(filter is LinkedHashMap<String, dynamic> || filter is LogicalQueryOperator);
+      assert(filter is LinkedHashMap<String, dynamic> ||
+          filter is LogicalQueryOperator);
 
       if (filter is Map<String, dynamic>) {
         // convert 'QuerySelector' into map, too
@@ -144,10 +144,7 @@ class MongoCollection {
       }
       if (filter is LogicalQueryOperator) {
         filterCopy = filter.values;
-      }
-      else{
-
-      }
+      } else {}
     }
 
     var sortMap = options?.sort?.map((k, v) => MapEntry(k, v.value));

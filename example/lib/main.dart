@@ -36,72 +36,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> init() async {
     // initialized MongoRealm App
 
-    try {
-      // create a user
-//        await client.auth
-//            .registerWithEmail(email: "naamahasson1@gmail.com", password: "123456");
-
-      // login Anonymously
-
-
-      // var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteXN0aXRjaGFwcC1manBtbiIsImV4cCI6MTYyMTc5MzQyMSwiaWF0IjoxNjExODMwNjU1LCJzdWIiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIiLCJ1c2VySWQiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIifQ.kNowkTYV5J_xoR_aVowuattEcazesM09RmTfzpqJM2M";
-      // var mongoUser = await client.auth.login(Credentials.jwt(token));
-
-   ///   CoreRealmUser mongoUser =
-   //        await client.auth.loginWithCredential(AnonymousCredential()
-
-//          UserPasswordCredential(
-//              username: 'naamahasson1@gmail.com',//"kfir25816@gmail.com",
-//              password: '123456',//"asdfghj"
-//          )
-//               );
-
-//    614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv.apps.googleusercontent.com
-
-//      CoreRealmUser mongoUser = await client.auth.loginWithCredential(
-//          GoogleCredential(
-//        serverClientId: "614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv",//"281897935076-dlab9116cid9cmivd6nilofihip552cr",
-//        scopes: ["email"],
-//      )
-//          FacebookCredential(permissions: ["email"])
-//          );
-
-     // if (mongoUser != null) {
-     //   print("logged in as ${mongoUser.id ?? '?'}");
-     // }
-     // else {
-     //   print("wrong pass or username");
-     // }
-
-      // sign out
-
-//      client.auth.logout();
-
-//      var user = await client.auth.user;
-//      print("you are user with id: '${user.id ?? '?'}', email: ${user.profile.email ?? '?'}");
-//
-//      var userId = await client.auth.getUserId();
-//      print("you are '${userId ?? '?'}'");
-
-      // after app initialized and user authenticated, show some data
-
-//      countData(); /// DONE ON WEB
-//        insertData(); /// DONE ON WEB
-//      fetchData();    /// DONE ON WEB
-//      deleteData(); /// DONE ON WEB
-//        updateData(); /// DONE ON WEB
-
- //     watchData();
-
-      /// DONE ON WEB
-//      aggregateCollection(); //TODO: check
-
-      /// DONE ON WEB
-//      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
-//        print(value);
-//      });
-
-    } on PlatformException catch (e) {
+    try {} on PlatformException catch (e) {
       print("Error! ${e.message}");
     } on Exception {}
   }

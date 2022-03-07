@@ -55,7 +55,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 initialValue: _email,
                 decoration: InputDecoration(labelText: 'Email'),
                 autocorrect: false,
-                validator: (val) => val !=null && val.isEmpty ? "Name can't be empty." : null,
+                validator: (val) =>
+                    val != null && val.isEmpty ? "Name can't be empty." : null,
                 onSaved: (val) => _email = val,
               ),
             ),
@@ -68,8 +69,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: true,
                 autocorrect: false,
                 validator: (val) {
-
-                  if (val !=null && val.isEmpty) return "Password can't be empty.";
+                  if (val != null && val.isEmpty)
+                    return "Password can't be empty.";
 
                   if (val!.length < 6)
                     return "Password must be at least 6 charcaters long";
@@ -90,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             SizedBox(height: 12),
-            if(_state == LoginState.login)...[
+            if (_state == LoginState.login) ...[
               Column(
                 children: <Widget>[
                   Container(
@@ -130,7 +131,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Colors.red,
                       child: Text("Login with Custom Function",
                           style: TextStyle(color: Colors.white)),
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CustomLoginScreen())),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => CustomLoginScreen())),
                     ),
                   ),
                   Container(
@@ -174,9 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _loginAnonymously() async {
-    CoreRealmUser? mongoUser =
-        await app.login(Credentials.anonymous());
-
+    CoreRealmUser? mongoUser = await app.login(Credentials.anonymous());
 
     if (mongoUser != null) {
       // String userId = mongoUser.id;
@@ -192,13 +194,10 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _loginWithGoogle() async {
-
     GoogleSignIn _googleSignIn = GoogleSignIn(
       scopes: [
         'email',
       ],
-   //    serverClientId: // "762586994135-je9l46njk4hf63fb1k2jjmh6ep7nk9bv.apps.googleusercontent.com",
-   // "762586994135-je9l46njk4hf63fb1k2jjmh6ep7nk9bv.apps.googleusercontent.com"
     );
 
     var s = await _googleSignIn.signIn();
@@ -206,17 +205,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // var idToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjAzYjJkMjJjMmZlY2Y4NzNlZDE5ZTViOGNmNzA0YWZiN2UyZWQ0YmUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI5NTExNjI5MDg4MjMta2VzYjc1Ymd1ZTNidWpkazhyaTBtZ2VyaGhtdnU1MmMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI5NTExNjI5MDg4MjMtNnQ3a3AxbzFncWs1cWJmbGJvZXQ4Y25rYWRqYjAzdmYuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTU3NjY0MDY0NzgwMDI2Mjc2MzIiLCJlbWFpbCI6ImtmaXIyNTgxMkBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IktmaXJvc3MgTWF0aXR5YWh1IiwicGljdHVyZSI6Imh0dHBzOi8vbGg0Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tMjJYUThDcVlpMVEvQUFBQUFBQUFBQUkvQUFBQUFBQUFBQUEvQU1adXVjbWl1UGZ0WkVaMnhQQVh6R2hIRzJJN3BKZzVwUS9zOTYtYy9waG90by5qcGciLCJnaXZlbl9uYW1lIjoiS2Zpcm9zcyIsImZhbWlseV9uYW1lIjoiTWF0aXR5YWh1IiwibG9jYWxlIjoiZW4iLCJpYXQiOjE2MTIzNTg1MzAsImV4cCI6MTYxMjM2MjEzMH0.nP-qstM_zz4ZaCy9vlIkT0FuIwjGR0mK9GBJvTTTcIkq8EIgAOw4D9o5-_HhhbgxrRpXjIj5pV3G0iGWMTSDz1kEpsS9a1UvTfEG_Gpmr2IDSGZ6e0K-XsBPlviH7KiEXW1NJ_V5ZSNlvl6O4P2F9q0PhPcFlJpjWUxxPvSGXlMC3rFZAM4QkXbG55te1yasebexF04yKcB4_4n35GnoGkYN4jsFUX3sMD9sMVMYBAqoaTtQgIXf8yQyLwoomBNt_hgUtyHx-iW7KCQhy6G9wczdkswdakfbVCQ73yXvw7bQGt2Y57mOgGc7WqjP0Xz8m-M2G0kldmRZDV1KZJL5uA";
 
-    CoreRealmUser? mongoUser =
-        await app.login(//WithCredential(
+    CoreRealmUser? mongoUser = await app.login(//WithCredential(
 
-            // ignore: deprecated_member_use
-            // GoogleCredential(
-            //     serverClientId: '762586994135-gqn337ha77t07clhs4rs6lcbl1f87a6s',
-            //     scopes: ["email"],
-            // )
+        // ignore: deprecated_member_use
+        // GoogleCredential(
+        //     serverClientId: '762586994135-gqn337ha77t07clhs4rs6lcbl1f87a6s',
+        //     scopes: ["email"],
+        // )
 
-          GoogleCredential2(serverAuthCode!)
-        );
+        GoogleCredential2(serverAuthCode!));
 
     // CoreRealmUser? mongoUser =
     //     await app.login(//WithCredential(
@@ -226,7 +223,6 @@ class _LoginScreenState extends State<LoginScreen> {
     //             serverClientId: "762586994135-gqn337ha77t07clhs4rs6lcbl1f87a6s",
     //             scopes: ["email"],
     //         )
-
 
     //
     //       Credentials.google(
@@ -266,8 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
         String accessToken = facebookToken!.token;
 
         CoreRealmUser? mongoUser =
-        await app.login(Credentials.facebook(accessToken));
-
+            await app.login(Credentials.facebook(accessToken));
 
         if (mongoUser != null) {
           print("logged in as ${mongoUser.id}");
@@ -295,21 +290,19 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _loginWithApple() async{
-    final credential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ]
-    );
+  void _loginWithApple() async {
+    final credential = await SignInWithApple.getAppleIDCredential(scopes: [
+      AppleIDAuthorizationScopes.email,
+      AppleIDAuthorizationScopes.fullName,
+    ]);
 
     if (credential.identityToken == null) {
       // handle errors from Apple here
       return;
     }
 
-
-    var idToken = credential.identityToken!;// String.fromCharCodes(credential.identityToken!);
+    var idToken = credential
+        .identityToken!; // String.fromCharCodes(credential.identityToken!);
 
     CoreRealmUser? mongoUser = await app.login(Credentials.apple(idToken));
 
@@ -336,10 +329,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (_state == LoginState.login) {
         try {
-          CoreRealmUser? mongoUser = await app.login(
-              Credentials.emailPassword(_email, _password)
-          );
-
+          CoreRealmUser? mongoUser =
+              await app.login(Credentials.emailPassword(_email, _password));
 
           if (mongoUser != null) {
             String userId = mongoUser.id!;
@@ -359,18 +350,15 @@ class _LoginScreenState extends State<LoginScreen> {
         } on Exception catch (_) {}
       } else if (_state == LoginState.register) {
         bool isSuccess = await app.registerUser(_email, _password);
-        if(isSuccess){
-
-          var mongoUser = await app.login(
-              Credentials.emailPassword(_email, _password)
-          );
+        if (isSuccess) {
+          var mongoUser =
+              await app.login(Credentials.emailPassword(_email, _password));
 
           String userId = mongoUser!.id!;
           print("Logged in as id=$userId");
 
           // Navigator.pushReplacement(
           //     context, MaterialPageRoute(builder: (_) => HomeScreen()));
-
 
           Fluttertoast.showToast(
               msg: "Hello there!",

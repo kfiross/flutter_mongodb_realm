@@ -316,7 +316,8 @@ class GoogleSignIn {
   /// either [kSignInRequiredError] (when there is no authenticated user) or
   /// [kSignInFailedError] (when an unknown error occurred).
   Future<GoogleSignInAccount?> signInSilently({bool suppressErrors = true}) {
-    final Future<GoogleSignInAccount?> result = _addMethodCall('signInSilently');
+    final Future<GoogleSignInAccount?> result =
+        _addMethodCall('signInSilently');
     if (suppressErrors) {
       return result.catchError((dynamic _) => null);
     }

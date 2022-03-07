@@ -21,7 +21,7 @@ class MongoDocument {
     if (map != null) {
       //_map.addAll(map);
       //_map.addEntries(map.entries);
-      for(String key in map.keys){
+      for (String key in map.keys) {
         _map[key] = map[key];
       }
     }
