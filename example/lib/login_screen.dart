@@ -7,8 +7,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 
-
-import 'home_screen.dart';
 import 'login_custom.dart';
 import 'reset_pass_screen.dart';
 
