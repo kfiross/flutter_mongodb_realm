@@ -1,6 +1,9 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_mongodb_realm/bson_document.dart';
 import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -17,9 +20,10 @@ class _HomeScreenState extends State<HomeScreen> {
   MongoCollection? _collection;
 
   final _filterOptions = <String>[
-    "name",
+    "firstName",
+    "lastName",
     "year",
-    "grades",
+    // "grades",
   ];
 
   final _operatorsOptions = <String>[
@@ -27,11 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
     ">=",
     "<",
     "<=",
+    "==",
 //    "between"
   ];
 
   String? _selectedFilter;
   String? _selectedOperator;
+  var _selectedValueForFilterCtrler = TextEditingController();
 
   //
   final formKey = GlobalKey<FormState>();
@@ -49,6 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    _selectedValueForFilterCtrler.dispose();
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
@@ -60,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> list = _students.map((s) => StudentItem(s)).toList();
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -98,11 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
               _filterRow(),
               SizedBox(height: 20),
               _header(),
-              if(list.isNotEmpty)
-                Expanded(child: ListView.builder(
-                  itemBuilder: (context, index) => list[index],
-                  itemCount: list.length,
-                )),
+              _studentsListStreamBuilder(),
+              //_studentsList(),
             ],
           ),
         ),
@@ -186,6 +194,72 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _studentsListStreamBuilder(){
+    return StreamBuilder(
+      stream: _collection?.watch(),
+      builder: (context, snapshot){
+        if(snapshot.data == null){
+          return const SizedBox.shrink();
+        }
+        // print(snapshot.data);
+        // return const SizedBox.shrink();
+
+        return FutureBuilder<List<MongoDocument>>(
+          future: _collection?.find(),
+          builder: (BuildContext _, AsyncSnapshot<List<MongoDocument>> snapshot2) {
+
+            if(snapshot.data == null)
+              return const SizedBox.shrink();
+
+          _students.clear();
+          var documents = snapshot2.data;
+          documents?.forEach((document) {
+            _students.add(Student.fromDocument(document));
+          });
+
+          return _studentsList();
+        },);
+      },
+    );
+    // final list = _students.map((s) {
+    //   return StudentItem(s, () async{
+    //     var docDeleted = await _collection?.deleteOne({
+    //       "_id": s.id,
+    //     });
+    //     print("deleted docs: $docDeleted");
+    //   });
+    // }).toList();
+
+    // if(list.isEmpty){
+    //   return const SizedBox.shrink();
+    // }
+    //
+    // return Expanded(child: ListView.builder(
+    //   itemBuilder: (context, index) => list[index],
+    //   itemCount: list.length,
+    // ));
+  }
+
+  Widget _studentsList(){
+    final list = _students.map((s) {
+      return StudentItem(s, () async{
+        var docDeleted = await _collection?.deleteOne({
+          "_id": s.id,
+        });
+        print("deleted docs: $docDeleted");
+      });
+    }).toList();
+
+    if(list.isEmpty){
+      return const SizedBox.shrink();
+    }
+
+    return Expanded(child: ListView.builder(
+      itemBuilder: (context, index) => list[index],
+      itemCount: list.length,
+    ));
+  }
+
   _filterRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -223,16 +297,63 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           width: 100,
           child: TextField(
+            controller: _selectedValueForFilterCtrler,
             maxLines: 1,
           ),
         ),
         SizedBox(width: 20),
         Expanded(
           flex: 1,
-          child: RaisedButton(
+          child: ElevatedButton(
             child: Text("Filter"),
-            onPressed: () {
-              // todo: implemnt this
+            onPressed: () async {
+
+              var operator;
+              var checkValue = _selectedValueForFilterCtrler.text;
+              var value;
+              String selectedFilter = _selectedFilter ?? "";
+
+              if(_selectedFilter == "year"){
+                value = int.parse(checkValue);
+              }
+              else{
+                value = checkValue;
+              }
+
+
+              switch(_selectedOperator){
+                case ">":
+                  operator = QueryOperator.gt(value);
+                  break;
+
+                case ">=":
+                  operator = QueryOperator.gte(value);
+                  break;
+
+                case "<":
+                  operator = QueryOperator.lt(value);
+                  break;
+
+                case "<=":
+                  operator = QueryOperator.lte(value);
+                  break;
+
+                case "==":
+                  operator = value;
+                  break;
+
+                case "!=":
+                  operator = QueryOperator.ne(checkValue);
+                  break;
+              }
+
+              var docs = await _collection?.find(
+                  filter: {
+                    selectedFilter: operator
+                  }
+              );
+
+              print("docs found = ${docs!.length}");
             },
           ),
         )
@@ -267,17 +388,18 @@ class _HomeScreenState extends State<HomeScreen> {
         lastName: _newStudLastName,
         year: _newStudYear,
       );
-     // var id = await _collection.insertOne(newStudent.asDocument());
-     // print("inserted_id=$id");
 
-      var docsIds = await _collection?.insertMany([
-        newStudent.asDocument(),
-        newStudent.asDocument(),
-      ]);
+     var id = await _collection?.insertOne(newStudent.asDocument());
+     print("inserted_id=$id");
 
-      for(var id in (docsIds ?? {}).values){
-        print("inserted_id=$id");
-      }
+      // var docsIds = await _collection?.insertMany([
+      //   newStudent.asDocument(),
+      //   newStudent.asDocument(),
+      // ]);
+
+      // for(var id in (docsIds ?? {}).values){
+      //   print("inserted_id=$id");
+      // }
 
       setState(() {
         form.reset();
@@ -288,50 +410,57 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class StudentItem extends StatelessWidget {
   final Student student;
+  final VoidCallback onPress;
 
-  StudentItem(this.student);
+  StudentItem(this.student, this.onPress);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: Text(
-              "${student.firstName} ${student.lastName}",
-              style: TextStyle(fontSize: 20),
+      child: InkWell(
+        onTap: (){
+          onPress.call();
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Text(
+                "${student.firstName} ${student.lastName}",
+                style: TextStyle(fontSize: 20),
+              ),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              "${student.year}",
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-          Expanded(
+            Expanded(
               flex: 1,
               child: Text(
-                sprintf("%.2f", [student.gradesAvg]),
+                "${student.year}",
                 style: TextStyle(fontSize: 18),
-              )),
-        ],
+              ),
+            ),
+            Expanded(
+                flex: 1,
+                child: Text(
+                  sprintf("%.2f", [student.gradesAvg]),
+                  style: TextStyle(fontSize: 18),
+                )),
+          ],
+        ),
       ),
     );
   }
 }
 
 class Student {
+  final ObjectId? id;
   final String? firstName;
   final String? lastName;
   final int? year;
   final List<int>? grades;
 
-  Student({this.lastName, this.firstName, this.grades, this.year});
+  Student({this.lastName, this.firstName, this.grades, this.year, this.id});
 
   double get gradesAvg {
     var sum = 0;
@@ -343,6 +472,7 @@ class Student {
 
   static fromDocument(MongoDocument document) {
     return Student(
+        id: document.get('_id'),
         firstName: document.get("firstName") ?? "",
         lastName: document.get("lastName") ?? "",
         grades: (document.get("grades") == null

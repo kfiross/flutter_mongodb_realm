@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:bson/bson.dart';
@@ -130,7 +131,7 @@ class MongoCollection {
   Future<List<MongoDocument>> find({filter, RemoteFindOptions? options}) async {
     var filterCopy = <String, dynamic>{};
     if (filter != null) {
-      assert(filter is Map<String, dynamic> || filter is LogicalQueryOperator);
+      assert(filter is LinkedHashMap<String, dynamic> || filter is LogicalQueryOperator);
 
       if (filter is Map<String, dynamic>) {
         // convert 'QuerySelector' into map, too
@@ -143,6 +144,9 @@ class MongoCollection {
       }
       if (filter is LogicalQueryOperator) {
         filterCopy = filter.values;
+      }
+      else{
+
       }
     }
 

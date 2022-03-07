@@ -19,7 +19,11 @@ class MongoDocument {
   /// or an empty Document instance if not provided.
   MongoDocument(Map<String, Object?>? map) {
     if (map != null) {
-      _map.addAll(map);
+      //_map.addAll(map);
+      //_map.addEntries(map.entries);
+      for(String key in map.keys){
+        _map[key] = map[key];
+      }
     }
   }
 
@@ -68,7 +72,7 @@ class MongoDocument {
 
   /// Parses a string in MongoDB Extended JSON format to a Document
   static MongoDocument parse(data) {
-    Map<String, Object> map = json.decode(data);
+    Map<String, dynamic> map = json.decode(data);
 //    if(kIsWeb){
 //      map = FlutterMongoRealm.customEventToMap(data);
 //    }
