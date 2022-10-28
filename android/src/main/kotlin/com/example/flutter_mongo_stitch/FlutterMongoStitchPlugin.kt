@@ -1,27 +1,37 @@
 package com.example.flutter_mongo_stitch
 
-import androidx.annotation.NonNull;
+//import com.mongodb.stitch.android.core.Stitch
+//import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
+//import com.google.firebase.FirebaseApp
+//import com.google.firebase.FirebaseOptions
+//import com.mongodb.stitch.android.core.StitchAppClient
+
+import android.R.attr.data
+import android.content.Context
+import android.util.Log
+import androidx.annotation.NonNull
+import com.example.flutter_mongo_stitch.streamHandlers.AuthStreamHandler
+import com.example.flutter_mongo_stitch.streamHandlers.StreamHandler
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.Scopes
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
+import com.google.android.gms.tasks.Task
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-
-//import com.mongodb.stitch.android.core.Stitch
-//import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
-import io.flutter.plugin.common.EventChannel
-import android.content.Context
-import android.util.Log
-import com.example.flutter_mongo_stitch.streamHandlers.AuthStreamHandler
-import com.example.flutter_mongo_stitch.streamHandlers.StreamHandler
 import io.realm.Realm
-//import com.mongodb.stitch.android.core.StitchAppClient
-
 import io.realm.mongodb.App
 import io.realm.mongodb.AppConfiguration
 import io.realm.mongodb.AppException
 import io.realm.mongodb.User
+
 
 /** FlutterMongoStitchPlugin */
 public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
@@ -124,10 +134,17 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             result.error("ERROR", "Not provided a MongoRealm App ID", "")
         }
 
+//        FirebaseApp.initializeApp(
+//            appContext,
+//            FirebaseOptions.Builder()
+//                .setApplicationId("1:247144301956:android:1dc623507aadd5d70749d1") // Required for Analytics.
+//                .setApiKey("AIzaSyBU1yRELXmtR5QkPW_jN5nB9hFhMasxA1g") // Required for Auth.
+//                .build()
+//        );
 
         Realm.init(appContext);
         try {
-            app = App(AppConfiguration.Builder(clientAppId).build())
+            app = App(AppConfiguration.Builder(clientAppId!!).build())
         }
         catch (e: Exception){
             Log.d("MongoRealm", e.message);
@@ -180,7 +197,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccess) {
                 result.success(it.get().toMap())
             } else {
-                result.error("ERROR", "Google Provider Login failed: ${it.error?.message ?: '?'}", null)//${it.exception?.message}", "")
+                result.error("ERROR", "Google Provider Login failed: ${it.error?.message ?: '?'}", null)
             }
         })
     }

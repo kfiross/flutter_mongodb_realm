@@ -41,21 +41,8 @@ class MongoRealmAuth {
       );
     } else if (credential is GoogleCredential2) {
       try {
-        var accessToken = credential.accessToken;
-        result = await FlutterMongoRealm.signInWithGoogle(accessToken);
-      } on Exception catch (e) {
-        print(e);
-      }
-    } else if (credential is GoogleCredential) {
-      _googleLoginWrapper.init(
-        serverClientId:
-            "${credential.serverClientId}.apps.googleusercontent.com",
-        scopes: credential.scopes,
-      );
-
-      try {
-        var authCode = await _googleLoginWrapper.handleSignInAndGetAuthServerCode();
-        result = await FlutterMongoRealm.signInWithGoogle(authCode ?? '');
+        var authCode = credential.authCode;
+        result = await FlutterMongoRealm.signInWithGoogle(authCode);
       } on Exception catch (e) {
         print(e);
       }
@@ -80,11 +67,11 @@ class MongoRealmAuth {
   Future<bool?> logout() async {
     var result = await FlutterMongoRealm.logout();
 
+
     bool loggedWithGoogle = await (_googleLoginWrapper.isLogged as FutureOr<bool>);
-//    bool loggedWithFacebook = await _facebookLoginWrapper.isLogged;
-//
     if (loggedWithGoogle) await _googleLoginWrapper.handleSignOut();
-//
+
+//    bool loggedWithFacebook = await _facebookLoginWrapper.isLogged;
 //    if (loggedWithFacebook)
 //      await _facebookLoginWrapper.handleSignOut();
 

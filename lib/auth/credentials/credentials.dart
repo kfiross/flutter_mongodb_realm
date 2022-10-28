@@ -19,10 +19,6 @@ class Credentials {
       // ignore: deprecated_member_use_from_same_package
       UserPasswordCredential(username: username, password: password);
 
-  static StitchCredential google(
-          {String? serverClientId, List<String>? scopes}) =>
-      // ignore: deprecated_member_use_from_same_package
-      GoogleCredential(serverClientId: serverClientId, scopes: scopes);
 
   static StitchCredential facebook(String accessToken) =>
       // ignore: deprecated_member_use_from_same_package

@@ -79,6 +79,11 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // DEPRECATED!! //
+    // Import the Firebase BoM
+//    implementation platform('com.google.firebase:firebase-bom:31.0.1')
+//    implementation 'com.google.firebase:firebase-common-ktx:20.1.1'
+    implementation 'com.google.android.gms:play-services-auth:20.3.0'
+
 //    implementation 'org.mongodb:stitch-android-sdk:4.5.0'
 
 

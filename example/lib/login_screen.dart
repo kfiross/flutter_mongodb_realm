@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 
+// import 'package:visa/google.dart' as visa;
+// import 'package:visa/auth-data.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -197,46 +200,17 @@ class _LoginScreenState extends State<LoginScreen> {
       scopes: [
         'email',
       ],
-   //    serverClientId: // "762586994135-je9l46njk4hf63fb1k2jjmh6ep7nk9bv.apps.googleusercontent.com",
-   // "762586994135-je9l46njk4hf63fb1k2jjmh6ep7nk9bv.apps.googleusercontent.com"
+        clientId: '247144301956-9500dqr72gsfva7pnr6qq8apda63pblj.apps.googleusercontent.com'
     );
 
-    var s = await _googleSignIn.signIn();
-    var serverAuthCode = s?.serverAuthCode;
+    bool isLogged = await _googleSignIn.isSignedIn();
+    if(isLogged){
+      await _googleSignIn.signOut();
+    }
+    var account = await _googleSignIn.signIn();
+    var serverAuthCode = account?.serverAuthCode;
 
-    // var idToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjAzYjJkMjJjMmZlY2Y4NzNlZDE5ZTViOGNmNzA0YWZiN2UyZWQ0YmUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI5NTExNjI5MDg4MjMta2VzYjc1Ymd1ZTNidWpkazhyaTBtZ2VyaGhtdnU1MmMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI5NTExNjI5MDg4MjMtNnQ3a3AxbzFncWs1cWJmbGJvZXQ4Y25rYWRqYjAzdmYuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTU3NjY0MDY0NzgwMDI2Mjc2MzIiLCJlbWFpbCI6ImtmaXIyNTgxMkBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IktmaXJvc3MgTWF0aXR5YWh1IiwicGljdHVyZSI6Imh0dHBzOi8vbGg0Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tMjJYUThDcVlpMVEvQUFBQUFBQUFBQUkvQUFBQUFBQUFBQUEvQU1adXVjbWl1UGZ0WkVaMnhQQVh6R2hIRzJJN3BKZzVwUS9zOTYtYy9waG90by5qcGciLCJnaXZlbl9uYW1lIjoiS2Zpcm9zcyIsImZhbWlseV9uYW1lIjoiTWF0aXR5YWh1IiwibG9jYWxlIjoiZW4iLCJpYXQiOjE2MTIzNTg1MzAsImV4cCI6MTYxMjM2MjEzMH0.nP-qstM_zz4ZaCy9vlIkT0FuIwjGR0mK9GBJvTTTcIkq8EIgAOw4D9o5-_HhhbgxrRpXjIj5pV3G0iGWMTSDz1kEpsS9a1UvTfEG_Gpmr2IDSGZ6e0K-XsBPlviH7KiEXW1NJ_V5ZSNlvl6O4P2F9q0PhPcFlJpjWUxxPvSGXlMC3rFZAM4QkXbG55te1yasebexF04yKcB4_4n35GnoGkYN4jsFUX3sMD9sMVMYBAqoaTtQgIXf8yQyLwoomBNt_hgUtyHx-iW7KCQhy6G9wczdkswdakfbVCQ73yXvw7bQGt2Y57mOgGc7WqjP0Xz8m-M2G0kldmRZDV1KZJL5uA";
-
-    CoreRealmUser? mongoUser =
-        await app.login(//WithCredential(
-
-            // ignore: deprecated_member_use
-            // GoogleCredential(
-            //     serverClientId: '762586994135-gqn337ha77t07clhs4rs6lcbl1f87a6s',
-            //     scopes: ["email"],
-            // )
-
-          GoogleCredential2(serverAuthCode!)
-        );
-
-    // CoreRealmUser? mongoUser =
-    //     await app.login(//WithCredential(
-    //
-    //         // ignore: deprecated_member_use
-    //         GoogleCredential(
-    //             serverClientId: "762586994135-gqn337ha77t07clhs4rs6lcbl1f87a6s",
-    //             scopes: ["email"],
-    //         )
-
-
-    //
-    //       Credentials.google(
-    //   serverClientId:
-    //         // "762586994135-sop8bd99tsec7ng40v3r7r8bu6sk487u",
-    //       // "762586994135-b58vl2afhuq76a74ho28c2pm5hi07kbk",
-    //          "762586994135-je9l46njk4hf63fb1k2jjmh6ep7nk9bv",
-    //   scopes: ["email"],
-    // ),
-    //     );
+    CoreRealmUser? mongoUser = await app.login(GoogleCredential2(serverAuthCode!));
 
     if (mongoUser != null) {
       print("logged in as ${mongoUser.id}");

@@ -114,23 +114,33 @@ CoreRealmUser? mongoUser = await app.login(
 * __Google__
 
 Inorder to make Google login works, please follow the following instructions use the following:<br><br>
-1. Remove (if used) the version used from pubspec.yaml (ex. google_sign_in: ^4.5.1) <br>
-2. Use git repo version instead (copy from below)<br>
-3. In dart code use also serverClientId parameter
+1. Create project in Firebase
+2. Add a web app
+3. Go to Google Cloud Platorm -> API & services -> Credentials
+   [https://console.cloud.google.com/apis/credentials?project=[YOUR_PROJECT_ID]]
+4. use the client ID of *WEB*
+5. use this client ID and client secret on MongoDB's as Google Authentication
+6. create SHA-1 for the app and add it to Firebase project you created
+7. Take the serverAuthCode after login, this will work if all set correctly
 <br><br>
-This has to be done in order to get the auth code need by the Mongo Stitch SDK
+This has to be done in order to get the auth code need by the Mongo Realm SDK
 
 
 Calling on Flutter:
 
 ```dart
-CoreRealmUser? mongoUser = await app.login(
-  Credentials.google(
-    serverClientId: <Google Server Client Id>, // just the start from "<ID>.apps.googleusercontent.com"   
-    scopes: <list of scopes>,
-));
-```
+ GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+    ],
+    clientId: '247144301956-9500dqr72gsfva7pnr6qq8apda63pblj.apps.googleusercontent.com'
+);
 
+var account = await _googleSignIn.signIn();
+var serverAuthCode = account?.serverAuthCode;
+
+CoreRealmUser? mongoUser = await app.login(GoogleCredential2(serverAuthCode!));
+```
 
 * __Custom JWT__
 ```dart
