@@ -133,7 +133,7 @@ Calling on Flutter:
     scopes: [
       'email',
     ],
-    clientId: '247144301956-9500dqr72gsfva7pnr6qq8apda63pblj.apps.googleusercontent.com'
+    clientId: '[YOUR_APP_ID].apps.googleusercontent.com'
 );
 
 var account = await _googleSignIn.signIn();

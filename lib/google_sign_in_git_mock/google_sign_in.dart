@@ -3,7 +3,6 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:ui' show hashValues;
 
 import 'package:flutter/services.dart' show MethodChannel, PlatformException;
 import 'package:meta/meta.dart' show visibleForTesting;
@@ -135,7 +134,7 @@ class GoogleSignInAccount implements GoogleIdentity {
   }
 
   @override
-  int get hashCode => hashValues(displayName, email, id, photoUrl, _idToken);
+  int get hashCode => Object.hash(displayName, email, id, photoUrl, _idToken);
 
   @override
   String toString() {

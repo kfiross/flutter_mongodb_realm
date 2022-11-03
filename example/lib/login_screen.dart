@@ -194,22 +194,19 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _loginWithGoogle() async {
-
-    GoogleSignIn _googleSignIn = GoogleSignIn(
-      scopes: [
-        'email',
-      ],
-        clientId: '247144301956-9500dqr72gsfva7pnr6qq8apda63pblj.apps.googleusercontent.com'
-    );
+    GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
+      'email',
+    ], clientId: '??');
 
     bool isLogged = await _googleSignIn.isSignedIn();
-    if(isLogged){
+    if (isLogged) {
       await _googleSignIn.signOut();
     }
     var account = await _googleSignIn.signIn();
     var serverAuthCode = account?.serverAuthCode;
 
-    CoreRealmUser? mongoUser = await app.login(GoogleCredential2(serverAuthCode!));
+    CoreRealmUser? mongoUser =
+        await app.login(GoogleCredential2(serverAuthCode!));
 
     if (mongoUser != null) {
       print("logged in as ${mongoUser.id}");

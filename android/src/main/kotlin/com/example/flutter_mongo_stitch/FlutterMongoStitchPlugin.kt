@@ -134,14 +134,6 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             result.error("ERROR", "Not provided a MongoRealm App ID", "")
         }
 
-//        FirebaseApp.initializeApp(
-//            appContext,
-//            FirebaseOptions.Builder()
-//                .setApplicationId("1:247144301956:android:1dc623507aadd5d70749d1") // Required for Analytics.
-//                .setApiKey("AIzaSyBU1yRELXmtR5QkPW_jN5nB9hFhMasxA1g") // Required for Auth.
-//                .build()
-//        );
-
         Realm.init(appContext);
         try {
             app = App(AppConfiguration.Builder(clientAppId!!).build())
@@ -470,7 +462,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         val filter = call.argument<String>("filter")
         val projection = call.argument<String>("projection")
 
-        val task = client.findDocument(
+        val task = client.findDoc]ument(
                 databaseName,
                 collectionName,
                 filter,

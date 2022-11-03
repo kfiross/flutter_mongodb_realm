@@ -1,3 +1,9 @@
+## [2.0.0]
+* Stable version of null-safety support 
+
+## [2.0.0-nullsafety.3]
+* Fixed missing code in Kotlin plugin. 
+
 ## [2.0.0-nullsafety.2]
 * Fixed `pub.dev` score. 
 
