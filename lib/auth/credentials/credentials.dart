@@ -19,7 +19,6 @@ class Credentials {
       // ignore: deprecated_member_use_from_same_package
       UserPasswordCredential(username: username, password: password);
 
-
   static StitchCredential facebook(String accessToken) =>
       // ignore: deprecated_member_use_from_same_package
       FacebookCredential(accessToken);
