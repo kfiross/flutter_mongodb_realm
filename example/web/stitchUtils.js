@@ -82,6 +82,13 @@ function Mongo() {
 
         var strings = [];
         results.forEach((doc) => {
+
+            let docId = doc['_id']
+            if (typeof docId === 'object' || docId instanceof Object){
+                doc['_id'] = {
+                    '$oid': `${docId}`
+                }
+            }
             strings.push(JSON.stringify(doc))
         })
 
@@ -329,33 +336,46 @@ function Mongo() {
      Mongo.prototype.setupWatchCollection = async function(databaseName, collectionName, arg){
         var collection = this.getCollection(databaseName, collectionName)
 
-        console.log(arg)
+
         console.log(typeof arg)
-        if (typeof arg === 'string' || arg instanceof String){
+        let asObjectIDs = false;
+        if (arg == null){
+            asObjectIDs = true;
+        }
+        else if (typeof arg === 'string' || arg instanceof String){
             arg = JSON.parse(arg);
         }
-        if (typeof arg === 'array' || arg instanceof Array){
+        else if (typeof arg === 'array' || arg instanceof Array){
             if(arg[1] == false){
                 arg = arg[0]
             }
             else {
-                var lst = [];
-                arg[0].forEach((str) => {
-                    lst.push(new stitch.BSON.ObjectId(str))
-                })
-                arg = lst;
+                asObjectIDs = true
+                if(arg[0] == null){
+                    arg = null
+                }
+                else{
+                    var lst = [];
+                    arg[0].forEach((str) => {
+                        lst.push(new stitch.BSON.ObjectId(str))
+                    })
+                    arg = lst;
+                }
             }
         }
 
-
         var changeStream = await collection.watch(arg);
 
+        console.log(`asObjectIDs=${asObjectIDs}`)
         // Set the change listener. This will be called
         // when the watched documents are updated.
         changeStream.onNext((event) => {
 
+          let docId = event.fullDocument['_id']
           var results = {
-            "_id": event.fullDocument['_id']
+            "_id": asObjectIDs
+                ? {'$oid': docId} //new stitch.BSON.ObjectId(docId)
+                : docId
           }
           var watchEvent = new CustomEvent("watchEvent."+databaseName+"."+collectionName, {
                detail: JSON.stringify(results)

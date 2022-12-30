@@ -216,7 +216,7 @@ class FlutterMongoRealm {
           "watchEvent.$databaseName.$collectionName");
 
       // ignore: close_sinks
-      var controller = StreamController<String>();
+      var controller = StreamController<String>.broadcast();
 
       // migrating events from the js-event to a dart event
       jsStream.listen((event) {
@@ -224,9 +224,10 @@ class FlutterMongoRealm {
 
         var map = json.decode("${eventDetail ?? '{}'}");
 
-        if (map['_id'] is String == false) {
-          map['_id'] = ObjectId.parse(map['_id']);
-        }
+        // if (map['_id'] is Map == true) {
+        //   map['_id'] = ObjectId.parse(map['_id']);
+        // }
+        print(jsonEncode(map));
         controller.add(jsonEncode(map));
       });
 
@@ -322,9 +323,9 @@ class FlutterMongoRealm {
     await FlutterMongoStitchPlatform.instance.setupWatchCollection(
       collectionName,
       databaseName,
-      ids: ids!,
-      asObjectIds: asObjectIds!,
-      filter: filter!,
+      ids: ids,
+      asObjectIds: asObjectIds ?? true,
+      filter: filter,
     );
   }
 }

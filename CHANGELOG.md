@@ -1,3 +1,6 @@
+## [2.0.2]
+* Fixed web-plugin bug
+
 ## [2.0.0]
 * Stable version of null-safety support 
 

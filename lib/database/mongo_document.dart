@@ -34,6 +34,8 @@ class MongoDocument {
   static fixMapMismatchedTypes(Map map) {
     final map2 = map.entries.toList();
     var result;
+    print(37);
+    print(map2[0].key);
     if (map2.length == 1 && map2[0].key.contains("\$")) {
       switch (map2[0].key.substring(1)) {
         // Convert 'ObjectId' type
@@ -73,15 +75,9 @@ class MongoDocument {
   /// Parses a string in MongoDB Extended JSON format to a Document
   static MongoDocument parse(data) {
     Map<String, dynamic> map = json.decode(data);
-//    if(kIsWeb){
-//      map = FlutterMongoRealm.customEventToMap(data);
-//    }
-//    else {
-//      map = json.decode(data);
-//    }
-    // fix MongoDB bullshit
+
     map.forEach((key, value) {
-      if (value is LinkedHashMap) {
+      if (value is LinkedHashMap || value is Map) {
         map[key] = fixMapMismatchedTypes(value);
       }
     });

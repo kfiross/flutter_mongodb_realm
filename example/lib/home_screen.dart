@@ -200,9 +200,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return StreamBuilder(
       stream: _collection?.watch(),
       builder: (context, snapshot) {
-        if (snapshot.data == null) {
-          return const SizedBox.shrink();
-        }
+        // if (snapshot.data == null) {
+        //   return const SizedBox.shrink();
+        // }
         // print(snapshot.data);
         // return const SizedBox.shrink();
 
