@@ -462,7 +462,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         val filter = call.argument<String>("filter")
         val projection = call.argument<String>("projection")
 
-        val task = client.findDoc]ument(
+        val task = client.findDocument(
                 databaseName,
                 collectionName,
                 filter,
