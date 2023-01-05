@@ -9,4 +9,13 @@ class UserPasswordCredential extends StitchCredential {
     required this.username,
     required this.password,
   });
+
+  @override
+  Map<String, Object?> toJson() {
+    return {
+      "type": "email_password",
+      "email": username,
+      "password": password,
+    };
+  }
 }

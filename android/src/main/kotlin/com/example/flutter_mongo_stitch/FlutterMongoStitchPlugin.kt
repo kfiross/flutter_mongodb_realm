@@ -1,24 +1,9 @@
 package com.example.flutter_mongo_stitch
 
-//import com.mongodb.stitch.android.core.Stitch
-//import com.mongodb.stitch.android.services.mongodb.remote.RemoteMongoClient
-//import com.google.firebase.FirebaseApp
-//import com.google.firebase.FirebaseOptions
-//import com.mongodb.stitch.android.core.StitchAppClient
-
-import android.R.attr.data
 import android.content.Context
 import android.util.Log
-import androidx.annotation.NonNull
 import com.example.flutter_mongo_stitch.streamHandlers.AuthStreamHandler
 import com.example.flutter_mongo_stitch.streamHandlers.StreamHandler
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.Scopes
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.Scope
-import com.google.android.gms.tasks.Task
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
@@ -34,9 +19,9 @@ import io.realm.mongodb.User
 
 
 /** FlutterMongoStitchPlugin */
-public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
+class FlutterMongoStitchPlugin : FlutterPlugin, MethodCallHandler {
 
-    private lateinit var app: App;
+    private lateinit var app: App
     private lateinit var client: MyMongoStitchClient
     private lateinit var appContext: Context
 
@@ -48,20 +33,22 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
     private lateinit var streamsChannel: StreamsChannel
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
 
-        channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_mongo_stitch")
+        channel = MethodChannel(flutterPluginBinding.flutterEngine.dartExecutor,
+            "flutter_mongo_stitch")
         channel.setMethodCallHandler(this)
 
         appContext = flutterPluginBinding.applicationContext
 
-        streamsChannel = StreamsChannel(flutterPluginBinding.binaryMessenger, "streams_channel_test")
-        streamsChannel.setStreamHandlerFactory(object: StreamsChannel.StreamHandlerFactory{
+        streamsChannel =
+            StreamsChannel(flutterPluginBinding.binaryMessenger, "streams_channel_test")
+        streamsChannel.setStreamHandlerFactory(object : StreamsChannel.StreamHandlerFactory {
             override fun create(arguments: Any?): EventChannel.StreamHandler? {
                 if (arguments == null || arguments !is Map<*, *> || arguments["handler"] == null)
                     return null
 
-                return when(arguments["handler"]){
+                return when (arguments["handler"]) {
                     "watchCollection" -> StreamHandler(client, arguments)
                     "auth" -> AuthStreamHandler(client, app, arguments)
                     else -> null
@@ -87,7 +74,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         }
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
             "connectMongo" -> connectMongo(call, result)
 
@@ -99,8 +86,8 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             "findDocuments" -> findDocuments(call, result)
             "findDocument" -> findDocument(call, result)
             "countDocuments" -> countDocuments(call, result)
-            "updateDocument" -> updateDocument(call , result)
-            "updateDocuments" -> updateDocuments(call , result)
+            "updateDocument" -> updateDocument(call, result)
+            "updateDocuments" -> updateDocuments(call, result)
             "aggregate" -> aggregate(call, result)
 
             // Auth
@@ -112,6 +99,7 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             "signInWithCustomFunction" -> signInWithCustomAuthFunction(call, result)
             "signInWithApple" -> signInWithApple(call, result)
 
+            "linkCredentials" -> linkCredentials(call, result)
             "registerWithEmail" -> registerWithEmail(call, result)
             "logout" -> logout(result)
             "getUserId" -> getUserId(result)
@@ -127,24 +115,23 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
     }
 
-    private fun connectMongo(@NonNull call: MethodCall, @NonNull result: Result) {
+    private fun connectMongo(call: MethodCall, result: Result) {
         val clientAppId = call.argument<String>("app_id")
 
         if (clientAppId == null) {
             result.error("ERROR", "Not provided a MongoRealm App ID", "")
         }
 
-        Realm.init(appContext);
+        Realm.init(appContext)
         try {
             app = App(AppConfiguration.Builder(clientAppId!!).build())
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             Log.d("MongoRealm", e.message ?: "")
         }
 
         val user: User? = app.currentUser()
-        val mongoClient =  user?.getMongoClient(
-                "mongodb-atlas"
+        val mongoClient = user?.getMongoClient(
+            "mongodb-atlas"
         )
 
 
@@ -155,156 +142,172 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     }
 
 
-    private fun signInAnonymously(@NonNull result: Result) {
+    private fun signInAnonymously(result: Result) {
 
-        client.signInAnonymously(App.Callback {
+        client.signInAnonymously {
             if (it.isSuccess) {
-                val user = it.get();
-                result.success(user.toMap());
+                val user = it.get()
+                result.success(user.toMap())
             } else {
                 result.error("ERROR", "Anonymous Provider Not Deployed", "")
             }
-        })
+        }
     }
 
-    private fun signInWithUsernamePassword(@NonNull call: MethodCall, @NonNull result: Result) {
+    private fun signInWithUsernamePassword(call: MethodCall, result: Result) {
         val username = call.argument<String>("username") ?: ""
         val password = call.argument<String>("password") ?: ""
 
-        client.signInWithUsernamePassword(username, password, App.Callback {
+        client.signInWithUsernamePassword(username, password) {
             if (it.isSuccess) {
-                val user = it.get();
-                result.success(user.toMap());
+                val user = it.get()
+                result.success(user.toMap())
             } else {
                 result.error("ERROR", "UserEmailPassword Provider Login failed: ${it.error}", "")
             }
-        })
+        }
 
     }
 
-    private fun signInWithGoogle(@NonNull call: MethodCall, @NonNull result: Result){
-         val authCode = call.argument<String>("code") ?: ""
+    private fun signInWithGoogle(call: MethodCall, result: Result) {
+        val authCode = call.argument<String>("code") ?: ""
 
-        client.signInWithGoogle(authCode, App.Callback {
+        client.signInWithGoogle(authCode) {
             if (it.isSuccess) {
                 result.success(it.get().toMap())
             } else {
-                result.error("ERROR", "Google Provider Login failed: ${it.error?.message ?: '?'}", null)
+                result.error("ERROR",
+                    "Google Provider Login failed: ${it.error?.message ?: '?'}",
+                    null)
             }
-        })
+        }
     }
 
-    private fun signInWithFacebook(@NonNull call: MethodCall, @NonNull result: Result){
+    private fun signInWithFacebook(call: MethodCall, result: Result) {
         val token = call.argument<String>("token") ?: ""
 
 
-        client.signInWithFacebook(token, App.Callback {
+        client.signInWithFacebook(token) {
             if (it.isSuccess) {
                 result.success(it.get().toMap())
             } else {
-                result.error("ERROR", "Facebook Provider Login failed: ${it.error.message}", null)            }
-        })
+                result.error("ERROR", "Facebook Provider Login failed: ${it.error.message}", null)
+            }
+        }
     }
 
-    private fun signInWithCustomJwt(@NonNull call: MethodCall, @NonNull result: Result){
+    private fun signInWithCustomJwt(call: MethodCall, result: Result) {
         val token = call.argument<String>("token") ?: ""
 
-        client.signInWithCustomJwt(token, App.Callback {
+        client.signInWithCustomJwt(token) {
             if (it.isSuccess) {
                 result.success(it.get().toMap())
             } else {
-                result.error("ERROR", "Custom JWT Provider Login failed: ${it.error.message}", null)            }
-        })
+                result.error("ERROR", "Custom JWT Provider Login failed: ${it.error.message}", null)
+            }
+        }
     }
 
 
-    private fun signInWithCustomAuthFunction(@NonNull call: MethodCall, @NonNull result: Result){
+    private fun signInWithCustomAuthFunction(call: MethodCall, result: Result) {
         val json = call.argument<String>("json") ?: ""
 
-        client.signInWithCustomAuthFunction(json, App.Callback {
+        client.signInWithCustomAuthFunction(json) {
             if (it.isSuccess) {
                 result.success(it.get().toMap())
             } else {
-                result.error("ERROR", "Custom Auth Function Provider Login failed: ${it.error.message}", null)            }
-        })
+                result.error("ERROR",
+                    "Custom Auth Function Provider Login failed: ${it.error.message}",
+                    null)
+            }
+        }
     }
 
-    private fun signInWithApple(@NonNull call: MethodCall, @NonNull result: Result){
+    private fun signInWithApple(call: MethodCall, result: Result) {
         val idToken = call.argument<String>("token") ?: ""
 
-        client.signInWithApple(idToken, App.Callback {
+        client.signInWithApple(idToken) {
             if (it.isSuccess) {
                 result.success(it.get().toMap())
             } else {
-                result.error("ERROR", "Sign in with Apple Login failed: ${it.error.message}", null)            }
-        })
+                result.error("ERROR", "Sign in with Apple Login failed: ${it.error.message}", null)
+            }
+        }
     }
 
-    private fun registerWithEmail(@NonNull call: MethodCall, @NonNull result: Result) {
+    // TODO: check this
+    private fun linkCredentials(call: MethodCall, result: Result) {
+        val credsJson = call.argument<HashMap<String, Any>>("creds") ?: emptyMap()
+
+        client.linkCredentials(credsJson) {
+            if (it.isSuccess) {
+                result.success(it.get().toMap())
+            } else {
+                result.error("ERROR", "Linking accounts failed: ${it.error.message}", null)
+            }
+        }
+    }
+
+    private fun registerWithEmail(call: MethodCall, result: Result) {
         val email = call.argument<String>("email") ?: ""
         val password = call.argument<String>("password") ?: ""
 
-        client.registerWithEmail(email, password, App.Callback {
+        client.registerWithEmail(email, password) {
             if (it.isSuccess) {
                 result.success(true)
             } else {
                 result.error("ERROR", "Error registering new user: ${it.error?.message}", "")
             }
-        })
+        }
     }
 
 
-    private fun logout(@NonNull result: Result) {
-
-        client.logout(App.Callback {
+    private fun logout(result: Result) {
+        client.logout {
             if (it.isSuccess) {
                 result.success(true)
             } else {
                 result.error("ERROR", "Cannot logout user", "")
             }
-        })
+        }
     }
 
-    private fun getUserId(@NonNull result: Result) {
+    private fun getUserId(result: Result) {
         try {
             val id = client.getUserId()
 
-            if(id == null){
+            if (id == null) {
                 result.error("ERROR", "", null)
-            }
-            else {
+            } else {
                 result.success(id)
             }
-        }
-        catch (e: AppException){
+        } catch (e: AppException) {
             result.error("ERROR", "", null)
         }
     }
 
-    private fun getUser(@NonNull result: Result) {
+    private fun getUser(result: Result) {
 
         try {
             val user = client.getUser()
             result.success(user?.toMap())
-        }
-        catch (e: AppException){
+        } catch (e: AppException) {
             result.error("ERROR", "Cannot get user", "")
         }
     }
 
-    private fun sendResetPasswordEmail(@NonNull call: MethodCall, @NonNull result: Result){
+    private fun sendResetPasswordEmail(call: MethodCall, result: Result) {
         val email = call.argument<String>("email")
 
-        if(email.isNullOrEmpty()){
+        if (email.isNullOrEmpty()) {
             result.error("ERROR", "must sent to a valid email", null)
         }
 
         try {
             client.sendResetPasswordEmail(email!!)
             result.success(true)
-        }
-        catch (e: AppException){
-           result.error("Error", "Failed to send a reset password email: ${e.message}", null)
+        } catch (e: AppException) {
+            result.error("Error", "Failed to send a reset password email: ${e.message}", null)
         }
     }
 
@@ -312,16 +315,16 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     /**
      *
      */
-    private fun insertDocument(@NonNull call: MethodCall, @NonNull result: Result) {
+    private fun insertDocument(call: MethodCall, result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val data = call.argument<HashMap<String, Any>>("data")
 
 
         val task = client.insertDocument(
-                databaseName,
-                collectionName,
-                data
+            databaseName,
+            collectionName,
+            data
         )
 
         if (task == null)
@@ -332,30 +335,31 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         task!!.getAsync {
             if (it.isSuccess) {
                 result.success(it.get().insertedId.toJavaValue())
-            }
-            else {
-                result.error("Error", "Failed to insert a document: ${it.error?.message ?: '?'}", null)
+            } else {
+                result.error("Error",
+                    "Failed to insert a document: ${it.error?.message ?: '?'}",
+                    null)
             }
         }
     }
 
-    private fun insertDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
+    private fun insertDocuments(call: MethodCall, result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val list = call.argument<List<String>>("list")
 
 
         val task = client.insertDocuments(
-                databaseName,
-                collectionName,
-                list
+            databaseName,
+            collectionName,
+            list
         )
 
         if (task == null)
             result.error("Error", "Failed to insert a document", "")
 
         task!!.getAsync { it ->
-            if(it.isSuccess) {
+            if (it.isSuccess) {
                 val results = emptyMap<Int, String>().toMutableMap()
                 val insertedIds = it.get().insertedIds
                 insertedIds.forEach {
@@ -363,23 +367,22 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
                 }
 
                 result.success(results)
-            }
-            else
+            } else
                 result.error("Error", "Failed to insert a document ${it.error?.message}", null)
 
         }
     }
 
-    private fun deleteDocument(@NonNull call: MethodCall, @NonNull result: Result) {
+    private fun deleteDocument(call: MethodCall, result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val filter = call.argument<String>("filter")
 
 
         val task = client.deleteDocument(
-                databaseName,
-                collectionName,
-                filter
+            databaseName,
+            collectionName,
+            filter
         )
 
         if (task == null)
@@ -389,20 +392,22 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccess)
                 result.success(it.get()?.deletedCount)
             else
-                result.error("Error", "Failed to delete a document: ${it.error?.message ?: '?'}", "")
+                result.error("Error",
+                    "Failed to delete a document: ${it.error?.message ?: '?'}",
+                    "")
 
         }
     }
 
-    private fun deleteDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
+    private fun deleteDocuments(call: MethodCall, result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val filter = call.argument<String>("filter")
 
         val task = client.deleteDocuments(
-                databaseName,
-                collectionName,
-                filter
+            databaseName,
+            collectionName,
+            filter
         )
 
         if (task == null)
@@ -412,13 +417,15 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccess)
                 result.success(it.get()?.deletedCount)
             else
-                result.error("Error", "Failed to insert a document: ${it.error?.message ?: '?'}", "")
+                result.error("Error",
+                    "Failed to insert a document: ${it.error?.message ?: '?'}",
+                    "")
 
         }
     }
 
 
-    private fun findDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
+    private fun findDocuments(call: MethodCall, result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val filter = call.argument<String>("filter")
@@ -428,12 +435,12 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         val sort = call.argument<String>("sort")
 
         val task = client.findDocuments(
-                databaseName,
-                collectionName,
-                filter,
-                projection,
-                limit,
-                sort
+            databaseName,
+            collectionName,
+            filter,
+            projection,
+            limit,
+            sort
         )
 
         if (task == null)
@@ -445,9 +452,9 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         task!!.iterator().getAsync { it ->
             if (!it.isSuccess) {
                 result.error("Error", "Failed to find documents: ${it.error?.message ?: '?'}", "")
-                return@getAsync;
+                return@getAsync
             }
-            if(it.get() != null) {
+            if (it.get() != null) {
                 it.get().forEach {
                     queryResults.add(it.toJson())
                 }
@@ -456,17 +463,17 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
         }
     }
 
-    private fun findDocument(@NonNull call: MethodCall, @NonNull result: Result) {
+    private fun findDocument(call: MethodCall, result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val filter = call.argument<String>("filter")
         val projection = call.argument<String>("projection")
 
         val task = client.findDocument(
-                databaseName,
-                collectionName,
-                filter,
-                projection
+            databaseName,
+            collectionName,
+            filter,
+            projection
         )
 
         if (task == null)
@@ -476,21 +483,23 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccess)
                 result.success(it.get()?.toJson())
             else
-                result.error("Error", "Failed to insert a document: ${it.error?.message ?: '?'}", "")
+                result.error("Error",
+                    "Failed to insert a document: ${it.error?.message ?: '?'}",
+                    "")
 
         }
     }
 
     // filter option added
-    private fun countDocuments(@NonNull call: MethodCall, @NonNull result: Result) {
+    private fun countDocuments(call: MethodCall, result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val filter = call.argument<String>("filter")
 
         val task = client.countDocuments(
-                databaseName,
-                collectionName,
-                filter
+            databaseName,
+            collectionName,
+            filter
         )
 
         if (task == null)
@@ -500,23 +509,25 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
             if (it.isSuccess)
                 result.success(it.get())
             else
-                result.error("Error", "Failed to count the collection: ${it.error?.message ?: '?'}", "")
+                result.error("Error",
+                    "Failed to count the collection: ${it.error?.message ?: '?'}",
+                    "")
 
         }
     }
 
     //
-    private fun updateDocument(@NonNull call: MethodCall, @NonNull result: Result){
+    private fun updateDocument(call: MethodCall, result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val filter = call.argument<String>("filter")
         val update = call.argument<String>("update")
 
         val task = client.updateDocument(
-                databaseName,
-                collectionName,
-                filter,
-                update!!
+            databaseName,
+            collectionName,
+            filter,
+            update!!
         )
 
         if (task == null)
@@ -524,24 +535,26 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         task!!.getAsync {
             if (it.isSuccess)
-                result.success(listOf(it.get()?.matchedCount,it.get()?.modifiedCount))
+                result.success(listOf(it.get()?.matchedCount, it.get()?.modifiedCount))
             else
-                result.error("Error", "Failed to update the collection: ${it.error?.message ?: '?'}", "")
+                result.error("Error",
+                    "Failed to update the collection: ${it.error?.message ?: '?'}",
+                    "")
 
         }
     }
 
-    private fun updateDocuments(@NonNull call: MethodCall, @NonNull result: Result){
+    private fun updateDocuments(call: MethodCall, result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val filter = call.argument<String>("filter")
         val update = call.argument<String>("update")
 
         val task = client.updateDocuments(
-                databaseName,
-                collectionName,
-                filter,
-                update!!
+            databaseName,
+            collectionName,
+            filter,
+            update!!
         )
 
         if (task == null)
@@ -549,24 +562,26 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         task!!.getAsync {
             if (it.isSuccess)
-                result.success(listOf(it.get()?.matchedCount,it.get()?.modifiedCount))
+                result.success(listOf(it.get()?.matchedCount, it.get()?.modifiedCount))
             else
-                result.error("Error", "Failed to update the collection: : ${it.error?.message ?: '?'}", "")
+                result.error("Error",
+                    "Failed to update the collection: : ${it.error?.message ?: '?'}",
+                    "")
 
         }
     }
 
 
-    private fun aggregate(@NonNull call: MethodCall, @NonNull result: Result){
+    private fun aggregate(call: MethodCall, result: Result) {
         val databaseName = call.argument<String>("database_name")
         val collectionName = call.argument<String>("collection_name")
         val pipelineStrings = call.argument<List<String>>("pipeline")
 
 
         val task = client.aggregate(
-                databaseName,
-                collectionName,
-                pipelineStrings
+            databaseName,
+            collectionName,
+            pipelineStrings
         )
 
         if (task == null)
@@ -576,7 +591,9 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         task!!.iterator().getAsync {
             if (!it.isSuccess)
-                result.error("Error", "Failed to insert a document: ${it.error?.message ?: '?'}", "")
+                result.error("Error",
+                    "Failed to insert a document: ${it.error?.message ?: '?'}",
+                    "")
 
             aggregationResults.add(it.get().next().toJson())
             result.success(aggregationResults)
@@ -593,40 +610,25 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
     }
 
     ///====================================================================
-    private fun callFunction(@NonNull call: MethodCall, @NonNull result: Result){
+    private fun callFunction(call: MethodCall, result: Result) {
         val functionName = call.argument<String>("name")
         val args = call.argument<List<Any>>("args")
         val timeout = call.argument<Int>("timeout")
 
-        if(functionName.isNullOrEmpty()){
+        if (functionName.isNullOrEmpty()) {
             result.error("Error", "Function name is missing", null)
         }
 
 
         try {
-            val funcResult = client.callFunction(functionName!!, args, timeout?.toLong());
+            val funcResult = client.callFunction(functionName!!, args, timeout?.toLong())
             result.success(funcResult?.toJavaValue())
-        }
-        catch (e: AppException){
+        } catch (e: AppException) {
             result.error("Error", "Failed to call function: ${e.message}", "")
         }
-
-//        val task = client.callFunction(functionName!!, args, timeout?.toLong())
-//
-//        if (task == null)
-//            result.error("Error", "Failed to call function - Task Failed", "")
-//
-//        task!!.addOnCompleteListener {
-//            if (it.isSuccessful) {
-//                result.success(it.result?.toJavaValue())
-//            }
-//            else
-//                result.error("Error", "Failed to call function: ${it.exception?.message}", "")
-//
-//        }
     }
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
     }
 }

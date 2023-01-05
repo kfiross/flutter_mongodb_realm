@@ -109,6 +109,11 @@ class MyMongoStitchClient(
         return app.loginAsync(Credentials.apple(idToken), callback);
     }
 
+    fun linkCredentials(credsJson: Map<String, Any>, callback: App.Callback<User>) : RealmAsyncTask? {
+        val creds = CredentialsExtensions.fromMap(credsJson)
+        return app.currentUser()?.linkCredentialsAsync(creds, callback)
+    }
+
     fun logout(callback: App.Callback<User>): RealmAsyncTask?
             = app.currentUser()?.logOutAsync(callback);
 
@@ -134,7 +139,6 @@ class MyMongoStitchClient(
             : RealmResultTask<InsertOneResult>? {
         val collection = getCollection(databaseName, collectionName)
 
-        
         //Document.parse(json)
         val document = Document()
 
@@ -345,6 +349,4 @@ class MyMongoStitchClient(
             this.client = user.getMongoClient("mongodb-atlas")
         }
     }
-
-
 }

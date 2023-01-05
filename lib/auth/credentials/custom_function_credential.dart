@@ -7,4 +7,12 @@ class FunctionCredential extends StitchCredential {
   final MongoDocument arguments;
 
   FunctionCredential(this.arguments);
+
+  @override
+  Map<String, Object?> toJson() {
+    return {
+      "type": "function",
+      "arguments": arguments
+    };
+  }
 }
