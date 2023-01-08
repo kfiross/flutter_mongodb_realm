@@ -6,7 +6,7 @@ class GoogleCredential2 extends StitchCredential {
   GoogleCredential2(this.authCode);
 
   @override
-  Map<String, Object?> toJson() {
+  Map<String, Object> toJson() {
     return {
       "type": "google",
       "authCode": authCode

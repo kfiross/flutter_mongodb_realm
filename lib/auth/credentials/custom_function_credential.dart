@@ -9,7 +9,7 @@ class FunctionCredential extends StitchCredential {
   FunctionCredential(this.arguments);
 
   @override
-  Map<String, Object?> toJson() {
+  Map<String, Object> toJson() {
     return {
       "type": "function",
       "arguments": arguments

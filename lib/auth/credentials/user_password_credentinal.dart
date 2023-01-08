@@ -11,7 +11,7 @@ class UserPasswordCredential extends StitchCredential {
   });
 
   @override
-  Map<String, Object?> toJson() {
+  Map<String, Object> toJson() {
     return {
       "type": "email_password",
       "email": username,

@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_mongo_stitch_platform_interface: ^2.0.0
+  flutter_mongo_stitch_platform_interface: ^2.1.0-dev.2
   # The design on https://flutter.dev/go/federated-plugins was to leave
   # this constraint as "any". We cannot do it right now as it fails pub publish
   # validation, so we set a ^ constraint.
@@ -29,6 +29,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+dependency_overrides:
+  flutter_mongo_stitch_web: 1.0.0
 
 
 flutter:

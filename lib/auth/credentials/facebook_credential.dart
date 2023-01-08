@@ -7,7 +7,7 @@ class FacebookCredential extends StitchCredential {
   FacebookCredential(this.accessToken);
 
   @override
-  Map<String, Object?> toJson() {
+  Map<String, Object> toJson() {
     return {
       "type": "facebook",
       "accessToken": accessToken

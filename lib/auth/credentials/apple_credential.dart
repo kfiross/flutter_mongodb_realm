@@ -7,7 +7,7 @@ class AppleCredential extends StitchCredential {
   AppleCredential(this.idToken);
 
   @override
-  Map<String, Object?> toJson() {
+  Map<String, Object> toJson() {
     return {
       "type": "apple",
       "idToken": idToken

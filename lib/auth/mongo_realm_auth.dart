@@ -70,6 +70,11 @@ class MongoRealmAuth {
     return result;
   }
 
+  Future<bool> isLoggedIn() async {
+    var result = await FlutterMongoRealm.isLoggedIn();
+    return result;
+  }
+
   Future<bool?> logout() async {
     var result = await FlutterMongoRealm.logout();
 

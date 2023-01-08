@@ -293,6 +293,27 @@ class MyMongoStitchClient {
         }
     }
     
+    func linkCredentials(
+        credsJson: Dictionary<String, Any>,
+        onCompleted: @escaping ([String:Any])->Void,
+        onError: @escaping (String?)->Void
+    ) {
+        if let creds = try? CredentialsExtensions.fromMap(credsJson) {
+            self.app.currentUser?.linkUser(credentials: creds, { authResult in
+                switch authResult {
+                case .success(let user):
+                    onCompleted(user.toMap())
+                    break
+                    
+                case .failure(let error):
+                    onError("AppleID Provider Login failed \(error)")
+                    break
+                }
+            })
+        }
+    }
+    
+    
     func registerWithEmail(
         email: String,
         password: String,
@@ -314,6 +335,10 @@ class MyMongoStitchClient {
             
             onCompleted(true)
         }
+    }
+    
+    func isLoggedIn() -> Bool{
+        return self.app.currentUser?.isLoggedIn ?? false;
     }
 
     
