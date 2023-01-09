@@ -99,6 +99,7 @@ class FlutterMongoStitchPlugin : FlutterPlugin, MethodCallHandler {
             "signInWithCustomFunction" -> signInWithCustomAuthFunction(call, result)
             "signInWithApple" -> signInWithApple(call, result)
 
+            "isLoggedIn" -> isLoggedIn(result)
             "linkCredentials" -> linkCredentials(call, result)
             "registerWithEmail" -> registerWithEmail(call, result)
             "logout" -> logout(result)
@@ -233,6 +234,11 @@ class FlutterMongoStitchPlugin : FlutterPlugin, MethodCallHandler {
                 result.error("ERROR", "Sign in with Apple Login failed: ${it.error.message}", null)
             }
         }
+    }
+
+    private fun isLoggedIn(result: Result) {
+        val isLogged = client.isLoggedIn()
+        result.success(isLogged)
     }
 
     // TODO: check this

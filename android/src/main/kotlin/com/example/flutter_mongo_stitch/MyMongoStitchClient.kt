@@ -109,6 +109,10 @@ class MyMongoStitchClient(
         return app.loginAsync(Credentials.apple(idToken), callback);
     }
 
+    fun isLoggedIn() : Boolean {
+        return app.currentUser()?.isLoggedIn ?: false
+    }
+
     fun linkCredentials(credsJson: Map<String, Any>, callback: App.Callback<User>) : RealmAsyncTask? {
         val creds = CredentialsExtensions.fromMap(credsJson)
         return app.currentUser()?.linkCredentialsAsync(creds, callback)
