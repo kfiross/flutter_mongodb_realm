@@ -34,8 +34,6 @@ class MongoDocument {
   static fixMapMismatchedTypes(Map map) {
     final map2 = map.entries.toList();
     var result;
-    print(37);
-    print(map2[0].key);
     if (map2.length == 1 && map2[0].key.contains("\$")) {
       switch (map2[0].key.substring(1)) {
         // Convert 'ObjectId' type
