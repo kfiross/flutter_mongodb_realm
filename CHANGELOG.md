@@ -1,3 +1,27 @@
+## [2.1.0]
+* Added `linkCredentials` function
+* Added `isLoggedIn` function
+ 
+## [2.0.2]
+* Fixed web-plugin bug
+
+## [2.0.0]
+* Stable version of null-safety support 
+
+## [2.0.0-nullsafety.3]
+* Fixed missing code in Kotlin plugin. 
+
+## [2.0.0-nullsafety.2]
+* Fixed `pub.dev` score. 
+
+## [2.0.0-nullsafety.1]
+* Fixed many null-safety related fixes
+* Upgraded dependencies
+* Fixed example project
+
+## [2.0.0-nullsafety.0]
+* Migrated into Null-Safety
+
 ## [1.2.6]
 * a list of objects turned into one object (issue #31)
 

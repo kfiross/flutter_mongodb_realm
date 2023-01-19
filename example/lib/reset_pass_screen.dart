@@ -10,7 +10,7 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   //final client = MongoRealmClient();
   final app = RealmApp();
-  String _email;
+  String? _email;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -32,7 +32,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               initialValue: _email,
               decoration: InputDecoration(labelText: 'Email'),
               autocorrect: false,
-              validator: (val) => val.isEmpty ? "Email can't be empty." : null,
+              validator: (val) =>
+                  val != null && val.isEmpty ? "Email can't be empty." : null,
               onSaved: (val) => _email = val,
             ),
           ),
@@ -48,12 +49,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   void _sendEmail() async {
     final form = _formKey.currentState;
-    form.save();
+    form!.save();
 
     if (form.validate()) {
       try {
-        final success = await app
-            .sendResetPasswordEmail(_email); //"kfir25812@gmail.com");
+        final success =
+            await app.sendResetPasswordEmail(_email); //"kfir25812@gmail.com");
         print(success);
       } on PlatformException catch (e) {
         print(e.message ?? 'Unknown error');

@@ -7,8 +7,8 @@ import 'plugin.dart';
 /// The MongoRealmClient is the entry point for working with data in MongoDB
 /// remotely via Stitch.
 class MongoRealmClient {
-  @deprecated
-  final MongoRealmAuth auth = MongoRealmAuth();
+  // @deprecated
+  // final MongoRealmAuth auth = MongoRealmAuth();
 
   @deprecated
   static Future initializeApp(String appID) async {
@@ -24,7 +24,7 @@ class MongoRealmClient {
   }
 
   /// Calls the specified Stitch function
-  Future callFunction(String name, {List args, int requestTimeout}) async {
+  Future callFunction(String name, {List? args, int? requestTimeout}) async {
     var result = await FlutterMongoRealm.callFunction(
       name,
       args: args,

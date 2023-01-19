@@ -1,4 +1,4 @@
-import 'package:extension/enum.dart';
+import 'package:extension/extension.dart';
 
 class PopValue extends Enum<int> {
   const PopValue(int val) : super(val);

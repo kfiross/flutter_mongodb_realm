@@ -10,12 +10,6 @@ import 'package:flutter_mongodb_realm/auth/credentials/apple_credential.dart';
 import 'package:flutter_mongodb_realm/database/mongo_document.dart';
 
 import '../auth.dart';
-import 'anonymous_credential.dart';
-import 'custom_function_credential.dart';
-import 'user_password_credentinal.dart';
-import 'google_credential.dart';
-import 'facebook_credential.dart';
-import 'custom_jwt_credential.dart';
 
 class Credentials {
   // ignore: deprecated_member_use_from_same_package
@@ -24,11 +18,6 @@ class Credentials {
   static StitchCredential emailPassword(String username, String password) =>
       // ignore: deprecated_member_use_from_same_package
       UserPasswordCredential(username: username, password: password);
-
-  static StitchCredential google(
-          {String serverClientId, List<String> scopes}) =>
-      // ignore: deprecated_member_use_from_same_package
-      GoogleCredential(serverClientId: serverClientId, scopes: scopes);
 
   static StitchCredential facebook(String accessToken) =>
       // ignore: deprecated_member_use_from_same_package

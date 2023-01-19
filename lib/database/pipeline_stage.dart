@@ -10,7 +10,7 @@ class PipelineStage {
   }
 
   PipelineStage.group(String groupByField,
-      {Map<String, dynamic> accumulators}) {
+      {required Map<String, dynamic> accumulators}) {
     var map = <String, dynamic>{
       "_id": "\$$groupByField",
     };

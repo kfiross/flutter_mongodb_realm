@@ -1,4 +1,4 @@
-import 'package:streams_channel/streams_channel.dart';
+import 'package:streams_channel2/streams_channel2.dart';
 
 class StreamInterop {
   static StreamsChannel _streamsChannel =

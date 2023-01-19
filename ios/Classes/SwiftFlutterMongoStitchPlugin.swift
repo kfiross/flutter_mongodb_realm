@@ -126,7 +126,12 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         case "signInWithApple":
             self.signInWithApple(call: call, result: result)
             break
+            
+        case "linkCredentials":
+            self.linkCredentials(call: call, result: result)
         
+        case "isLoggedIn":
+            self.isLoggedIn(result)
             
         case "registerWithEmail":
             self.registerWithEmail(call: call, result: result)
@@ -300,6 +305,22 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         )
     }
     
+    func linkCredentials(call: FlutterMethodCall, result: @escaping FlutterResult){
+        
+        let credsJson = call.arguments as! Dictionary<String, Any>
+        
+
+        self.client?.linkCredentials(
+            credsJson: credsJson,
+            onCompleted: { map in
+                 result(map)
+            },
+            onError: { message in
+                result(FlutterError(code: "ERROR",message: message, details: nil))
+            }
+        )
+    }
+    
     
     func registerWithEmail(call: FlutterMethodCall, result: @escaping FlutterResult){
         let args = call.arguments as! Dictionary<String, Any>
@@ -317,6 +338,11 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
                 result(FlutterError(code: "ERROR",message: message, details: nil))
             }
         )
+    }
+    
+    func isLoggedIn(_ result: @escaping FlutterResult){
+        let isLogged = self.client?.isLoggedIn() ?? false
+        result(isLogged)
     }
     
     func logout(_ result: @escaping FlutterResult){
@@ -350,6 +376,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             result(user!.toMap())
         }
     }
+
     
     func sendResetPasswordEmail(call: FlutterMethodCall, result: @escaping FlutterResult) {
         let args = call.arguments as! Dictionary<String, Any>

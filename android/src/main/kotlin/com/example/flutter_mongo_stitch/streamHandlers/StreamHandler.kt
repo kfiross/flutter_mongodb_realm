@@ -14,7 +14,7 @@ import io.realm.internal.events.ChangeEvent
 class StreamHandler(val client: MyMongoStitchClient, val arguments: Any?)
     : EventChannel.StreamHandler {
 
-    private lateinit var handler: Handler
+    private var handler: Handler? = null
     private var eventSink: EventChannel.EventSink? = null
 
     override fun onListen(o: Any, eventSink: EventChannel.EventSink) {
@@ -40,7 +40,7 @@ class StreamHandler(val client: MyMongoStitchClient, val arguments: Any?)
 //                // handle change event
 
                 handler = Handler(Looper.getMainLooper())
-                handler.post {
+                handler?.post {
 //                      eventSink.success(mapOf(
 //                          "id" to event.fullDocument?.get("_id"),
 //                          "fullDocumentJson" to event.fullDocument?.toJson()
@@ -55,6 +55,6 @@ class StreamHandler(val client: MyMongoStitchClient, val arguments: Any?)
     }
 
     override fun onCancel(o: Any) {
-        handler.removeCallbacks {  }
+        handler?.removeCallbacks {  }
     }
 }

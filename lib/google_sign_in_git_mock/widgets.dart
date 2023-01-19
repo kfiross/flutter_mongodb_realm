@@ -4,7 +4,6 @@
 
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'src/common.dart';
@@ -22,11 +21,11 @@ class GoogleUserCircleAvatar extends StatelessWidget {
   /// in place of a profile photo, or a default profile photo if the user's
   /// identity does not specify a `displayName`.
   const GoogleUserCircleAvatar({
-    @required this.identity,
+    required this.identity,
     this.placeholderPhotoUrl,
     this.foregroundColor,
     this.backgroundColor,
-  }) : assert(identity != null);
+  });
 
   /// A regular expression that matches against the "size directive" path
   /// segment of Google profile image URLs.
@@ -41,13 +40,13 @@ class GoogleUserCircleAvatar extends StatelessWidget {
   /// The color of the text to be displayed if photo is not available.
   ///
   /// If a foreground color is not specified, the theme's text color is used.
-  final Color foregroundColor;
+  final Color? foregroundColor;
 
   /// The color with which to fill the circle. Changing the background color
   /// will cause the avatar to animate to the new color.
   ///
   /// If a background color is not specified, the theme's primary color is used.
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// The URL of a photo to use if the user's [identity] does not specify a
   /// `photoUrl`.
@@ -56,7 +55,7 @@ class GoogleUserCircleAvatar extends StatelessWidget {
   /// then this widget will attempt to display the user's first initial as
   /// determined from the identity's [displayName] field. If that is `null` a
   /// default (generic) Google profile photo will be displayed.
-  final String placeholderPhotoUrl;
+  final String? placeholderPhotoUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +70,7 @@ class GoogleUserCircleAvatar extends StatelessWidget {
   /// before the image filename. The format is described in [sizeDirective].
   ///
   /// Falls back to the default profile photo if [photoUrl] is [null].
-  static String _sizedProfileImageUrl(String photoUrl, double size) {
+  static String _sizedProfileImageUrl(String? photoUrl, double size) {
     if (photoUrl == null) {
       // If the user has no profile photo and no display name, fall back to
       // the default profile photo as a last resort.
@@ -96,20 +95,20 @@ class GoogleUserCircleAvatar extends StatelessWidget {
     // Placeholder to use when there is no photo URL, and while the photo is
     // loading. Uses the first character of the display name (if it has one),
     // or the first letter of the email address if it does not.
-    final List<String> placeholderCharSources = <String>[
+    final List<String?> placeholderCharSources = <String?>[
       identity.displayName,
       identity.email,
       '-',
     ];
     final String placeholderChar = placeholderCharSources
-        .firstWhere((String str) => str != null && str.trimLeft().isNotEmpty)
+        .firstWhere((String? str) => str != null && str.trimLeft().isNotEmpty)!
         .trimLeft()[0]
         .toUpperCase();
     final Widget placeholder = Center(
       child: Text(placeholderChar, textAlign: TextAlign.center),
     );
 
-    final String photoUrl = identity.photoUrl ?? placeholderPhotoUrl;
+    final String? photoUrl = identity.photoUrl ?? placeholderPhotoUrl;
     if (photoUrl == null) {
       return placeholder;
     }
