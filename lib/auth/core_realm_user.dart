@@ -1,19 +1,29 @@
+import 'credentials/stitch_credential.dart';
+import 'mongo_realm_auth.dart';
+
 /// A user that belongs to a MongoDB Stitch application.
 class CoreRealmUser {
   final String? id;
   final String? deviceId;
   final StitchUserProfile? profile;
 
+  final _realmAuth = MongoRealmAuth();
   CoreRealmUser({
     required this.id,
     this.deviceId,
     this.profile,
   });
 
+  Future<CoreRealmUser?> linkCredentials(StitchCredential credential){
+    return _realmAuth.linkCredentials(credential);
+  }
+
 //  final String loggedInProviderType;
 //  final String loggedInProviderName;
   //final StitchUserProfileImpl profile;
-//  final bool isLoggedIn;
+  Future<bool> get isLoggedIn {
+    return _realmAuth.isLoggedIn();
+  }
 //  final DateTime lastAuthActivity;
 
   static fromMap(Map? map) {

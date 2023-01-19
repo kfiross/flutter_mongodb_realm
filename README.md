@@ -43,6 +43,7 @@ Web integration automatically!
 * Auth Listener
 * Reset Password
 * Login/Sign in/Logout
+* Link User Identities [X]
 
 <b>Functions</b>
 * Calling a Realm function
@@ -230,6 +231,14 @@ StreamBuilder _authBuilder(BuildContext context) {
       },
   );
 }
+```
+
+
+#### Link User Identities
+The app can then link the new identity with the current user.
+```dart
+CoreRealmUser? mongoUser = app.login(Credentials.anonymous());
+user.linkCredentials(Credentials.emailPassword("email", "password"));
 ```
 
 ### Database

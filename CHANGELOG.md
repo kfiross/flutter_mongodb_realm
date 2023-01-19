@@ -1,3 +1,7 @@
+## [2.1.0]
+* Added `linkCredentials` function
+* Added `isLoggedIn` function
+ 
 ## [2.0.2]
 * Fixed web-plugin bug
 

@@ -1,6 +1,6 @@
 name: flutter_mongodb_realm
 description: Unofficial plugin for using services of the serverless platform MongoDB Realm (previously MongoDB Stitch).
-version: 2.0.2+2
+version: 2.1.0
 homepage: https://github.com/kfiross/flutter_mongo_stitch
 
 environment:
@@ -11,11 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_mongo_stitch_platform_interface: ^2.0.0
+  flutter_mongo_stitch_platform_interface: ^2.1.0
   # The design on https://flutter.dev/go/federated-plugins was to leave
   # this constraint as "any". We cannot do it right now as it fails pub publish
   # validation, so we set a ^ constraint.
-  flutter_mongo_stitch_web: ^1.1.0
+  flutter_mongo_stitch_web: ^1.1.0+1
 #    path: ../flutter_mongo_stitch_web
 
 

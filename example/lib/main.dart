@@ -36,9 +36,13 @@ class _MyAppState extends State<MyApp> {
   Future<void> init() async {
     // initialized MongoRealm App
 
-    try {} on PlatformException catch (e) {
-      print("Error! ${e.message}");
-    } on Exception {}
+    // try {} on PlatformException catch (e) {
+    //   print("Error! ${e.message}");
+    // } on Exception {}
+
+    await app.login(Credentials.anonymous());
+    print("init");
+    watchData();
   }
 
   Future<void> countData() async {
@@ -291,15 +295,17 @@ class _MyAppState extends State<MyApp> {
         client.getDatabase("test").getCollection("my_collection");
 
     try {
-//      final stream = myCollection.watch(ids: ["22", "8"], asObjectIds: false);
+      print("init stream");
+      final stream = myCollection.watch(ids: ["22"], asObjectIds: false);
 //      final stream2 = myCollection.watch(ids: ["5ee8a50ffaba833f1c6c6a7c"]);
 //      final stream3 =  myCollection.watchWithFilter({"age": 25}); /// WORKS!
 
-      final streamSimple = myCollection.watch();
+  //    final streamSimple = myCollection.watch();
 
       /// WORKS!
 
-      streamSimple.listen((event) {
+      print("start to listen");
+      stream.listen((event) {
         print(event);
         var fullDocument = MongoDocument.parse(event);
         print("a document with '${fullDocument.map["_id"]}' is changed");
@@ -308,7 +314,7 @@ class _MyAppState extends State<MyApp> {
         // do something
       });
     } on PlatformException catch (e) {
-      debugPrint("Error! ${e.message}");
+      print("Error! ${e.message}");
     }
   }
 
@@ -366,9 +372,39 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: _authBuilder(context),
-//      home: dummyHomeWidget(),
+      // home: _authBuilder(context),
+      home: dummyHomeWidget(),
     );
+  }
+
+  void test(){
+    try {
+      var userId = "9";
+      print(userId);
+      app.currentUser.then((value) => print(value!.profile!.email));
+
+      final database = client.getDatabase("herohunt");
+      print(database.name);
+
+      var colection = database.getCollection("users");
+      print(colection.collectionName);
+
+      final stream2 = colection.watch(ids: [userId], asObjectIds: false);
+
+      stream2.listen((data) {
+        // data contains JSON string of the document that was changed
+        print("New change");
+        var fullDocument = MongoDocument.parse(data);
+        print(fullDocument);
+        // Do other stuff...
+      }, onError: (error) {
+        print("On error: $error");
+      }, onDone: () {
+        print("On Done");
+      }, cancelOnError: true);
+    } catch (error) {
+      print("Error while listening: $error");
+    }
   }
 
   dummyHomeWidget() {

@@ -65,6 +65,16 @@ class MongoRealmAuth {
     return result;
   }
 
+  Future<CoreRealmUser?> linkCredentials(StitchCredential credential) async{
+    var result = await FlutterMongoRealm.linkCredentials(credential.toJson());
+    return result;
+  }
+
+  Future<bool> isLoggedIn() async {
+    var result = await FlutterMongoRealm.isLoggedIn();
+    return result;
+  }
+
   Future<bool?> logout() async {
     var result = await FlutterMongoRealm.logout();
 

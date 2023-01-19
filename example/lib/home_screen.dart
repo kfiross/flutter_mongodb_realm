@@ -48,6 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
+    // app.currentUser.then((user) {
+    //   user!.linkCredentials(Credentials.emailPassword('k@k.com', '1234567'));
+    // });
+
 //   client.callFunction("sum", args: [3, 4]).then((value) {
 //     print(value);
 //   });
@@ -101,70 +105,76 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
-        body: Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: <Widget>[
-              _filterRow(),
-              SizedBox(height: 20),
-              _header(),
-              _studentsListStreamBuilder(),
-              //_studentsList(),
-            ],
-          ),
-        ),
-        bottomSheet: Container(
-          margin: const EdgeInsets.only(bottom: 4),
-          child: Form(
-            key: formKey,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(
-                  flex: 3,
-                  child: TextFormField(
-                    decoration: InputDecoration(labelText: 'First Name'),
-                    autocorrect: false,
-                    validator: (val) =>
-                        val != null && val.isEmpty ? "can't be empty." : null,
-                    onSaved: (val) => _newStudFirstName = val ?? "",
-                  ),
+        body: Column(
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: <Widget>[
+                    _filterRow(),
+                    SizedBox(height: 20),
+                    _header(),
+                    _studentsListStreamBuilder(),
+                    //_studentsList(),
+                  ],
                 ),
-                SizedBox(width: 12),
-                Expanded(
-                  flex: 3,
-                  child: TextFormField(
-                    decoration: InputDecoration(labelText: 'Last Name'),
-                    autocorrect: false,
-                    validator: (val) =>
-                        val != null && val.isEmpty ? "can't be empty." : null,
-                    onSaved: (val) => _newStudLastName = val ?? "",
-                  ),
-                ),
-                SizedBox(width: 12),
-                Expanded(
-                  flex: 1,
-                  child: TextFormField(
-                    decoration: InputDecoration(labelText: 'Year'),
-                    autocorrect: false,
-                    validator: (val) =>
-                        val != null && val.isEmpty ? "can't be empty." : null,
-                    onSaved: (val) {
-                      if (val != null) {
-                        _newStudYear = int.parse(val);
-                      }
-                    },
-                  ),
-                ),
-                SizedBox(width: 12),
-                Expanded(
-                  flex: 2,
-                  child: RaisedButton(
-                      child: Text("Add"), onPressed: _insertNewStudent),
-                ),
-              ],
+              ),
             ),
-          ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 4),
+              child: Form(
+                key: formKey,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: TextFormField(
+                        decoration: InputDecoration(labelText: 'First Name'),
+                        autocorrect: false,
+                        validator: (val) =>
+                        val != null && val.isEmpty ? "can't be empty." : null,
+                        onSaved: (val) => _newStudFirstName = val ?? "",
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      flex: 3,
+                      child: TextFormField(
+                        decoration: InputDecoration(labelText: 'Last Name'),
+                        autocorrect: false,
+                        validator: (val) =>
+                        val != null && val.isEmpty ? "can't be empty." : null,
+                        onSaved: (val) => _newStudLastName = val ?? "",
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      flex: 1,
+                      child: TextFormField(
+                        decoration: InputDecoration(labelText: 'Year'),
+                        autocorrect: false,
+                        validator: (val) =>
+                        val != null && val.isEmpty ? "can't be empty." : null,
+                        onSaved: (val) {
+                          if (val != null) {
+                            _newStudYear = int.parse(val);
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      flex: 2,
+                      child: RaisedButton(
+                          child: Text("Add"), onPressed: _insertNewStudent),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -477,7 +487,7 @@ class Student {
             : (document.get("grades") as List)
                 .map((e) => int.parse("$e"))
                 .toList()),
-        year: document.get("year") ?? 1);
+        year: (document.get("year") ?? 1).toInt());
   }
 
   MongoDocument asDocument() {
