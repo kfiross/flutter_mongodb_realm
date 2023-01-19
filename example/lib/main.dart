@@ -372,9 +372,39 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: _authBuilder(context),
-//      home: dummyHomeWidget(),
+      // home: _authBuilder(context),
+      home: dummyHomeWidget(),
     );
+  }
+
+  void test(){
+    try {
+      var userId = "9";
+      print(userId);
+      app.currentUser.then((value) => print(value!.profile!.email));
+
+      final database = client.getDatabase("herohunt");
+      print(database.name);
+
+      var colection = database.getCollection("users");
+      print(colection.collectionName);
+
+      final stream2 = colection.watch(ids: [userId], asObjectIds: false);
+
+      stream2.listen((data) {
+        // data contains JSON string of the document that was changed
+        print("New change");
+        var fullDocument = MongoDocument.parse(data);
+        print(fullDocument);
+        // Do other stuff...
+      }, onError: (error) {
+        print("On error: $error");
+      }, onDone: () {
+        print("On Done");
+      }, cancelOnError: true);
+    } catch (error) {
+      print("Error while listening: $error");
+    }
   }
 
   dummyHomeWidget() {

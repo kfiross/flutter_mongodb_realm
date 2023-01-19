@@ -2,11 +2,28 @@
 
 var mongoClient;
 var stitchAppClient;
+var realmApp;
 
 function uint8ArrayToHex(uint8Array) {
     return Array.prototype.map.call(new Uint8Array(uint8Array.buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
 }
 
+function getCredFromJson(json){
+    switch(json["type"]){
+        case "anon":
+            throw Exception("can't link anonymous")
+        case "email_password":
+            return Realm.Credentials.emailPassword(json["email"] as String, json["password"] as String)
+        case "apple":
+            return Realm.Credentials.apple(json["idToken"] as String)
+        case "facebook":
+            return Realm.Credentials.facebook(json["accessToken"] as String)
+//        case "google":
+//            return Credentials.google(json["authorizationCode"] as String)
+        case "jwt" :
+            return Realm.Credentials.jwt(json["jwtToken"] as String)
+    }
+}
 
 function Mongo() {
     Mongo.prototype.connectMongo  = function(appId) {
@@ -18,6 +35,9 @@ function Mongo() {
         );
 
         this.sendAuthListenerEvent(null);
+
+        // Realm
+        realmApp = new Realm.App({ id: appId });
     }
 
     /// -----------------------------------------------------
@@ -276,6 +296,13 @@ function Mongo() {
 
         console.log('DONE!');
     };
+
+    Mongo.prototype.linkCredentials = async function(jsonData){
+         var json = JSON.parse(jsonData);
+        const realmUserCredentials = getCredFromJson(json)
+        await realmApp.currentUser.linkCredentials(realmUserCredentials);
+        return user;
+    }
 
     Mongo.prototype.logout  = async function(){
         await stitchAppClient.auth.logout();
