@@ -74,6 +74,10 @@ class MyMongoStitchClient(
         return app.currentUser()?.id
     }
 
+    fun getRefreshToken(): String? {
+        return app.currentUser()?.refreshToken
+    }
+
     fun isUserLoggedIn(): Boolean{
         return app.currentUser()?.isLoggedIn ?: false
     }

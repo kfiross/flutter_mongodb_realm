@@ -74,6 +74,10 @@ class FlutterMongoRealm {
     return await FlutterMongoStitchPlatform.instance.getUserId();
   }
 
+  static Future<String> getRefreshToken() async {
+    return await FlutterMongoStitchPlatform.instance.getRefreshToken();
+  }
+
   static Future<bool> registerWithEmail(String email, String password) async {
     return await FlutterMongoStitchPlatform.instance
             .registerWithEmail(email, password) ??

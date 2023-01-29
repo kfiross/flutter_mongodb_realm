@@ -18,6 +18,10 @@ class CoreRealmUser {
     return _realmAuth.linkCredentials(credential);
   }
 
+  Future<String> get refreshToken() {
+    return _realmAuth.getRefreshToken()
+  }
+
 //  final String loggedInProviderType;
 //  final String loggedInProviderName;
   //final StitchUserProfileImpl profile;

@@ -104,6 +104,7 @@ class FlutterMongoStitchPlugin : FlutterPlugin, MethodCallHandler {
             "registerWithEmail" -> registerWithEmail(call, result)
             "logout" -> logout(result)
             "getUserId" -> getUserId(result)
+            "getRefreshToken" -> getRefreshToken(result)
             "getUser" -> getUser(result)
             "sendResetPasswordEmail" -> sendResetPasswordEmail(call, result)
 
@@ -291,6 +292,21 @@ class FlutterMongoStitchPlugin : FlutterPlugin, MethodCallHandler {
             result.error("ERROR", "", null)
         }
     }
+
+    private fun getRefreshToken(result: Result){
+        try {
+            val token = client.getRefreshToken()
+
+            if (token == null) {
+                result.error("ERROR", "", null)
+            } else {
+                result.success(token)
+            }
+        } catch (e: AppException) {
+            result.error("ERROR", "", null)
+        }
+    }
+
 
     private fun getUser(result: Result) {
 

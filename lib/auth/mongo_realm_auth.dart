@@ -94,6 +94,11 @@ class MongoRealmAuth {
     return result;
   }
 
+  Future<String> getRefreshToken() async {
+    var result = await FlutterMongoRealm.getRefreshToken();
+    return result;
+  }
+
   Future<bool> registerWithEmail(
       {required String email, required String password}) async {
     var result = await FlutterMongoRealm.registerWithEmail(email, password);
