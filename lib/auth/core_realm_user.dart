@@ -18,8 +18,8 @@ class CoreRealmUser {
     return _realmAuth.linkCredentials(credential);
   }
 
-  Future<String> get refreshToken() {
-    return _realmAuth.getRefreshToken()
+  Future<String> getRefreshToken() {
+    return _realmAuth.getRefreshToken();
   }
 
 //  final String loggedInProviderType;

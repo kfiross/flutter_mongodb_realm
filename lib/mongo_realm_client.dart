@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 
-import 'auth/auth.dart';
 import 'database/database.dart';
 import 'plugin.dart';
 

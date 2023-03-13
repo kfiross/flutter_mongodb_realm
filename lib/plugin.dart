@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:bson/bson.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_mongodb_realm/stream_interop/stream_interop.dart';
 import 'package:flutter_mongo_stitch_platform_interface/flutter_mongo_stitch_platform_interface.dart';
@@ -75,7 +74,8 @@ class FlutterMongoRealm {
   }
 
   static Future<String> getRefreshToken() async {
-    return await FlutterMongoStitchPlatform.instance.getRefreshToken();
+    throw UnimplementedError();
+    //return await FlutterMongoStitchPlatform.instance.getRefreshToken();
   }
 
   static Future<bool> registerWithEmail(String email, String password) async {
