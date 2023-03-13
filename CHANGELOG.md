@@ -1,3 +1,6 @@
+## [2.1.1]
+* Fixed bug with ios
+
 ## [2.1.0]
 * Added `linkCredentials` function
 * Added `isLoggedIn` function
