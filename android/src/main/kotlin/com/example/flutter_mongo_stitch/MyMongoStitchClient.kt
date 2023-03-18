@@ -74,6 +74,10 @@ class MyMongoStitchClient(
         return app.currentUser()?.id
     }
 
+    fun getAccessToken(): String? {
+        return app.currentUser()?.accessToken
+    }
+
     fun getRefreshToken(): String? {
         return app.currentUser()?.refreshToken
     }

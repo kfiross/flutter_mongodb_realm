@@ -144,6 +144,14 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         case "getUserId":
             self.getUserId(result)
             break
+
+        case "getAccessToken":
+            self.getAccessToken(result)
+            break
+
+        case "getRefreshToken":
+            self.getRefreshToken(result)
+            break
             
         case "getUser":
             self.getUser(result)
@@ -363,6 +371,26 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
             result(FlutterError(code: "ERROR", message: "can't get user id ", details: nil))
         } else {
             result(id)
+        }
+    }
+
+    func getAccessToken(_ result: @escaping FlutterResult){
+        let token = self.client?.getAccessToken()
+
+        if (token == nil) {
+            result(FlutterError(code: "ERROR", message: "can't get user access token ", details: nil))
+        } else {
+            result(token)
+        }
+    }
+
+    func getRefreshToken(_ result: @escaping FlutterResult){
+        let token = self.client?.getRefreshToken()
+
+        if (token == nil) {
+            result(FlutterError(code: "ERROR", message: "can't get user access token ", details: nil))
+        } else {
+            result(token)
         }
     }
     
