@@ -75,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    app.currentUser.then((user) => user!.accessToken.then((token) => print("accessToken = $token")));
     return SafeArea(
       top: false,
       child: Scaffold(

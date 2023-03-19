@@ -265,20 +265,6 @@ class MyMongoStitchClient {
             return
         }
         
-//        self.app.login(
-//            credentials: Credentials.function(payload: payload)
-//        ) { authResult in
-//            switch(authResult){
-//            case .success(let user):
-//                onCompleted(user)
-//                break
-//
-//            case .failure(let error):
-//                onError("Custom Function Provider Login failed: \(error)")
-//                break
-//
-//            }
-//        }
     }
     
     func signInWithApple(
@@ -378,16 +364,6 @@ class MyMongoStitchClient {
             onCompleted()
         })
         
-//        let emailPassClient = self.auth.providerClient(fromFactory: userPasswordClientFactory)
-//
-//        return emailPassClient.sendResetPasswordEmail(toEmail: email) { result in
-//        switch result {
-//        case .success(let _):
-//            onCompleted()
-//        case .failure(let error):
-//            onError("Failed to send a reset password email: \(error)")
-//            }
-//        }
     }
     
     func getUser() -> StitchUser? {
@@ -396,6 +372,14 @@ class MyMongoStitchClient {
     
     func getUserId() -> String? {
         return self.auth.currentUser?.id // self.app.currentUser?.id
+    }
+    
+    func getAccessToken() -> String? {
+        return self.app.currentUser?.accessToken
+    }
+    
+    func getRefreshToken() -> String? {
+        return self.app.currentUser?.refreshToken
     }
     
     // MARK: Database (MongoDB Atlas)
@@ -813,6 +797,9 @@ class MyMongoStitchClient {
         self.auth.login(withCredential: AnonymousCredential()) { authResult in
             switch authResult {
             case .success(let user):
+                let credentials = Credentials.anonymous
+                self.new_login(credentials)
+                
                 onCompleted(user.toMap())
                 break
                 
@@ -835,6 +822,9 @@ class MyMongoStitchClient {
         ) { authResult in
             switch authResult {
             case .success(let user):
+                let credentials = Credentials.emailPassword(email: username, password: password)
+                self.new_login(credentials)
+                
                 onCompleted(user.toMap())
                 break
                 
@@ -856,6 +846,9 @@ class MyMongoStitchClient {
         ) { authResult in
             switch authResult {
             case .success(let user):
+                let credentials = Credentials.google(serverAuthCode: authCode)
+                self.new_login(credentials)
+                
                 onCompleted(user.toMap())
                 break
                 
@@ -878,6 +871,8 @@ class MyMongoStitchClient {
         ) { authResult in
             switch authResult {
             case .success(let user):
+                let credentials = Credentials.facebook(accessToken: accessToken)
+                self.new_login(credentials)
                 onCompleted(user.toMap())
                 break
                 
@@ -899,6 +894,9 @@ class MyMongoStitchClient {
         ) { authResult in
             switch authResult {
             case .success(let user):
+                let credentials = Credentials.jwt(token: accessToken)
+                self.new_login(credentials)
+                
                 onCompleted(user.toMap())
                 break
                 
@@ -913,13 +911,16 @@ class MyMongoStitchClient {
         onCompleted: @escaping ([String:Any])->Void,
         onError: @escaping (String?)->Void
     ){
-//        let data = idToken.data(using: .utf8)!
         let appleCredential = AppleCredential.init(identityTokenString: idToken)
 
         self.auth.login(withCredential: appleCredential
         ) { authResult in
             switch authResult {
             case .success(let user):
+                
+                let credentials = Credentials.apple(idToken: idToken)
+                self.new_login(credentials)
+                
                 onCompleted(user.toMap())
                 break
                 
@@ -935,26 +936,9 @@ class MyMongoStitchClient {
         onCompleted: @escaping ([String:Any])->Void,
         onError: @escaping (String?)->Void
     ){
-//        var payload = RealmSwift.Document()
-//        var map = [String:AnyObject]()
-//      //  do{
-//            if let data = json.data(using: .utf8) {
-//                    do {
-//                        map = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String:AnyObject]
-//                    } catch {
-//                        print("Something went wrong")
-//                    }
-//                for (key,value) in map{
-//                    payload[key] = value as? AnyBSON
-//                }
-//        }
-//            catch{
-//            onError("Failed to send Payload")
-//        }
         
-//        CustomCredential(withToken: accessToken)
-        
-         var payload = Document()
+            
+        var payload = Document()
         
         do{
             payload = try Document.init(fromJSON: json)
@@ -965,21 +949,6 @@ class MyMongoStitchClient {
 
         let credential = FunctionCredential.init(payload: payload)
         
-     
-//            FunctionCredential(payload: payload)
-        
-//        self.app.login(credentials: Credentials.function(payload: payload)
-//        ) { authResult in
-//            switch authResult {
-//               case .success(let user):
-//                   onCompleted(user.toMap())
-//                   break
-//
-//               case .failure(let error):
-//                   onError("Custom Function Provider Login failed \(error)")
-//                   break
-//               }
-//        }
 
 
         self.auth.login(
@@ -987,6 +956,9 @@ class MyMongoStitchClient {
         ) { authResult in
             switch authResult {
             case .success(let user):
+                
+                self.new_login_custom(json)
+                
                 onCompleted(user.toMap())
                 break
 
@@ -1005,6 +977,10 @@ class MyMongoStitchClient {
         self.auth.logout { result in
             switch result {
             case .success(_):
+                self.app.currentUser!.logOut { error in
+                    print(error ?? "")
+                }
+                
                 onCompleted(true)
                 break
                 
@@ -1012,6 +988,41 @@ class MyMongoStitchClient {
                 onError("Cannot logout user: \(error)")
                 break
             }
+        }
+        
+    }
+    
+    private func new_login(_ credentials: Credentials){
+        self.app.login(credentials: credentials) { (result) in
+            switch result {
+            case .failure(let error):
+                print("Login failed: \(error.localizedDescription)")
+            case .success(let user):
+                print("Successfully logged in as user \(user)")
+            }
+        }
+    }
+    
+    private func new_login_custom(_ json: String){
+        var payload_new = RealmSwift.Document()
+        var map = [String:AnyObject]()
+        do{
+            if let data = json.data(using: .utf8) {
+                    do {
+                        map = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String:AnyObject]
+                    } catch {
+                        print("Something went wrong")
+                    }
+                for (key,value) in map{
+                    payload_new[key] = value as? AnyBSON
+                }
+                let credentials = Credentials.function(payload: payload_new)
+                self.new_login(credentials)
+                
+            }
+        }
+        catch {
+            print("Failed to send Payload")
         }
         
     }

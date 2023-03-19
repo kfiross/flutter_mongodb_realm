@@ -21,16 +21,10 @@ class MyRLMAuthDelegate: ASLoginDelegate
         self._events = events;
     }
     func authenticationDidComplete(error: Error) {
-        
+        self._events(nil)
     }
     
     func authenticationDidComplete(user: User) {
-//        if (user != nil){
-//            self._events(user!.toMap())
-//        }
-//        else {
-//            self._events(nil)
-//        }
         switch(user.state){
             case .loggedIn:
                 self._events(user.toMap())
@@ -49,7 +43,7 @@ class MyRLMAuthDelegate: ASLoginDelegate
         }
         
     }
-    
+
     
 }
 
@@ -73,11 +67,11 @@ class MyStitchAuthDelegate: StitchAuthDelegate
     }
 }
 
-
+var loginDelegate: MyRLMAuthDelegate?
 @available(iOS 13.0, *)
 class AuthStreamHandlerRLM : FlutterStreamHandler{
     var realmApp: App
-    var loginDelegate: MyRLMAuthDelegate?
+    // var loginDelegate: MyRLMAuthDelegate?
     
     init(realmApp: App) {
         self.realmApp = realmApp
