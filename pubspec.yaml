@@ -15,8 +15,8 @@ dependencies:
   # The design on https://flutter.dev/go/federated-plugins was to leave
   # this constraint as "any". We cannot do it right now as it fails pub publish
   # validation, so we set a ^ constraint.
-  flutter_mongo_stitch_web: ^1.1.0+1
-#    path: ../flutter_mongo_stitch_web
+  flutter_mongo_stitch_web: ^1.2.0
+    # path: ../flutter_mongo_stitch_web
 
 
   universal_html: ^2.0.8      # instead importing in runtime

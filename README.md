@@ -13,7 +13,7 @@ For API reference [check here](https://pub.dartlang.org/documentation/flutter_mo
 
 The minimum requirements are:
  - Android 5.0 (API 21)
- - iOS 11.0
+ - iOS 13.0
 
 ## Setup
 Doesn't require any setup besides adding as a dependency
@@ -44,6 +44,7 @@ Web integration automatically!
 * Reset Password
 * Login/Sign in/Logout
 * Link User Identities [X]
+* Access token or Refresh token
 
 <b>Functions</b>
 * Calling a Realm function

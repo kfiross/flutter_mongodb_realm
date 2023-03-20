@@ -75,7 +75,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    app.currentUser.then((user) => user!.accessToken.then((token) => print("accessToken = $token")));
+    Future.delayed(Duration(seconds: 1)).then((value) {
+      app.currentUser.then((user) {
+        user!.accessToken.then((token) {
+          print("accessToken = $token");
+        });
+      });
+    });
+
     return SafeArea(
       top: false,
       child: Scaffold(

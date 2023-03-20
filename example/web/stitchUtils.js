@@ -9,20 +9,22 @@ function uint8ArrayToHex(uint8Array) {
 }
 
 function getCredFromJson(json){
-    switch(json["type"]){
-        case "anon":
-            throw Exception("can't link anonymous")
-        case "email_password":
-            return Realm.Credentials.emailPassword(json["email"] as String, json["password"] as String)
-        case "apple":
-            return Realm.Credentials.apple(json["idToken"] as String)
-        case "facebook":
-            return Realm.Credentials.facebook(json["accessToken"] as String)
-//        case "google":
-//            return Credentials.google(json["authorizationCode"] as String)
-        case "jwt" :
-            return Realm.Credentials.jwt(json["jwtToken"] as String)
-    }
+    throw Exception("not implemented!!")
+//    switch(json["type"]){
+//        case "anon":
+//            throw Exception("can't link anonymous")
+//        case "email_password":
+//            throw Exception("can't link anonymous")
+//            // return Realm.Credentials.emailPassword(json["email"] as String, json["password"] as String)
+//        case "apple":
+//            return Realm.Credentials.apple(json["idToken"] as String)
+//        case "facebook":
+//            return Realm.Credentials.facebook(json["accessToken"] as String)
+////        case "google":
+////            return Credentials.google(json["authorizationCode"] as String)
+//        case "jwt" :
+//            return Realm.Credentials.jwt(json["jwtToken"] as String)
+//    }
 }
 
 function Mongo() {
@@ -189,6 +191,8 @@ function Mongo() {
 
         this.sendAuthListenerEvent(userObject);
 
+        await realmApp.logIn(Realm.Credentials.anonymous())
+
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify({"id": user.id}));
         });
@@ -208,6 +212,8 @@ function Mongo() {
 
          this.sendAuthListenerEvent(userObject);
 
+         await realmApp.logIn(Realm.Credentials.emailPassword(username, password));
+
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify(userObject));
         });
@@ -225,6 +231,8 @@ function Mongo() {
         }
 
         this.sendAuthListenerEvent(userObject);
+
+        await realmApp.logIn(Realm.Credentials.google(authCode));
 
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify(userObject));
@@ -244,6 +252,8 @@ function Mongo() {
 
         this.sendAuthListenerEvent(userObject);
 
+        await realmApp.logIn(Realm.Credentials.facebook(token));
+
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify(userObject));
         });
@@ -261,6 +271,8 @@ function Mongo() {
         };
 
         this.sendAuthListenerEvent(userObject);
+
+        await realmApp.logIn(Realm.Credentials.jwt(jwtString));
 
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify(userObject));
@@ -281,6 +293,8 @@ function Mongo() {
         };
 
         this.sendAuthListenerEvent(userObject);
+
+        await realmApp.emailPassword.function(json)
 
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify(userObject));
@@ -306,17 +320,37 @@ function Mongo() {
 
     Mongo.prototype.logout  = async function(){
         await stitchAppClient.auth.logout();
+        await realmApp.logOut()
         this.sendAuthListenerEvent(null);
         console.log('logged out')
     };
 
-     Mongo.prototype.getUserId  = async function(){
+     Mongo.prototype.getUserId = async function(){
          var user = await stitchAppClient.auth.user;
 
          return new Promise((resolve, reject) => {
             resolve(user.id);
          });
      };
+
+     Mongo.prototype.getAccessToken = async function(){
+         var token = realmApp.currentUser.accessToken
+
+         return new Promise((resolve, reject) => {
+             resolve(token);
+         });
+     };
+
+
+
+     Mongo.prototype.getRefreshToken = async function(){
+       var token = await realmApp.currentUser.refreshToken;
+
+       return new Promise((resolve, reject) => {
+          resolve(refreshToken);
+       });
+     };
+
 
 
      Mongo.prototype.getUser  = async function(){

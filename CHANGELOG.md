@@ -1,3 +1,6 @@
+## [2.2.0]
+* Added support for `getRefreshToken` and `getAccessToken`
+
 ## [2.1.1]
 * Fixed bug with ios
 
