@@ -12,7 +12,7 @@ import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 For API reference [check here](https://pub.dartlang.org/documentation/flutter_mongodb_realm/latest/)
 
 The minimum requirements are:
- - Android 5.0 (API 21)
+ - Android 7.0 (API 24)
  - iOS 13.0
 
 ## Setup

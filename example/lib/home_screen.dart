@@ -44,10 +44,13 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _newStudLastName;
   int? _newStudYear;
 
+  ScrollController? _scrollController;
+
   @override
   void initState() {
     super.initState();
 
+    _scrollController = ScrollController();
     // app.currentUser.then((user) {
     //   user!.linkCredentials(Credentials.emailPassword('k@k.com', '1234567'));
     // });
@@ -60,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _selectedValueForFilterCtrler.dispose();
+    _scrollController?.dispose();
     super.dispose();
   }
 
@@ -68,9 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.didChangeDependencies();
 
     _collection ??= client.getDatabase("test").getCollection("students");
-    try {
-      await _fetchStudents();
-    } catch (e) {}
+    // try {
+    //   await _fetchStudents();
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 
   @override
@@ -141,8 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: TextFormField(
                         decoration: InputDecoration(labelText: 'First Name'),
                         autocorrect: false,
-                        validator: (val) =>
-                        val != null && val.isEmpty ? "can't be empty." : null,
+                        validator: (val) => val != null && val.isEmpty ? "can't be empty." : null,
                         onSaved: (val) => _newStudFirstName = val ?? "",
                       ),
                     ),
@@ -152,8 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: TextFormField(
                         decoration: InputDecoration(labelText: 'Last Name'),
                         autocorrect: false,
-                        validator: (val) =>
-                        val != null && val.isEmpty ? "can't be empty." : null,
+                        validator: (val) => val != null && val.isEmpty ? "can't be empty." : null,
                         onSaved: (val) => _newStudLastName = val ?? "",
                       ),
                     ),
@@ -163,8 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: TextFormField(
                         decoration: InputDecoration(labelText: 'Year'),
                         autocorrect: false,
-                        validator: (val) =>
-                        val != null && val.isEmpty ? "can't be empty." : null,
+                        validator: (val) => val != null && val.isEmpty ? "can't be empty." : null,
                         onSaved: (val) {
                           if (val != null) {
                             _newStudYear = int.parse(val);
@@ -175,8 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(width: 12),
                     Expanded(
                       flex: 2,
-                      child: ElevatedButton(
-                          child: Text("Add"), onPressed: _insertNewStudent),
+                      child: ElevatedButton(child: Text("Add"), onPressed: _insertNewStudent),
                     ),
                   ],
                 ),
@@ -201,14 +203,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Name",
                 style: TextStyle(fontWeight: FontWeight.bold),
               )),
+          Expanded(flex: 1, child: Text("Year", style: TextStyle(fontWeight: FontWeight.bold))),
           Expanded(
-              flex: 1,
-              child:
-                  Text("Year", style: TextStyle(fontWeight: FontWeight.bold))),
-          Expanded(
-              flex: 1,
-              child: Text("Grades Avg.",
-                  style: TextStyle(fontWeight: FontWeight.bold))),
+              flex: 1, child: Text("Grades Avg.", style: TextStyle(fontWeight: FontWeight.bold))),
         ],
       ),
     );
@@ -225,16 +222,24 @@ class _HomeScreenState extends State<HomeScreen> {
         // return const SizedBox.shrink();
 
         return FutureBuilder<List<MongoDocument>>(
-          future: _collection?.find(),
-          builder:
-              (BuildContext _, AsyncSnapshot<List<MongoDocument>> snapshot2) {
-            if (snapshot.data == null) return const SizedBox.shrink();
+          future: _collection?.find(options: RemoteFindOptions(limit: 10, sort: {
+            '_id': OrderValue.DESCENDING
+          })),
+          builder: (BuildContext _, AsyncSnapshot<List<MongoDocument>> snapshot2) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              if (snapshot2.connectionState != ConnectionState.done) {
+                return _studentsList();
+              }
+            }
+            if (snapshot2.data == null) return const SizedBox.shrink();
 
             _students.clear();
-            var documents = snapshot2.data;
-            documents?.forEach((document) {
+
+            var documents = snapshot2.data ?? [];
+            for(var document in documents){
               _students.add(Student.fromDocument(document));
-            });
+            }
+            print(_students.length);
 
             return _studentsList();
           },
@@ -273,9 +278,13 @@ class _HomeScreenState extends State<HomeScreen> {
     if (list.isEmpty) {
       return const SizedBox.shrink();
     }
+    Future.microtask(() {
+      _scrollDown();
+    });
 
     return Expanded(
         child: ListView.builder(
+      controller: _scrollController,
       itemBuilder: (context, index) => list[index],
       itemCount: list.length,
     ));
@@ -365,8 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   break;
               }
 
-              var docs =
-                  await _collection?.find(filter: {selectedFilter: operator});
+              var docs = await _collection?.find(filter: {selectedFilter: operator});
 
               print("docs found = ${docs!.length}");
             },
@@ -378,6 +386,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Functions ///
 
+  void _scrollDown() {
+    _scrollController?.animateTo(_scrollController?.position.maxScrollExtent ?? 0, curve: Curves.bounceIn, duration: Duration(milliseconds: 10));
+  }
+
   _fetchStudents() async {
     List? documents = await _collection?.find(
 
@@ -386,9 +398,9 @@ class _HomeScreenState extends State<HomeScreen> {
 //      }
         );
     _students.clear();
-    documents?.forEach((document) {
+    for (var document in documents ?? []) {
       _students.add(Student.fromDocument(document));
-    });
+    }
     setState(() {});
   }
 
@@ -492,9 +504,7 @@ class Student {
         lastName: document.get("lastName") ?? "",
         grades: (document.get("grades") == null
             ? <int>[]
-            : (document.get("grades") as List)
-                .map((e) => int.parse("$e"))
-                .toList()),
+            : (document.get("grades") as List).map((e) => int.parse("$e")).toList()),
         year: (document.get("year") ?? 1).toInt());
   }
 

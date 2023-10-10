@@ -231,14 +231,14 @@ class MyMongoStitchClient(
 
         val result = collection?.find(filter)?.projection(projectionBson)
 
-        //  add optional limit
-        if (limit != null){
-            result?.limit(limit)
-        }
-
         // add optional sort
         if (sortBson != null){
             result?.sort(sortBson)
+        }
+
+        //  add optional limit
+        if (limit != null){
+            result?.limit(limit)
         }
 
         return result
