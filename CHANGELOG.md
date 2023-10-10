@@ -1,3 +1,8 @@
+# [2.2.1]
+* Removed unused `extension` dependency
+* Updated dependencies
+* Bumped minimum dart version is `2.18.0`
+
 ## [2.2.0]
 * Added support for `getRefreshToken` and `getAccessToken`
 
