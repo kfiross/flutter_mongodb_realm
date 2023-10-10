@@ -299,8 +299,27 @@ var docs = await collection.find(
     }
   ),
 );
+```
+#### FindIterable
+Cleaner way for using `find`
+```dart
+var docs = await collection.findIterable()
+     .limit(70)
+     .filter({
+       "year": QueryOperator.gt(2010)..lte(2014),
+     }).projection({
+       "title": ProjectionValue.INCLUDE,
+       "rated": ProjectionValue.INCLUDE,
+       "year": ProjectionValue.INCLUDE,
+     }).sort({
+       "year": OrderValue.ASCENDING,
+     })
+     .find();  // IMPORTANT TO CALL!!
+```
 
-
+#### FindOne
+like`find`, but only the first document matched
+```dart
 // the same as above, but just get the first matched one
 var document = await collection.findOne();
 
@@ -318,6 +337,7 @@ int size = await collection.count({
     "age": 25,
 });
 ```
+
 
 #### Delete
 filtering can be used with QueryOperator class for more robust code

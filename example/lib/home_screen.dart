@@ -222,9 +222,10 @@ class _HomeScreenState extends State<HomeScreen> {
         // return const SizedBox.shrink();
 
         return FutureBuilder<List<MongoDocument>>(
-          future: _collection?.find(options: RemoteFindOptions(limit: 10, sort: {
-            '_id': OrderValue.DESCENDING
-          })),
+          future: _collection?.findIterable()
+              .limit(10)
+              .sort({'_id': OrderValue.DESCENDING})
+              .find(),
           builder: (BuildContext _, AsyncSnapshot<List<MongoDocument>> snapshot2) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               if (snapshot2.connectionState != ConnectionState.done) {

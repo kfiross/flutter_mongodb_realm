@@ -388,4 +388,12 @@ class RemoteFindOptions {
   final Map<String, OrderValue>? sort;
 
   RemoteFindOptions({this.limit, this.projection, this.sort});
+
+  RemoteFindOptions copyWith({int? limit, Map<String, ProjectionValue>? projection, Map<String, OrderValue>? sort}) {
+    return RemoteFindOptions(
+      limit: limit ?? this.limit,
+      projection: projection ?? this.projection,
+      sort: sort ?? this.sort,
+    );
+  }
 }
