@@ -89,11 +89,11 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           title: Text("Home Screen"),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Icon(Icons.refresh, color: Colors.white),
               onPressed: _fetchStudents,
             ),
-            FlatButton(
+            TextButton(
               child: Icon(Icons.exit_to_app, color: Colors.white),
               onPressed: () async {
                 try {
@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(width: 12),
                     Expanded(
                       flex: 2,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                           child: Text("Add"), onPressed: _insertNewStudent),
                     ),
                   ],

@@ -83,8 +83,10 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 36),
             SizedBox(
               width: 220,
-              child: RaisedButton(
-                color: Colors.red,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
                 child: Text((_state == LoginState.login) ? 'Login' : 'Register',
                     style: TextStyle(color: Colors.white)),
                 onPressed: _submitForm,
@@ -97,8 +99,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     width: 220,
                     margin: const EdgeInsets.only(bottom: 12),
-                    child: RaisedButton(
-                      color: Colors.red,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
                       child: Text("Login as Anonymous",
                           style: TextStyle(color: Colors.white)),
                       onPressed: _loginAnonymously,
@@ -107,8 +111,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     width: 220,
                     margin: const EdgeInsets.only(bottom: 12),
-                    child: RaisedButton(
-                      color: Colors.red,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
                       child: Text("Login with Facebook",
                           style: TextStyle(color: Colors.white)),
                       onPressed: _loginWithFacebook,
@@ -117,8 +123,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     width: 220,
                     margin: const EdgeInsets.only(bottom: 12),
-                    child: RaisedButton(
-                      color: Colors.red,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
                       child: Text("Login with Google",
                           style: TextStyle(color: Colors.white)),
                       onPressed: _loginWithGoogle,
@@ -127,8 +135,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     width: 220,
                     margin: const EdgeInsets.only(bottom: 12),
-                    child: RaisedButton(
-                      color: Colors.red,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
                       child: Text("Login with Custom Function",
                           style: TextStyle(color: Colors.white)),
                       onPressed: () => Navigator.push(
@@ -157,8 +167,10 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Container(
               width: 200,
-              child: RaisedButton(
-                color: Colors.green,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
                 child: Text(
                     "Go to ${(_state == LoginState.login) ? 'register' : 'login'}",
                     style: TextStyle(color: Colors.white)),
@@ -352,7 +364,7 @@ Future buildErrorDialog(BuildContext context, _message) {
         title: Text('Something went wrong...'),
         content: Text(_message),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();

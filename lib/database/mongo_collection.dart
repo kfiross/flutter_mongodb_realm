@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:bson/bson.dart';
-import 'package:extension/extension.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_mongodb_realm/database/pipeline_stage.dart';
 
@@ -13,18 +12,20 @@ import 'mongo_document.dart';
 import 'query_operator.dart';
 import 'update_operator.dart';
 
-class ProjectionValue extends Enum<int> {
-  const ProjectionValue._(int val) : super(val);
+enum ProjectionValue {
+  INCLUDE(1),
+  EXCLUDE(0);
 
-  static const ProjectionValue INCLUDE = const ProjectionValue._(1);
-  static const ProjectionValue EXCLUDE = const ProjectionValue._(0);
+  final int value;
+  const ProjectionValue(this.value);
 }
 
-class OrderValue extends Enum<int> {
-  const OrderValue._(int val) : super(val);
+enum OrderValue {
+  ASCENDING(1),
+  DESCENDING(-1);
 
-  static const OrderValue ASCENDING = const OrderValue._(1);
-  static const OrderValue DESCENDING = const OrderValue._(-1);
+  final int value;
+  const OrderValue(this.value);
 }
 
 /// MongoCollection provides read and write access to documents.

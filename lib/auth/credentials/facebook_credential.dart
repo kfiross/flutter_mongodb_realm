@@ -8,9 +8,6 @@ class FacebookCredential extends StitchCredential {
 
   @override
   Map<String, Object> toJson() {
-    return {
-      "type": "facebook",
-      "accessToken": accessToken
-    };
+    return {"type": "facebook", "accessToken": accessToken};
   }
 }

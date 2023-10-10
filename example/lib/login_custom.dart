@@ -47,8 +47,10 @@ class _CustomLoginScreenState extends State<CustomLoginScreen> {
             SizedBox(height: 36),
             Container(
               width: 200,
-              child: RaisedButton(
-                color: Colors.red,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
                 child: Text('Login', style: TextStyle(color: Colors.white)),
                 onPressed: _submitForm,
               ),

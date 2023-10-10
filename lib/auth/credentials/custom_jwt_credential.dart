@@ -8,9 +8,6 @@ class CustomJwtCredential extends StitchCredential {
 
   @override
   Map<String, Object> toJson() {
-    return {
-      "type": "jwt",
-      "token": token
-    };
+    return {"type": "jwt", "token": token};
   }
 }

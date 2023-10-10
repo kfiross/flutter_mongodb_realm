@@ -55,8 +55,10 @@ class FlutterMongoRealm {
     return CoreRealmUser.fromMap(details);
   }
 
-  static Future<CoreRealmUser?> linkCredentials(Map<String, Object> json) async {
-    var details = await FlutterMongoStitchPlatform.instance.linkCredentials(json);
+  static Future<CoreRealmUser?> linkCredentials(
+      Map<String, Object> json) async {
+    var details =
+        await FlutterMongoStitchPlatform.instance.linkCredentials(json);
     return CoreRealmUser.fromMap(details);
   }
 

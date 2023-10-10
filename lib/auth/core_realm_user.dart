@@ -14,7 +14,7 @@ class CoreRealmUser {
     this.profile,
   });
 
-  Future<CoreRealmUser?> linkCredentials(StitchCredential credential){
+  Future<CoreRealmUser?> linkCredentials(StitchCredential credential) {
     return _realmAuth.linkCredentials(credential);
   }
 

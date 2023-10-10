@@ -416,7 +416,7 @@ class _MyAppState extends State<MyApp> {
         child: Column(
           children: <Widget>[
             Text('Running on: \n'),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Reset Password"),
               onPressed: () async {
                 try {

@@ -65,7 +65,7 @@ class MongoRealmAuth {
     return result;
   }
 
-  Future<CoreRealmUser?> linkCredentials(StitchCredential credential) async{
+  Future<CoreRealmUser?> linkCredentials(StitchCredential credential) async {
     var result = await FlutterMongoRealm.linkCredentials(credential.toJson());
     return result;
   }
@@ -79,8 +79,7 @@ class MongoRealmAuth {
     var result = await FlutterMongoRealm.logout();
 
     bool? loggedWithGoogle = await _googleLoginWrapper.isLogged;
-    if (loggedWithGoogle == true)
-      await _googleLoginWrapper.handleSignOut();
+    if (loggedWithGoogle == true) await _googleLoginWrapper.handleSignOut();
 
 //    bool loggedWithFacebook = await _facebookLoginWrapper.isLogged;
 //    if (loggedWithFacebook)

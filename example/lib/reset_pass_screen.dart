@@ -38,7 +38,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ),
           ),
           SizedBox(height: 12),
-          RaisedButton(
+          ElevatedButton(
             child: Text("Reset Password"),
             onPressed: _sendEmail,
           )
