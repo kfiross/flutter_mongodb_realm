@@ -277,6 +277,48 @@ class MyMongoStitchClient {
             self.signInWithApple_s(idToken: idToken, onCompleted: onCompleted, onError: onError)
             return
         }
+        
+//        self.app.login(
+//            credentials: Credentials.jwt(token: accessToken)
+//        ) { authResult in
+//            switch(authResult){
+//            case .success(let user):
+//                onCompleted(user)
+//                break
+//
+//            case .failure(let error):
+//                onError("JWT Provider Login failed \(error)")
+//                break
+//
+//            }
+//        }
+    }
+    
+    func signInWithCustomFunction(
+        json: String,
+        onCompleted: @escaping ([String:Any])->Void,
+        onError: @escaping (String?)->Void
+        ){
+        
+        guard false else {
+            self.signInWithCustomFunction_s(json: json, onCompleted: onCompleted, onError: onError)
+            return
+        }
+        
+//        self.app.login(
+//            credentials: Credentials.function(payload: payload)
+//        ) { authResult in
+//            switch(authResult){
+//            case .success(let user):
+//                onCompleted(user)
+//                break
+//
+//            case .failure(let error):
+//                onError("Custom Function Provider Login failed: \(error)")
+//                break
+//
+//            }
+//        }
     }
     
     func linkCredentials(
@@ -936,7 +978,7 @@ class MyMongoStitchClient {
         onCompleted: @escaping ([String:Any])->Void,
         onError: @escaping (String?)->Void
     ){
-        
+
             
         var payload = Document()
         

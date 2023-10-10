@@ -164,6 +164,10 @@ class MongoCollection {
       return [];
     }
 
+    if (resultJson == null) {
+      return [];
+    }
+
     var result = resultJson.map((string) {
       return MongoDocument.parse(string);
     }).toList();

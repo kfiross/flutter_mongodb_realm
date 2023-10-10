@@ -114,7 +114,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         case "signInWithFacebook":
             self.signInWithFacebook(call: call, result: result)
             break
-         
+
         case "signInWithCustomJwt":
             self.signInWithCustomJwt(call: call, result: result)
             break

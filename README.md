@@ -39,6 +39,7 @@ Web integration automatically!
 * Custom Authentication Function
 * Apple ID \[X]
 
+
 **Authentication:**
 * Auth Listener
 * Reset Password
@@ -177,6 +178,14 @@ final appleResult = await AppleSignIn.performRequests([
 3. Use the token in the `login` function with the `Credentials.apple` auth provider
 ```dart
 CoreRealmUser? mongoUser = app.login(Credentials.apple(idToken));
+```
+
+* Custom (Auth) Function:
+```dart
+MongoDocument payload = MongoDocument({
+  "username": "bob"
+})
+CoreRealmUser mongoUser = await app.login(Credentials.function(payload);
 ```
 
 <b>NOTE: In any case , if mongoUser != null the login was successful.</b>
@@ -337,7 +346,6 @@ await collection.updateOne(
   update: UpdateSelector.set({
     "age": 26,
   });
-
 );
 ```
 Updating the only all matched documents:

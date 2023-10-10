@@ -59,6 +59,11 @@
 
 ## [1.2.1]
 * Using the latest web plugin version.
+=======
+* Updated README.
+
+## [1.2.1]
+* Using latest web plugin version.
 
 ## [1.2.0]
 * Added `Custom JWT` auth provider.

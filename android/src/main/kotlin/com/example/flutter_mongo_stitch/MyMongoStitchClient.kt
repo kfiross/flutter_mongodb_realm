@@ -126,6 +126,7 @@ class MyMongoStitchClient(
         return app.currentUser()?.linkCredentialsAsync(creds, callback)
     }
 
+
     fun logout(callback: App.Callback<User>): RealmAsyncTask?
             = app.currentUser()?.logOutAsync(callback);
 
