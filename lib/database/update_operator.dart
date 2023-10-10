@@ -1,10 +1,9 @@
-import 'package:extension/enum.dart';
+enum PopValue {
+  LAST(1),
+  FIRST(-1);
 
-class PopValue extends Enum<int> {
-  const PopValue(int val) : super(val);
-
-  static const PopValue LAST = const PopValue(1);
-  static const PopValue FIRST = const PopValue(-1);
+  final int value;
+  const PopValue(this.value);
 }
 //import 'package:bson/bson.dart';
 
@@ -136,11 +135,13 @@ class UpdateOperator {
 
 /// ////////////////////////////////////////////////////////
 
-class SortValue extends Enum<int> {
-  const SortValue(int val) : super(val);
+enum SortValue {
+  ASC(1),
+  DSC(-1);
 
-  static const SortValue ASC = const SortValue(1);
-  static const SortValue DSC = const SortValue(-1);
+  final int value;
+
+  const SortValue(this.value);
 }
 
 class ArrayModifier {

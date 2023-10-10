@@ -2,11 +2,30 @@
 
 var mongoClient;
 var stitchAppClient;
+var realmApp;
 
 function uint8ArrayToHex(uint8Array) {
     return Array.prototype.map.call(new Uint8Array(uint8Array.buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
 }
 
+function getCredFromJson(json){
+    throw Exception("not implemented!!")
+//    switch(json["type"]){
+//        case "anon":
+//            throw Exception("can't link anonymous")
+//        case "email_password":
+//            throw Exception("can't link anonymous")
+//            // return Realm.Credentials.emailPassword(json["email"] as String, json["password"] as String)
+//        case "apple":
+//            return Realm.Credentials.apple(json["idToken"] as String)
+//        case "facebook":
+//            return Realm.Credentials.facebook(json["accessToken"] as String)
+////        case "google":
+////            return Credentials.google(json["authorizationCode"] as String)
+//        case "jwt" :
+//            return Realm.Credentials.jwt(json["jwtToken"] as String)
+//    }
+}
 
 function Mongo() {
     Mongo.prototype.connectMongo  = function(appId) {
@@ -18,6 +37,9 @@ function Mongo() {
         );
 
         this.sendAuthListenerEvent(null);
+
+        // Realm
+        realmApp = new Realm.App({ id: appId });
     }
 
     /// -----------------------------------------------------
@@ -82,6 +104,13 @@ function Mongo() {
 
         var strings = [];
         results.forEach((doc) => {
+
+            let docId = doc['_id']
+            if (typeof docId === 'object' || docId instanceof Object){
+                doc['_id'] = {
+                    '$oid': `${docId}`
+                }
+            }
             strings.push(JSON.stringify(doc))
         })
 
@@ -162,6 +191,8 @@ function Mongo() {
 
         this.sendAuthListenerEvent(userObject);
 
+        await realmApp.logIn(Realm.Credentials.anonymous())
+
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify({"id": user.id}));
         });
@@ -181,6 +212,8 @@ function Mongo() {
 
          this.sendAuthListenerEvent(userObject);
 
+         await realmApp.logIn(Realm.Credentials.emailPassword(username, password));
+
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify(userObject));
         });
@@ -198,6 +231,8 @@ function Mongo() {
         }
 
         this.sendAuthListenerEvent(userObject);
+
+        await realmApp.logIn(Realm.Credentials.google(authCode));
 
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify(userObject));
@@ -217,6 +252,8 @@ function Mongo() {
 
         this.sendAuthListenerEvent(userObject);
 
+        await realmApp.logIn(Realm.Credentials.facebook(token));
+
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify(userObject));
         });
@@ -234,6 +271,8 @@ function Mongo() {
         };
 
         this.sendAuthListenerEvent(userObject);
+
+        await realmApp.logIn(Realm.Credentials.jwt(jwtString));
 
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify(userObject));
@@ -255,6 +294,8 @@ function Mongo() {
 
         this.sendAuthListenerEvent(userObject);
 
+        await realmApp.emailPassword.function(json)
+
         return new Promise((resolve, reject) => {
             resolve(JSON.stringify(userObject));
         });
@@ -270,19 +311,46 @@ function Mongo() {
         console.log('DONE!');
     };
 
+    Mongo.prototype.linkCredentials = async function(jsonData){
+         var json = JSON.parse(jsonData);
+        const realmUserCredentials = getCredFromJson(json)
+        await realmApp.currentUser.linkCredentials(realmUserCredentials);
+        return user;
+    }
+
     Mongo.prototype.logout  = async function(){
         await stitchAppClient.auth.logout();
+        await realmApp.logOut()
         this.sendAuthListenerEvent(null);
         console.log('logged out')
     };
 
-     Mongo.prototype.getUserId  = async function(){
+     Mongo.prototype.getUserId = async function(){
          var user = await stitchAppClient.auth.user;
 
          return new Promise((resolve, reject) => {
             resolve(user.id);
          });
      };
+
+     Mongo.prototype.getAccessToken = async function(){
+         var token = realmApp.currentUser.accessToken
+
+         return new Promise((resolve, reject) => {
+             resolve(token);
+         });
+     };
+
+
+
+     Mongo.prototype.getRefreshToken = async function(){
+       var token = await realmApp.currentUser.refreshToken;
+
+       return new Promise((resolve, reject) => {
+          resolve(refreshToken);
+       });
+     };
+
 
 
      Mongo.prototype.getUser  = async function(){
@@ -329,33 +397,46 @@ function Mongo() {
      Mongo.prototype.setupWatchCollection = async function(databaseName, collectionName, arg){
         var collection = this.getCollection(databaseName, collectionName)
 
-        console.log(arg)
+
         console.log(typeof arg)
-        if (typeof arg === 'string' || arg instanceof String){
+        let asObjectIDs = false;
+        if (arg == null){
+            asObjectIDs = true;
+        }
+        else if (typeof arg === 'string' || arg instanceof String){
             arg = JSON.parse(arg);
         }
-        if (typeof arg === 'array' || arg instanceof Array){
+        else if (typeof arg === 'array' || arg instanceof Array){
             if(arg[1] == false){
                 arg = arg[0]
             }
             else {
-                var lst = [];
-                arg[0].forEach((str) => {
-                    lst.push(new stitch.BSON.ObjectId(str))
-                })
-                arg = lst;
+                asObjectIDs = true
+                if(arg[0] == null){
+                    arg = null
+                }
+                else{
+                    var lst = [];
+                    arg[0].forEach((str) => {
+                        lst.push(new stitch.BSON.ObjectId(str))
+                    })
+                    arg = lst;
+                }
             }
         }
 
-
         var changeStream = await collection.watch(arg);
 
+        console.log(`asObjectIDs=${asObjectIDs}`)
         // Set the change listener. This will be called
         // when the watched documents are updated.
         changeStream.onNext((event) => {
 
+          let docId = event.fullDocument['_id']
           var results = {
-            "_id": event.fullDocument['_id']
+            "_id": asObjectIDs
+                ? {'$oid': docId} //new stitch.BSON.ObjectId(docId)
+                : docId
           }
           var watchEvent = new CustomEvent("watchEvent."+databaseName+"."+collectionName, {
                detail: JSON.stringify(results)

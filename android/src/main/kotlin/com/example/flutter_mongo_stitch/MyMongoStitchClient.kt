@@ -74,6 +74,14 @@ class MyMongoStitchClient(
         return app.currentUser()?.id
     }
 
+    fun getAccessToken(): String? {
+        return app.currentUser()?.accessToken
+    }
+
+    fun getRefreshToken(): String? {
+        return app.currentUser()?.refreshToken
+    }
+
     fun isUserLoggedIn(): Boolean{
         return app.currentUser()?.isLoggedIn ?: false
     }
@@ -88,7 +96,7 @@ class MyMongoStitchClient(
     }
 
     fun signInWithGoogle(idToken: String, callback: App.Callback<User>): RealmAsyncTask? {
-        return app.loginAsync(Credentials.google(idToken ,GoogleAuthType.ID_TOKEN), callback)
+        return app.loginAsync(Credentials.google(idToken ,GoogleAuthType.AUTH_CODE), callback)
     }
 
     fun signInWithFacebook(accessToken: String, callback: App.Callback<User>): RealmAsyncTask? {
@@ -104,6 +112,20 @@ class MyMongoStitchClient(
 
         return app.loginAsync(Credentials.customFunction(args), callback)
     }
+
+    fun signInWithApple(idToken: String, callback: App.Callback<User>) : RealmAsyncTask? {
+        return app.loginAsync(Credentials.apple(idToken), callback);
+    }
+
+    fun isLoggedIn() : Boolean {
+        return app.currentUser()?.isLoggedIn ?: false
+    }
+
+    fun linkCredentials(credsJson: Map<String, Any>, callback: App.Callback<User>) : RealmAsyncTask? {
+        val creds = CredentialsExtensions.fromMap(credsJson)
+        return app.currentUser()?.linkCredentialsAsync(creds, callback)
+    }
+
 
     fun logout(callback: App.Callback<User>): RealmAsyncTask?
             = app.currentUser()?.logOutAsync(callback);
@@ -130,7 +152,6 @@ class MyMongoStitchClient(
             : RealmResultTask<InsertOneResult>? {
         val collection = getCollection(databaseName, collectionName)
 
-        
         //Document.parse(json)
         val document = Document()
 
@@ -341,6 +362,4 @@ class MyMongoStitchClient(
             this.client = user.getMongoClient("mongodb-atlas")
         }
     }
-
-
 }

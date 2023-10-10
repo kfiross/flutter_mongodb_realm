@@ -13,7 +13,7 @@ For API reference [check here](https://pub.dartlang.org/documentation/flutter_mo
 
 The minimum requirements are:
  - Android 5.0 (API 21)
- - iOS 11.0
+ - iOS 13.0
 
 ## Setup
 Doesn't require any setup besides adding as a dependency
@@ -37,11 +37,15 @@ Web integration automatically!
 * Facebook \[X]
 * JWT
 * Custom Authentication Function
+* Apple ID \[X]
+
 
 **Authentication:**
 * Auth Listener
 * Reset Password
 * Login/Sign in/Logout
+* Link User Identities [X]
+* Access token or Refresh token
 
 <b>Functions</b>
 * Calling a Realm function
@@ -88,68 +92,92 @@ final userEmail = user.profile.email;
 
 #### Login
 You can log in using the following providers:
-* Anonymous:
+* __Anonymous__
 ```dart
-CoreRealmUser mongoUser = await app.login(Credentials.anonymous());
+CoreRealmUser? mongoUser = await app.login(Credentials.anonymous());
 ```
 
-* Email\Password:
+* __Email\Password__
 ```dart
-CoreRealmUser mongoUser = await app.login(
+CoreRealmUser? mongoUser = await app.login(
   Credentials.emailPassword(username: <email_address>, password: <password>));
 ```
 
-* Facebook:
+* __Facebook__
 
-For login with Facebook import the required flutter's package and configure in the native side as their instructions.
+In order to login with Facebook import the required flutter's package and configure in the native side as their instructions.
 
 usage:
 ```dart
-CoreRealmUser mongoUser = await app.login(
+CoreRealmUser? mongoUser = await app.login(
   Credentials.facebook(<access_token>));
 ```
 
 
-* Google:
+* __Google__
 
-<b>
-    Inorder to make Google login works, please follow the follwing instructions use the following:<br><br>
-    1. Remove (if used) the version used from pubspec.yaml (ex. google_sign_in: ^4.5.1) <br>
-    2. Use git repo version instead (copy from below)<br>
-    3. In dart code use also serverClientId parmeter
-    <br><br>
-    This has to be done in order to get the auth code need by the Mongo Stitch SDK
-</b>
+Inorder to make Google login works, please follow the following instructions use the following:<br><br>
+1. Create project in Firebase
+2. Add a web app
+3. Go to Google Cloud Platorm -> API & services -> Credentials
+   [https://console.cloud.google.com/apis/credentials?project=[YOUR_PROJECT_ID]]
+4. use the client ID of *WEB*
+5. use this client ID and client secret on MongoDB's as Google Authentication
+6. create SHA-1 for the app and add it to Firebase project you created
+7. Take the serverAuthCode after login, this will work if all set correctly
+<br><br>
+This has to be done in order to get the auth code need by the Mongo Realm SDK
 
-calling on flutter:
+
+Calling on Flutter:
+
 ```dart
-CoreRealmUser mongoUser = await app.login(
-  Credentials.google(
-    serverClientId: <Google Server Client Id>, // just the start from "<ID>.apps.googleusercontent.com"   
-    scopes: <list of scopes>,
-));
+ GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+    ],
+    clientId: '[YOUR_APP_ID].apps.googleusercontent.com'
+);
+
+var account = await _googleSignIn.signIn();
+var serverAuthCode = account?.serverAuthCode;
+
+CoreRealmUser? mongoUser = await app.login(GoogleCredential2(serverAuthCode!));
 ```
-in pubspec.yaml:
-```
-.. (other dependencies)
-google_sign_in:
-  git:
-    url: git://github.com/fbcouch/plugins.git
-    path: packages/google_sign_in
-    ref: server-auth-code
-```
+
+* __Custom JWT__
 ```dart
-CoreRealmUser mongoUser = await app.login(
-  Credentials.google(
-    serverClientId: <Google Server Client Id>, // just the start from "<ID>.apps.googleusercontent.com"   
-    scopes: <list of scopes>,
-));
+CoreRealmUser? mongoUser = await app.login(Credentials.jwt(<token>);
+```
+
+* __Custom (Auth) Function__
+```dart
+MongoDocument payload = MongoDocument({
+  "username": "bob"
+})
+CoreRealmUser? mongoUser = await app.login(Credentials.function(payload);
 ```
 
 
-* Custom JWT:
+* __Apple ID__
+1. Add a dependency that implementing signing in with apple, such as [apple_sign_in](https://pub.dev/packages/apple_sign_in), or [sign_in_with_apple](https://pub.dev/packages/sign_in_with_apple) 
+
+2. In your Flutter app, retrieve Identify token from the login results
 ```dart
-CoreRealmUser mongoUser = await app.login(Credentials.jwt(<token>);
+// taken from the example project using the apple_sign_in plugin
+final appleResult = await AppleSignIn.performRequests([
+      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+
+    if (appleResult.error != null) {
+      // handle errors from Apple here
+    }
+
+    var idToken =  String.fromCharCodes(appleResult.credential.identityToken);
+```
+3. Use the token in the `login` function with the `Credentials.apple` auth provider
+```dart
+CoreRealmUser? mongoUser = app.login(Credentials.apple(idToken));
 ```
 
 * Custom (Auth) Function:
@@ -166,7 +194,7 @@ CoreRealmUser mongoUser = await app.login(Credentials.function(payload);
 Register a user with Email\Password
 
 ```dart
-CoreRealmUser mongoUser = await app.registerWithEmail(
+CoreRealmUser? mongoUser = await app.registerWithEmail(
     email: <email_address>, password: <password>);
 ```
 
@@ -215,6 +243,14 @@ StreamBuilder _authBuilder(BuildContext context) {
 }
 ```
 
+
+#### Link User Identities
+The app can then link the new identity with the current user.
+```dart
+CoreRealmUser? mongoUser = app.login(Credentials.anonymous());
+user.linkCredentials(Credentials.emailPassword("email", "password"));
+```
+
 ### Database
 To get access to a collection:
 ```dart
@@ -234,7 +270,7 @@ collection.insertMany(documents);
 ```
 
 #### Find
-filtering can be used with QuerySelector class for more robust code
+filtering can be used with QueryOperator class for more robust code
 ```dart
 
 // fetch all document in the collection
@@ -243,7 +279,7 @@ var docs = collection.find();
 // fetch all document in the collection applying some filter
 var docs = collection.find(
   filter: {
-    "year": QuerySelector.gt(2010)..lte(2014), // == 'year'>2010 && 'year'<=2014
+    "year": QueryOperator.gt(2010)..lte(2014), // == 'year'>2010 && 'year'<=2014
 });
 
 // optional: can also add find options (projection/limit/sort)
@@ -270,7 +306,7 @@ var document = await collection.findOne();
 
 var document = await collection.findOne(
   filter: {
-    "year": QuerySelector.gt(2010)..lte(2014), // == 'year'>2010 && 'year'<=2014
+    "year": QueryOperator.gt(2010)..lte(2014), // == 'year'>2010 && 'year'<=2014
 });
 
 
@@ -284,7 +320,7 @@ int size = await collection.count({
 ```
 
 #### Delete
-filtering can be used with QuerySelector class for more robust code
+filtering can be used with QueryOperator class for more robust code
 ```dart
 // fetch all documents in the collection
 var deletedDocs = await collection.deleteMany({});
@@ -294,7 +330,7 @@ var deletedDocs = await collection.deleteOne({"age": 24});
 
 // fetch all document in the collection applying some filter
 var deletedDocs = 
-  await collection.deleteMany({"age": QuerySelector.gte(24)});
+  await collection.deleteMany({"age": QueryOperator.gte(24)});
 ```
 
 #### Update
@@ -310,7 +346,6 @@ await collection.updateOne(
   update: UpdateSelector.set({
     "age": 26,
   });
-
 );
 ```
 Updating the only all matched documents:
@@ -357,7 +392,7 @@ OR get the stream to subscribed to  a part of the collection applying
 filter on the listened documents
 ```dart
 final streamFilter = collection.watchWithFilter({
-  "age": QuerySelector.lte(26)
+  "age": QueryOperator.lte(26)
 });
 ```
 

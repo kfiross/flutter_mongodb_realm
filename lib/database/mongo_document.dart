@@ -6,9 +6,9 @@ import 'package:bson/bson.dart';
 
 /// A representation of a document as a Map
 class MongoDocument {
-  final Map<String, dynamic> _map = LinkedHashMap<String, dynamic>();
+  final Map<String, Object?> _map = LinkedHashMap<String, Object>();
 
-  Map<String, Object> get map => _map;
+  Map<String, Object?> get map => _map;
 
   /// Create a Document instance initialized with the given key/value pair.
   MongoDocument.single(String key, dynamic value) {
@@ -17,9 +17,13 @@ class MongoDocument {
 
   /// Creates a Document instance initialized with the given map.
   /// or an empty Document instance if not provided.
-  MongoDocument(Map<String, dynamic> map) {
+  MongoDocument(Map<String, Object?>? map) {
     if (map != null) {
-      _map.addAll(map);
+      //_map.addAll(map);
+      //_map.addEntries(map.entries);
+      for (String key in map.keys) {
+        _map[key] = map[key];
+      }
     }
   }
 
@@ -69,15 +73,9 @@ class MongoDocument {
   /// Parses a string in MongoDB Extended JSON format to a Document
   static MongoDocument parse(data) {
     Map<String, dynamic> map = json.decode(data);
-//    if(kIsWeb){
-//      map = FlutterMongoRealm.customEventToMap(data);
-//    }
-//    else {
-//      map = json.decode(data);
-//    }
-    // fix MongoDB bullshit
+
     map.forEach((key, value) {
-      if (value is LinkedHashMap) {
+      if (value is LinkedHashMap || value is Map) {
         map[key] = fixMapMismatchedTypes(value);
       }
     });

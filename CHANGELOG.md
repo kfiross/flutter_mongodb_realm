@@ -1,3 +1,50 @@
+# [2.2.1]
+* Removed unused `extension` dependency
+* Updated dependencies
+* Bumped minimum dart version is `2.18.0`
+
+## [2.2.0]
+* Added support for `getRefreshToken` and `getAccessToken`
+
+## [2.1.1]
+* Fixed bug with ios
+
+## [2.1.0]
+* Added `linkCredentials` function
+* Added `isLoggedIn` function
+ 
+## [2.0.2]
+* Fixed web-plugin bug
+
+## [2.0.0]
+* Stable version of null-safety support 
+
+## [2.0.0-nullsafety.3]
+* Fixed missing code in Kotlin plugin. 
+
+## [2.0.0-nullsafety.2]
+* Fixed `pub.dev` score. 
+
+## [2.0.0-nullsafety.1]
+* Fixed many null-safety related fixes
+* Upgraded dependencies
+* Fixed example project
+
+## [2.0.0-nullsafety.0]
+* Migrated into Null-Safety
+
+## [1.2.6]
+* a list of objects turned into one object (issue #31)
+
+## [1.2.5+2]
+* README updated.
+
+## [1.2.5+1]
+* Fixed `pub.dev` score.
+
+## [1.2.5]
+* Added `Sign With Apple ID` auth provider.
+
 ## [1.2.4]
 * Return null for empty `findOne` Query. (issue #23)
 
@@ -8,6 +55,11 @@
 * `ObjectId` can be used (Also fixing issue #18). 
 
 ## [1.2.1+1]
+* README updated.
+
+## [1.2.1]
+* Using the latest web plugin version.
+=======
 * Updated README.
 
 ## [1.2.1]

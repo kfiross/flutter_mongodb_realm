@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 
@@ -37,74 +36,13 @@ class _MyAppState extends State<MyApp> {
   Future<void> init() async {
     // initialized MongoRealm App
 
-    try {
-      // create a user
-//        await client.auth
-//            .registerWithEmail(email: "naamahasson1@gmail.com", password: "123456");
+    // try {} on PlatformException catch (e) {
+    //   print("Error! ${e.message}");
+    // } on Exception {}
 
-      // login Anonymously
-
-
-      // var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteXN0aXRjaGFwcC1manBtbiIsImV4cCI6MTYyMTc5MzQyMSwiaWF0IjoxNjExODMwNjU1LCJzdWIiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIiLCJ1c2VySWQiOiI1ZTlkNzEwZmJjZDg5NTIxOWM2YzFmMWIifQ.kNowkTYV5J_xoR_aVowuattEcazesM09RmTfzpqJM2M";
-      // var mongoUser = await client.auth.login(Credentials.jwt(token));
-
-   ///   CoreRealmUser mongoUser =
-   //        await client.auth.loginWithCredential(AnonymousCredential()
-
-//          UserPasswordCredential(
-//              username: 'naamahasson1@gmail.com',//"kfir25816@gmail.com",
-//              password: '123456',//"asdfghj"
-//          )
-//               );
-
-//    614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv.apps.googleusercontent.com
-
-//      CoreRealmUser mongoUser = await client.auth.loginWithCredential(
-//          GoogleCredential(
-//        serverClientId: "614805511929-lc92msgps9tr32slg8hqt9taqa3q3kbv",//"281897935076-dlab9116cid9cmivd6nilofihip552cr",
-//        scopes: ["email"],
-//      )
-//          FacebookCredential(permissions: ["email"])
-//          );
-
-     // if (mongoUser != null) {
-     //   print("logged in as ${mongoUser.id ?? '?'}");
-     // }
-     // else {
-     //   print("wrong pass or username");
-     // }
-
-      // sign out
-
-//      client.auth.logout();
-
-//      var user = await client.auth.user;
-//      print("you are user with id: '${user.id ?? '?'}', email: ${user.profile.email ?? '?'}");
-//
-//      var userId = await client.auth.getUserId();
-//      print("you are '${userId ?? '?'}'");
-
-      // after app initialized and user authenticated, show some data
-
-//      countData(); /// DONE ON WEB
-//        insertData(); /// DONE ON WEB
-//      fetchData();    /// DONE ON WEB
-//      deleteData(); /// DONE ON WEB
-//        updateData(); /// DONE ON WEB
-
- //     watchData();
-
-      /// DONE ON WEB
-//      aggregateCollection(); //TODO: check
-
-      /// DONE ON WEB
-//      await client.callFunction("sum", args: [8, 4], requestTimeout: 54000).then((value) {
-//        print(value);
-//      });
-
-    } on PlatformException catch (e) {
-      print("Error! ${e.message}");
-    } on Exception {}
+    await app.login(Credentials.anonymous());
+    print("init");
+    watchData();
   }
 
   Future<void> countData() async {
@@ -357,15 +295,17 @@ class _MyAppState extends State<MyApp> {
         client.getDatabase("test").getCollection("my_collection");
 
     try {
-//      final stream = myCollection.watch(ids: ["22", "8"], asObjectIds: false);
+      print("init stream");
+      final stream = myCollection.watch(ids: ["22"], asObjectIds: false);
 //      final stream2 = myCollection.watch(ids: ["5ee8a50ffaba833f1c6c6a7c"]);
 //      final stream3 =  myCollection.watchWithFilter({"age": 25}); /// WORKS!
 
-      final streamSimple = myCollection.watch();
+  //    final streamSimple = myCollection.watch();
 
       /// WORKS!
 
-      streamSimple.listen((event) {
+      print("start to listen");
+      stream.listen((event) {
         print(event);
         var fullDocument = MongoDocument.parse(event);
         print("a document with '${fullDocument.map["_id"]}' is changed");
@@ -374,7 +314,7 @@ class _MyAppState extends State<MyApp> {
         // do something
       });
     } on PlatformException catch (e) {
-      debugPrint("Error! ${e.message}");
+      print("Error! ${e.message}");
     }
   }
 
@@ -433,8 +373,38 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: _authBuilder(context),
-//      home: dummyHomeWidget(),
+      // home: dummyHomeWidget(),
     );
+  }
+
+  void test(){
+    try {
+      var userId = "9";
+      print(userId);
+      app.currentUser.then((value) => print(value!.profile!.email));
+
+      final database = client.getDatabase("herohunt");
+      print(database.name);
+
+      var colection = database.getCollection("users");
+      print(colection.collectionName);
+
+      final stream2 = colection.watch(ids: [userId], asObjectIds: false);
+
+      stream2.listen((data) {
+        // data contains JSON string of the document that was changed
+        print("New change");
+        var fullDocument = MongoDocument.parse(data);
+        print(fullDocument);
+        // Do other stuff...
+      }, onError: (error) {
+        print("On error: $error");
+      }, onDone: () {
+        print("On Done");
+      }, cancelOnError: true);
+    } catch (error) {
+      print("Error while listening: $error");
+    }
   }
 
   dummyHomeWidget() {
@@ -446,13 +416,13 @@ class _MyAppState extends State<MyApp> {
         child: Column(
           children: <Widget>[
             Text('Running on: \n'),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Reset Password"),
               onPressed: () async {
                 try {
                   var currUser = await app.currentUser;
                   final success = await app.sendResetPasswordEmail(
-                      currUser.profile.email); //"kfir25812@gmail.com");
+                      currUser?.profile?.email); //"kfir25812@gmail.com");
                   print(success);
                 } on PlatformException catch (e) {
                   print(e.message ?? 'Unkown error');
@@ -466,7 +436,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   StreamBuilder _authBuilder(BuildContext context) {
-    Stream stream = client.auth.authListener();
+    Stream stream = app.authListener();
     return StreamBuilder(
       stream: stream,
       builder: (context, AsyncSnapshot snapshot) {

@@ -1,6 +1,6 @@
 package com.example.flutter_mongo_stitch
 
-//import com.mongodb.stitch.android.core.auth.StitchUser
+import io.realm.mongodb.Credentials
 import io.realm.mongodb.User
 import org.bson.BsonType
 import org.bson.BsonValue
@@ -34,24 +34,6 @@ fun BsonValue.toJavaValue(): Any {
     }
 }
 
-//fun StitchUser.toMap(): Map<String, Any> {
-//    return mapOf(
-//            "id" to id,
-//            "device_id" to deviceId,
-//            "profile" to mapOf(
-//                    "name" to profile?.name,
-//                    "email" to profile?.email,
-//                    "pictureUrl" to profile?.pictureUrl,
-//                    "firstName" to profile?.firstName,
-//                    "lastName" to profile?.lastName,
-//                    "gender" to profile?.gender,
-//                    "birthday" to profile?.birthday,
-//                    "minAge" to profile?.minAge,
-//                    "maxAge" to profile?.maxAge
-//            )
-//    )
-//}
-
 fun User.toMap(): Map<String, Any> {
     return mapOf(
             "id" to id,
@@ -68,4 +50,18 @@ fun User.toMap(): Map<String, Any> {
                     "maxAge" to profile?.maxAge
             )
     )
+}
+
+object CredentialsExtensions{
+    fun fromMap(json: Map<String, Any>): Credentials?{
+        return when(json["type"]){
+            "anon" -> throw Exception("can't link anonymous")
+            "email_password" -> Credentials.emailPassword(json["email"] as String, json["password"] as String)
+            "apple" -> Credentials.apple(json["idToken"] as String)
+            "facebook" -> Credentials.facebook(json["accessToken"] as String)
+            //"google" -> Credentials.google(json["authorizationCode"] as String)
+            "jwt" -> Credentials.jwt(json["jwtToken"] as String)
+            else -> null
+        }
+    }
 }
