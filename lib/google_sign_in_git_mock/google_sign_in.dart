@@ -289,6 +289,7 @@ class GoogleSignIn {
       }
     }).catchError((dynamic _) {
       // Ignore if previous call completed with an error.
+      return null;
     });
     _lastMethodCompleter = completer;
     return _lastMethodCompleter!.future;
