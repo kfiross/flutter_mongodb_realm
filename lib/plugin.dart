@@ -154,7 +154,7 @@ class FlutterMongoRealm {
       collectionName: collectionName,
       databaseName: databaseName,
       filter: filter,
-      projection: projection!,
+      projection: projection ?? null,
     );
   }
 
