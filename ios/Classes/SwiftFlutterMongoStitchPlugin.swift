@@ -190,27 +190,24 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         
         let app = App(id: clientAppId!)
         let mongoClientRLM = app.currentUser?.mongoClient("mongodb-atlas")
+        var stitchAppClient: StitchAppClient?  = nil
         if(Stitch.defaultAppClient != nil){
- // todo: remove when removing StitchSDK dependency
-        let mongoClient = try? stitchAppClient.serviceClient(
-            fromFactory: remoteMongoClientFactory, withName: "mongodb-atlas"
-        )
-                
-        self.client = MyMongoStitchClient(client: mongoClient!, appClient: Stitch.defaultAppClient, app: app)
-        result(true)
+            stitchAppClient = Stitch.defaultAppClient!
         }else{
         // todo: remove when removing StitchSDK dependency
-        let stitchAppClient = try! Stitch.initializeDefaultAppClient(withClientAppID: clientAppId!)
+        stitchAppClient = try! Stitch.initializeDefaultAppClient(withClientAppID: clientAppId!)
+        }
+        
+       
         
         // todo: remove when removing StitchSDK dependency
-        let mongoClient = try? stitchAppClient.serviceClient(
+        let mongoClient = try? stitchAppClient!.serviceClient(
             fromFactory: remoteMongoClientFactory, withName: "mongodb-atlas"
         )
                 
-        self.client = MyMongoStitchClient(client: mongoClient!, appClient: stitchAppClient, app: app)
+        self.client = MyMongoStitchClient(client: mongoClient!, appClient: stitchAppClient!, app: app)
         result(true)
-        }
-    }
+           }
     
     func signInAnonymously(_ result: @escaping FlutterResult){
         self.client?.signInAnonymously(
