@@ -190,7 +190,15 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
         
         let app = App(id: clientAppId!)
         let mongoClientRLM = app.currentUser?.mongoClient("mongodb-atlas")
-        
+        if(Stitch.defaultAppClient != nil){
+ // todo: remove when removing StitchSDK dependency
+        let mongoClient = try? stitchAppClient.serviceClient(
+            fromFactory: remoteMongoClientFactory, withName: "mongodb-atlas"
+        )
+                
+        self.client = MyMongoStitchClient(client: mongoClient!, appClient: Stitch.defaultAppClient, app: app)
+        result(true)
+        }else{
         // todo: remove when removing StitchSDK dependency
         let stitchAppClient = try! Stitch.initializeDefaultAppClient(withClientAppID: clientAppId!)
         
@@ -201,6 +209,7 @@ public class SwiftFlutterMongoStitchPlugin: NSObject, FlutterPlugin {
                 
         self.client = MyMongoStitchClient(client: mongoClient!, appClient: stitchAppClient, app: app)
         result(true)
+        }
     }
     
     func signInAnonymously(_ result: @escaping FlutterResult){
