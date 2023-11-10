@@ -6,7 +6,7 @@ import 'package:bson/bson.dart';
 
 /// A representation of a document as a Map
 class MongoDocument {
-  final Map<String, Object?> _map = LinkedHashMap<String, Object>();
+  final Map<String, Object?> _map = LinkedHashMap<String, Object?>();
 
   Map<String, Object?> get map => _map;
 
