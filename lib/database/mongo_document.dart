@@ -15,6 +15,7 @@ class MongoDocument {
     _map[key] = value;
   }
 
+  ///
   /// Creates a Document instance initialized with the given map.
   /// or an empty Document instance if not provided.
   MongoDocument(Map<String, Object?>? map) {
