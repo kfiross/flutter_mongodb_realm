@@ -294,32 +294,32 @@ class MyMongoStitchClient {
 //        }
     }
     
-    func signInWithCustomFunction(
-        json: String,
-        onCompleted: @escaping ([String:Any])->Void,
-        onError: @escaping (String?)->Void
-        ){
+//     func signInWithCustomFunction(
+//         json: String,
+//         onCompleted: @escaping ([String:Any])->Void,
+//         onError: @escaping (String?)->Void
+//         ){
         
-        guard false else {
-            self.signInWithCustomFunction_s(json: json, onCompleted: onCompleted, onError: onError)
-            return
-        }
+//         guard false else {
+//             self.signInWithCustomFunction_s(json: json, onCompleted: onCompleted, onError: onError)
+//             return
+//         }
         
-//        self.app.login(
-//            credentials: Credentials.function(payload: payload)
-//        ) { authResult in
-//            switch(authResult){
-//            case .success(let user):
-//                onCompleted(user)
-//                break
-//
-//            case .failure(let error):
-//                onError("Custom Function Provider Login failed: \(error)")
-//                break
-//
-//            }
-//        }
-    }
+// //        self.app.login(
+// //            credentials: Credentials.function(payload: payload)
+// //        ) { authResult in
+// //            switch(authResult){
+// //            case .success(let user):
+// //                onCompleted(user)
+// //                break
+// //
+// //            case .failure(let error):
+// //                onError("Custom Function Provider Login failed: \(error)")
+// //                break
+// //
+// //            }
+// //        }
+//     }
     
     func linkCredentials(
         credsJson: Dictionary<String, Any>,
