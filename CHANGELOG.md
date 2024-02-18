@@ -1,6 +1,6 @@
 # [2.3.0]
 * fix bugs in iOS (Pull request #50)
-* 
+
 # [2.2.1]
 * Removed unused `extension` dependency
 * Updated dependencies
